@@ -6,20 +6,24 @@
 #include "InputPort.h"
 #include "OutputPort.h"
 #include "FileSource.h"
+#include "Flow.h"
 
 using namespace std;
 
 int main()
 {
 
+	Flow *flow = new Flow();
+	flow->addOperator(new FileSource());
+
+/*
 	queue<Tuple *> *portQ = new queue<Tuple *>();
 	InputPort *iport = new InputPort(portQ);
-
 	FileSource *fs = new FileSource();
-	
 	fs->addInputPort(iport);
-
 	fs->process();
+*/
+
 /*
 	queue<Tuple *> *portQ = new queue<Tuple *>();
 
