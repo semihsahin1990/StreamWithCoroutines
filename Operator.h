@@ -6,30 +6,30 @@
 #include "InputPort.h"
 #include "OutputPort.h"
 
-using namespace std;
+// Operator: user visible interface
+// OpertorImpl has a Operator: System implementation of an operator
+
 class Operator
-{	
+{
 	private:
 
-		vector<InputPort *> *inputPorts;
-		vector<OutputPort *> *outputPorts;
+        std::vector<InputPort *> inputPorts;
+        std::vector<OutputPort *> outputPorts;
 
 	public:
 
 		Operator()
 		{
-			inputPorts = new vector<InputPort *>();
-			outputPorts = new vector<OutputPort *>();
 		}
 
 		virtual void process()=0;
 
-		virtual vector<InputPort *>* getInputPorts()
+		virtual vector<InputPort *> const & getInputPorts() const
 		{
 			return inputPorts;
 		}
 
-		virtual vector<OutputPort *>* getOutputPorts()
+		virtual vector<OutputPort *> const & getOutputPorts() const
 		{
 			return outputPorts;
 		}
