@@ -2,14 +2,18 @@
 #include<vector>
 #include<queue>
 
-#include "Flow.h"
-#include "Operator.h"
-#include "InputPort.h"
-#include "OutputPort.h"
+#include "streamc/Flow.h"
+#include "streamc/Operator.h"
+#include "streamc/InputPort.h"
+#include "streamc/OutputPort.h"
 
+using namespace streamc;
+
+
+/*
 Flow::Flow()
 {
-	Flow::ops = new vector<Operator *>();
+	ops = new vector<Operator *>();
 }
 
 void Flow::addOperator(Operator *op)
@@ -27,6 +31,7 @@ void Flow::connect(Operator *op1, Operator *op2)
 	op1->addOutputPort(oPort);
 	op2->addInputPort(iPort);
 }
+*/
 
 void Flow::run(int numberOfThreads)
 {

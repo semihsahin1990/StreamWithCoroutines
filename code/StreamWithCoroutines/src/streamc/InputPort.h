@@ -3,6 +3,9 @@
 #include<queue>
 #include "Tuple.h"
 
+namespace streamc
+{
+
 class InputPort
 {
 	private:
@@ -13,3 +16,5 @@ class InputPort
 		bool hasTuple();
 		Tuple popTuple();
 };
+
+}

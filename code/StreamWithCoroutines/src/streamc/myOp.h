@@ -2,14 +2,20 @@
 #include "Operator.h"
 #include "InputPort.h"
 
-using namespace std;
+namespace streamc
+{
 
-class myOp : public Operator{
+class myOp : public Operator
+{
 public:
-	myOp(int id) : Operator(id){
-	}
+    myOp(int id) : Operator(id)
+    {
+    }
 
-	void process(){
-		cout<<"processing"<<endl;	
-	}
+    void process()
+    {
+        std::cout << "processing" << std::endl;	
+    }
 };
+
+}

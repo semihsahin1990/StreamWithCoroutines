@@ -1,8 +1,12 @@
 #include <iostream>
 #include <unordered_map>
 #include <vector>
-#include "Operator.h"
 
+#include "streamc/Operator.h"
+
+namespace streamc
+{
+ 
 class Flow
 {
 private:
@@ -35,8 +39,8 @@ private:
 	std::unordered_map<Operator*, std::vector<Node>> adjList;
 
 public:
-
-	void connect(Operator *op1, uint32_t oport, Operator *op2, uint32_t iport){
+	void connect(Operator *op1, uint32_t oport, Operator *op2, uint32_t iport)
+        {
 		Node node(op2, oport, iport);
 		adjList[op1].push_back(node);
 	}
@@ -54,3 +58,6 @@ public:
 	void run(int numberOfThreads);
 
 };
+
+}
+

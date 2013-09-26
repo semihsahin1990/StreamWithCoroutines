@@ -3,6 +3,9 @@
 #include<queue>
 #include "Tuple.h"
 
+namespace streamc
+{
+
 class OutputPort
 {
 	private:
@@ -12,3 +15,5 @@ class OutputPort
 		OutputPort(std::queue<Tuple> *portQ);
 		void pushTuple(Tuple tuple);
 };
+
+}

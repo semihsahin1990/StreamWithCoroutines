@@ -6,10 +6,15 @@
 #include<unordered_map>
 #include<vector>
 
-class Tuple{
+namespace streamc
+{
+
+class Tuple
+{
 
 private:
-	class Value{
+	class Value
+        {
 		enum Type {Integer, Double, String, IntList, DoubleList, StringList};
 	public:
 		Type type;
@@ -57,6 +62,7 @@ private:
 				case String:
 					delete pointer.stringPointer;
 				break;
+                                // TODO: unhandled cases
 
 			}
 		}
@@ -100,9 +106,10 @@ private:
 
 public:
 	~Tuple(){
-		//delete all
+          // TODO: delete all     
 	};
 
+        // TODO: fix memory leaks 
 	void addAttribute(std::string const &name, int64_t const &value){
 		Value *val = new Value(value);
 		values[name] = val;
@@ -158,3 +165,5 @@ public:
 	}
 
 };
+
+}

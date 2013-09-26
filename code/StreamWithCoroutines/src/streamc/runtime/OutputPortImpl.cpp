@@ -2,6 +2,7 @@
 #include "../OutputPort.h"
 
 using namespace std;
+using namespace streamc;
 
 OutputPort::OutputPort(queue<Tuple> *portQ)
 {

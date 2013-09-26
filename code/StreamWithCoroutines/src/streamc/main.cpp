@@ -2,14 +2,15 @@
 #include<vector>
 #include<queue>
 
-#include "Tuple.h"
-#include "InputPort.h"
-#include "OutputPort.h"
-#include "Operator.h"
-#include "Flow.h"
-#include "myOp.h"
+#include "streamc/Tuple.h"
+#include "streamc/InputPort.h"
+#include "streamc/OutputPort.h"
+#include "streamc/Operator.h"
+#include "streamc/Flow.h"
+#include "streamc/myOp.h"
 
 using namespace std;
+using namespace streamc;
 
 int main()
 {

@@ -9,6 +9,9 @@
 // Operator: user visible interface
 // OpertorImpl implements a Operator: System implementation of an operator
 
+namespace streamc
+{
+
 class Operator
 {
 private:
@@ -46,3 +49,5 @@ public:
 		return outputPorts;
 	}
 };
+
+}

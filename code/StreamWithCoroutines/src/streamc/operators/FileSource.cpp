@@ -1,9 +1,12 @@
 #include<iostream>
 #include<vector>
 
-#include "Operator.h"
+#include "streamc/operators/FileSource.h"
 
-class FileSource : public Operator
+using namespace streamc;
+using namespace std;
+
+void FileSource::process()
 {
-	
-};
+    cout << "processing" <<endl;
+}

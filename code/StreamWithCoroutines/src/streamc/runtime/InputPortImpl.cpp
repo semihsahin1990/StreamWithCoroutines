@@ -1,8 +1,9 @@
-#include<queue>
-#include "../Tuple.h"
-#include "../InputPort.h"
+#include <queue>
+#include "streamc/Tuple.h"
+#include "streamc/InputPort.h"
 
 using namespace std;
+using namespace streamc;
 
 InputPort::InputPort(queue<Tuple> *portQ)
 {
