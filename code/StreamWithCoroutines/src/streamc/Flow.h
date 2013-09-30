@@ -10,7 +10,6 @@ namespace streamc
 class Flow
 {
 private:
-
 	class Node{
 	private:
 		Operator *op;

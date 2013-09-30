@@ -115,20 +115,18 @@ private:
 	std::unordered_map<std::string, Value *> values;
 
 public:
-	~Tuple(){
-		values.clear();
-		/*
-		std::unordered_map<std::string, Value *>::iterator it = values.begin();
-		while(it!=values.end()){
-			it = values.erase(it);
-		}
-		*/
+        ~Tuple() {
+            for (auto it=values.begin(); it!=values.end(); ++it)
+                delete it->second;
 	};
 
-	void addAttribute(std::string const &name, int64_t const &value){
-		Value *val = new Value(value);
-		values[name] = val;
+	void addAttribute(std::string const &name, int64_t const &value) {
+            deleteExisting(name);
+            Value *val = new Value(value);
+            values[name] = val;
 	}
+  
+        // TODO: deleteExisting + add it to the below
 
 	void addAttribute(std::string const &name, double const &value){
 		Value *val = new Value(value);
