@@ -9,6 +9,9 @@ OutputPort::OutputPort(queue<Tuple> *portQ)
 	OutputPort::portQ = portQ;
 }
 
+OutputPort::~OutputPort(){
+	delete OutputPort::portQ;
+}
 
 void OutputPort::pushTuple(Tuple tuple)
 {

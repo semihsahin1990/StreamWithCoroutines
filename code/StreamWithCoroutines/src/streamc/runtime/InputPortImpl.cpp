@@ -10,6 +10,10 @@ InputPort::InputPort(queue<Tuple> *portQ)
 	InputPort::portQ = portQ;
 }
 
+InputPort::~InputPort(){
+	delete InputPort::portQ;
+}
+
 bool InputPort::hasTuple()
 {
 	return !(InputPort::portQ)->empty();

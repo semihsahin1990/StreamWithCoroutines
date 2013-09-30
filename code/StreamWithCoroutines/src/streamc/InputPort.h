@@ -13,6 +13,7 @@ class InputPort
 	
 	public:
 		InputPort(std::queue<Tuple> *portQ);
+		~InputPort();
 		bool hasTuple();
 		Tuple popTuple();
 };

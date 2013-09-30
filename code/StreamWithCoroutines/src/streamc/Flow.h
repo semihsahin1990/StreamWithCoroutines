@@ -21,7 +21,6 @@ private:
 			this->oport = oport;
 			this->iport = iport;
 		}
-
 		Operator *getOperator(){
 			return op;
 		}
@@ -39,8 +38,12 @@ private:
 	std::unordered_map<Operator*, std::vector<Node>> adjList;
 
 public:
+	~Flow(){
+		adjList.clear();
+	}
+
 	void connect(Operator *op1, uint32_t oport, Operator *op2, uint32_t iport)
-        {
+	{
 		Node node(op2, oport, iport);
 		adjList[op1].push_back(node);
 	}
@@ -54,7 +57,6 @@ public:
 			std::cout<<std::endl;
 		}
 	}
-
 	void run(int numberOfThreads);
 
 };

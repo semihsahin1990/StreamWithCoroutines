@@ -13,6 +13,7 @@ class OutputPort
 	
 	public:
 		OutputPort(std::queue<Tuple> *portQ);
+		~OutputPort();
 		void pushTuple(Tuple tuple);
 };
 

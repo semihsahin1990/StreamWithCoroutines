@@ -23,6 +23,12 @@ public:
 	Operator(int id){
 		this->id = id;
 	}
+
+	virtual ~Operator(){
+		inputPorts.clear();
+		outputPorts.clear();
+	}
+
 	int getId(){
 		return id;
 	}

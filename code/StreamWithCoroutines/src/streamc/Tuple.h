@@ -62,8 +62,18 @@ private:
 				case String:
 					delete pointer.stringPointer;
 				break;
-                                // TODO: unhandled cases
+				
+				case IntList:
+					delete pointer.intListPointer;
+				break;
 
+				case DoubleList:
+					delete pointer.doubleListPointer;
+				break;
+
+				case StringList:
+					delete pointer.stringListPointer;
+				break;
 			}
 		}
 
@@ -106,10 +116,15 @@ private:
 
 public:
 	~Tuple(){
-          // TODO: delete all     
+		values.clear();
+		/*
+		std::unordered_map<std::string, Value *>::iterator it = values.begin();
+		while(it!=values.end()){
+			it = values.erase(it);
+		}
+		*/
 	};
 
-        // TODO: fix memory leaks 
 	void addAttribute(std::string const &name, int64_t const &value){
 		Value *val = new Value(value);
 		values[name] = val;
@@ -163,7 +178,6 @@ public:
 	std::vector<std::string> &getStringListAttribute(std::string const &name){
 		return values[name]->getStringList();
 	}
-
 };
 
 }

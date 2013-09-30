@@ -33,7 +33,6 @@ int main()
 	flow.connect(op2,7,op3,8);
 	flow.connect(op1,9,op4,10);
 
-
 	flow.printTopology();
 	/*
 	Tuple t;
