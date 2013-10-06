@@ -8,14 +8,13 @@ namespace streamc
 
 class InputPort
 {
-	private:
-		std::queue<Tuple> *portQ;
-	
-	public:
-		InputPort(std::queue<Tuple> *portQ);
-		~InputPort();
-		bool hasTuple();
-		Tuple popTuple();
+	public:	
+		static InputPort* create(std::queue<Tuple> *portQ);
+		virtual bool hasTuple() = 0;
+		virtual Tuple popTuple() = 0;
+
+	protected:
+		InputPort() {}
 };
 
 }

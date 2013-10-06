@@ -14,9 +14,9 @@ class Tuple
 
 private:
 	class Value
-        {
+	{
 		enum Type {Integer, Double, String, IntList, DoubleList, StringList};
-	public:
+		public:
 		Type type;
 
 		Value(int64_t const &value){
@@ -115,40 +115,43 @@ private:
 	std::unordered_map<std::string, Value *> values;
 
 public:
-        ~Tuple() {
-            for (auto it=values.begin(); it!=values.end(); ++it)
-                delete it->second;
+	~Tuple(){
+		for (auto it=values.begin(); it!=values.end(); ++it)
+			delete it->second;
 	};
 
 	void addAttribute(std::string const &name, int64_t const &value) {
-            deleteExisting(name);
-            Value *val = new Value(value);
-            values[name] = val;
+		deleteExisting(name);
+		Value *val = new Value(value);
+		values[name] = val;
 	}
   
-        // TODO: deleteExisting + add it to the below
-
 	void addAttribute(std::string const &name, double const &value){
+		deleteExisting(name);
 		Value *val = new Value(value);
 		values[name] = val;
 	}
 
 	void addAttribute(std::string const &name, std::string const &value){
+		deleteExisting(name);
 		Value *val = new Value(value);
 		values[name] = val;
 	}
 
 	void addAttribute(std::string const &name, std::vector<int64_t> const &list){
+		deleteExisting(name);
 		Value *val = new Value(list);
 		values[name] = val;
 	}
 
 	void addAttribute(std::string const &name, std::vector<double> const &list){
+		deleteExisting(name);
 		Value *val = new Value(list);
 		values[name] = val;
 	}
 
 	void addATtribute(std::string const &name, std::vector<std::string> const &list){
+		deleteExisting(name);
 		Value *val = new Value(list);
 		values[name] = val;
 	}
@@ -175,6 +178,15 @@ public:
 
 	std::vector<std::string> &getStringListAttribute(std::string const &name){
 		return values[name]->getStringList();
+	}
+
+private:
+	void deleteExisting(std::string name){
+		std::unordered_map<std::string, Value *>::const_iterator found = values.find(name);
+		
+		if(found != values.end()){
+			delete found->second;
+		}
 	}
 };
 

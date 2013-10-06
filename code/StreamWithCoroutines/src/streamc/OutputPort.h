@@ -8,13 +8,12 @@ namespace streamc
 
 class OutputPort
 {
-	private:
-		std::queue<Tuple> *portQ;
-	
 	public:
-		OutputPort(std::queue<Tuple> *portQ);
-		~OutputPort();
-		void pushTuple(Tuple tuple);
+		static OutputPort* create(std::queue<Tuple> *portQ);
+		virtual void pushTuple(Tuple tuple) = 0;
+
+	protected:
+		OutputPort(){}
 };
 
 }
