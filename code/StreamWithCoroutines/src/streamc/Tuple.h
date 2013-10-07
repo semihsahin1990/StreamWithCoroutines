@@ -182,8 +182,7 @@ public:
 
 private:
 	void deleteExisting(std::string name){
-		std::unordered_map<std::string, Value *>::const_iterator found = values.find(name);
-		
+		auto found = values.find(name);		
 		if(found != values.end()){
 			delete found->second;
 		}
