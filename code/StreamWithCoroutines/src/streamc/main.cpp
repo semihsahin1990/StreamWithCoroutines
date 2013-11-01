@@ -21,12 +21,13 @@ int main()
 	FileSource* fs3 = new FileSource("fs3", "");
 	FileSource* fs4 = new FileSource("fs4", "");
 	
-	Flow flow;
-
-	flow.addConnection(fs1,1,fs3,1);
-	flow.addConnection(fs1,2,fs4,1);
-	flow.addConnection(fs2,1,fs3,2);
-	flow.addConnection(fs3,1,fs4,2);
+        Flow flow("abc");
+        flow.addOperator(fs1);
+        flow.addOperator(fs2);
+	flow.connectOperators(fs1,1,fs3,1);
+	//flow.addConnection(fs1,2,fs4,1);
+	//flow.addConnection(fs2,1,fs3,2);
+	//flow.addConnection(fs3,1,fs4,2);
 	
 	flow.printTopology();
 	
@@ -41,7 +42,12 @@ int main()
 		cout<< (*it)->getId() <<endl;
 	}
 
-	
+        FlowRunner const & runner = FlowRunner::createFlowRunner();
+        runner.run(flow, 5);
+        
+        // alternatif 1: runner.wait(flow);
+        // alternatif 2: sleep(10); runner.shutdown(flow); runner.wait(flow);
+        	
 /*
 	queue<Tuple>* q = new queue<Tuple>();
 	OutputPortImpl* fs1OP = new OutputPortImpl(q);

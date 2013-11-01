@@ -3,11 +3,7 @@
 #include<iostream>
 #include<vector>
 
-#include "InputPort.h"
-#include "OutputPort.h"
-
-// Operator: user visible interface
-// OpertorImpl implements a Operator: System implementation of an operator
+#include "OperatorContext.h"
 
 namespace streamc
 {
@@ -15,50 +11,44 @@ namespace streamc
 class Operator
 {
 private:
-	std::string id_;
-	std::vector<InputPort *> inputPorts;
-	std::vector<OutputPort *> outputPorts;
+  std::string id_;
+  OperatorContext * context_;
 
 public:
-	Operator(std::string id){
-		id_ = id;
-	}
-
-	virtual ~Operator(){
-		inputPorts.clear();
-		outputPorts.clear();
-	}
-
-	std::string getId(){
-		return id_;
-	}
-
-	virtual void init() = 0;
-	virtual void process() = 0;
-	
-	virtual void const addInputPort(InputPort *inputPort)
-	{
-		inputPorts.push_back(inputPort);
-	}
-	
-	virtual void const addOutputPort(OutputPort *outputPort)
-	{
-		outputPorts.push_back(outputPort);
-	}
-	
-	virtual std::vector<InputPort *> const & getInputPorts()
-	{
-		return inputPorts;
-	}
-	
-	virtual std::vector<OutputPort *> const & getOutputPorts()
-	{
-		return outputPorts;
-	}
-
-	virtual bool isShutdownRequested(){
-		return false;
-	}
+  Operator(std::string id)
+    : id_(id), completed_(false)
+  {
+  }
+  
+  virtual ~Operator() 
+  {
+  }
+  
+  std::string getId() 
+  {
+    return id_;
+  }
+  
+  bool isCompleted() 
+  {
+    return context_->isCompleted();
+  }
+  
+  Context const & getContext() 
+  {
+    return context_;
+  } 
+  
+protected:
+  virtual void init() = 0;
+  virtual void process() = 0;
+  
+private:
+  friend class FlowRunnerImpl;
+  void setContext(OperatorContext * context) 
+  {
+    context_ = context;
+  }
 };
-
+ 
 }
