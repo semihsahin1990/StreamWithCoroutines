@@ -1,145 +1,85 @@
 #include<iostream>
-#include<vector>
+#include<sstream>
 #include<queue>
 
 #include "streamc/Tuple.h"
 #include "streamc/InputPort.h"
 #include "streamc/OutputPort.h"
 #include "streamc/Operator.h"
-#include "streamc/Flow.h"
-#include "streamc/myOp.h"
+#include "streamc/FlowRunner.h"
+#include "streamc/runtime/InputPortImpl.h"
+#include "streamc/runtime/OutputPortImpl.h"
+#include "streamc/operators/FileSource.h"
 
 using namespace std;
 using namespace streamc;
 
 int main()
 {
-	myOp* mop1 = new myOp(1);
-	myOp* mop2 = new myOp(2);
-	myOp* mop3 = new myOp(3);
-	myOp* mop4 = new myOp(4);
-	
-	Operator *op1 = mop1;
-	Operator *op2 = mop2;
-	Operator *op3 = mop3;
-	Operator *op4 = mop4;
-
-	uint32_t oport, iport;
+	FileSource* fs1 = new FileSource("fs1", "");
+	FileSource* fs2 = new FileSource("fs2", "");
+	FileSource* fs3 = new FileSource("fs3", "");
+	FileSource* fs4 = new FileSource("fs4", "");
 	
 	Flow flow;
-	
-	flow.connect(op1,5,op3,6);
-	flow.connect(op3,11,op4,12);
-	flow.connect(op2,7,op3,8);
-	flow.connect(op1,9,op4,10);
 
+	flow.addConnection(fs1,1,fs3,1);
+	flow.addConnection(fs1,2,fs4,1);
+	flow.addConnection(fs2,1,fs3,2);
+	flow.addConnection(fs3,1,fs4,2);
+	
 	flow.printTopology();
-	/*
-	Tuple t;
-	string name;
-	int64_t x;
-	double y;
-	string z;
 	
-	name = "1"; x = 11;
-	t.addAttribute(name,x);
-	name = "2"; x = 22;
-	t.addAttribute(name,x);
-	name = "3"; x = 33;
-	t.addAttribute(name,x);
+	vector<Operator *> operators = flow.getOperators();
+	for(auto it=operators.begin(); it!=operators.end(); it++){
+		cout<< (*it)->getId() <<endl;
+	}
 	
-	cout<<t.getIntAttribute("1")<<endl;
+	cout<<endl;
+	vector<Operator *> neighbors = flow.getNeighbors(fs1);
+	for(auto it=neighbors.begin(); it!=neighbors.end(); it++){
+		cout<< (*it)->getId() <<endl;
+	}
 
-	queue<Tuple>* portQ = new queue<Tuple>();
-	InputPort* iport = new InputPort(portQ);
-	OutputPort* oport = new OutputPort(portQ);
 	
-	cout<<iport->hasTuple()<<endl;
-	oport->pushTuple(t);
+/*
+	queue<Tuple>* q = new queue<Tuple>();
+	OutputPortImpl* fs1OP = new OutputPortImpl(q);
+
+	FileSource fs("fs1", "input1.txt");
 	
-	cout<<iport->hasTuple()<<endl;
-	Tuple tt = iport->popTuple();
+	fs.addOutputPort(fs1OP);
+	fs.init();
+	fs.process();
+
+	cout<<q->size()<<endl;
+	Tuple t = q->front();
+	cout<<t.getIntAttribute("key0")<<endl;
+	//q->pop();
+*/
+	/*
+	queue<Tuple>* shared = new queue<Tuple>();
+
+	InputPortImpl* ipImpl = new InputPortImpl(shared);
+	OutputPortImpl* opImpl = new OutputPortImpl(shared);
+
+	Tuple t1;
+	t1.addAttribute("key1", (int64_t)3);
+	t1.addAttribute("key2", (int64_t)4);
+	opImpl->pushTuple(t1);
+	
+	Tuple t2;
+	t2.addAttribute("key1", (double)1.1);
+	t2.addAttribute("key2", (double)2.2);
+	opImpl->pushTuple(t2);
+	
+	Tuple t = ipImpl->frontTuple();
+	cout<<"int values "<<t.getIntAttribute("key1")<<" "<<t.getIntAttribute("key2")<<endl;
+	ipImpl->popTuple();
+
+	Tuple x = ipImpl->frontTuple();
+	cout<<"double values "<<x.getDoubleAttribute("key1")<<" "<<x.getDoubleAttribute("key2")<<endl;
+	ipImpl->popTuple();
 	*/
-	/*
-	name = "1"; x = 11;
-	t.addAttribute(name,x);
-	name = "2"; x = 22;
-	t.addAttribute(name,x);
-	name = "3"; x = 33;
-	t.addAttribute(name,x);
-
-
-	name = "4"; y = 4.4;
-	t.addAttribute(name,y);
-	name = "5"; y = 5.5;
-	t.addAttribute(name,y);
-
-	name = "6"; z = "66";
-	t.addAttribute(name,z);
-	name = "7"; z = "77";
-	t.addAttribute(name,z);
-
-	cout<< t.getIntAttribute("1")<<endl;
-	cout<< t.getIntAttribute("2")<<endl;
-	cout<< t.getIntAttribute("3")<<endl;
-	cout<< t.getDoubleAttribute("4")<<endl;
-	cout<< t.getDoubleAttribute("5")<<endl;
-	cout<< t.getStringAttribute("6")<<endl;
-	cout<< t.getStringAttribute("7")<<endl;
-
-	vector<int64_t> myVector;
-	x = 123;
-	myVector.push_back(x);
-	x = 456;
-	myVector.push_back(x);
-	
-	name = "8";
-	t.addAttribute(name, myVector);
-
-	name = "9";
-	x = 789;
-	myVector.pop_back();
-	myVector.push_back(x);
-	t.addAttribute(name, myVector);
-
-	vector<int64_t> vec1 = t.getIntListAttribute("8");
-	cout<<vec1.size()<<endl;
-	vector<int64_t> vec2 = t.getIntListAttribute("9");
-	cout<<vec2.size()<<endl;
-
-	for(int i=0; i<vec1.size(); i++){
-		cout<<vec1.at(i)<<" ";
-	}
-	cout<<endl;
-	
-	vec1.pop_back();
-	vec1 = t.getIntListAttribute("8");
-	for(int i=0; i<vec1.size(); i++){
-		cout<<vec1.at(i)<<" ";
-	}
-	cout<<endl;
-
-	for(int i=0; i<vec2.size(); i++){
-		cout<<vec2.at(i)<<" ";
-	}
-	cout<<endl;
-
-	vector<int> a;
-	a.push_back(1);
-	a.push_back(2);
-
-	vector<int> *b = new vector<int>(a);
-	b->push_back(3);
-
-	for(int i=0; i<a.size(); i++){
-		cout<<a.at(i)<<" ";
-	}
-	cout<<endl;
-	
-	for(int i=0; i<b->size(); i++){
-		cout<<b->at(i)<<" ";
-	}
-	cout<<endl;
-	*/	
 	return 0;
 }

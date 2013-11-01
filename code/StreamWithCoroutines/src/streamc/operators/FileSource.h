@@ -8,8 +8,15 @@ namespace streamc
 
 class FileSource : public Operator
 {
+private:
+	OutputPort* oport_;
+	std::string fileName_;
+
 public:
-    virtual void process();
+	FileSource(std::string id, std::string fileName);
+
+	virtual void process();
+	virtual void init();
 };
 
 }

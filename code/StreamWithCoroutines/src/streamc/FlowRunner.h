@@ -9,7 +9,7 @@ class FlowRunner
 {
 public:	
     static FlowRunner & createRunner();
-    virtual void run(Flow const & flow, int numThreads) = 0;
+    virtual void run(Flow &flow, int numThreads) = 0;
 };
 
 }

@@ -10,7 +10,8 @@ class InputPort
 {
 	public:	
 		virtual bool hasTuple() = 0;
-		virtual Tuple popTuple() = 0;
+		virtual Tuple frontTuple() = 0;
+		virtual void popTuple() = 0;
 
 	protected:
 		InputPort() {}

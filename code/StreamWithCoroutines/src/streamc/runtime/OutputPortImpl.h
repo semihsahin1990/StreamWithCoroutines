@@ -14,11 +14,7 @@ class OutputPortImpl : public OutputPort
 			portQ_ = portQ;
 		}
 
-		void pushTuple(Tuple tuple){
+		void pushTuple(Tuple &tuple){
 			portQ_->push(tuple);
 		}
 };
-
-OutputPort* OutputPort::create(queue<Tuple> *portQ){
-	return new OutputPortImpl(portQ);
-}

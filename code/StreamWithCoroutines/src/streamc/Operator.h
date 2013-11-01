@@ -15,13 +15,13 @@ namespace streamc
 class Operator
 {
 private:
-	int id;
+	std::string id_;
 	std::vector<InputPort *> inputPorts;
 	std::vector<OutputPort *> outputPorts;
 
 public:
-	Operator(int id){
-		this->id = id;
+	Operator(std::string id){
+		id_ = id;
 	}
 
 	virtual ~Operator(){
@@ -29,11 +29,12 @@ public:
 		outputPorts.clear();
 	}
 
-	int getId(){
-		return id;
+	std::string getId(){
+		return id_;
 	}
 
-	virtual void process()=0;
+	virtual void init() = 0;
+	virtual void process() = 0;
 	
 	virtual void const addInputPort(InputPort *inputPort)
 	{
@@ -53,6 +54,10 @@ public:
 	virtual std::vector<OutputPort *> const & getOutputPorts()
 	{
 		return outputPorts;
+	}
+
+	virtual bool isShutdownRequested(){
+		return false;
 	}
 };
 

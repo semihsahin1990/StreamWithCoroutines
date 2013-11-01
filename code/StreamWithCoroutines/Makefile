@@ -63,7 +63,8 @@ MY_CFLAGS = -I src
 MY_LIBS   =
 
 # The pre-processor options used by the cpp (man cpp for more).
-CPPFLAGS  = -Wall -std=c++11 -stdlib=libc++
+CPPFLAGS  = -Wall -std=c++11 
+#-stdlib=libc++
 
 # The options used in linking as well as in any direct use of ld.
 LDFLAGS   =
@@ -95,7 +96,7 @@ CXXFLAGS= -g -O2
 #CC     = gcc
 
 # The C++ program compiler.
-CXX    = clang++
+CXX    = g++
 
 # Un-comment the following line to compile C programs as C++ ones.
 #CC     = $(CXX)
@@ -237,6 +238,8 @@ endif
 
 clean:
 	$(RM) $(OBJS) $(PROGRAM) $(PROGRAM).exe
+	find -iname "*.d" -exec rm '{}' ';'
+	find -iname "*.swp" -exec rm '{}' ';'
 
 distclean: clean
 	$(RM) $(DEPS) TAGS

@@ -3,7 +3,7 @@
 
 using namespace streamc;
 
-FlowRunner & FlowRunner::createRunner()
+FlowRunner &FlowRunner::createRunner()
 {
     static FlowRunnerImpl runner;
     return static_cast<FlowRunner&>(runner);

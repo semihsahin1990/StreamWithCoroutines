@@ -16,6 +16,7 @@ private:
 	class Value
 	{
 		enum Type {Integer, Double, String, IntList, DoubleList, StringList};
+
 		public:
 		Type type;
 

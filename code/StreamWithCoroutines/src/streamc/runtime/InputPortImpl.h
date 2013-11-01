@@ -18,13 +18,15 @@ class InputPortImpl: public InputPort
 			return !portQ_->empty();
 		}
 	
-		Tuple popTuple(){
-			Tuple returned = portQ_->front();
+		Tuple frontTuple(){
+			return portQ_->front();
+		}
+
+		void popTuple(){
 			portQ_->pop();
-			return returned;
+		}
+
+		void pop(){
+			portQ_->pop();
 		}
 };
-
-InputPort* InputPort::create(queue<Tuple> *portQ){
-	return new InputPortImpl(portQ);
-}
