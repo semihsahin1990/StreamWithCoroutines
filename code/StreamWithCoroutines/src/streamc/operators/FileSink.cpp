@@ -1,5 +1,9 @@
 #include "streamc/operators/FileSink.h"
 
+#include "streamc/Tuple.h"
+#include "streamc/InputPort.h"
+#include "streamc/OperatorContext.h"
+
 #include <iostream>
 #include <fstream>
 #include <regex>
@@ -22,14 +26,14 @@ void FileSink::process(OperatorContext & context)
   output.open(fileName_.c_str(), ios::out);
   while (!context.isShutdownRequested()) {
     iport_->waitTuple();
-    Tuple & tuple = iport_.getFrontTuple();
+    Tuple & tuple = iport_->getFrontTuple();
     auto const & attributes = tuple.getAttributes();
     if (!attributes.empty()) {
       auto it=attributes.begin();
-      it->second->print(output);
+      Value::toString(*(it->second));
       for (++it; it!=attributes.end(); ++it) 
-        output << "," << Value::toString(*it->second);
+        output << "," << Value::toString(*(it->second));
     }
-    iport_.popTuple();
+    iport_->popTuple();
   } 
 }

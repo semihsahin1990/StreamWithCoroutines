@@ -1,32 +1,39 @@
+#pragma once 
+
 #include "streamc/Tuple.h"
 #include "streamc/InputPort.h"
 
-using namespace std;
-using namespace streamc;
+#include <deque>
+
+namespace streamc 
+{
+
+class OperatorContextImpl;
 
 class InputPortImpl: public InputPort
 {
-	private:
-		queue<Tuple> *portQ_;
+public:
+  InputPortImpl();
+  void addPublisher(OperatorContextImpl * oper);
+  void pushTuple(Tuple const & tuple);
 
-	public:
-		InputPortImpl(queue<Tuple> *portQ){
-			portQ_ = portQ;
-		}
+  // public interface
+  bool isComplete();
+  bool hasTuple();
+  size_t getTupleCount();  
+  bool waitTuple();
+  Tuple & getFrontTuple();
+  Tuple & getTupleAt(size_t index);
+  void popTuple();
 
-		bool hasTuple(){
-			return !portQ_->empty();
-		}
-	
-		Tuple frontTuple(){
-			return portQ_->front();
-		}
+private:
+  bool isCompleteNoLock();
 
-		void popTuple(){
-			portQ_->pop();
-		}
-
-		void pop(){
-			portQ_->pop();
-		}
+private:
+  bool isComplete_;
+  std::deque<Tuple> portQueue_;
+  std::vector<OperatorContextImpl *> publishers_;
+  std::mutex mutex_; 
 };
+
+} // namespace streamc

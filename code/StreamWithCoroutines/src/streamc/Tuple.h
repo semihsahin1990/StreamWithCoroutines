@@ -12,7 +12,7 @@ public:
   std::unordered_map<std::string, Value *> values_;
 public:
   Tuple() {}
-  Tuple(Tuple const & other)
+  Tuple(Tuple const & other) 
   {
     for(auto it=other.values_.begin(); it!=other.values_.end(); ++it) 
       values_[it->first] = new Value(*(it->second));
@@ -21,6 +21,10 @@ public:
     for (auto it=values_.begin(); it!=values_.end(); ++it)
       delete it->second;
   };
+  std::unordered_map<std::string, Value *> const & getAttributes() const
+  {
+    return values_;
+  }
   Tuple & operator=(Tuple const & other)
   {
     for (auto it=values_.begin(); it!=values_.end();) {

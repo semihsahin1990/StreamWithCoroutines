@@ -1,5 +1,9 @@
 #include "streamc/operators/FileSource.h"
 
+#include "streamc/Tuple.h"
+#include "streamc/OutputPort.h"
+#include "streamc/OperatorContext.h"
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -9,7 +13,7 @@ using namespace streamc;
 using namespace std;
 
 FileSource::FileSource(std::string const & name, std::string const & fileName,
-                       std::unordred_map<std::string, Type> const & attributes)
+                       std::unordered_map<std::string, Type> const & attributes)
   : Operator(name, 0, 1), fileName_(fileName), attributes_(attributes) 
 {}
 
@@ -24,16 +28,17 @@ void FileSource::process(OperatorContext & context)
   string line;
   ifstream input;
   input.open(fileName_.c_str(), ios::in);
+  std::regex sep(",");
   while (!context.isShutdownRequested()) {
     input >> line;
     if(input.eof())
-      break;
-    regex_token_iterator tokenIt(line.begin(), line.end(), ",", -1);
-    for (auto it=attributes.begin(); it!=attributes.end(); ++it, ++tokenIt) {
+      break;   
+    sregex_token_iterator tokenIt(line.begin(), line.end(), sep, -1);
+    for (auto it=attributes_.begin(); it!=attributes_.end(); ++it, ++tokenIt) {
       string const & name = it->first;
       Type type = it->second;
       string const & token = *tokenIt;
-      tuple.setAttribute(name, Value::fromString(token));
+      tuple.setAttribute(name, Value::fromString(token, type));
     }
     oport_->pushTuple(tuple);
   } 

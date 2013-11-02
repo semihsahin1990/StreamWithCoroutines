@@ -1,5 +1,8 @@
 #include "streamc/Value.h"
 
+#include <sstream>
+#include <cctype>
+
 using namespace std;
 using namespace streamc;
 
@@ -13,37 +16,29 @@ T from_string(string const & str)
 }
 
 template <typename T>
-T from_string_vec(string const & str)
-{
-  istringstream sstr(str);
-  vector<T> vecValue;
-  from_string_vec<T>(sstr, vecValue);
-  return vecValue;
-}
-
-template <typename T>
 void from_string_vec(istream & sstr, vector<T> & vecValue)
 {
-  while (is_space(sstr.peek())) 
+  T value;
+  while (isspace(sstr.peek())) 
     sstr.get();
   int c = sstr.get();
   if (c!='[') {
     sstr.setstate(ios::failbit);
     return;
   }
-  while (is_space(sstr.peek())) 
+  while (isspace(sstr.peek())) 
     sstr.get(); 
   c = sstr.peek();
   if (c==']') {
     sstr.get();
-    return vecValue;    
+    return;    
   }
   sstr >> value; 
   if (!sstr) 
     return;
   vecValue.push_back(value);
   while(true) {
-    while (is_space(sstr.peek())) 
+    while (isspace(sstr.peek())) 
       sstr.get();
     c = sstr.get();      
     if (c!=',' && c!=']') {
@@ -60,6 +55,15 @@ void from_string_vec(istream & sstr, vector<T> & vecValue)
 }
 
 template <typename T>
+std::vector<T> from_string_vec(string const & str)
+{
+  istringstream sstr(str);
+  vector<T> vecValue;
+  from_string_vec<T>(sstr, vecValue);
+  return vecValue;
+}
+
+template <typename T>
 string to_string_vec(vector<T> const & vecValue)
 {
   ostringstream ostr;
@@ -71,20 +75,21 @@ string to_string_vec(vector<T> const & vecValue)
       ostr << "," << *it;
   }
   ostr << "]";
+  return ostr.str();
 }
 
 Value Value::fromString(string const & str, Type type) 
 {
   switch(type) {
   case Type::Integer:
-    return Value(from_string<uint64_t>(str));
+    return Value(from_string<int64_t>(str));
   case Type::Double:
     return Value(from_string<double>(str));
   case Type::String:
     return str;
     //TODO: return Value(from_string_literal(str));
   case Type::IntList:
-    return Value(from_string_vec<uint64_t>(str));
+    return Value(from_string_vec<int64_t>(str));
   case Type::DoubleList:
     return Value(from_string_vec<double>(str));
   case Type::StringList:
@@ -96,18 +101,18 @@ string Value::toString(Value const & value)
 {
   switch(value.getType()) {
   case Type::Integer:
-    return to_string(*value.intPointer);
+    return to_string(*value.pointer.intPointer);
   case Type::Double:
-    return to_string(*value.doublePointer);
+    return to_string(*value.pointer.doublePointer);
   case Type::String:
-    return *value.stringPointer;
+    return *value.pointer.stringPointer;
     //TODO: return to_string_literal(*value.stringPointer);
   case Type::IntList:
-    retur to_string_vec(*value.intListPointer);
+    return to_string_vec(*value.pointer.intListPointer);
   case Type::DoubleList:
-    retur to_string_vec(*value.doubleListPointer);
+    return to_string_vec(*value.pointer.doubleListPointer);
   case Type::StringList:
-    retur to_string_vec(*value.stringListPointer);
+    return to_string_vec(*value.pointer.stringListPointer);
   }          
 }
 

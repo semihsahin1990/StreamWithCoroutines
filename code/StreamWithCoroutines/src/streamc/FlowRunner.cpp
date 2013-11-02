@@ -1,4 +1,6 @@
 #include "streamc/FlowRunner.h"
+
+#include "streamc/Flow.h"
 #include "streamc/runtime/FlowRunnerImpl.h"
 
 using namespace streamc;

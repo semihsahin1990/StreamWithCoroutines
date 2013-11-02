@@ -1,5 +1,10 @@
 #include "streamc/operators/Filter.h"
 
+#include "streamc/Tuple.h"
+#include "streamc/InputPort.h"
+#include "streamc/OutputPort.h"
+#include "streamc/OperatorContext.h"
+
 using namespace streamc;
 using namespace std;
 
@@ -19,9 +24,9 @@ void Filter::process(OperatorContext & context)
     bool closed = iport_->waitTuple();
     if (closed)
       break;
-    Tuple & tuple = iport_.getFrontTuple();
+    Tuple & tuple = iport_->getFrontTuple();
     if (filter_(tuple)) 
-      oport_.pushTuple(tuple);
-    iport_.popTuple();
+      oport_->pushTuple(tuple);
+    iport_->popTuple();
   }
 }

@@ -1,20 +1,21 @@
+#pragma once
+
 #include "streamc/Tuple.h"
 #include "streamc/OutputPort.h"
 
-using namespace std;
-using namespace streamc;
+namespace streamc
+{
+
+class OperatorContextImpl;
 
 class OutputPortImpl : public OutputPort
-{
-	private:
-		queue<Tuple> *portQ_;
-
-	public:
-		OutputPortImpl(queue<Tuple> *portQ){
-			portQ_ = portQ;
-		}
-
-		void pushTuple(Tuple &tuple){
-			portQ_->push(tuple);
-		}
+{  
+public:
+  OutputPortImpl();
+  void addSubscriber(OperatorContextImpl * oper, size_t inPort);
+  void pushTuple(Tuple const & tuple);
+private:
+  std::vector<std::pair<OperatorContextImpl *, size_t>> subscribers_;
 };
+
+} // namespace streamc

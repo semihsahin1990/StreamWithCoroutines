@@ -7,20 +7,22 @@
 namespace streamc 
 {
 
+class Tuple;
+class InputPort;
+class OutputPort;
+
 class Filter : public Operator
 {
+public:
+  Filter(std::string const & name, std::function<bool (Tuple &)> filter);
+  void init(OperatorContext & context);
+  void process(OperatorContext & context);
 private:
   InputPort * iport_;
   OutputPort * oport_;
   std::function<bool (Tuple &)> filter_;
-public:
-  Filter(std::string const & name, std::function<bool (Tuple &)> filter);
-       
-protected:
-  void init(OperatorContext & context);
-  void process(OperatorContext & context);
 };
 
-}
+} // namespace streamc
 
 

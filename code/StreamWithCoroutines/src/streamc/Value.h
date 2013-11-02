@@ -1,9 +1,12 @@
 #pragma once
 
-#include<string>
-#include<iostream>
-#include<inttypes.h>
-#include<vector>
+#include <string>
+#include <iostream>
+#include <inttypes.h>
+#include <vector>
+
+namespace streamc
+{
 
 enum class Type 
 {
@@ -239,3 +242,5 @@ private:
     std::vector<std::string> * stringListPointer;
   } pointer;
 };
+
+} // namespace streamc

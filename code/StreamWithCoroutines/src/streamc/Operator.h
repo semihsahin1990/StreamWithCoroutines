@@ -1,7 +1,5 @@
 #pragma once
 
-#include "streamc/OperatorContext.h"
-
 #include<iostream>
 #include<vector>
 
@@ -39,7 +37,6 @@ public:
   {
     return numOutputPorts_;
   }
-protected:
   virtual void init(OperatorContext & context) = 0;
   virtual void process(OperatorContext & context) = 0;
 };
