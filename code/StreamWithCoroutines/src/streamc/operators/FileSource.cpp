@@ -1,9 +1,5 @@
 #include "streamc/operators/FileSource.h"
 
-#include "streamc/Tuple.h"
-#include "streamc/OutputPort.h"
-#include "streamc/OperatorContext.h"
-
 #include <iostream>
 #include <fstream>
 #include <sstream>

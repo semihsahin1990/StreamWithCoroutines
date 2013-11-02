@@ -1,12 +1,15 @@
 #pragma once
 
+#include "streamc/Tuple.h"
+#include "streamc/InputPort.h"
+#include "streamc/OutputPort.h"
+#include "streamc/OperatorContext.h"
+
 #include<iostream>
 #include<vector>
 
 namespace streamc
 {
-
-class OperatorContext;
 
 class Operator
 {

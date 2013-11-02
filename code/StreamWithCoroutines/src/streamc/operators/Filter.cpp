@@ -1,10 +1,5 @@
 #include "streamc/operators/Filter.h"
 
-#include "streamc/Tuple.h"
-#include "streamc/InputPort.h"
-#include "streamc/OutputPort.h"
-#include "streamc/OperatorContext.h"
-
 using namespace streamc;
 using namespace std;
 

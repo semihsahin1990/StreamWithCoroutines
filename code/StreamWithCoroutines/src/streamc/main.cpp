@@ -1,4 +1,3 @@
-#include "streamc/Tuple.h"
 #include "streamc/Flow.h"
 #include "streamc/FlowRunner.h"
 #include "streamc/operators/FileSource.h"
@@ -14,7 +13,7 @@ int main()
   Flow flow("simple file filtering");
   
   // a source operator that reads from a file
-  unordered_map<string,Type> schema= {{"name",Type::String}, {"grade",Type::String}};
+  unordered_map<string,Type> schema = {{"name",Type::String}, {"grade",Type::String}};
   Operator * src = flow.createOperator<FileSource>("src" /*op name*/, "in.dat" /*in file*/, schema /*file format*/);
 
   // a filter operator that drops F grades 
@@ -25,11 +24,12 @@ int main()
   Operator * snk = flow.createOperator<FileSink>("snk" /*op name*/, "out.dat" /*out file*/); 
   
   // connections
-  flow.addOperator(src);
-  flow.addOperator(flt);
-  flow.addOperator(snk);
-  flow.addConnection(src,0, flt,0);
-  flow.addConnection(flt,0, snk,0);
+
+  // output 0 of src connects to intput 0 of flt
+  flow.addConnection(src,0, flt,0); 
+
+  // output 0 of flt connects to input 0 of snk
+  flow.addConnection(flt,0, snk,0); 
 	
   flow.printTopology(std::cout);
 	  

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "streamc/Operator.h"
+
 #include <iostream>
 #include <memory>
 #include <unordered_map>
@@ -8,7 +10,6 @@
 namespace streamc
 {
 
-class Operator;
 class OperatorConnections;
 
 class OutConnection

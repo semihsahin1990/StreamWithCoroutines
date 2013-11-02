@@ -7,10 +7,6 @@
 namespace streamc 
 {
 
-class Tuple;
-class InputPort;
-class OutputPort;
-
 class Filter : public Operator
 {
 public:

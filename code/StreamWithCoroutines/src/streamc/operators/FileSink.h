@@ -6,8 +6,6 @@
 namespace streamc 
 {
 
-class InputPort;
-
 class FileSink : public Operator
 {
 public:

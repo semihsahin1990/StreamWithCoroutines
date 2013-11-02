@@ -1,14 +1,10 @@
 #include "streamc/Operator.h"
 
-#include "streamc/Value.h"
-
 #include <iostream>
 #include <unordered_map>
 
 namespace streamc 
 {
-
-class OutputPort;
 
 class FileSource : public Operator
 {
