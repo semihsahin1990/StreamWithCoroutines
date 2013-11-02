@@ -50,6 +50,13 @@ public:
   std::vector<InConnection> const & getInConnections(Operator *op, size_t inPort) const;
   void printTopology(std::ostream & ostream) const; 
 
+  template <typename T, typename... Args>
+  Operator * createOperator(std::string const & name, Args&&... args)
+  {
+    Operator * op = new T(name, std::forward<Args>(args)...);
+    addOperator(op);
+    return op;
+  }
 private:
   std::string name_;
   std::vector<Operator *> opList_; // to return to users

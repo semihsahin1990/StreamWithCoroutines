@@ -10,14 +10,19 @@ using namespace streamc;
 
 int main()
 {
-  // operator instances
-  Flow flow("test flow");
-  FileSource * src = new FileSource("src", "src.dat", 
-      {{"name",Type::String}, {"grade",Type::String}});
-  Filter * flt = new Filter("flt", [] (Tuple & t) { 
-      return t.getStringAttribute("grade") != "F"; 
-  });
-  FileSink * snk = new FileSink("snk", "snk.dat");
+  // operator graph
+  Flow flow("simple file filtering");
+  
+  // a source operator that reads from a file
+  unordered_map<string,Type> schema= {{"name",Type::String}, {"grade",Type::String}};
+  Operator * src = flow.createOperator<FileSource>("src" /*op name*/, "in.dat" /*in file*/, schema /*file format*/);
+
+  // a filter operator that drops F grades 
+  auto filter = [] (Tuple & t) { return t.getStringAttribute("grade") != "F"; };
+  Operator * flt = flow.createOperator<Filter>("flt" /*op name*/, filter /* filter cond*/); 
+
+  // a sink operator that writes to a file
+  Operator * snk = flow.createOperator<FileSink>("snk" /*op name*/, "out.dat" /*out file*/); 
   
   // connections
   flow.addOperator(src);
@@ -33,5 +38,9 @@ int main()
   runner.run(flow, 5);
   runner.wait(flow);
   
-  // alternative: sleep(10); runner.shutdown(flow); runner.wait(flow);        
+  /*alternative:
+  sleep(10); 
+  runner.requestShutdown(flow); 
+  runner.wait(flow);        
+  */
 }
