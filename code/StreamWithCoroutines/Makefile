@@ -236,9 +236,9 @@ endif
 endif
 
 clean:
-	$(RM) $(OBJS) $(PROGRAM) $(PROGRAM).exe
 	find -iname "*.d" -exec rm '{}' ';'
 	find -iname "*.swp" -exec rm '{}' ';'
+	$(RM) $(OBJS) $(PROGRAM) $(PROGRAM).exe
 
 distclean: clean
 	$(RM) $(DEPS) TAGS

@@ -1,7 +1,7 @@
-#include<iostream>
-#include<vector>
-
 #include "streamc/Operator.h"
+
+#include <iostream>
+#include <vector>
 
 namespace streamc 
 {
@@ -9,14 +9,15 @@ namespace streamc
 class FileSource : public Operator
 {
 private:
-	OutputPort* oport_;
-	std::string fileName_;
-
+  std::string fileName_;
+  std::unordered_map<std::string, Type> attributes_;
+  OutputPort * oport_;
 public:
-	FileSource(std::string id, std::string fileName);
-
-	virtual void process();
-	virtual void init();
+  FileSource(std::string const & name, std::string const & fileName,
+             std::unordred_map<std::string, Type> const & attributes);  
+protected:
+  void init(OperatorContext & context);
+  void process(OperatorContext & context);
 };
 
 }

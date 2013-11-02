@@ -1,43 +1,40 @@
-#include<iostream>
-#include<fstream>
-#include<sstream>
 #include "streamc/operators/FileSource.h"
+
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <regex>
 
 using namespace streamc;
 using namespace std;
 
+FileSource::FileSource(std::string const & name, std::string const & fileName,
+                       std::unordred_map<std::string, Type> const & attributes)
+  : Operator(name, 0, 1), fileName_(fileName), attributes_(attributes) 
+{}
 
-FileSource::FileSource(string id, string fileName) 
-  : Operator(id) 
+void FileSource::init(OperatorContext & context)
 {
-  fileName_ = fileName;
+  oport_ = & context.getOutputPort(0);
 }
 
-void FileSource::init()
+void FileSource::process(OperatorContext & context)
 {
-  oport_ = getContext().getOutputPorts()[0];
-}
-
-void FileSource::process()
-{
-  int64_t value;
-  int counter=0;
-  stringstream key;
-
+  Tuple tuple;
+  string line;
   ifstream input;
   input.open(fileName_.c_str(), ios::in);
-  
-  while (!getContext().isShutdownRequested() ) {
-    input>>value;
+  while (!context.isShutdownRequested()) {
+    input >> line;
     if(input.eof())
       break;
-    
-    key.str("");
-    key<<"key"<<counter++;
-    
-    Tuple t;
-    t.addAttribute(key.str(), value);
-    oport_->pushTuple(t);
-  }        
-  input.close();
+    regex_token_iterator tokenIt(line.begin(), line.end(), ",", -1);
+    for (auto it=attributes.begin(); it!=attributes.end(); ++it, ++tokenIt) {
+      string const & name = it->first;
+      Type type = it->second;
+      string const & token = *tokenIt;
+      tuple.setAttribute(name, Value::fromString(token));
+    }
+    oport_->pushTuple(tuple);
+  } 
 }

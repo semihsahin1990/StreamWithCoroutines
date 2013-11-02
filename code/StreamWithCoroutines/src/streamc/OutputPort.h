@@ -1,18 +1,14 @@
 #pragma once
 
-#include<queue>
-#include "Tuple.h"
+#include "streamc/Tuple.h"
 
 namespace streamc
 {
 
 class OutputPort
 {
-	public:
-		virtual void pushTuple(Tuple &tuple) = 0;
-
-	protected:
-		OutputPort(){}
+public:
+  virtual void pushTuple(Tuple const & tuple) = 0;
 };
 
 }

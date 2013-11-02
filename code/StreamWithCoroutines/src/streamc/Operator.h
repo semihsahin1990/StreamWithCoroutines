@@ -1,54 +1,47 @@
 #pragma once
 
+#include "streamc/OperatorContext.h"
+
 #include<iostream>
 #include<vector>
-
-#include "OperatorContext.h"
 
 namespace streamc
 {
 
+class OperatorContext;
+
 class Operator
 {
 private:
-  std::string id_;
-  OperatorContext * context_;
+  std::string name_;
+  size_t numInputPorts_;
+  size_t numOutputPorts_;
 
 public:
-  Operator(std::string id)
-    : id_(id), completed_(false)
-  {
-  }
-  
+  Operator(std::string const & name, size_t numInputPorts, size_t numOutputPorts)
+    : name_(name), numInputPorts_(numInputPorts), numOutputPorts_(numOutputPorts) 
+  {}
+  Operator(size_t numInputPorts, size_t numOutputPorts)
+    : Operator("op@addr_"+std::to_string(reinterpret_cast<uintptr_t>(this)), 
+               numInputPorts, numOutputPorts) 
+  {}
   virtual ~Operator() 
+  {}  
+  std::string const & getName() const
   {
+    return name_;
   }
-  
-  std::string getId() 
+  size_t getNumberOfInputPorts() const
   {
-    return id_;
+    return numInputPorts_;
   }
-  
-  bool isCompleted() 
+  size_t getNumberOfOutputPorts() const
   {
-    return context_->isCompleted();
+    return numOutputPorts_;
   }
-  
-  Context const & getContext() 
-  {
-    return context_;
-  } 
-  
 protected:
-  virtual void init() = 0;
-  virtual void process() = 0;
-  
-private:
-  friend class FlowRunnerImpl;
-  void setContext(OperatorContext * context) 
-  {
-    context_ = context;
-  }
+  virtual void init(OperatorContext & context) = 0;
+  virtual void process(OperatorContext & context) = 0;
 };
  
 }
