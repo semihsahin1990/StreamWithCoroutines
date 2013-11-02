@@ -13,8 +13,8 @@ int main()
   Flow flow("simple file filtering");
   
   // a source operator that reads from a file
-  unordered_map<string,Type> schema = {{"name",Type::String}, {"grade",Type::String}};
-  Operator * src = flow.createOperator<FileSource>("src" /*op name*/, "in.dat" /*in file*/, schema /*file format*/);
+  unordered_map<string,Type> format = {{"name",Type::String}, {"grade",Type::String}};
+  Operator * src = flow.createOperator<FileSource>("src" /*op name*/, "in.dat" /*in file*/, format /*file format*/);
 
   // a filter operator that drops F grades 
   auto filter = [] (Tuple & t) { return t.getStringAttribute("grade") != "F"; };
