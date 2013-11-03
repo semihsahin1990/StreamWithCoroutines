@@ -53,43 +53,44 @@ Flow::Flow(string const & name)
 Flow::~Flow() 
 {}
 
-void Flow::addOperator(Operator * op)
+void Flow::addOperator(Operator & op)
 {
-  if (ops_.count(op->getName())>0)
-    throw runtime_error("Operator with name '"+op->getName()+"' exists");
-  ops_[op->getName()] = unique_ptr<Operator>(op);
-  uintptr_t opAddr = reinterpret_cast<uintptr_t>(op);
+  string const & name = op.getName();
+  if (ops_.count(name)>0)
+    throw runtime_error("Operator with name '"+name+"' already exists in flow '"+name_+"'.");
+  ops_[name] = unique_ptr<Operator>(&op);
+  uintptr_t opAddr = reinterpret_cast<uintptr_t>(&op);
   opConnections_[opAddr] = unique_ptr<OperatorConnections>(
-    new OperatorConnections(op->getNumberOfInputPorts(), op->getNumberOfOutputPorts()));
-  opList_.push_back(op);
+    new OperatorConnections(op.getNumberOfInputPorts(), op.getNumberOfOutputPorts()));
+  opList_.push_back(&op);
 }
 
-void Flow::addConnection(Operator * fromOp, uint32_t fromOutPort, 
-                         Operator * toOp, uint32_t toInPort)
+void Flow::addConnection(Operator & fromOp, uint32_t fromOutPort, 
+                         Operator & toOp, uint32_t toInPort)
 {
-  uintptr_t fromOpAddr = reinterpret_cast<uintptr_t>(fromOp);
-  uintptr_t toOpAddr = reinterpret_cast<uintptr_t>(toOp);
+  uintptr_t fromOpAddr = reinterpret_cast<uintptr_t>(&fromOp);
+  uintptr_t toOpAddr = reinterpret_cast<uintptr_t>(&toOp);
   opConnections_[fromOpAddr]->addOutputConnection(fromOutPort, OutConnection(toOp, toInPort)); 
   opConnections_[toOpAddr]->addInputConnection(toInPort, InConnection(fromOp, fromOutPort)); 
 }
 
-Operator * Flow::getOperatorByName(std::string const & opName) const
+Operator & Flow::getOperatorByName(std::string const & opName) const
 {
   auto it = ops_.find(opName);
   if (it==ops_.end())
-    return nullptr;
-  return it->second.get();
+    throw runtime_error("Operator with name '"+opName+"' does not exist in flow '"+name_+"'.");
+  return *(it->second.get());
 }
 
-std::vector<OutConnection> const & Flow::getOutConnections(Operator *op, size_t outPort) const
+std::vector<OutConnection> const & Flow::getOutConnections(Operator & op, size_t outPort) const
 {
-  uintptr_t opAddr = reinterpret_cast<uintptr_t>(op);
+  uintptr_t opAddr = reinterpret_cast<uintptr_t>(&op);
   return opConnections_.find(opAddr)->second->getOutputPortConnections(outPort);
 }
 
-std::vector<InConnection> const & Flow::getInConnections(Operator *op, size_t inPort) const
+std::vector<InConnection> const & Flow::getInConnections(Operator & op, size_t inPort) const
 {
-  uintptr_t opAddr = reinterpret_cast<uintptr_t>(op);
+  uintptr_t opAddr = reinterpret_cast<uintptr_t>(&op);
   return opConnections_.find(opAddr)->second->getInputPortConnections(inPort);  
 }
 
@@ -105,12 +106,12 @@ void Flow::printTopology(std::ostream & ostream) const
     for (size_t oport=0; oport<oper->getNumberOfOutputPorts(); ++oport) {
       ostream << "\t\toutput port #" << oport << ":\n";
       for (auto const & conn : connections.getOutputPortConnections(oport)) 
-        ostream << "\t\t\toperator: " << conn.getOperator()->getName() << ", input port: " << conn.getInputPort() << "\n";
+        ostream << "\t\t\toperator: " << conn.getOperator().getName() << ", input port: " << conn.getInputPort() << "\n";
     }
     for (size_t iport=0; iport<oper->getNumberOfInputPorts(); ++iport) {
       ostream << "\t\tinput port #" << iport << ":\n";
       for (auto const & conn : connections.getInputPortConnections(iport)) 
-        ostream << "\t\t\toperator: " << conn.getOperator()->getName() << ", output port: " << conn.getOutputPort() << "\n";
+        ostream << "\t\t\toperator: " << conn.getOperator().getName() << ", output port: " << conn.getOutputPort() << "\n";
     }
   }
 }

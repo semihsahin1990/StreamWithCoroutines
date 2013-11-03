@@ -32,9 +32,9 @@ void FlowContext::run(int numThreads)
     // add input ports
     for (size_t i=0; i<oper->getNumberOfInputPorts(); ++i) {
       InputPortImpl * port = new InputPortImpl();
-      vector<InConnection> const & conns = flow_.getInConnections(oper, i);
+      vector<InConnection> const & conns = flow_.getInConnections(*oper, i);
       for (InConnection const & conn : conns) {
-        uintptr_t oopAddr = reinterpret_cast<uintptr_t>(conn.getOperator());
+        uintptr_t oopAddr = reinterpret_cast<uintptr_t>(&conn.getOperator());
         port->addPublisher(operatorContexts_[oopAddr].get());
       }
       operatorContext->addInputPort(port);
@@ -42,9 +42,9 @@ void FlowContext::run(int numThreads)
     // add output ports
     for (size_t i=0; i<oper->getNumberOfOutputPorts(); ++i) {
       OutputPortImpl * port = new OutputPortImpl();
-      vector<OutConnection> const & conns = flow_.getOutConnections(oper, i);
+      vector<OutConnection> const & conns = flow_.getOutConnections(*oper, i);
       for (OutConnection const & conn : conns)  {
-        uintptr_t oopAddr = reinterpret_cast<uintptr_t>(conn.getOperator());
+        uintptr_t oopAddr = reinterpret_cast<uintptr_t>(&conn.getOperator());
         port->addSubscriber(operatorContexts_[oopAddr].get(), conn.getInputPort());
       }
       operatorContext->addOutputPort(port);

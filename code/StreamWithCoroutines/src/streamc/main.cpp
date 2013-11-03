@@ -14,14 +14,18 @@ int main()
   
   // a source operator that reads from a file
   unordered_map<string,Type> format = {{"name",Type::String}, {"grade",Type::String}};
-  Operator * src = flow.createOperator<FileSource>("src" /*op name*/, "in.dat" /*in file*/, format /*file format*/);
+  Operator & src = flow.createOperator<FileSource>("src",    // op name
+                                                   "in.dat", // in file
+                                                   format);  // file format
 
   // a filter operator that drops F grades 
   auto filter = [] (Tuple & t) { return t.getStringAttribute("grade") != "F"; };
-  Operator * flt = flow.createOperator<Filter>("flt" /*op name*/, filter /* filter cond*/); 
+  Operator & flt = flow.createOperator<Filter>("flt",   // op name
+                                               filter); // filter
 
   // a sink operator that writes to a file
-  Operator * snk = flow.createOperator<FileSink>("snk" /*op name*/, "out.dat" /*out file*/); 
+  Operator & snk = flow.createOperator<FileSink>("snk",      // op name 
+                                                 "out.dat"); // out file
   
   // connections
 

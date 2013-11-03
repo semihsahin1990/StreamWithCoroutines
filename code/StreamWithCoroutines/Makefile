@@ -52,7 +52,7 @@ all: $(BINDIR)/$(PROGRAM)
 
 $(OBJDIR)/%.d:$(SRCDIR)/%.cpp
 	@mkdir -p $(dir $@)
-	@/bin/echo -n $(dir $<) > $@
+	@/bin/echo -n $(dir $@) > $@
 	@$(DEPEND) $< >> $@ || rm $@
 
 # Rules for generating object files (.o).
