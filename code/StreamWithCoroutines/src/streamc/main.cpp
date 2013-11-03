@@ -30,10 +30,10 @@ int main()
   // connections
 
   // output 0 of src connects to intput 0 of flt
-  flow.addConnection(src,0, flt,0); 
+  flow.addConnection( (src,0) >> (0,flt) ); 
 
   // output 0 of flt connects to input 0 of snk
-  flow.addConnection(flt,0, snk,0); 
+  flow.addConnection( (flt,0) >> (0,snk) ); 
 	
   flow.printTopology(std::cout);
 	  

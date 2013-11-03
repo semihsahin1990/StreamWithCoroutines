@@ -20,28 +20,28 @@ class OperatorConnections
 {
 public:
   OperatorConnections(size_t numInputPorts, size_t numOutputPorts)
-    : inPortConnections_(numInputPorts, vector<InConnection>()),
-      outPortConnections_(numOutputPorts, vector<OutConnection>())
+    : inPortConnections_(numInputPorts, vector<FromConnection>()),
+      outPortConnections_(numOutputPorts, vector<ToConnection>())
   {}
-  void addOutputConnection(size_t outPort, OutConnection const & ocon) 
+  void addOutputConnection(size_t outPort, ToConnection const & ocon) 
   {
     outPortConnections_[outPort].push_back(ocon);
   }
-  void addInputConnection(size_t inPort, InConnection const & icon) 
+  void addInputConnection(size_t inPort, FromConnection const & icon) 
   {
     inPortConnections_[inPort].push_back(icon);
   }
-  vector<OutConnection> const & getOutputPortConnections(size_t outPort) const 
+  vector<ToConnection> const & getOutputPortConnections(size_t outPort) const 
   { 
     return outPortConnections_[outPort]; 
   }
-  vector<InConnection> const & getInputPortConnections(size_t inPort) const 
+  vector<FromConnection> const & getInputPortConnections(size_t inPort) const 
   { 
     return inPortConnections_[inPort]; 
   }
 private:
-  vector<vector<InConnection>> inPortConnections_;
-  vector<vector<OutConnection>> outPortConnections_;
+  vector<vector<FromConnection>> inPortConnections_;
+  vector<vector<ToConnection>> outPortConnections_;
 };
 
 } // namespace streamc
@@ -70,8 +70,19 @@ void Flow::addConnection(Operator & fromOp, uint32_t fromOutPort,
 {
   uintptr_t fromOpAddr = reinterpret_cast<uintptr_t>(&fromOp);
   uintptr_t toOpAddr = reinterpret_cast<uintptr_t>(&toOp);
-  opConnections_[fromOpAddr]->addOutputConnection(fromOutPort, OutConnection(toOp, toInPort)); 
-  opConnections_[toOpAddr]->addInputConnection(toInPort, InConnection(fromOp, fromOutPort)); 
+  opConnections_[fromOpAddr]->addOutputConnection(fromOutPort, ToConnection(toOp, toInPort)); 
+  opConnections_[toOpAddr]->addInputConnection(toInPort, FromConnection(fromOp, fromOutPort)); 
+}
+
+void Flow::addConnection(FromConnection const & from, ToConnection const & to)
+{
+  addConnection(from.getOperator(), from.getOutputPort(),
+                to.getOperator(), to.getInputPort()); 
+}
+
+void Flow::addConnection(Connection const & conn)
+{
+  addConnection(conn.getInConnection(), conn.getOutConnection());
 }
 
 Operator & Flow::getOperatorByName(std::string const & opName) const
@@ -82,13 +93,13 @@ Operator & Flow::getOperatorByName(std::string const & opName) const
   return *(it->second.get());
 }
 
-std::vector<OutConnection> const & Flow::getOutConnections(Operator & op, size_t outPort) const
+std::vector<ToConnection> const & Flow::getOutConnections(Operator & op, size_t outPort) const
 {
   uintptr_t opAddr = reinterpret_cast<uintptr_t>(&op);
   return opConnections_.find(opAddr)->second->getOutputPortConnections(outPort);
 }
 
-std::vector<InConnection> const & Flow::getInConnections(Operator & op, size_t inPort) const
+std::vector<FromConnection> const & Flow::getInConnections(Operator & op, size_t inPort) const
 {
   uintptr_t opAddr = reinterpret_cast<uintptr_t>(&op);
   return opConnections_.find(opAddr)->second->getInputPortConnections(inPort);  
