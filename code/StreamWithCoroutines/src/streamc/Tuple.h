@@ -6,10 +6,12 @@
 
 namespace streamc
 {
+
 class Tuple
 {
-public:
+private:
   std::unordered_map<std::string, Value *> values_;
+  
 public:
   Tuple() {}
   Tuple(Tuple const & other) 
@@ -87,7 +89,8 @@ public:
   {
     return values_[name]->getIntValue();
   }
-  double & getDoubleAttribute(std::string const & name) {
+  double & getDoubleAttribute(std::string const & name) 
+  {
     return values_[name]->getDoubleValue();
   }
   std::string & getStringAttribute(std::string const & name) 
@@ -117,5 +120,42 @@ private:
       it->second->setValue(value);
   }
 };
+
+template <Type T>
+inline typename TypeKindToType<T>::type & get(Tuple & tuple, std::string const & name) 
+{
+  static_assert(true, "incorrect type passed to streamc::Tuple::get<>(std::string const &)");
+  return *static_cast<typename TypeKindToType<T>::type *>(nullptr);
+}
+template <>
+inline int64_t & get<Type::Integer>(Tuple & tuple, std::string const & name) 
+{
+  return tuple.getIntAttribute(name);
+}
+template <>
+inline double & get<Type::Double>(Tuple & tuple, std::string const & name) 
+{
+  return tuple.getDoubleAttribute(name);
+}
+template <>
+inline std::string & get<Type::String>(Tuple & tuple, std::string const & name) 
+{
+  return tuple.getStringAttribute(name);
+}
+template <>
+inline std::vector<int64_t> & get<Type::IntList>(Tuple & tuple, std::string const & name) 
+{
+  return tuple.getIntListAttribute(name);
+}
+template <>
+inline std::vector<double> & get<Type::DoubleList>(Tuple & tuple, std::string const & name) 
+{
+  return tuple.getDoubleListAttribute(name);
+}
+template <>
+inline std::vector<std::string> & get<Type::StringList>(Tuple & tuple, std::string const & name) 
+{
+  return tuple.getStringListAttribute(name);
+}
   
 }

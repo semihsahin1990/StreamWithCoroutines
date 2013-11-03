@@ -19,7 +19,7 @@ int main()
                                                    format);  // file format
 
   // a filter operator that drops F grades 
-  auto filter = [] (Tuple & t) { return t.getStringAttribute("grade") != "F"; };
+  auto filter = [] (Tuple & t) { return get<Type::String>(t, "grade") != "F"; };
   Operator & flt = flow.createOperator<Filter>("flt",   // op name
                                                filter); // filter
 

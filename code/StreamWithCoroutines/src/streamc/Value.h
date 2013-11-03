@@ -18,6 +18,41 @@ enum class Type
   StringList 
 };
 
+template <Type T>
+struct TypeKindToType {};
+
+template<>
+struct TypeKindToType<Type::Integer> 
+{
+  typedef int64_t type;
+};
+template<>
+struct TypeKindToType<Type::Double> 
+{
+  typedef double type;
+};
+template<>
+struct TypeKindToType<Type::String> 
+{
+  typedef std::string type;
+};
+
+template<>
+struct TypeKindToType<Type::IntList> 
+{
+  typedef std::vector<int64_t> type;
+};
+template<>
+struct TypeKindToType<Type::DoubleList> 
+{
+  typedef std::vector<double> type;
+};
+template<>
+struct TypeKindToType<Type::StringList> 
+{
+  typedef std::vector<std::string> type;
+};
+
 class Value
 {    
 public:
