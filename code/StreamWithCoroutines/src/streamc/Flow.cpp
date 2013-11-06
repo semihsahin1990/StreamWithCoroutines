@@ -85,6 +85,12 @@ void Flow::addConnection(Connection const & conn)
   addConnection(conn.getInConnection(), conn.getOutConnection());
 }
 
+void Flow::addConnections(ConnectionChain const & conns)
+{
+  for (auto const & conn : conns.getConnections())
+    addConnection(conn);
+}
+
 Operator & Flow::getOperatorByName(std::string const & opName) const
 {
   auto it = ops_.find(opName);
@@ -107,22 +113,21 @@ std::vector<FromConnection> const & Flow::getInConnections(Operator & op, size_t
 
 void Flow::printTopology(std::ostream & ostream) const
 {
-  for (auto const & nameOpPair : ops_) {
-    string const & opName = nameOpPair.first;
-    Operator * oper = nameOpPair.second.get();
+  for (auto oper : opList_) {
+    string const & opName = oper->getName();
     uintptr_t opAddr = reinterpret_cast<uintptr_t>(oper);
     ostream << "operator: " << opName << "\n";
     ostream << "\tout conections:\n";
     OperatorConnections const & connections = *(opConnections_.find(opAddr)->second); 
-    for (size_t oport=0; oport<oper->getNumberOfOutputPorts(); ++oport) {
-      ostream << "\t\toutput port #" << oport << ":\n";
-      for (auto const & conn : connections.getOutputPortConnections(oport)) 
-        ostream << "\t\t\toperator: " << conn.getOperator().getName() << ", input port: " << conn.getInputPort() << "\n";
-    }
     for (size_t iport=0; iport<oper->getNumberOfInputPorts(); ++iport) {
       ostream << "\t\tinput port #" << iport << ":\n";
       for (auto const & conn : connections.getInputPortConnections(iport)) 
         ostream << "\t\t\toperator: " << conn.getOperator().getName() << ", output port: " << conn.getOutputPort() << "\n";
+    }
+    for (size_t oport=0; oport<oper->getNumberOfOutputPorts(); ++oport) {
+      ostream << "\t\toutput port #" << oport << ":\n";
+      for (auto const & conn : connections.getOutputPortConnections(oport)) 
+        ostream << "\t\t\toperator: " << conn.getOperator().getName() << ", input port: " << conn.getInputPort() << "\n";
     }
   }
 }

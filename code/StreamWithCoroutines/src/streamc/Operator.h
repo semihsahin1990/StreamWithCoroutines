@@ -8,6 +8,10 @@
 #include<iostream>
 #include<vector>
 
+#define MEXP1(x) [] (Tuple & t_) { return x; }
+#define MEXP2(x) [] (Tuple & t0_, Tuple & t1_) { return x; }
+#define MEXPn(x) [] (std::vector<Tuple *> const & ts_) { return x; }
+
 namespace streamc
 {
 

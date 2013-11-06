@@ -7,6 +7,16 @@ Filter::Filter(std::string const & name, std::function<bool (Tuple &)> filter)
   : Operator(name, 1, 1), filter_(filter)
 {}
 
+Filter::Filter(std::string const & name)
+  : Filter(name, MEXP1(false))
+{}
+
+Filter & Filter::set_filter(std::function<bool (Tuple &)> filter)
+{
+  filter_ = filter;
+  return *this;
+}
+
 void Filter::init(OperatorContext & context)
 {
   iport_ = & context.getInputPort(0);

@@ -9,35 +9,29 @@ using namespace streamc;
 
 int main()
 {
-  // operator graph
   Flow flow("simple file filtering");
   
-  // a source operator that reads from a file
-  unordered_map<string,Type> format = {{"name",Type::String}, {"grade",Type::String}};
-  Operator & src = flow.createOperator<FileSource>("src",    // op name
-                                                   "in.dat", // in file
-                                                   format);  // file format
+  Operator & src = flow.createOperator<FileSource>("src")
+    .set_fileName("in.dat")
+    .set_fileFormat({{"name",Type::String}, {"grade",Type::String}});
 
-  // a filter operator that drops F grades 
-  auto filter = [] (Tuple & t) { return get<Type::String>(t, "grade") != "F"; };
-  Operator & flt = flow.createOperator<Filter>("flt",   // op name
-                                               filter); // filter
+  Operator & fltF = flow.createOperator<Filter>("fltF")
+    .set_filter(MEXP1( t_.get<Type::String>("grade") != "F" ));
 
-  // a sink operator that writes to a file
-  Operator & snk = flow.createOperator<FileSink>("snk",      // op name 
-                                                 "out.dat"); // out file
-  
-  // connections
+  Operator & fltG = flow.createOperator<Filter>("fltG")
+    .set_filter(MEXP1( t_.get<Type::String>("name") != "Gil" ));
 
-  // output 0 of src connects to intput 0 of flt
-  flow.addConnection( (src,0) >> (0,flt) ); 
+  Operator & snk = flow.createOperator<FileSink>("snk")
+    .set_fileName("out.dat"); 
+  	
+  flow.addConnections( (src,0) >> (0,fltF,0) >> (0,fltG,0) >> (0,snk) ); 
 
-  // output 0 of flt connects to input 0 of snk
-  flow.addConnection( (flt,0) >> (0,snk) ); 
-	
+  // alternative:
+  //flow.addConnection( (src,0) >> (0,flt) ); 
+  //flow.addConnection( (flt,0) >> (0,snk) ); 
+
   flow.printTopology(std::cout);
 	  
-  // run it!
   FlowRunner & runner = FlowRunner::createRunner();
   runner.run(flow, 5);
   runner.wait(flow);

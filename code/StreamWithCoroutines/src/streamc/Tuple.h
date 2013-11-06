@@ -85,6 +85,8 @@ public:
       values_.erase(it);
     }
   }
+  template <Type T>
+  typename TypeKindToType<T>::type & get(std::string const & name);
   int64_t & getIntAttribute(std::string const & name) 
   {
     return values_[name]->getIntValue();
@@ -158,4 +160,10 @@ inline std::vector<std::string> & get<Type::StringList>(Tuple & tuple, std::stri
   return tuple.getStringListAttribute(name);
 }
   
+template <Type T>
+typename TypeKindToType<T>::type & Tuple::get(std::string const & name)
+{
+  return streamc::get<T>(*this, name);
+}
+
 }

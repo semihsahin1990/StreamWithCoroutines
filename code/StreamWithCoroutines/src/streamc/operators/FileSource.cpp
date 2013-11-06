@@ -13,6 +13,26 @@ FileSource::FileSource(std::string const & name, std::string const & fileName,
   : Operator(name, 0, 1), fileName_(fileName), attributes_(attributes) 
 {}
 
+FileSource::FileSource(std::string const & name, std::string const & fileName)
+  : FileSource(name, fileName, {})
+{}
+
+FileSource::FileSource(std::string const & name)
+  : FileSource(name, "", {})
+{}
+
+FileSource & FileSource::set_fileName(std::string const & fileName)
+{
+  fileName_ = fileName;
+  return *this;
+}
+
+FileSource & FileSource::set_fileFormat(std::unordered_map<std::string, Type> const & attributes)
+{
+  attributes_ = attributes;
+  return *this;
+}
+
 void FileSource::init(OperatorContext & context)
 {
   oport_ = & context.getOutputPort(0);

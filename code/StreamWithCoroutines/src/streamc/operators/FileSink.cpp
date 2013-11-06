@@ -11,6 +11,17 @@ FileSink::FileSink(std::string const & name, std::string const & fileName)
   : Operator(name, 1, 0), fileName_(fileName)
 {}
 
+FileSink::FileSink(std::string const & name)
+  : FileSink(name, "")
+{}
+
+FileSink & FileSink::set_fileName(std::string const & fileName)
+{
+  fileName_ = fileName;
+  return *this;
+}
+
+
 void FileSink::init(OperatorContext & context)
 {
   iport_ = & context.getInputPort(0);
