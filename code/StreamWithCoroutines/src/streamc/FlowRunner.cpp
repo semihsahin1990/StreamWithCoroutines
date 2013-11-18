@@ -5,6 +5,7 @@
 
 using namespace streamc;
 
+//creates FlowRunnerImpl and returns it
 FlowRunner & FlowRunner::createRunner()
 {
     static FlowRunnerImpl runner;

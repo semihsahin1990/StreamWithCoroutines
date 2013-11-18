@@ -30,6 +30,7 @@ private:
   bool isCompleteNoLock();
 
 private:
+  //properties of InputPortImpl
   bool isComplete_;
   std::deque<Tuple> portQueue_;
   std::vector<OperatorContextImpl *> publishers_;

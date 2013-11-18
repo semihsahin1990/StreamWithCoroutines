@@ -7,26 +7,30 @@
 using namespace streamc;
 using namespace std;
 
+//constructor with name and fileName
 FileSink::FileSink(std::string const & name, std::string const & fileName)
   : Operator(name, 1, 0), fileName_(fileName)
 {}
 
+//constructor with name, fileName is initialized with ""
 FileSink::FileSink(std::string const & name)
   : FileSink(name, "")
 {}
 
+//set fileName
 FileSink & FileSink::set_fileName(std::string const & fileName)
 {
   fileName_ = fileName;
   return *this;
 }
 
-
+//init FileSink with OperatorContext
 void FileSink::init(OperatorContext & context)
 {
   iport_ = & context.getInputPort(0);
 }
 
+//wait for tuple, get it. write its all attribute values to the file.
 void FileSink::process(OperatorContext & context)
 {
   ofstream output;
@@ -37,7 +41,7 @@ void FileSink::process(OperatorContext & context)
     auto const & attributes = tuple.getAttributes();
     if (!attributes.empty()) {
       auto it=attributes.begin();
-      Value::toString(*(it->second));
+      output << Value::toString(*(it->second));
       for (++it; it!=attributes.end(); ++it) 
         output << "," << Value::toString(*(it->second));
     }

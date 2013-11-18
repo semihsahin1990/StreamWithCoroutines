@@ -39,32 +39,38 @@ public:
   { 
     return inPortConnections_[inPort]; 
   }
+
 private:
+  //////////////////////////////////////////////////////  neden vector<vector<>> ??, bir porttan birden fazla connection'a izin veriyormuyuz?
   vector<vector<FromConnection>> inPortConnections_;
   vector<vector<ToConnection>> outPortConnections_;
 };
 
 } // namespace streamc
 
+//constructor with name
 Flow::Flow(string const & name)
   : name_(name)
 {}
 
+//destructor with name
 Flow::~Flow() 
 {}
 
+//adds operator to the flow
 void Flow::addOperator(Operator & op)
 {
   string const & name = op.getName();
   if (ops_.count(name)>0)
     throw runtime_error("Operator with name '"+name+"' already exists in flow '"+name_+"'.");
+
   ops_[name] = unique_ptr<Operator>(&op);
   uintptr_t opAddr = reinterpret_cast<uintptr_t>(&op);
-  opConnections_[opAddr] = unique_ptr<OperatorConnections>(
-    new OperatorConnections(op.getNumberOfInputPorts(), op.getNumberOfOutputPorts()));
+  opConnections_[opAddr] = unique_ptr<OperatorConnections>(new OperatorConnections(op.getNumberOfInputPorts(), op.getNumberOfOutputPorts()));
   opList_.push_back(&op);
 }
 
+//adds connection to the flow topology
 void Flow::addConnection(Operator & fromOp, uint32_t fromOutPort, 
                          Operator & toOp, uint32_t toInPort)
 {
@@ -74,23 +80,27 @@ void Flow::addConnection(Operator & fromOp, uint32_t fromOutPort,
   opConnections_[toOpAddr]->addInputConnection(toInPort, FromConnection(fromOp, fromOutPort)); 
 }
 
+//adds connection to the flow topology
 void Flow::addConnection(FromConnection const & from, ToConnection const & to)
 {
   addConnection(from.getOperator(), from.getOutputPort(),
                 to.getOperator(), to.getInputPort()); 
 }
 
+//adds connection to the flow topology
 void Flow::addConnection(Connection const & conn)
 {
   addConnection(conn.getInConnection(), conn.getOutConnection());
 }
 
+//adds all connections of connection chain to the flow topology
 void Flow::addConnections(ConnectionChain const & conns)
 {
   for (auto const & conn : conns.getConnections())
     addConnection(conn);
 }
 
+//returns operator with opName
 Operator & Flow::getOperatorByName(std::string const & opName) const
 {
   auto it = ops_.find(opName);
@@ -111,6 +121,7 @@ std::vector<FromConnection> const & Flow::getInConnections(Operator & op, size_t
   return opConnections_.find(opAddr)->second->getInputPortConnections(inPort);  
 }
 
+//prints the flow topology
 void Flow::printTopology(std::ostream & ostream) const
 {
   for (auto oper : opList_) {
