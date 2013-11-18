@@ -27,8 +27,9 @@ int main()
   flow.addConnections( (src,0) >> (0,fltF,0) >> (0,fltG,0) >> (0,snk) ); 
 
   // alternative:
-  //flow.addConnection( (src,0) >> (0,flt) ); 
-  //flow.addConnection( (flt,0) >> (0,snk) ); 
+  // flow.addConnection( (src,0) >> (0,flt) ); 
+  // flow.addConnection( (flt,0) >> (0,snk) ); 
+  // flow.addConnection(src, 0, flt, 0);
 
   flow.printTopology(std::cout);
 	  

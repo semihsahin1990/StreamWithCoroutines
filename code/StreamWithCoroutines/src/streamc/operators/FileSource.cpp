@@ -9,7 +9,7 @@ using namespace streamc;
 using namespace std;
 
 FileSource::FileSource(std::string const & name, std::string const & fileName,
-                       std::unordered_map<std::string, Type> const & attributes)
+                       std::vector<std::pair<std::string, Type>> const & attributes)
   : Operator(name, 0, 1), fileName_(fileName), attributes_(attributes) 
 {}
 
@@ -27,7 +27,7 @@ FileSource & FileSource::set_fileName(std::string const & fileName)
   return *this;
 }
 
-FileSource & FileSource::set_fileFormat(std::unordered_map<std::string, Type> const & attributes)
+FileSource & FileSource::set_fileFormat(std::vector<std::pair<std::string, Type>> const & attributes)
 {
   attributes_ = attributes;
   return *this;
