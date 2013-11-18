@@ -10,47 +10,75 @@
 using namespace std;
 using namespace streamc;
 
+//constructor with flow, initially none of the operators is completed and shutdown is not requested.
 FlowContext::FlowContext(Flow & flow)
   : flow_(flow), numCompleted_(0), isShutdownRequested_(false)
 {}
 
+//destructor 
 FlowContext::~FlowContext()
 {}
 
+/*
+create operator contexts for each operator in the flow
+add input and output ports to each operator context
+run the flow with numThreads thread
+*/
 void FlowContext::run(int numThreads)
 {
+  //get operators
   vector<Operator *> const & opers = flow_.getOperators();
-  for (Operator * oper : opers) {
+
+  //create operator context for each operator
+  for (Operator * oper : opers) 
+  {
     uintptr_t opAddr = reinterpret_cast<uintptr_t>(oper);
     OperatorContextImpl * operatorContext = new OperatorContextImpl(this, oper);
     // add the operator context
     operatorContexts_[opAddr] = unique_ptr<OperatorContextImpl>(operatorContext);
   }
-  for (Operator * oper : opers) {
+  
+
+  //add input and output ports to each operator context
+  for (Operator * oper : opers) 
+  {
     uintptr_t opAddr = reinterpret_cast<uintptr_t>(oper);
     OperatorContextImpl * operatorContext = operatorContexts_[opAddr].get();
+
     // add input ports
-    for (size_t i=0; i<oper->getNumberOfInputPorts(); ++i) {
+    for (size_t i=0; i<oper->getNumberOfInputPorts(); ++i) 
+    {
       InputPortImpl * port = new InputPortImpl();
       vector<FromConnection> const & conns = flow_.getInConnections(*oper, i);
-      for (auto const & conn : conns) {
+
+      //add publishers
+      for (auto const & conn : conns) 
+      {
         uintptr_t oopAddr = reinterpret_cast<uintptr_t>(&conn.getOperator());
         port->addPublisher(operatorContexts_[oopAddr].get());
       }
       operatorContext->addInputPort(port);
     }
+
     // add output ports
-    for (size_t i=0; i<oper->getNumberOfOutputPorts(); ++i) {
+    for (size_t i=0; i<oper->getNumberOfOutputPorts(); ++i) 
+    {
       OutputPortImpl * port = new OutputPortImpl();
       vector<ToConnection> const & conns = flow_.getOutConnections(*oper, i);
-      for (auto const & conn : conns)  {
+
+      //add subscribers
+      for (auto const & conn : conns)  
+      {
         uintptr_t oopAddr = reinterpret_cast<uintptr_t>(&conn.getOperator());
         port->addSubscriber(operatorContexts_[oopAddr].get(), conn.getInputPort());
       }
       operatorContext->addOutputPort(port);
     }
   }
-  for (Operator * oper : opers) {
+  
+  //init all operators
+  for (Operator * oper : opers) 
+  {
     uintptr_t opAddr = reinterpret_cast<uintptr_t>(oper);
     OperatorContextImpl * operatorContext = operatorContexts_[opAddr].get();
     operatorContext->initOper();
@@ -58,6 +86,7 @@ void FlowContext::run(int numThreads)
   // TODO: we need to hookup to the scheduler to perform the computation
 }
 
+//////////////////////////////////////////////////////////////////////////////
 void FlowContext::wait()
 {
   unique_lock<mutex> lock(mutex_);
@@ -65,6 +94,7 @@ void FlowContext::wait()
     cv_.wait(lock);
 }
 
+//increment numCompleted, and mark oper as completed
 void FlowContext::markOperatorCompleted(Operator * oper)
 {
   unique_lock<mutex> lock(mutex_);
@@ -73,11 +103,13 @@ void FlowContext::markOperatorCompleted(Operator * oper)
     cv_.notify_one();
 }
 
+//set isShutDownRequested as true
 void FlowContext::requestShutdown()
 {
   isShutdownRequested_.store(true);
 }
 
+//return isShutDownRequested value
 bool FlowContext::isShutdownRequested()
 {
   return isShutdownRequested_.load();
