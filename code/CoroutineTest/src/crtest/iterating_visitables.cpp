@@ -37,7 +37,6 @@ private:
     int end_;
 };
 
-
 class CounterVisitor : public Visitor<int>
 {
 public:
