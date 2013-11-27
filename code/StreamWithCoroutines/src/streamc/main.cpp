@@ -42,6 +42,7 @@ int main()
   runner.requestShutdown(flow); 
   runner.wait(flow);        
   */
+  return EXIT_SUCCESS;
 }
 
 

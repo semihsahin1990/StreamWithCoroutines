@@ -14,9 +14,7 @@ BINDIR  = bin
 
 PROGRAM   = main
 
-SRCDIRS   = streamc \
-	    streamc/runtime \
-	    streamc/operators 
+SRCDIRS   = crtest 
 CPPFLAGS  = -Wall -std=c++11 -stdlib=libc++
 INCLUDES  = -I/opt/local/include
 LDFLAGS   = -L/opt/local/lib -lboost_coroutine-mt -lboost_context-mt 
