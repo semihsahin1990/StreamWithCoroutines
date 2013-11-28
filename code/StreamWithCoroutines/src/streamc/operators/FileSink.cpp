@@ -36,7 +36,9 @@ void FileSink::process(OperatorContext & context)
   ofstream output;
   output.open(fileName_.c_str(), ios::out);
   while (!context.isShutdownRequested()) {
-    iport_->waitTuple();
+    bool closed = iport_->waitTuple();
+    if (closed)
+      break;
     Tuple & tuple = iport_->getFrontTuple();
     auto const & attributes = tuple.getAttributes();
     if (!attributes.empty()) {
@@ -45,6 +47,7 @@ void FileSink::process(OperatorContext & context)
       for (++it; it!=attributes.end(); ++it) 
         output << "," << Value::toString(*(it->second));
     }
+    output << "\n";
     iport_->popTuple();
   } 
 }

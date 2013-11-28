@@ -45,7 +45,7 @@ void FlowContext::run(int numThreads)
 
     // add input ports
     for (size_t i=0; i<oper->getNumberOfInputPorts(); ++i) {
-      InputPortImpl * port = new InputPortImpl(*scheduler_);
+      InputPortImpl * port = new InputPortImpl(*operatorContext, *scheduler_);
       vector<FromConnection> const & conns = flow_.getInConnections(*oper, i);
 
       // add publishers
@@ -58,7 +58,7 @@ void FlowContext::run(int numThreads)
 
     // add output ports
     for (size_t i=0; i<oper->getNumberOfOutputPorts(); ++i) {
-      OutputPortImpl * port = new OutputPortImpl();
+      OutputPortImpl * port = new OutputPortImpl(*operatorContext, *scheduler_);
       vector<ToConnection> const & conns = flow_.getOutConnections(*oper, i);
 
       //add subscribers
@@ -106,6 +106,7 @@ void FlowContext::wait()
     threadPtr->join();  
 }
 
+// called by a worker thread
 // increment numCompleted, and mark oper as completed
 void FlowContext::markOperatorCompleted(Operator * oper)
 {
@@ -113,7 +114,7 @@ void FlowContext::markOperatorCompleted(Operator * oper)
   numCompleted_++;
   { // notify scheduler about the operator completion
     OperatorContextImpl * opc = operatorContexts_[oper].get();  
-    scheduler_->markOperatorCompleted(*opc); 
+    scheduler_->markOperatorAsCompleted(*opc); 
   }
   if (numCompleted_==flow_.getOperators().size()) {
     // tell the scheduler that there is no more work

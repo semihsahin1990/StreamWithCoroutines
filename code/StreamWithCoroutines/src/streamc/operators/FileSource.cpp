@@ -66,11 +66,16 @@ void FileSource::process(OperatorContext & context)
   input.open(fileName_.c_str(), ios::in);
   std::regex sep(",");
   while (!context.isShutdownRequested()) {
-    input >> line;
+    getline(input, line);
     if(input.eof())
       break;   
     sregex_token_iterator tokenIt(line.begin(), line.end(), sep, -1);
+    bool error = false;
     for (auto it=attributes_.begin(); it!=attributes_.end(); ++it, ++tokenIt) {
+      if (tokenIt==sregex_token_iterator()) {
+        error = true;
+        break; // problem with the line        
+      }
       string const & name = it->first;
       Type type = it->second;
       string const & token = *tokenIt;

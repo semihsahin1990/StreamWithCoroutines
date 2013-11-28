@@ -3,6 +3,7 @@
 #include "streamc/runtime/HashHelpers.h"
 #include "streamc/runtime/SchedulerState.h"
 
+#include <chrono>
 #include <condition_variable>
 #include <unordered_set>
 #include <unordered_map>
@@ -64,10 +65,16 @@ public:
   WorkerThread & getThread() { return *thread_; }
   void setThread(WorkerThread & thread) { thread_ = &thread; }
   WaitCondition & getWaitCondition();
+  void setBeginTime(std::chrono::high_resolution_clock::time_point beginTime) { beginTime_ = beginTime; }
+  std::chrono::high_resolution_clock::time_point getBeginTime() { return beginTime_; }
+  void setEndTime(std::chrono::high_resolution_clock::time_point endTime) { endTime_ = endTime; }
+  std::chrono::high_resolution_clock::time_point getEndTime() { return endTime_; }
 private:
   OperatorContextImpl * oper_;
   OperatorState state_;
   WorkerThread * thread_; // last thread that executed this operator
+  std::chrono::high_resolution_clock::time_point beginTime_;
+  std::chrono::high_resolution_clock::time_point endTime_;
   WaitCondition cond_;
 };
 

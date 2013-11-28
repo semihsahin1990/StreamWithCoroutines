@@ -3,8 +3,11 @@
 #include "streamc/OperatorContext.h"
 
 #include <memory>
+#include <mutex>
 #include <atomic>
 #include <vector>
+
+#include <boost/coroutine/coroutine.hpp>
 
 namespace streamc
 {
@@ -17,18 +20,14 @@ class OutputPortImpl;
 class OperatorContextImpl : public OperatorContext
 {
 public:
-  //constructor with flowContext and operator
   OperatorContextImpl(FlowContext * flowContext, Operator * oper);
-  //destructor
   ~OperatorContextImpl();
-  //add inputPort
+  Operator & getOperator() { return *oper_; }
   void addInputPort(InputPortImpl * port);
-  //add outputPort
   void addOutputPort(OutputPortImpl * port);
-  //init operator
   void initOper();
-  //run operator
   void runOper();
+  void yieldOper();
 
   bool isComplete() const { return isComplete_.load(); }
   size_t getNumberOfInputPorts() { return inputs_.size(); }
@@ -42,11 +41,19 @@ public:
   bool isShutdownRequested();
 
 private:
+  typedef boost::coroutines::coroutine<void()> coro_t;
+  void coroBody(coro_t::caller_type & caller);
+  bool coroStarted_;
+  coro_t coroCallee_;
+  coro_t::caller_type * coroCaller_;
+
+private:
   FlowContext * flowContext_;
   Operator * oper_;
   std::atomic<bool> isComplete_;
   std::vector<std::unique_ptr<InputPortImpl>> inputs_;
   std::vector<std::unique_ptr<OutputPortImpl>> outputs_;
+  std::mutex mutex_;
 };
 
 } // namespace streamc

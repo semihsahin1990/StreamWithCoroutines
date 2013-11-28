@@ -19,7 +19,7 @@ SRCDIRS   = streamc \
 	    streamc/operators 
 CPPFLAGS  = -Wall -std=c++11 -stdlib=libc++
 INCLUDES  = -I/opt/local/include -I/opt/boost/include
-LDFLAGS   = -L/opt/local/lib -Wl,-rpath,/opt/local/lib -L/opt/boost/lib -Wl,-rpath,/opt/boost/lib -lboost_coroutine-mt -lboost_context-mt 
+LDFLAGS   = -L/opt/local/lib -Wl,-rpath,/opt/local/lib -L/opt/boost/lib -Wl,-rpath,/opt/boost/lib -lboost_coroutine-mt -lboost_context-mt -lboost_system-mt 
 
 ## Implicit Section: change the following only when necessary.
 

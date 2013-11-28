@@ -15,6 +15,8 @@ public:
   void start();
   void join();
 private:
+  void run(); 
+private:
   int index_;
   Scheduler * scheduler_;
   std::unique_ptr<std::thread> thread_;

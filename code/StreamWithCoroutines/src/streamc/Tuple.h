@@ -27,6 +27,7 @@ public:
   {
     return values_;
   }
+  // TODO: check correctness of iterator stuff
   Tuple & operator=(Tuple const & other)
   {
     for (auto it=values_.begin(); it!=values_.end();) {
@@ -87,6 +88,8 @@ public:
   }
   template <Type T>
   typename TypeKindToType<T>::type & get(std::string const & name);
+  template <Type T>
+  typename TypeKindToType<T>::type const & get(std::string const & name) const;
   int64_t & getIntAttribute(std::string const & name) 
   {
     return values_[name]->getIntValue();
@@ -165,5 +168,13 @@ typename TypeKindToType<T>::type & Tuple::get(std::string const & name)
 {
   return streamc::get<T>(*this, name);
 }
+
+template <Type T>
+typename TypeKindToType<T>::type const & Tuple::get(std::string const & name) const
+{
+  return streamc::get<T>(const_cast<Tuple &>(*this), name);
+}
+
+
 
 }

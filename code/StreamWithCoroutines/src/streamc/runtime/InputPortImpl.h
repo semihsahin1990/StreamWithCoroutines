@@ -14,7 +14,7 @@ class Scheduler;
 class InputPortImpl: public InputPort
 {
 public:
-  InputPortImpl(Scheduler & scheduler);
+  InputPortImpl(OperatorContextImpl & oper, Scheduler & scheduler);
   void addPublisher(OperatorContextImpl & oper);
   void pushTuple(Tuple const & tuple);
 
@@ -31,6 +31,7 @@ private:
   bool isCompleteNoLock();
 
 private:
+  OperatorContextImpl * oper_;
   Scheduler * scheduler_;
   bool isComplete_;
   std::deque<Tuple> portQueue_;

@@ -26,8 +26,11 @@ public:
   void stop();
   // return the operator to execute, nullptr if the thread should exit
   OperatorContextImpl * getThreadWork(WorkerThread & thread);
-  void markOperatorCompleted(OperatorContextImpl & oper);
-  void markChangeInInputPortSize(InputPortImpl & iport);
+  void markOperatorAsCompleted(OperatorContextImpl & oper);
+  void markOperatorAsWaiting(OperatorContextImpl & oper, 
+      std::unordered_map<InputPortImpl *, size_t> const & waitSpec);  
+  void markInputPortAsChanged(InputPortImpl & iport);
+  void checkOperatorForPreemption(OperatorContextImpl & oper);
 private:
   void updateThreadState(WorkerThread & thread, ThreadInfo::ThreadState state);
   void updateOperatorState(OperatorContextImpl & oper, OperatorInfo::OperatorState state);

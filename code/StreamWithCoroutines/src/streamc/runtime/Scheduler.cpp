@@ -4,6 +4,7 @@
 #include "streamc/runtime/WorkerThread.h"
 #include "streamc/runtime/SchedulerPlugin.h"
 #include "streamc/runtime/RandomScheduling.h"
+#include "streamc/runtime/OutputPortImpl.h"
 
 using namespace std;
 using namespace streamc;
@@ -46,14 +47,47 @@ void Scheduler::stop()
     threadInfoPair.second->getCV().notify_one();
 }
 
-void Scheduler::markOperatorCompleted(OperatorContextImpl & oper)
+void Scheduler::markOperatorAsCompleted(OperatorContextImpl & oper)
 {
   unique_lock<mutex> lock(mutex_);  
   updateOperatorState(oper, OperatorInfo::Completed); 
+  // It is possible that the downstream operators that are currently in Waiting
+  // state may need to be put into Ready state, as their input ports may close
+  // due to this operator's completion. It is ok to superfluously take out an
+  // operator out of Waiting state, as it will check again upon wake up to see
+  // if it needs to wait again or not.
+  for (size_t i=0, iu=oper.getNumberOfOutputPorts(); i<iu; ++i)  {
+    OutputPortImpl & oport = oper.getOutputPortImpl(i);
+    for (size_t j=0, ju=oport.getNumberOfSubscribers(); j<ju; ++j)  {
+      pair<OperatorContextImpl *, size_t> subscriber = oport.getSubscriber(j);
+      OperatorContextImpl & doper = *subscriber.first;
+      OperatorInfo & doinfo = *(operContexts_[&doper]);
+      if (doinfo.getState()==OperatorInfo::Waiting)
+        updateOperatorState(doper, OperatorInfo::Ready);
+    }
+  }
 }
 
-void Scheduler::markChangeInInputPortSize(InputPortImpl & iport)
+void Scheduler::markOperatorAsWaiting(OperatorContextImpl & oper, 
+      std::unordered_map<InputPortImpl *, size_t> const & waitSpec)
 {
+  {
+    unique_lock<mutex> lock(mutex_);  
+    OperatorInfo & oinfo = *(operContexts_[&oper]);
+    OperatorInfo::WaitCondition & waitCond = oinfo.getWaitCondition();
+    for (auto & portSizePair : waitSpec)
+      waitCond.setWait(*portSizePair.first, portSizePair.second);
+    if (!waitCond.isReady())  
+      updateOperatorState(oper, OperatorInfo::Waiting); 
+    else 
+      updateOperatorState(oper, OperatorInfo::Ready); 
+  }
+  oper.yieldOper(); // co-routine jumps back to the WorkerThread
+}
+
+void Scheduler::markInputPortAsChanged(InputPortImpl & iport)
+{
+  unique_lock<mutex> lock(mutex_);
   auto it = waitingOperators_.find(&iport); 
   // no operators to switch into ready state
   if (it==waitingOperators_.end()) 
@@ -61,15 +95,21 @@ void Scheduler::markChangeInInputPortSize(InputPortImpl & iport)
   OperatorContextImpl & oper = *(it->second);
   OperatorInfo & oinfo = *(operContexts_[&oper]);
   OperatorInfo::WaitCondition & waitCond = oinfo.getWaitCondition();
-  if (waitCond.isReady()) {
-    waitCond.reset();
+  if (waitCond.isReady()) 
     updateOperatorState(oper, OperatorInfo::Ready);
-    if (waitingThreads_.size()>0) {
-      // wake one of the threads, as there is more work now
-      WorkerThread * thread = *(waitingThreads_.begin());
-      threads_[thread]->getCV().notify_one();
-    }
+}
+
+void Scheduler::checkOperatorForPreemption(OperatorContextImpl & oper)
+{
+  bool preempt = false;
+  {
+    unique_lock<mutex> lock(mutex_);  
+    preempt = plugin_->checkOperatorForPreemption(*this, oper); 
+    if (preempt)
+      updateOperatorState(oper, OperatorInfo::Ready); 
   }
+  if (preempt)
+    oper.yieldOper(); // co-routine jumps back to the WorkerThread
 }
 
 OperatorContextImpl * Scheduler::getThreadWork(WorkerThread & thread)
@@ -78,20 +118,20 @@ OperatorContextImpl * Scheduler::getThreadWork(WorkerThread & thread)
   OperatorContextImpl * assignment = nullptr;
   if (!stopped_) {
     updateThreadState(thread, ThreadInfo::Waiting);
-    assignment = plugin_->getOperatorToExecute(*this, thread); 
+    assignment = plugin_->findOperatorToExecute(*this, thread); 
     while (assignment==nullptr) {
       ThreadInfo & info = *(threads_[&thread]);
       info.getCV().wait(lock);
-      if (stopped_)
+      if (stopped_) 
         break;
-      assignment = plugin_->getOperatorToExecute(*this, thread); 
+      assignment = plugin_->findOperatorToExecute(*this, thread); 
     }
   }
-  if (assignment==NULL) {
+  if (assignment==nullptr) {
     updateThreadState(thread, ThreadInfo::Completed);
+  } else  {
     threads_[&thread]->setOperator(*assignment); 
     operContexts_[assignment]->setThread(thread);
-  } else  {
     updateThreadState(thread, ThreadInfo::Running);
     updateOperatorState(*assignment, OperatorInfo::Running);
   }
@@ -106,12 +146,16 @@ void Scheduler::updateOperatorState(OperatorContextImpl & oper, OperatorInfo::Op
     return; // no change
   oinfo.setState(state);
   if (oldState==OperatorInfo::Waiting) {
+    OperatorInfo::WaitCondition & waitCond = oinfo.getWaitCondition();
     for (size_t i=0, iu=oper.getNumberOfInputPorts(); i<iu; ++i)  {
       InputPortImpl & iport = oper.getInputPortImpl(i);
-      waitingOperators_.erase(&iport);    
+      if (waitCond.getWait(iport)>0) 
+        waitingOperators_.erase(&iport);    
     }
   } else if (oldState==OperatorInfo::Ready) {
     readyOperators_.erase(&oper);    
+  } else if (oldState==OperatorInfo::Running) {
+    oinfo.setEndTime(chrono::high_resolution_clock::now());
   }
   if (state==OperatorInfo::OperatorInfo::Waiting) {
     OperatorInfo::WaitCondition & waitCond = oinfo.getWaitCondition();
@@ -122,6 +166,14 @@ void Scheduler::updateOperatorState(OperatorContextImpl & oper, OperatorInfo::Op
     }
   } else if (state==OperatorInfo::OperatorInfo::Ready) {
     readyOperators_.insert(&oper);
+    oinfo.getWaitCondition().reset(); 
+    if (waitingThreads_.size()>0) {
+      // wake one of the threads, as there is more work now
+      WorkerThread * thread = *(waitingThreads_.begin());
+      threads_[thread]->getCV().notify_one();
+    }
+  } else if (state==OperatorInfo::OperatorInfo::Running) {
+    oinfo.setBeginTime(chrono::high_resolution_clock::now());
   }
 }
 

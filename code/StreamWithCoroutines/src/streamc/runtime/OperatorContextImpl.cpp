@@ -5,6 +5,8 @@
 #include "streamc/runtime/InputPortImpl.h"
 #include "streamc/runtime/OutputPortImpl.h"
 
+#include <functional>
+
 using namespace std;
 using namespace streamc;
 
@@ -27,14 +29,34 @@ bool OperatorContextImpl::isShutdownRequested()
 void OperatorContextImpl::initOper() 
 {
   oper_->init(*this);
+  coroStarted_ = false;
 }
 
-//run the operator. when it returns, set isComplete_ as true and mark operator as completed
-void OperatorContextImpl::runOper() 
+// run the operator. when it returns, set isComplete_ as true and mark operator
+// as completed.
+void OperatorContextImpl::coroBody(coro_t::caller_type & caller)
 {
+  coroCaller_ = & caller;
   oper_->process(*this);
   isComplete_.store(true);
-  flowContext_->markOperatorCompleted(oper_);
+  flowContext_->markOperatorCompleted(oper_);  
+}
+
+void OperatorContextImpl::runOper() 
+{
+  unique_lock<mutex> lock(mutex_);  
+  using namespace placeholders;
+  if (!coroStarted_) {
+    coroStarted_ = true;
+    coroCallee_ = coro_t(bind(&OperatorContextImpl::coroBody, this, _1));    
+  } else {
+    coroCallee_();
+  }
+}
+
+void OperatorContextImpl::yieldOper()
+{
+  (*coroCaller_)();
 }
 
 //add inputPort to the context

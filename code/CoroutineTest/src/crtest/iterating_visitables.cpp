@@ -134,7 +134,8 @@ int main(void)
     VisitableIterator<int> iter(static_cast<Visitable<int>&>(counter));
     for (; iter.isValid(); iter.moveToNext()) {
         int data = iter.getData();
-        std::cerr << data << std::endl;
+        cerr << data << endl;
     }
+
     return EXIT_SUCCESS;
 }
