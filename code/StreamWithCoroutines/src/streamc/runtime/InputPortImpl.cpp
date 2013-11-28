@@ -24,6 +24,8 @@ void InputPortImpl::pushTuple(Tuple const & tuple)
 {
   lock_guard<mutex> lock(mutex_);
   portQueue_.push_back(tuple);
+  // TODO: hook into the scheduler to see if the operator
+  // needs to move into schedulable state
 }
 
 //return isCompleteNoLock()
@@ -45,16 +47,13 @@ bool InputPortImpl::isCompleteNoLock()
   if (!portQueue_.empty())
     return false;
   bool allComplete = true;
-  for (OperatorContextImpl * opc : publishers_)
-  {
-    if (!opc->isComplete())
-    {
+  for (OperatorContextImpl * opc : publishers_) {
+    if (!opc->isComplete()) {
       allComplete = false;
       break;
     }
   }
-  if (allComplete) 
-  {
+  if (allComplete) {
     isComplete_ = true;
     return true;
   }
@@ -76,20 +75,25 @@ size_t InputPortImpl::getTupleCount()
 }
 
 /*
-return true if port is completed
-return false if portQueue has tuple
+return true iff port is completed
 */
 bool InputPortImpl::waitTuple() 
 {
+  bool needToWait = true;
   {
     lock_guard<mutex> lock(mutex_);
     if (!portQueue_.empty())
-      return false; 
-    if (isComplete())
+      needToWait = false;
+    else if (isComplete())
       return true;
   }
-  // TODO: we need to hook into the scheduler to get
-  // descheduled, since we need to wait
+  if (needToWait) {
+    // TODO: we need to hook into the scheduler to get
+    // descheduled, since we need to wait
+  } else {
+    // TODO: check with scheduler to see if we need to
+    // preempt
+  }
   return false;
 }
 

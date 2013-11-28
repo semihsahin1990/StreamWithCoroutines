@@ -19,17 +19,15 @@ FlowRunnerImpl::~FlowRunnerImpl()
 void FlowRunnerImpl::run(Flow & flow, int numThreads)
 {
   lock_guard<std::mutex> lock(mutex_);
-  uintptr_t flowAddr = reinterpret_cast<uintptr_t>(&flow);
-  flowContexts_[flowAddr] = unique_ptr<FlowContext>(new FlowContext(flow));
-  flowContexts_[flowAddr]->run(numThreads);
+  flowContexts_[&flow] = unique_ptr<FlowContext>(new FlowContext(flow));
+  flowContexts_[&flow]->run(numThreads);
 }
 
 //pause the main thread of flow
 void FlowRunnerImpl::wait(Flow & flow)
 {
   lock_guard<mutex> lock(mutex_);
-  uintptr_t flowAddr = reinterpret_cast<uintptr_t>(&flow);
-  FlowContext & flowContext = *flowContexts_[flowAddr];
+  FlowContext & flowContext = *flowContexts_[&flow];
   flowContext.wait();
 }
 
@@ -37,7 +35,6 @@ void FlowRunnerImpl::wait(Flow & flow)
 void FlowRunnerImpl::requestShutdown(Flow & flow)
 {
   lock_guard<std::mutex> lock(mutex_);
-  uintptr_t flowAddr = reinterpret_cast<uintptr_t>(&flow);
-  FlowContext & flowContext = *flowContexts_[flowAddr];
+  FlowContext & flowContext = *flowContexts_[&flow];
   flowContext.requestShutdown();
 }

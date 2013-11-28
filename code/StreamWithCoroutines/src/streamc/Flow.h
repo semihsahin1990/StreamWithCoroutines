@@ -1,6 +1,7 @@
 #pragma once
 
 #include "streamc/Operator.h"
+#include "streamc/runtime/HashHelpers.h"
 
 #include <iostream>
 #include <memory>
@@ -256,8 +257,8 @@ private:
   //maps name to operator
   std::unordered_map<std::string, std::unique_ptr<Operator>> ops_;
 
-  //maps operator to operator connections
-  std::unordered_map<uintptr_t, std::unique_ptr<OperatorConnections>> opConnections_;
+  // maps operator to operator connections
+  std::unordered_map<Operator *, std::unique_ptr<OperatorConnections>> opConnections_;
 };
 
 } // namespace streamc

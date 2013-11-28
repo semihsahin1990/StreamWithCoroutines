@@ -12,18 +12,17 @@ using namespace streamc;
 OutputPortImpl::OutputPortImpl()
 {}
 
-//add (subscriber operator(operator context), portNo) pair to this port
+// add (subscriber operator(operator context), portNo) pair to this port
 void OutputPortImpl::addSubscriber(OperatorContextImpl * oper, size_t inPort)
 {
   subscribers_.push_back(std::make_pair(oper, inPort));
 }
 
 
-//push tuple to the input port of each subscriber
+// push tuple to the input port of each subscriber
 void OutputPortImpl::pushTuple(Tuple const & tuple)
 {
-  // TODO: we need to hook into the scheduler to check whether we should go
-  // ahead or otherwise we will be descheduled
+  // TODO: hook into the scheduler to see if we need to be preempted
 
   for(auto const & opPortPair : subscribers_)
   {

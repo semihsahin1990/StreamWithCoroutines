@@ -1,5 +1,6 @@
 #pragma once
 
+#include "streamc/runtime/HashHelpers.h"
 #include "streamc/FlowRunner.h"
 
 #include <unordered_map>
@@ -32,7 +33,7 @@ public:
 
 private:
   //maps flows to flowContexts
-  std::unordered_map<uintptr_t, std::unique_ptr<FlowContext>> flowContexts_;
+  std::unordered_map<Flow *, std::unique_ptr<FlowContext>> flowContexts_;
   std::mutex mutex_; 
 };
 

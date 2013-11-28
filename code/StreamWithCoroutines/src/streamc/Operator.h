@@ -5,8 +5,8 @@
 #include "streamc/OutputPort.h"
 #include "streamc/OperatorContext.h"
 
-#include<iostream>
-#include<vector>
+#include <iostream>
+#include <vector>
 
 #define MEXP1(x) [] (Tuple & t_) { return x; }
 #define MEXP2(x) [] (Tuple & t0_, Tuple & t1_) { return x; }
@@ -59,3 +59,5 @@ public:
 };
  
 }
+
+

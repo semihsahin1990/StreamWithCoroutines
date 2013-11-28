@@ -41,7 +41,6 @@ public:
   }
 
 private:
-  //////////////////////////////////////////////////////  neden vector<vector<>> ??, bir porttan birden fazla connection'a izin veriyormuyuz?
   vector<vector<FromConnection>> inPortConnections_;
   vector<vector<ToConnection>> outPortConnections_;
 };
@@ -65,8 +64,7 @@ void Flow::addOperator(Operator & op)
     throw runtime_error("Operator with name '"+name+"' already exists in flow '"+name_+"'.");
 
   ops_[name] = unique_ptr<Operator>(&op);
-  uintptr_t opAddr = reinterpret_cast<uintptr_t>(&op);
-  opConnections_[opAddr] = unique_ptr<OperatorConnections>(new OperatorConnections(op.getNumberOfInputPorts(), op.getNumberOfOutputPorts()));
+  opConnections_[&op] = unique_ptr<OperatorConnections>(new OperatorConnections(op.getNumberOfInputPorts(), op.getNumberOfOutputPorts()));
   opList_.push_back(&op);
 }
 
@@ -74,10 +72,8 @@ void Flow::addOperator(Operator & op)
 void Flow::addConnection(Operator & fromOp, uint32_t fromOutPort, 
                          Operator & toOp, uint32_t toInPort)
 {
-  uintptr_t fromOpAddr = reinterpret_cast<uintptr_t>(&fromOp);
-  uintptr_t toOpAddr = reinterpret_cast<uintptr_t>(&toOp);
-  opConnections_[fromOpAddr]->addOutputConnection(fromOutPort, ToConnection(toOp, toInPort)); 
-  opConnections_[toOpAddr]->addInputConnection(toInPort, FromConnection(fromOp, fromOutPort)); 
+  opConnections_[&fromOp]->addOutputConnection(fromOutPort, ToConnection(toOp, toInPort)); 
+  opConnections_[&toOp]->addInputConnection(toInPort, FromConnection(fromOp, fromOutPort)); 
 }
 
 //adds connection to the flow topology
@@ -111,14 +107,12 @@ Operator & Flow::getOperatorByName(std::string const & opName) const
 
 std::vector<ToConnection> const & Flow::getOutConnections(Operator & op, size_t outPort) const
 {
-  uintptr_t opAddr = reinterpret_cast<uintptr_t>(&op);
-  return opConnections_.find(opAddr)->second->getOutputPortConnections(outPort);
+  return opConnections_.find(&op)->second->getOutputPortConnections(outPort);
 }
 
 std::vector<FromConnection> const & Flow::getInConnections(Operator & op, size_t inPort) const
 {
-  uintptr_t opAddr = reinterpret_cast<uintptr_t>(&op);
-  return opConnections_.find(opAddr)->second->getInputPortConnections(inPort);  
+  return opConnections_.find(&op)->second->getInputPortConnections(inPort);  
 }
 
 //prints the flow topology
@@ -126,10 +120,9 @@ void Flow::printTopology(std::ostream & ostream) const
 {
   for (auto oper : opList_) {
     string const & opName = oper->getName();
-    uintptr_t opAddr = reinterpret_cast<uintptr_t>(oper);
     ostream << "operator: " << opName << "\n";
     ostream << "\tout conections:\n";
-    OperatorConnections const & connections = *(opConnections_.find(opAddr)->second); 
+    OperatorConnections const & connections = *(opConnections_.find(oper)->second); 
     for (size_t iport=0; iport<oper->getNumberOfInputPorts(); ++iport) {
       ostream << "\t\tinput port #" << iport << ":\n";
       for (auto const & conn : connections.getInputPortConnections(iport)) 
