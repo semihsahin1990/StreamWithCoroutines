@@ -4,10 +4,12 @@
 
 namespace streamc 
 { 
+  class InputPortImpl;
   class Operator; 
   class OperatorContextImpl;
   class WorkerThread;
 }
+
 namespace std 
 {
   template<>
@@ -19,10 +21,7 @@ namespace std
       return std::hash<uintptr_t>()(reinterpret_cast<uintptr_t>(opAddr));
     }
   };
-}
 
-namespace std 
-{
   template<>
   struct hash<streamc::OperatorContextImpl *> 
   {
@@ -32,10 +31,7 @@ namespace std
       return std::hash<uintptr_t>()(reinterpret_cast<uintptr_t>(opcAddr));
     }
   };
-}
 
-namespace std 
-{
   template<>
   struct hash<streamc::WorkerThread *> 
   {
@@ -45,4 +41,16 @@ namespace std
       return std::hash<uintptr_t>()(reinterpret_cast<uintptr_t>(threadAddr));
     }
   };
+
+  template<>
+  struct hash<streamc::InputPortImpl *> 
+  {
+  public:
+    size_t operator()(streamc::InputPortImpl * const & iportAddr) const
+    {
+      return std::hash<uintptr_t>()(reinterpret_cast<uintptr_t>(iportAddr));
+    }
+  };
 }
+
+

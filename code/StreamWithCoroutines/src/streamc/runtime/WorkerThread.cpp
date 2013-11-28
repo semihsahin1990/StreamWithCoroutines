@@ -5,20 +5,19 @@
 using namespace std;
 using namespace streamc;
 
-WorkerThread::WorkerThread(int index, Scheduler * scheduler)
-  : index_(index), scheduler_(scheduler), stop_(false) 
+WorkerThread::WorkerThread(int index, Scheduler & scheduler)
+  : index_(index), scheduler_(&scheduler), stop_(false) 
 {}
 
 void WorkerThread::start()
 {
+  thread_.reset(new thread());
   while(!stop_.load()) {
-    // TODO: hook into the scheduler    
+    OperatorContextImpl * oper = scheduler_->getThreadWork(*this);
+    if (oper==nullptr) // no more work to come
+      break; 
+    // TODO: execute operator
   }
-}
-
-void WorkerThread::stop()
-{
-  stop_.store(true);
 }
 
 void WorkerThread::join()

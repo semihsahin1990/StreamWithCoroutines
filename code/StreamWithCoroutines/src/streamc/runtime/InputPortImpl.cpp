@@ -1,6 +1,7 @@
 #include "streamc/runtime/InputPortImpl.h"
 
 #include "streamc/runtime/OperatorContextImpl.h"
+#include "streamc/runtime/Scheduler.h"
 
 #include <thread>
 #include <mutex>
@@ -9,14 +10,14 @@ using namespace std;
 using namespace streamc;
 
 //constructor
-InputPortImpl::InputPortImpl()
-  : isComplete_(false) 
+InputPortImpl::InputPortImpl(Scheduler & scheduler)
+  : scheduler_(&scheduler), isComplete_(false) 
 {}
 
 //add publisher operator(operator context) to this port
-void InputPortImpl::addPublisher(OperatorContextImpl * oper)
+void InputPortImpl::addPublisher(OperatorContextImpl & oper)
 {
-  publishers_.push_back(oper);
+  publishers_.push_back(&oper);
 }
 
 //push tuple to the queue
@@ -24,8 +25,7 @@ void InputPortImpl::pushTuple(Tuple const & tuple)
 {
   lock_guard<mutex> lock(mutex_);
   portQueue_.push_back(tuple);
-  // TODO: hook into the scheduler to see if the operator
-  // needs to move into schedulable state
+  scheduler_->markChangeInInputPortSize(*this);
 }
 
 //return isCompleteNoLock()

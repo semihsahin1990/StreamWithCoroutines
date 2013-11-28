@@ -11,9 +11,8 @@ class Scheduler;
 class WorkerThread
 {
 public:
-  WorkerThread(int index, Scheduler * scheduler);
+  WorkerThread(int index, Scheduler & scheduler);
   void start();
-  void stop();
   void join();
 private:
   int index_;

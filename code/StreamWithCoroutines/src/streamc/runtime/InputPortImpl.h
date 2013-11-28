@@ -9,12 +9,13 @@ namespace streamc
 {
 
 class OperatorContextImpl;
+class Scheduler;
 
 class InputPortImpl: public InputPort
 {
 public:
-  InputPortImpl();
-  void addPublisher(OperatorContextImpl * oper);
+  InputPortImpl(Scheduler & scheduler);
+  void addPublisher(OperatorContextImpl & oper);
   void pushTuple(Tuple const & tuple);
 
   // public interface
@@ -30,7 +31,7 @@ private:
   bool isCompleteNoLock();
 
 private:
-  //properties of InputPortImpl
+  Scheduler * scheduler_;
   bool isComplete_;
   std::deque<Tuple> portQueue_;
   std::vector<OperatorContextImpl *> publishers_;

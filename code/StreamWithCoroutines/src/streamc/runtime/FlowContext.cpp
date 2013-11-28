@@ -27,6 +27,9 @@ run the flow with numThreads thread
 */
 void FlowContext::run(int numThreads)
 {
+  // create the scheduler
+  scheduler_.reset(new Scheduler());
+
   // get operators
   vector<Operator *> const & opers = flow_.getOperators();
 
@@ -42,13 +45,13 @@ void FlowContext::run(int numThreads)
 
     // add input ports
     for (size_t i=0; i<oper->getNumberOfInputPorts(); ++i) {
-      InputPortImpl * port = new InputPortImpl();
+      InputPortImpl * port = new InputPortImpl(*scheduler_);
       vector<FromConnection> const & conns = flow_.getInConnections(*oper, i);
 
       // add publishers
       for (auto const & conn : conns) {
         Operator * ooper = &conn.getOperator();
-        port->addPublisher(operatorContexts_[ooper].get());
+        port->addPublisher(*operatorContexts_[ooper]);
       }
       operatorContext->addInputPort(port);
     }
@@ -61,7 +64,7 @@ void FlowContext::run(int numThreads)
       //add subscribers
       for (auto const & conn : conns) {
         Operator * ooper = &conn.getOperator();
-        port->addSubscriber(operatorContexts_[ooper].get(), conn.getInputPort());
+        port->addSubscriber(*operatorContexts_[ooper], conn.getInputPort());
       }
       operatorContext->addOutputPort(port);
     }
@@ -73,10 +76,9 @@ void FlowContext::run(int numThreads)
     operatorContext->initOper();
   }
 
-  // create scheduler and threads, add threads to the scheduler
-  scheduler_.reset(new Scheduler());
+  // create threads and add threads to the scheduler
   for (int i=0; i<numThreads; ++i) { 
-    auto thread = new WorkerThread(i, scheduler_.get());
+    auto thread = new WorkerThread(i, *scheduler_);
     threads_.push_back(unique_ptr<WorkerThread>(thread));
     scheduler_->addThread(*threads_[i]);
   }

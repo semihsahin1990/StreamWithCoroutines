@@ -30,19 +30,15 @@ public:
   //run operator
   void runOper();
 
-  //returns the inputPortImpl with port no = inputPort
-  InputPortImpl & getInputPortImpl(size_t inputPort);
-  
-  //returns the outputPortImpl with port no = outputPort
-  OutputPortImpl & getOutputPortImpl(size_t outputPort);
-  bool isComplete() const;
+  bool isComplete() const { return isComplete_.load(); }
+  size_t getNumberOfInputPorts() { return inputs_.size(); }
+  size_t getNumberOfOutputPorts() { return outputs_.size(); }
+  InputPortImpl & getInputPortImpl(size_t inputPort) { return *inputs_[inputPort]; }
+  OutputPortImpl & getOutputPortImpl(size_t outputPort) { return *outputs_[outputPort]; }
 
-  //interface to be implemented
-  //returns the inputPort with port no = inputPort
+  // interface to be implemented
   InputPort & getInputPort(size_t inputPort);
-  //returns the outputPort with port no = outputPort
   OutputPort & getOutputPort(size_t outputPort);
-  //returns whether shutdown is requested or not
   bool isShutdownRequested();
 
 private:

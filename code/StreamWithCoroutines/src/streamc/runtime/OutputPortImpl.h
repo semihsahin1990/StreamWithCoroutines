@@ -14,7 +14,7 @@ public:
   //constructor
   OutputPortImpl();
   //add (subscriber operator,portNo) pair to this port
-  void addSubscriber(OperatorContextImpl * oper, size_t inPort);
+  void addSubscriber(OperatorContextImpl & oper, size_t inPort);
   //push tuple to the input port of each subscriber
   void pushTuple(Tuple const & tuple);
 

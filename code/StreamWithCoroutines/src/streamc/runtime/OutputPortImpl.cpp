@@ -13,9 +13,9 @@ OutputPortImpl::OutputPortImpl()
 {}
 
 // add (subscriber operator(operator context), portNo) pair to this port
-void OutputPortImpl::addSubscriber(OperatorContextImpl * oper, size_t inPort)
+void OutputPortImpl::addSubscriber(OperatorContextImpl & oper, size_t inPort)
 {
-  subscribers_.push_back(std::make_pair(oper, inPort));
+  subscribers_.push_back(std::make_pair(&oper, inPort));
 }
 
 
