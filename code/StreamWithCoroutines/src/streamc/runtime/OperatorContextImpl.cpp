@@ -47,7 +47,7 @@ void OperatorContextImpl::coroBody(coro_t::caller_type & caller)
 void OperatorContextImpl::runOper() 
 {
   unique_lock<mutex> lock(mutex_);  
-  using namespace placeholders;
+  using placeholders::_1;
   if (!coroStarted_) {
     coroStarted_ = true;
     coroCallee_ = coro_t(bind(&OperatorContextImpl::coroBody, this, _1));    

@@ -37,6 +37,8 @@ int main()
   // flow.addConnection(src, 0, flt, 0);
 
   FlowRunner & runner = FlowRunner::createRunner();
+  runner.setInfrastructureLogLevel(Info);
+  runner.setApplicationLogLevel(Trace);
   runner.run(flow, 2);
   runner.wait(flow);
   

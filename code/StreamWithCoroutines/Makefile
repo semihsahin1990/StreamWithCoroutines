@@ -17,9 +17,11 @@ PROGRAM   = main
 SRCDIRS   = streamc \
 	    streamc/runtime \
 	    streamc/operators 
-CPPFLAGS  = -Wall -std=c++11 -stdlib=libc++
-INCLUDES  = -I/opt/local/include 
-LDFLAGS   = -L/opt/local/lib -Wl,-rpath,/opt/local/lib -lboost_coroutine-mt -lboost_context-mt -lboost_system-mt
+CPPFLAGS  =  -Wall -Wno-unneeded-internal-declaration -Wno-unknown-pragmas \
+             -std=c++11 -stdlib=libc++ -DBOOST_LOG_DYN_LINK
+INCLUDES  = -I/opt/local/libcpp-software/include
+LDFLAGS   = -L/opt/local/libcpp-software/lib -Wl,-rpath,/opt/local/libcpp-software/lib \
+	-lboost_coroutine-mt -lboost_context-mt -lboost_log-mt -lboost_log_setup-mt -lboost_system-mt -lboost_thread-mt
 
 ## Implicit Section: change the following only when necessary.
 

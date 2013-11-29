@@ -1,5 +1,7 @@
 #include "streamc/operators/FileSource.h"
 
+#include "streamc/Logger.h"
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -47,6 +49,7 @@ void FileSource::process(OperatorContext & context)
   std::regex sep(",");
   while (!context.isShutdownRequested()) {
     getline(input, line);
+    SC_APPLOG(Trace, "Read line: " << line);
     if(input.eof())
       break;   
     sregex_token_iterator tokenIt(line.begin(), line.end(), sep, -1);
@@ -54,6 +57,7 @@ void FileSource::process(OperatorContext & context)
     for (auto it=attributes_.begin(); it!=attributes_.end(); ++it, ++tokenIt) {
       if (tokenIt==sregex_token_iterator()) {
         error = true;
+        SC_APPLOG(Error, "Error in line: " << line);
         break; // problem with the line        
       }
       string const & name = it->first;
