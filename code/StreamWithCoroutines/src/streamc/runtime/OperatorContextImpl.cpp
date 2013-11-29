@@ -38,6 +38,8 @@ void OperatorContextImpl::coroBody(coro_t::caller_type & caller)
 {
   coroCaller_ = & caller;
   oper_->process(*this);
+  for (auto & iportPtr : inputs_) 
+    iportPtr->drain();
   isComplete_.store(true);
   flowContext_->markOperatorCompleted(oper_);  
 }

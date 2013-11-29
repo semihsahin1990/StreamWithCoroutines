@@ -17,8 +17,9 @@ public:
   InputPortImpl(OperatorContextImpl & oper, Scheduler & scheduler);
   void addPublisher(OperatorContextImpl & oper);
   void pushTuple(Tuple const & tuple);
+  void drain();
 
-  // public interface
+  // implemented interface
   bool isComplete();
   bool hasTuple();
   size_t getTupleCount();  

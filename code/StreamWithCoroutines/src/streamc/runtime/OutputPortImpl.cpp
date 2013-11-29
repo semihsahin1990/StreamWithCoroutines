@@ -1,7 +1,8 @@
 #include "streamc/runtime/OutputPortImpl.h"
 
-#include "streamc/runtime/OperatorContextImpl.h"
+#include "streamc/runtime/FlowContext.h"
 #include "streamc/runtime/InputPortImpl.h"
+#include "streamc/runtime/OperatorContextImpl.h"
 #include "streamc/runtime/Scheduler.h"
 
 #include <thread>
@@ -33,15 +34,34 @@ pair<OperatorContextImpl *, size_t> OutputPortImpl::getSubscriber(size_t index)
 // push tuple to the input port of each subscriber
 void OutputPortImpl::pushTuple(Tuple const & tuple)
 {
-  {
-    lock_guard<mutex> lock(mutex_);
-    for(auto const & opPortPair : subscribers_) {
-      OperatorContextImpl * op = opPortPair.first;
-      size_t inPort = opPortPair.second;
-      op->getInputPortImpl(inPort).pushTuple(tuple);
+  bool needToWait = true;
+  while (needToWait) {
+    unordered_map<InputPortImpl *, size_t> waitSpec;
+    {
+      lock_guard<mutex> lock(mutex_);
+      for(auto const & opPortPair : subscribers_) {
+        OperatorContextImpl * op = opPortPair.first;
+        size_t inPort = opPortPair.second;
+        InputPortImpl & iport = op->getInputPortImpl(inPort);      
+        if (iport.getTupleCount()>=FlowContext::getMaxQueueSize()) 
+          waitSpec[&iport] = FlowContext::getMaxQueueSize();
+      }      
+      if (waitSpec.size()==0) { // no need to wait
+        needToWait = false;
+        for(auto const & opPortPair : subscribers_) {
+          OperatorContextImpl * op = opPortPair.first;
+          size_t inPort = opPortPair.second;
+          op->getInputPortImpl(inPort).pushTuple(tuple);
+        }
+      }
+    }
+    if (needToWait) {
+      // we need to ask the scheduler to move us into bloked state
+      scheduler_->markOperatorAsWriteBlocked(*oper_, waitSpec);  
+    } else {
+      // we need to check with the scheduler to see if we need to preempt
+      scheduler_->checkOperatorForPreemption(*oper_);
     }
   }
-  // we need to check with the scheduler to see if we need to preempt
-  scheduler_->checkOperatorForPreemption(*oper_);
 }
 

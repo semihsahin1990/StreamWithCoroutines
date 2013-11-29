@@ -11,6 +11,8 @@
 using namespace std;
 using namespace streamc;
 
+size_t FlowContext::maxQueueSize_ = 10000; // TODO: make changable, and perhaps per port?
+
 //constructor with flow, initially none of the operators is completed and shutdown is not requested.
 FlowContext::FlowContext(Flow & flow)
   : flow_(flow), numCompleted_(0), isShutdownRequested_(false)

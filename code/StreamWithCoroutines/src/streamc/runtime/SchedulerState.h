@@ -37,34 +37,60 @@ private:
 class OperatorInfo
 {
 public:
-  class WaitCondition
+  struct ThresholdAndCount
+  {
+    size_t threshold;
+    size_t currentCount;
+    ThresholdAndCount() {}
+    ThresholdAndCount(size_t thresholdIn, size_t currentCountIn)
+      : threshold(thresholdIn), currentCount(currentCountIn) {}
+  };
+  class ReadWaitCondition
   {
   public:
-    typedef std::unordered_map<InputPortImpl *, size_t> PortWaitList;
-    WaitCondition() {}
-    WaitCondition(OperatorContextImpl & oper);
-    void setWait(InputPortImpl & iport, size_t count);
-    size_t getWait(InputPortImpl & iport);
-    bool isReady();
+    typedef std::unordered_map<InputPortImpl *, ThresholdAndCount> PortWaitList;
+    ReadWaitCondition() {}
+    ReadWaitCondition(OperatorContextImpl & oper);
+    void setWaitThreshold(InputPortImpl & iport, size_t thresh);
+    size_t getWaitThreshold(InputPortImpl & iport);
+    bool computeReadiness();
+    bool isReady(InputPortImpl & iport);
     void reset(); 
+    PortWaitList const & getWaitList() { return portWaits_; }
+  private:
+    PortWaitList portWaits_;
+  };
+  class WriteWaitCondition
+  {
+  public:
+    typedef std::unordered_map<InputPortImpl *, ThresholdAndCount> PortWaitList;
+    WriteWaitCondition() {}
+    WriteWaitCondition(OperatorContextImpl & oper);
+    void setWaitThreshold(InputPortImpl & iport, size_t thresh);
+    size_t getWaitThreshold(InputPortImpl & iport);
+    bool computeReadiness();
+    bool isReady(InputPortImpl & iport);
+    PortWaitList const & getWaitList() { return portWaits_; }
   private:
     PortWaitList portWaits_;
   };
 public:
-  enum OperatorState { Running,  // running on a thread
-                       Ready,    // can run on a thread (given scheduler assigns one)
-                       Waiting,  // waiting for data to be available
-                       Completed // no work to do
+  enum OperatorState { Running,      // running on a thread
+                       Ready,        // can run on a thread (given scheduler assigns one)
+                       ReadBlocked,  // waiting for data to be available at its input ports
+                       WriteBlocked, // waiting for data to be available at its output ports
+                       Completed     // no work to do
   };
   OperatorInfo() {}
-  OperatorInfo(OperatorContextImpl & oper) : oper_(&oper), state_(Ready), 
-                                             thread_(NULL) , cond_(oper) {}
+  OperatorInfo(OperatorContextImpl & oper) : oper_(&oper), state_(Ready), thread_(NULL) , 
+                                             readCond_(oper), writeCond_(oper) {}
   OperatorContextImpl & getOperatorContext() { return *oper_; }
   OperatorState getState() { return state_; }
   void setState(OperatorState state) { state_ = state; }
   WorkerThread & getThread() { return *thread_; }
   void setThread(WorkerThread & thread) { thread_ = &thread; }
-  WaitCondition & getWaitCondition();
+  ReadWaitCondition & getReadWaitCondition() { return readCond_; }
+  WriteWaitCondition & getWriteWaitCondition() { return writeCond_; }
   void setBeginTime(std::chrono::high_resolution_clock::time_point beginTime) { beginTime_ = beginTime; }
   std::chrono::high_resolution_clock::time_point getBeginTime() { return beginTime_; }
   void setEndTime(std::chrono::high_resolution_clock::time_point endTime) { endTime_ = endTime; }
@@ -75,7 +101,8 @@ private:
   WorkerThread * thread_; // last thread that executed this operator
   std::chrono::high_resolution_clock::time_point beginTime_;
   std::chrono::high_resolution_clock::time_point endTime_;
-  WaitCondition cond_;
+  ReadWaitCondition readCond_;
+  WriteWaitCondition writeCond_;
 };
 
 } /* namespace streamc */

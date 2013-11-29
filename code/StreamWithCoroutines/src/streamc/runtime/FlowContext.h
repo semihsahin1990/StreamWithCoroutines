@@ -42,12 +42,15 @@ public:
   //returns whether shutdown is requested or not
   bool isShutdownRequested();
 
+  static size_t getMaxQueueSize() { return maxQueueSize_; }
+
 private:
   Flow & flow_;
 
   // scheduler and threads
   std::unique_ptr<Scheduler> scheduler_;
   std::vector<std::unique_ptr<WorkerThread>> threads_;
+  static size_t maxQueueSize_;
   
   //number of operators completed
   size_t numCompleted_;

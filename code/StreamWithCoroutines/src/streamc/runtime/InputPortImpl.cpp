@@ -28,8 +28,9 @@ void InputPortImpl::pushTuple(Tuple const & tuple)
     lock_guard<mutex> lock(mutex_);
     portQueue_.push_back(tuple);
   }
+
   // scheduler has to check if this causes the operator to go into ready state 
-  scheduler_->markInputPortAsChanged(*this);
+  scheduler_->markInputPortAsWritten(*this);
 }
 
 //return isCompleteNoLock()
@@ -91,8 +92,8 @@ bool InputPortImpl::waitTuple()
         return true;
     }
     if (needToWait) {
-      // we need to ask the scheduler to move us into Waiting state
-      scheduler_->markOperatorAsWaiting(*oper_, { {this, 1} });  
+      // we need to ask the scheduler to move us into blocked state
+      scheduler_->markOperatorAsReadBlocked(*oper_, { {this, 1} });  
       // Reaching here does not mean that we do not need to wait anymore,
       // as it might be the case that the scheduler has woken us because
       // the port has closed! That is why we have the while loop above.
@@ -126,7 +127,21 @@ Tuple & InputPortImpl::getTupleAt(size_t index)
 // remove the next tuple
 void InputPortImpl::popTuple() 
 {
-  lock_guard<mutex> lock(mutex_);
-  portQueue_.pop_front();
+  {
+    lock_guard<mutex> lock(mutex_);
+    portQueue_.pop_front();
+  }
+  // scheduler has to check if this causes other operators to go into ready state 
+  scheduler_->markInputPortAsRead(*this);
 }
 
+// remove the next tuple
+void InputPortImpl::drain() 
+{
+  {
+    lock_guard<mutex> lock(mutex_);
+    portQueue_.clear();
+  }
+  // scheduler has to check if this causes other operators to go into ready state 
+  scheduler_->markInputPortAsRead(*this);
+}

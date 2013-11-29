@@ -27,9 +27,10 @@ public:
   // return the operator to execute, nullptr if the thread should exit
   OperatorContextImpl * getThreadWork(WorkerThread & thread);
   void markOperatorAsCompleted(OperatorContextImpl & oper);
-  void markOperatorAsWaiting(OperatorContextImpl & oper, 
-      std::unordered_map<InputPortImpl *, size_t> const & waitSpec);  
-  void markInputPortAsChanged(InputPortImpl & iport);
+  void markOperatorAsReadBlocked(OperatorContextImpl & oper, std::unordered_map<InputPortImpl *, size_t> const & waitSpec);  
+  void markOperatorAsWriteBlocked(OperatorContextImpl & oper, std::unordered_map<InputPortImpl *, size_t> const & waitSpec);  
+  void markInputPortAsWritten(InputPortImpl & iport);
+  void markInputPortAsRead(InputPortImpl & iport);
   void checkOperatorForPreemption(OperatorContextImpl & oper);
 private:
   void updateThreadState(WorkerThread & thread, ThreadInfo::ThreadState state);
@@ -37,10 +38,8 @@ private:
 public: // interfaces for SchdulerPluginService
   std::unordered_map<WorkerThread *, ThreadInfo *> const & getThreads() const { return threads_; }
   std::unordered_map<OperatorContextImpl *, OperatorInfo *> const & getOperators() const { return operContexts_; }
-  std::unordered_set<WorkerThread *> const & getWaitingThreads() const { return waitingThreads_; }
   std::unordered_set<WorkerThread *> const & getReadyThreads() const { return readyThreads_; }
   std::unordered_set<OperatorContextImpl *> const & getReadyOperators() const { return readyOperators_; }
-  std::unordered_map<InputPortImpl *, OperatorContextImpl *> const & getWaitingOperators() const { return waitingOperators_; }
 private:
   bool stopped_;
   std::vector<std::unique_ptr<ThreadInfo>> threadInfos_;
@@ -51,7 +50,8 @@ private:
   std::unordered_map<OperatorContextImpl *, OperatorInfo *> operContexts_;
   std::unordered_set<WorkerThread *> waitingThreads_;
   std::unordered_set<WorkerThread *> readyThreads_;
-  std::unordered_map<InputPortImpl *, OperatorContextImpl *> waitingOperators_;
+  std::unordered_map<InputPortImpl *, OperatorContextImpl *> readBlockedOperators_;
+  std::unordered_map<InputPortImpl *, std::unordered_set<OperatorContextImpl *>> writeBlockedOperators_;
   std::unordered_set<OperatorContextImpl *> readyOperators_;
   std::mutex mutex_; 
 };

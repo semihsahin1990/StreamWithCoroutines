@@ -7,7 +7,7 @@ using namespace streamc;
 
 #include <unordered_set>
 
-RandomScheduling::RandomScheduling(uint64_t epochMicrosecs/*=10*/) 
+RandomScheduling::RandomScheduling(uint64_t epochMicrosecs/*=1000*/) 
   : epochMicrosecs_(epochMicrosecs) 
 {
   constexpr double clockPeriodInMicrosec = 

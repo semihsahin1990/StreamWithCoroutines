@@ -11,7 +11,7 @@ namespace streamc
 class RandomScheduling : public SchedulerPlugin
 {
 public:
-  RandomScheduling(uint64_t epochMicrosecs=10);
+  RandomScheduling(uint64_t epochMicrosecs=1000);
 
   // return the operator to execute or nullptr if there is no operator to execute
   OperatorContextImpl * findOperatorToExecute(SchedulerPluginService & service,
