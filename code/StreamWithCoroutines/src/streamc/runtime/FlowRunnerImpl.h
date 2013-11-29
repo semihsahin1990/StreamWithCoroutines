@@ -23,13 +23,13 @@ public:
   ~FlowRunnerImpl();
 
   //run flow with numThreads threads
-  void run(Flow & flow, int numThreads);
+  void run(Flow & flow, int numThreads) override;
 
   //shutdown the flow execution
-  void requestShutdown(Flow & flow);  
+  void requestShutdown(Flow & flow) override;  
 
   //pause the main thread of a flow
-  void wait(Flow & flow);
+  void wait(Flow & flow) override;
 
 private:
   //maps flows to flowContexts

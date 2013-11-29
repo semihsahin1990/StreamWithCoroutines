@@ -127,13 +127,8 @@ void FlowContext::markOperatorCompleted(Operator * oper)
 // set isShutDownRequested as true
 void FlowContext::requestShutdown()
 {
-  if (!isShutdownRequested_.load()) {
-    unique_lock<mutex> lock(mutex_);
-    // tell the scheduler about the shutdown
-    scheduler_->stop();
-  }
-  // update the shutdown flag (used by the operators)
-  isShutdownRequested_.store(true);
+  if (!isShutdownRequested_.load()) 
+    isShutdownRequested_.store(true);
 }
 
 // return isShutDownRequested value

@@ -4,6 +4,10 @@
 #include "streamc/operators/FileSink.h"
 #include "streamc/operators/Filter.h"
 
+#include <cstdlib>
+#include <thread>
+#include <chrono>
+
 using namespace std;
 using namespace streamc;
 
@@ -25,23 +29,24 @@ int main()
     .set_fileName("data/out.dat"); 
   	
   flow.addConnections( (src,0) >> (0,fltF,0) >> (0,fltG,0) >> (0,snk) ); 
+  // flow.printTopology(std::cout);
 
-  // alternative:
+  // alternatives:
   // flow.addConnection( (src,0) >> (0,flt) ); 
   // flow.addConnection( (flt,0) >> (0,snk) ); 
   // flow.addConnection(src, 0, flt, 0);
 
-  // flow.printTopology(std::cout);
-	  
   FlowRunner & runner = FlowRunner::createRunner();
   runner.run(flow, 2);
   runner.wait(flow);
   
-  /*alternative:
-  sleep(10); 
+  /* 
+  // alternative:
+  this_thread::sleep_for(chrono::milliseconds(500));
   runner.requestShutdown(flow); 
-  runner.wait(flow);        
+  runner.wait(flow); 
   */
+  
   return EXIT_SUCCESS;
 }
 
