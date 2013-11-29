@@ -4,8 +4,9 @@ To build the library:
    cd lib
    make
 
-To try out a sample
+To try out a sample:
    cd sample/<SampleName>
    make
    ./main
+
 
