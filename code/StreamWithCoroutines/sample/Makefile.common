@@ -1,0 +1,8 @@
+INCLUDES  = -I../../lib/include -I/opt/local/libcpp-software/include
+LDFLAGS   = -L../../lib/bin -L/opt/local/libcpp-software/lib -Wl,-rpath,'$$ORIGIN'/../../lib/bin -Wl,-rpath,/opt/local/libcpp-software/lib \
+	-lstreamc -lboost_coroutine-mt -lboost_context-mt -lboost_log-mt -lboost_log_setup-mt -lboost_system-mt -lboost_thread-mt
+CXX = clang++
+CPPFLAGS = -std=c++11 -stdlib=libc++ -DBOOST_LOG_DYN_LINK
+CXXFLAGS = -g -O2 -fPIC -I $(SRCDIR) -I $(INCDIR) $(INCLUDES)
+
+

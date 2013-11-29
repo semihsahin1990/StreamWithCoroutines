@@ -1,0 +1,11 @@
+StreamC - Co-routine based implementation of stream processing
+
+To build the library:
+   cd lib
+   make
+
+To try out a sample
+   cd sample/<SampleName>
+   make
+   ./main
+

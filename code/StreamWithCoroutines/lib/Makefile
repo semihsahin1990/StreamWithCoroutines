@@ -9,10 +9,11 @@
 ## Customizable Section: adapt those variables to suit your program.
 
 OBJDIR  = obj
-SRCDIR  = src
 BINDIR  = bin
+SRCDIR  = src
+INCDIR  = include
 
-PROGRAM   = main
+LIBRARY   = libstreamc.so
 
 SRCDIRS   = streamc \
 	    streamc/runtime \
@@ -25,8 +26,8 @@ LDFLAGS   = -L/opt/local/libcpp-software/lib -Wl,-rpath,/opt/local/libcpp-softwa
 
 ## Implicit Section: change the following only when necessary.
 
-CFLAGS   = -g -O2 -I $(SRCDIR) $(INCLUDES)
-CXXFLAGS = -g -O2 -I $(SRCDIR) $(INCLUDES)
+CFLAGS   = -g -O2 -fPIC -I $(SRCDIR) -I $(INCDIR) $(INCLUDES)
+CXXFLAGS = -g -O2 -fPIC -I $(SRCDIR) -I $(INCDIR) $(INCLUDES)
 CC       = clang
 CXX      = clang++
 
@@ -50,7 +51,7 @@ LINK    = $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS)
 # Delete the default suffixes
 .SUFFIXES:
 
-all: $(BINDIR)/$(PROGRAM)
+all: $(BINDIR)/$(LIBRARY)
 
 # Rules for creating dependency files (.d).
 
@@ -66,16 +67,16 @@ $(OBJDIR)/%.o:$(SRCDIR)/%.cpp
 	$(COMPILE) $< -o $@
 
 # Rules for generating the executable.
-$(BINDIR)/$(PROGRAM):$(OBJS)
+$(BINDIR)/$(LIBRARY):$(OBJS)
 	@mkdir -p $(dir $@)
-	$(LINK) $(OBJS) -o $@
+	$(LINK) $(OBJS) -shared -o "$(PWD)/$@"
 
 ifneq ($(DEPS),)
   sinclude $(DEPS)
 endif
 
 clean:
-	$(RM) -fr $(OBJDIR) $(BINDIR)
+	$(RM) -r $(OBJDIR) $(BINDIR)
 
 
 # Show help.
@@ -91,7 +92,7 @@ help:
 
 # Show variables (for debug use only.)
 show:
-	@echo 'PROGRAM     :' $(PROGRAM)
+	@echo 'LIBRARY     :' $(LIBRARY)
 	@echo 'SRCDIRS     :' $(SRCDIRS)
 	@echo 'HEADERS     :' $(HEADERS)
 	@echo 'SOURCES     :' $(SOURCES)
