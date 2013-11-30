@@ -1,4 +1,4 @@
-PROGRAM = main
+PROGRAM   = main
 
 include ../Makefile.common
 

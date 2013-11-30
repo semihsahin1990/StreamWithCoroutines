@@ -15,36 +15,35 @@ INCDIR  = include
 
 LIBRARY   = libstreamc.so
 
-SRCDIRS   = streamc \
-	    streamc/runtime \
-	    streamc/operators 
-CPPFLAGS  =  -Wall -Wno-unneeded-internal-declaration -Wno-unknown-pragmas \
-             -std=c++11 -stdlib=libc++ -DBOOST_LOG_DYN_LINK
-INCLUDES  = -I/opt/local/libcpp-software/include
-LDFLAGS   = -L/opt/local/libcpp-software/lib -Wl,-rpath,/opt/local/libcpp-software/lib \
+CPPFLAGS  = -DBOOST_LOG_DYN_LINK
+INCLUDES  = -isystem /opt/local/libcpp-software/include
+LDFLAGS   = -L /opt/local/libcpp-software/lib -Wl,-rpath,/opt/local/libcpp-software/lib \
 	-lboost_coroutine-mt -lboost_context-mt -lboost_log-mt -lboost_log_setup-mt -lboost_system-mt -lboost_thread-mt
 
 ## Implicit Section: change the following only when necessary.
 
-CFLAGS   = -g -O2 -fPIC -I $(SRCDIR) -I $(INCDIR) $(INCLUDES)
-CXXFLAGS = -g -O2 -fPIC -I $(SRCDIR) -I $(INCDIR) $(INCLUDES)
-CC       = clang
-CXX      = clang++
+CXX      = clang++ 
+CXXFLAGS = -g -O2 -fPIC -Wall -std=c++11 -stdlib=libc++ 
+SRCDIRS  = $(shell find $(SRCDIR) -type d)
+INCDIRS  = $(shell find $(INCDIR) -type d)
+INCFLAGS = $(addprefix -I ,$(SRCDIRS)) $(addprefix -I ,$(INCDIRS)) $(INCLUDES)
+# Use gcc for dependency generation, as it seems clang does not support -MM, but only -M. 
+# The former option avoids putting system headers as dependencies.
+CCD      = gcc
+CCDFLAGS = -MM -MP
 
 ## Stable Section: usually no need to be changed. 
 
 SHELL   = /bin/sh
-SOURCES = $(wildcard $(addsuffix /*.cpp,$(addprefix $(SRCDIR)/,$(SRCDIRS))))
-HEADERS = $(wildcard $(addsuffix /*.h,$(addprefix $(SRCDIR)/,$(SRCDIRS))))
+SOURCES = $(wildcard $(addsuffix /*.cpp,$(SRCDIRS)))
 OBJS    = $(patsubst $(SRCDIR)/%,$(OBJDIR)/%,$(addsuffix .o, $(basename $(SOURCES))))
 DEPS    = $(OBJS:.o=.d)
 
 ## Define some useful variables.
-DEP_OPT = $(shell if `$(CC) --version | grep "GCC" >/dev/null`; then \
-                  echo "-MM -MP"; else echo "-M"; fi )
-DEPEND  = $(CC)  $(DEP_OPT) $(CFLAGS) $(CPPFLAGS)
-COMPILE = $(CXX) $(CXXFLAGS) $(CPPFLAGS) -c
-LINK    = $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS)
+DEP_OPT = -MM -MP
+DEPEND  = $(CCD) $(CPPFLAGS) $(CCDFLAGS) $(INCFLAGS) $(DEP_OPT)
+COMPILE = $(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INCFLAGS) 
+LINK    = $(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 
 .PHONY: all objs clean distclean help show
 
@@ -53,21 +52,17 @@ LINK    = $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS)
 
 all: $(BINDIR)/$(LIBRARY)
 
-# Rules for creating dependency files (.d).
-
-$(OBJDIR)/%.d:$(SRCDIR)/%.cpp
+$(OBJDIR)/%.d: $(SRCDIR)/%.cpp
 	@mkdir -p $(dir $@)
 	@/bin/echo -n $(dir $@) > $@
 	@$(DEPEND) $< >> $@ || rm $@
 
-# Rules for generating object files (.o).
-objs:$(OBJS)
+objs: $(OBJS)
 
-$(OBJDIR)/%.o:$(SRCDIR)/%.cpp
-	$(COMPILE) $< -o $@
+$(OBJDIR)/%.o: $(SRCDIR)/%.cpp
+	$(COMPILE) -c $< -o $@
 
-# Rules for generating the executable.
-$(BINDIR)/$(LIBRARY):$(OBJS)
+$(BINDIR)/$(LIBRARY): $(OBJS)
 	@mkdir -p $(dir $@)
 	$(LINK) $(OBJS) -shared -o "$(PWD)/$@"
 
@@ -78,8 +73,6 @@ endif
 clean:
 	$(RM) -r $(OBJDIR) $(BINDIR)
 
-
-# Show help.
 help:
 	@echo 'Usage: make [TARGET]'
 	@echo 'TARGETS:'
@@ -90,11 +83,10 @@ help:
 	@echo '  show      show variables (for debug use only).'
 	@echo '  help      print this message.'
 
-# Show variables (for debug use only.)
 show:
 	@echo 'LIBRARY     :' $(LIBRARY)
 	@echo 'SRCDIRS     :' $(SRCDIRS)
-	@echo 'HEADERS     :' $(HEADERS)
+	@echo 'INCDIRS     :' $(INCDIRS)
 	@echo 'SOURCES     :' $(SOURCES)
 	@echo 'OBJS        :' $(OBJS)
 	@echo 'DEPS        :' $(DEPS)

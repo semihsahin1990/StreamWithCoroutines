@@ -13,9 +13,9 @@ SRCDIR  = src
 BINDIR  = bin
 
 CPPFLAGS  = -DBOOST_LOG_DYN_LINK
-INCLUDES  = -I ../../lib/include -isystem /opt/local/libcpp-software/include
-LDFLAGS   = -L ../../lib/bin -L /opt/local/libcpp-software/lib -Wl,-rpath,../../lib/bin -Wl,-rpath,/opt/local/libcpp-software/lib \
-	-lstreamc -lboost_log-mt -lboost_log_setup-mt -lboost_coroutine-mt -lboost_context-mt -lboost_system-mt -lboost_thread-mt
+INCLUDES  = -isystem /opt/local/libcpp-software/include
+LDFLAGS   = -L /opt/local/libcpp-software/lib -Wl,-rpath,/opt/local/libcpp-software/lib \
+	-lboost_log-mt -lboost_log_setup-mt -lboost_coroutine-mt -lboost_context-mt -lboost_system-mt -lboost_thread-mt
 
 ## Implicit Section: change the following only when necessary.
 

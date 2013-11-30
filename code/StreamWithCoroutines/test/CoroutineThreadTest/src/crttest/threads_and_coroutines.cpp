@@ -53,6 +53,10 @@ inline ostream & operator<<(ostream & ostr, severity_level const & s)
   return ostr;
 }
 
+typedef src::severity_channel_logger_mt<                                                                                                                                                                       
+  severity_level, // the type of the severity level                                                                                                                                                                               
+  std::string  // the type of the channel name                                                                                                                                                                                 
+  > my_logger_mt;   
 
 BOOST_LOG_INLINE_GLOBAL_LOGGER_INIT(sysLogger_, my_logger_mt)
 {
