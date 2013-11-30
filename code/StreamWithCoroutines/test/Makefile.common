@@ -32,7 +32,7 @@ CCDFLAGS = -MM -MP
 
 SHELL   = /bin/sh
 SOURCES = $(wildcard $(addsuffix /*.cpp,$(SRCDIRS)))
-OBJS    = $(patsubst $(SRCDIR)/%,$(OBJDIR)/%,$(addsuffix .o, $(basename $(SOURCES))))
+OBJS    = $(patsubst $(SRCDIR)/%,$(OBJDIR)/%,$(SOURCES:.cpp=.o))
 DEPS    = $(OBJS:.o=.d)
 
 ## Define some useful variables.
