@@ -23,13 +23,8 @@ CXX      = clang++
 CXXFLAGS = -g -O2 -fPIC -Wall -std=c++11 -stdlib=libc++ 
 SRCDIRS  = $(shell find $(SRCDIR) -type d)
 INCFLAGS = $(addprefix -I ,$(SRCDIRS)) $(INCLUDES)
-# Use gcc for dependency generation, as it seems clang does not support -MM, but only -M. 
-# The former option avoids putting system headers as dependencies.
-CCD      = gcc
-CCDFLAGS = -MM -MP 
 
 ## Stable Section: usually no need to be changed. 
-
 SHELL   = /bin/sh
 SOURCES = $(wildcard $(addsuffix /*.cpp,$(SRCDIRS)))
 OBJS    = $(patsubst $(SRCDIR)/%,$(OBJDIR)/%,$(SOURCES:.cpp=.o))
@@ -37,7 +32,7 @@ DEPS    = $(OBJS:.o=.d)
 
 ## Define some useful variables.
 DEP_OPT = -MM -MP
-DEPEND  = $(CCD) $(CPPFLAGS) $(CCDFLAGS) $(INCFLAGS) $(DEP_OPT)
+DEPEND  = $(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INCFLAGS) $(DEP_OPT)
 COMPILE = $(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INCFLAGS) 
 LINK    = $(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 
