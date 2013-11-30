@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include "streamc/HashHelpers.h"
 
 namespace streamc 
 { 
@@ -12,16 +13,6 @@ namespace streamc
 
 namespace std 
 {
-  template<>
-  struct hash<streamc::Operator *> 
-  {
-  public:
-    size_t operator()(streamc::Operator * const & opAddr) const
-    {
-      return std::hash<uintptr_t>()(reinterpret_cast<uintptr_t>(opAddr));
-    }
-  };
-
   template<>
   struct hash<streamc::OperatorContextImpl *> 
   {

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "streamc/Operator.h"
-#include "streamc/runtime/HashHelpers.h"
 
 #include <iostream>
 #include <memory>
