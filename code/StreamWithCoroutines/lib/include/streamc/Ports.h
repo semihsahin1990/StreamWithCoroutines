@@ -2,6 +2,7 @@
 
 #include<vector>
 
+/*
 namespace streamc
 {
 
@@ -13,5 +14,6 @@ class Ports
   static bool waitTupleFromAll(std::vector<InputPort*> ports);
 };
 
-
 } //namespace streamc
+
+*/

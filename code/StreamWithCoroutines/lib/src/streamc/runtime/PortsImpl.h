@@ -1,13 +1,15 @@
 #pragma once
 
-#include "streamc/Ports.h"
+// TODO: This class is work under progress
 
 #include <vector>
 
 namespace streamc
 {
 
-class PortsImpl: public Ports
+class InputPort;
+
+class PortsImpl
 {
   public:
   //implemented interface

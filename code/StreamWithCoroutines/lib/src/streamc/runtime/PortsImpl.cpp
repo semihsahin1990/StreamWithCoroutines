@@ -6,6 +6,8 @@
 using namespace std;
 using namespace streamc;
 
+// TODO: this class is work under progress
+
 bool PortsImpl::waitTupleFromAll(vector<InputPort *>ports)
 {
   bool allAvailable = true;
