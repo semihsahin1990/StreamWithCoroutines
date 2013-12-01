@@ -108,32 +108,32 @@ $(document).ready(function(){initNavTree('group__FlowOps.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ga14fdf5686a59dc49a1ae09d76936895b"><td class="memItemLeft" align="right" valign="top">ToConnection&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__FlowOps.html#ga14fdf5686a59dc49a1ae09d76936895b">streamc::operator,</a> (size_t inPort, Operator &amp;downstreamOp)</td></tr>
-<tr class="memdesc:ga14fdf5686a59dc49a1ae09d76936895b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a to connection from an (input port index, downstream operator) pair.  <a href="#ga14fdf5686a59dc49a1ae09d76936895b">More...</a><br/></td></tr>
-<tr class="separator:ga14fdf5686a59dc49a1ae09d76936895b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga56937e6755dee56e815777e3679e631a"><td class="memItemLeft" align="right" valign="top">FromConnection&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__FlowOps.html#ga56937e6755dee56e815777e3679e631a">streamc::operator,</a> (Operator &amp;upstreamOp, size_t outPort)</td></tr>
-<tr class="memdesc:ga56937e6755dee56e815777e3679e631a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a from connection from an (upstream operator, output port index) pair.  <a href="#ga56937e6755dee56e815777e3679e631a">More...</a><br/></td></tr>
-<tr class="separator:ga56937e6755dee56e815777e3679e631a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga0e3eda2a23e261dd0df34cd6e80b11ca"><td class="memItemLeft" align="right" valign="top">Connection&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__FlowOps.html#ga0e3eda2a23e261dd0df34cd6e80b11ca">streamc::operator&gt;&gt;</a> (FromConnection const &amp;fromConn, ToConnection const &amp;toConn)</td></tr>
-<tr class="memdesc:ga0e3eda2a23e261dd0df34cd6e80b11ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a connection from a (from connection, to connection) pair.  <a href="#ga0e3eda2a23e261dd0df34cd6e80b11ca">More...</a><br/></td></tr>
-<tr class="separator:ga0e3eda2a23e261dd0df34cd6e80b11ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gad0dc1eda012f5186c13d11cf24d1d843"><td class="memItemLeft" align="right" valign="top">ConnectionKnot&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__FlowOps.html#gad0dc1eda012f5186c13d11cf24d1d843">streamc::operator,</a> (ToConnection const &amp;toConn, size_t outPort)</td></tr>
-<tr class="memdesc:gad0dc1eda012f5186c13d11cf24d1d843"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a connection knot from a (to connection, output port index) pair.  <a href="#gad0dc1eda012f5186c13d11cf24d1d843">More...</a><br/></td></tr>
-<tr class="separator:gad0dc1eda012f5186c13d11cf24d1d843"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gad591d5a6a8b336f51e6570064479cb6f"><td class="memItemLeft" align="right" valign="top">OpenConnectionChain&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__FlowOps.html#gad591d5a6a8b336f51e6570064479cb6f">streamc::operator&gt;&gt;</a> (FromConnection const &amp;fromConn, ConnectionKnot const &amp;knot)</td></tr>
-<tr class="memdesc:gad591d5a6a8b336f51e6570064479cb6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create an open connection chain from a (from connection, connection knot) pair.  <a href="#gad591d5a6a8b336f51e6570064479cb6f">More...</a><br/></td></tr>
-<tr class="separator:gad591d5a6a8b336f51e6570064479cb6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gafe63c9ba5bcc04670df63dfbb59cabaf"><td class="memItemLeft" align="right" valign="top">OpenConnectionChain&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__FlowOps.html#gafe63c9ba5bcc04670df63dfbb59cabaf">streamc::operator&gt;&gt;</a> (OpenConnectionChain &amp;&amp;chain, ConnectionKnot const &amp;knot)</td></tr>
-<tr class="memdesc:gafe63c9ba5bcc04670df63dfbb59cabaf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extend an open connection chain using a connection knot.  <a href="#gafe63c9ba5bcc04670df63dfbb59cabaf">More...</a><br/></td></tr>
-<tr class="separator:gafe63c9ba5bcc04670df63dfbb59cabaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga2bcf910825a9b8a07c3d6a3da1bc1bcf"><td class="memItemLeft" align="right" valign="top">ConnectionChain&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__FlowOps.html#ga2bcf910825a9b8a07c3d6a3da1bc1bcf">streamc::operator&gt;&gt;</a> (OpenConnectionChain &amp;&amp;chain, ToConnection const &amp;toConn)</td></tr>
-<tr class="memdesc:ga2bcf910825a9b8a07c3d6a3da1bc1bcf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert an open connection chain into a connection chain using a to connection.  <a href="#ga2bcf910825a9b8a07c3d6a3da1bc1bcf">More...</a><br/></td></tr>
-<tr class="separator:ga2bcf910825a9b8a07c3d6a3da1bc1bcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac1caf5cf1b21ab7426a7b9345e0ce57e"><td class="memItemLeft" align="right" valign="top">ToConnection&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__FlowOps.html#gac1caf5cf1b21ab7426a7b9345e0ce57e">streamc::connectors::operator,</a> (size_t inPort, Operator &amp;downstreamOp)</td></tr>
+<tr class="memdesc:gac1caf5cf1b21ab7426a7b9345e0ce57e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a to connection from an (input port index, downstream operator) pair.  <a href="#gac1caf5cf1b21ab7426a7b9345e0ce57e">More...</a><br/></td></tr>
+<tr class="separator:gac1caf5cf1b21ab7426a7b9345e0ce57e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga5d34f52534d643ae7c2d4f745976ecf4"><td class="memItemLeft" align="right" valign="top">FromConnection&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__FlowOps.html#ga5d34f52534d643ae7c2d4f745976ecf4">streamc::connectors::operator,</a> (Operator &amp;upstreamOp, size_t outPort)</td></tr>
+<tr class="memdesc:ga5d34f52534d643ae7c2d4f745976ecf4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a from connection from an (upstream operator, output port index) pair.  <a href="#ga5d34f52534d643ae7c2d4f745976ecf4">More...</a><br/></td></tr>
+<tr class="separator:ga5d34f52534d643ae7c2d4f745976ecf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga9e6869dfb249ef7736cb4fb71fbd5fb5"><td class="memItemLeft" align="right" valign="top">Connection&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__FlowOps.html#ga9e6869dfb249ef7736cb4fb71fbd5fb5">streamc::connectors::operator&gt;&gt;</a> (FromConnection const &amp;fromConn, ToConnection const &amp;toConn)</td></tr>
+<tr class="memdesc:ga9e6869dfb249ef7736cb4fb71fbd5fb5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a connection from a (from connection, to connection) pair.  <a href="#ga9e6869dfb249ef7736cb4fb71fbd5fb5">More...</a><br/></td></tr>
+<tr class="separator:ga9e6869dfb249ef7736cb4fb71fbd5fb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab3fad68ad74e856ed0ab881d7c6fae37"><td class="memItemLeft" align="right" valign="top">ConnectionKnot&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__FlowOps.html#gab3fad68ad74e856ed0ab881d7c6fae37">streamc::connectors::operator,</a> (ToConnection const &amp;toConn, size_t outPort)</td></tr>
+<tr class="memdesc:gab3fad68ad74e856ed0ab881d7c6fae37"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a connection knot from a (to connection, output port index) pair.  <a href="#gab3fad68ad74e856ed0ab881d7c6fae37">More...</a><br/></td></tr>
+<tr class="separator:gab3fad68ad74e856ed0ab881d7c6fae37"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga845b39ab8c41f62c4a933c1daef2e0dd"><td class="memItemLeft" align="right" valign="top">OpenConnectionChain&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__FlowOps.html#ga845b39ab8c41f62c4a933c1daef2e0dd">streamc::connectors::operator&gt;&gt;</a> (FromConnection const &amp;fromConn, ConnectionKnot const &amp;knot)</td></tr>
+<tr class="memdesc:ga845b39ab8c41f62c4a933c1daef2e0dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create an open connection chain from a (from connection, connection knot) pair.  <a href="#ga845b39ab8c41f62c4a933c1daef2e0dd">More...</a><br/></td></tr>
+<tr class="separator:ga845b39ab8c41f62c4a933c1daef2e0dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab11a040bf34160eaf0ece8f5159617a6"><td class="memItemLeft" align="right" valign="top">OpenConnectionChain&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__FlowOps.html#gab11a040bf34160eaf0ece8f5159617a6">streamc::connectors::operator&gt;&gt;</a> (OpenConnectionChain &amp;&amp;chain, ConnectionKnot const &amp;knot)</td></tr>
+<tr class="memdesc:gab11a040bf34160eaf0ece8f5159617a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extend an open connection chain using a connection knot.  <a href="#gab11a040bf34160eaf0ece8f5159617a6">More...</a><br/></td></tr>
+<tr class="separator:gab11a040bf34160eaf0ece8f5159617a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac35ecc4fd31a094c2ef94c1aa140a4f3"><td class="memItemLeft" align="right" valign="top">ConnectionChain&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__FlowOps.html#gac35ecc4fd31a094c2ef94c1aa140a4f3">streamc::connectors::operator&gt;&gt;</a> (OpenConnectionChain &amp;&amp;chain, ToConnection const &amp;toConn)</td></tr>
+<tr class="memdesc:gac35ecc4fd31a094c2ef94c1aa140a4f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert an open connection chain into a connection chain using a to connection.  <a href="#gac35ecc4fd31a094c2ef94c1aa140a4f3">More...</a><br/></td></tr>
+<tr class="separator:gac35ecc4fd31a094c2ef94c1aa140a4f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Flow construction operators. </p>
 <h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="ga14fdf5686a59dc49a1ae09d76936895b"></a>
+<a class="anchor" id="gac1caf5cf1b21ab7426a7b9345e0ce57e"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -141,7 +141,7 @@ Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">ToConnection streamc::operator, </td>
+          <td class="memname">ToConnection streamc::connectors::operator, </td>
           <td>(</td>
           <td class="paramtype">size_t&#160;</td>
           <td class="paramname"><em>inPort</em>, </td>
@@ -177,7 +177,7 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ga56937e6755dee56e815777e3679e631a"></a>
+<a class="anchor" id="ga5d34f52534d643ae7c2d4f745976ecf4"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -185,7 +185,7 @@ Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">FromConnection streamc::operator, </td>
+          <td class="memname">FromConnection streamc::connectors::operator, </td>
           <td>(</td>
           <td class="paramtype">Operator &amp;&#160;</td>
           <td class="paramname"><em>upstreamOp</em>, </td>
@@ -221,7 +221,7 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="gad0dc1eda012f5186c13d11cf24d1d843"></a>
+<a class="anchor" id="gab3fad68ad74e856ed0ab881d7c6fae37"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -229,7 +229,7 @@ Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">ConnectionKnot streamc::operator, </td>
+          <td class="memname">ConnectionKnot streamc::connectors::operator, </td>
           <td>(</td>
           <td class="paramtype">ToConnection const &amp;&#160;</td>
           <td class="paramname"><em>toConn</em>, </td>
@@ -265,7 +265,7 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ga0e3eda2a23e261dd0df34cd6e80b11ca"></a>
+<a class="anchor" id="ga9e6869dfb249ef7736cb4fb71fbd5fb5"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -273,7 +273,7 @@ Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Connection streamc::operator&gt;&gt; </td>
+          <td class="memname">Connection streamc::connectors::operator&gt;&gt; </td>
           <td>(</td>
           <td class="paramtype">FromConnection const &amp;&#160;</td>
           <td class="paramname"><em>fromConn</em>, </td>
@@ -309,7 +309,7 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="gad591d5a6a8b336f51e6570064479cb6f"></a>
+<a class="anchor" id="ga845b39ab8c41f62c4a933c1daef2e0dd"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -317,7 +317,7 @@ Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">OpenConnectionChain streamc::operator&gt;&gt; </td>
+          <td class="memname">OpenConnectionChain streamc::connectors::operator&gt;&gt; </td>
           <td>(</td>
           <td class="paramtype">FromConnection const &amp;&#160;</td>
           <td class="paramname"><em>fromConn</em>, </td>
@@ -353,7 +353,7 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="gafe63c9ba5bcc04670df63dfbb59cabaf"></a>
+<a class="anchor" id="gab11a040bf34160eaf0ece8f5159617a6"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -361,7 +361,7 @@ Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">OpenConnectionChain streamc::operator&gt;&gt; </td>
+          <td class="memname">OpenConnectionChain streamc::connectors::operator&gt;&gt; </td>
           <td>(</td>
           <td class="paramtype">OpenConnectionChain &amp;&amp;&#160;</td>
           <td class="paramname"><em>chain</em>, </td>
@@ -397,7 +397,7 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ga2bcf910825a9b8a07c3d6a3da1bc1bcf"></a>
+<a class="anchor" id="gac35ecc4fd31a094c2ef94c1aa140a4f3"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -405,7 +405,7 @@ Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">ConnectionChain streamc::operator&gt;&gt; </td>
+          <td class="memname">ConnectionChain streamc::connectors::operator&gt;&gt; </td>
           <td>(</td>
           <td class="paramtype">OpenConnectionChain &amp;&amp;&#160;</td>
           <td class="paramname"><em>chain</em>, </td>
@@ -446,7 +446,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sun Dec 1 2013 21:52:28 for StreamC by
+    <li class="footer">Generated on Sun Dec 1 2013 22:03:16 for StreamC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

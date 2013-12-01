@@ -48,7 +48,7 @@ void FlowContext::run(int numThreads)
     // add input ports
     for (size_t i=0; i<oper->getNumberOfInputPorts(); ++i) {
       InputPortImpl * port = new InputPortImpl(*operatorContext, *scheduler_);
-      vector<FromConnection> const & conns = flow_.getInConnections(*oper, i);
+      vector<connectors::FromConnection> const & conns = flow_.getInConnections(*oper, i);
 
       // add publishers
       for (auto const & conn : conns) {
@@ -61,7 +61,7 @@ void FlowContext::run(int numThreads)
     // add output ports
     for (size_t i=0; i<oper->getNumberOfOutputPorts(); ++i) {
       OutputPortImpl * port = new OutputPortImpl(*operatorContext, *scheduler_);
-      vector<ToConnection> const & conns = flow_.getOutConnections(*oper, i);
+      vector<connectors::ToConnection> const & conns = flow_.getOutConnections(*oper, i);
 
       //add subscribers
       for (auto const & conn : conns) {

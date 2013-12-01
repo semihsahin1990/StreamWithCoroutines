@@ -10,7 +10,7 @@ var searchData=
   ['flow',['Flow',['../classstreamc_1_1Flow.html#a546f4183476cf9fa3e8fbbf15e7300cb',1,'streamc::Flow']]],
   ['flow_20construction_20operators',['Flow construction operators',['../group__FlowOps.html',1,'']]],
   ['flowrunner',['FlowRunner',['../classstreamc_1_1FlowRunner.html',1,'streamc']]],
-  ['fromconnection',['FromConnection',['../classstreamc_1_1FromConnection.html',1,'streamc']]],
-  ['fromconnection',['FromConnection',['../classstreamc_1_1FromConnection.html#a22cc011301e505982c7dc20095aa5c20',1,'streamc::FromConnection']]],
+  ['fromconnection',['FromConnection',['../classstreamc_1_1connectors_1_1FromConnection.html',1,'streamc::connectors']]],
+  ['fromconnection',['FromConnection',['../classstreamc_1_1connectors_1_1FromConnection.html#a83bad2e7933beab7c18459abd9ad5edb',1,'streamc::connectors::FromConnection']]],
   ['fromstring',['fromString',['../classstreamc_1_1Value.html#a82fb0dc4ce987a3753e6beff49bb4567',1,'streamc::Value']]]
 ];

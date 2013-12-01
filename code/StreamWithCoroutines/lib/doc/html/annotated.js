@@ -1,18 +1,20 @@
 var annotated =
 [
     [ "streamc", null, [
+      [ "connectors", null, [
+        [ "ToConnection", "classstreamc_1_1connectors_1_1ToConnection.html", "classstreamc_1_1connectors_1_1ToConnection" ],
+        [ "FromConnection", "classstreamc_1_1connectors_1_1FromConnection.html", "classstreamc_1_1connectors_1_1FromConnection" ],
+        [ "Connection", "classstreamc_1_1connectors_1_1Connection.html", "classstreamc_1_1connectors_1_1Connection" ],
+        [ "ConnectionKnot", "classstreamc_1_1connectors_1_1ConnectionKnot.html", "classstreamc_1_1connectors_1_1ConnectionKnot" ],
+        [ "ConnectionChain", "classstreamc_1_1connectors_1_1ConnectionChain.html", "classstreamc_1_1connectors_1_1ConnectionChain" ],
+        [ "OpenConnectionChain", "classstreamc_1_1connectors_1_1OpenConnectionChain.html", "classstreamc_1_1connectors_1_1OpenConnectionChain" ]
+      ] ],
       [ "operators", null, [
         [ "Barrier", "classstreamc_1_1operators_1_1Barrier.html", "classstreamc_1_1operators_1_1Barrier" ],
         [ "FileSink", "classstreamc_1_1operators_1_1FileSink.html", "classstreamc_1_1operators_1_1FileSink" ],
         [ "FileSource", "classstreamc_1_1operators_1_1FileSource.html", "classstreamc_1_1operators_1_1FileSource" ],
         [ "Filter", "classstreamc_1_1operators_1_1Filter.html", "classstreamc_1_1operators_1_1Filter" ]
       ] ],
-      [ "ToConnection", "classstreamc_1_1ToConnection.html", "classstreamc_1_1ToConnection" ],
-      [ "FromConnection", "classstreamc_1_1FromConnection.html", "classstreamc_1_1FromConnection" ],
-      [ "Connection", "classstreamc_1_1Connection.html", "classstreamc_1_1Connection" ],
-      [ "ConnectionKnot", "classstreamc_1_1ConnectionKnot.html", "classstreamc_1_1ConnectionKnot" ],
-      [ "ConnectionChain", "classstreamc_1_1ConnectionChain.html", "classstreamc_1_1ConnectionChain" ],
-      [ "OpenConnectionChain", "classstreamc_1_1OpenConnectionChain.html", "classstreamc_1_1OpenConnectionChain" ],
       [ "Flow", "classstreamc_1_1Flow.html", "classstreamc_1_1Flow" ],
       [ "FlowRunner", "classstreamc_1_1FlowRunner.html", "classstreamc_1_1FlowRunner" ],
       [ "InputPort", "classstreamc_1_1InputPort.html", "classstreamc_1_1InputPort" ],

@@ -12,6 +12,7 @@
 using namespace std;
 using namespace streamc;
 using namespace streamc::operators;
+using namespace streamc::connectors;
 
 int main()
 {
