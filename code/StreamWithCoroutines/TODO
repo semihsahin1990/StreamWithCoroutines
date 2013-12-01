@@ -6,7 +6,11 @@ Generation II:
 - Smarter schedulers [0%]
 - Sample applications [5%]
 - Tests [0%]
-* Paper about the system [0%] 
+- Paper about the system [0%] 
+ * Emphasize: Programming model, runtime & scheduling algs
+ * Novelty:
+   + Pull-based operators simplify implementation of multi-input operators
+   + Scheduler-based runtime provides flexibility, makes optimizations possible
 
 Generation III: 
 - User-directed operator fission [0%]
@@ -17,7 +21,10 @@ Generation IV:
 - Partitioned stateful operators [0%]
 - Migration for partitioned stateful operators [0%]
 - Elastic fission for partitioned stateful operators [0%]
-* Paper about the system [0%]
+- Paper about the system [0%]
+ * Emphasize: Runtime & scheduling algs
+  + First system to combine pipelining and fission optimizations
+  + Has all the advantages of the pull-based design
 
 Generation V: 
 - Runtime support for regions in fission [0%]
