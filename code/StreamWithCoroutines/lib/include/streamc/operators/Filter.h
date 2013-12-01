@@ -8,7 +8,7 @@ namespace streamc
 {
 
 /**
- * Filter that evaluates tuples against a given condition.
+ * %Filter that evaluates tuples against a given condition.
  */
 class Filter : public Operator
 {
