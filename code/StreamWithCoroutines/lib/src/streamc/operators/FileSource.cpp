@@ -44,14 +44,23 @@ void FileSource::process(OperatorContext & context)
 {
   Tuple tuple;
   string line;
+  std::regex sep(",");
   ifstream input;
   input.open(fileName_.c_str(), ios::in);
-  std::regex sep(",");
+  if (!input) {
+    SC_APPLOG(Error, "Error in opening input file: " << fileName_ << ", details: "<< strerror(errno));
+    return;
+  }
   while (!context.isShutdownRequested()) {
+    line.clear();
     getline(input, line);
-    SC_APPLOG(Trace, "Read line: " << line);
-    if(input.eof())
+    if (!input && !input.eof()) {
+      SC_APPLOG(Error, "Error in reading from input file: " << fileName_ << ", details: "<< strerror(errno));
+      return;        
+    }
+    if(line.size()==0 && input.eof())
       break;   
+    SC_APPLOG(Trace, "Read line: " << line);
     sregex_token_iterator tokenIt(line.begin(), line.end(), sep, -1);
     bool error = false;
     for (auto it=attributes_.begin(); it!=attributes_.end(); ++it, ++tokenIt) {
@@ -65,7 +74,8 @@ void FileSource::process(OperatorContext & context)
       string const & token = *tokenIt;
       tuple.setAttribute(name, Value::fromString(token, type));
     }
-    oport_->pushTuple(tuple);
+    if (!error)
+      oport_->pushTuple(tuple);
   } 
 }
 

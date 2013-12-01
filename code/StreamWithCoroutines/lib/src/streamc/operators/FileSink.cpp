@@ -1,5 +1,7 @@
 #include "streamc/operators/FileSink.h"
 
+#include "streamc/Logger.h"
+
 #include <iostream>
 #include <fstream>
 #include <regex>
@@ -30,6 +32,10 @@ void FileSink::process(OperatorContext & context)
 {
   ofstream output;
   output.open(fileName_.c_str(), ios::out);
+  if (!output) {
+    SC_APPLOG(Error, "Error in opening output file: " << fileName_ << ", details: " << strerror(errno));
+    return;
+  }
   while (!context.isShutdownRequested()) {
     bool closed = iport_->waitTuple();
     if (closed)
