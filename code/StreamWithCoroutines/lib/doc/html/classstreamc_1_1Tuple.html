@@ -133,6 +133,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a46a4441fea0bbd7515dd661219304ecd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstreamc_1_1Tuple.html">Tuple</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Tuple.html#a46a4441fea0bbd7515dd661219304ecd">operator=</a> (<a class="el" href="classstreamc_1_1Tuple.html">Tuple</a> const &amp;other)</td></tr>
 <tr class="memdesc:a46a4441fea0bbd7515dd661219304ecd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assign from another tuple (aka assignment operator).  <a href="#a46a4441fea0bbd7515dd661219304ecd">More...</a><br/></td></tr>
 <tr class="separator:a46a4441fea0bbd7515dd661219304ecd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a525e0bc5d972957323a266a40dda47ce"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Tuple.html#a525e0bc5d972957323a266a40dda47ce">append</a> (<a class="el" href="classstreamc_1_1Tuple.html">Tuple</a> const &amp;tuple)</td></tr>
+<tr class="memdesc:a525e0bc5d972957323a266a40dda47ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Append a tuple to this tuple.  <a href="#a525e0bc5d972957323a266a40dda47ce">More...</a><br/></td></tr>
+<tr class="separator:a525e0bc5d972957323a266a40dda47ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0afda289f589f4c594453822b6f5a4e5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Tuple.html#a0afda289f589f4c594453822b6f5a4e5">setAttribute</a> (std::string const &amp;name, <a class="el" href="classstreamc_1_1Value.html">Value</a> const &amp;value)</td></tr>
 <tr class="memdesc:a0afda289f589f4c594453822b6f5a4e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set value of an attribute.  <a href="#a0afda289f589f4c594453822b6f5a4e5">More...</a><br/></td></tr>
 <tr class="separator:a0afda289f589f4c594453822b6f5a4e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -239,6 +242,39 @@ const &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a525e0bc5d972957323a266a40dda47ce"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void streamc::Tuple::append </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classstreamc_1_1Tuple.html">Tuple</a> const &amp;&#160;</td>
+          <td class="paramname"><em>tuple</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Append a tuple to this tuple. </p>
+<p>New attributes are added as copies, existing ones are overwritten. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tuple</td><td>tuple to be appended to this tuple </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="a09e84b313631835aa0e20e6d1a2e059a"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1090,7 +1126,7 @@ template&lt;Type T&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>streamc</b></li><li class="navelem"><a class="el" href="classstreamc_1_1Tuple.html">Tuple</a></li>
-    <li class="footer">Generated on Sun Dec 1 2013 21:14:34 for StreamC by
+    <li class="footer">Generated on Sun Dec 1 2013 21:21:13 for StreamC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

@@ -2,7 +2,7 @@
 
 #include "streamc/Value.h"
 
-#include<unordered_map>
+#include <unordered_map>
 
 namespace streamc
 {
@@ -68,6 +68,19 @@ public:
         *(vit->second) = *(it->second);
     }
     return *this;
+  }
+
+  /**
+   * Append a tuple to this tuple 
+   *
+   * New attributes are added as copies, existing ones are overwritten.
+   * @param tuple tuple to be appended to this tuple
+   */
+  void append(Tuple const & tuple)
+  {
+    auto tupleValues = tuple.getAttributes();
+    for(auto it = tupleValues.begin(); it!= tupleValues.end(); it++)
+      setAttribute(it->first, *(it->second));
   }
 
   /**
@@ -381,4 +394,4 @@ typename ValueTypeToCppType<T>::type const & Tuple::get(std::string const & name
 }
 /// @endcond
 
-}
+} // namespace streamc

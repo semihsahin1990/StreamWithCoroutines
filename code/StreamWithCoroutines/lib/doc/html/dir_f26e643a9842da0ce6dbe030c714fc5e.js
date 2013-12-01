@@ -12,6 +12,7 @@ var dir_f26e643a9842da0ce6dbe030c714fc5e =
     [ "Operator.h", "Operator_8h_source.html", null ],
     [ "OperatorContext.h", "OperatorContext_8h_source.html", null ],
     [ "OutputPort.h", "OutputPort_8h_source.html", null ],
+    [ "Ports.h", "Ports_8h_source.html", null ],
     [ "Tuple.h", "Tuple_8h_source.html", null ],
     [ "Value.h", "Value_8h_source.html", null ]
 ];

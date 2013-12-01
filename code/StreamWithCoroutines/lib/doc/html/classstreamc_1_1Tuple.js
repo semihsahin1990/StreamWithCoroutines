@@ -3,6 +3,7 @@ var classstreamc_1_1Tuple =
     [ "Tuple", "classstreamc_1_1Tuple.html#acffe1b4c50591eaa89a7fbf41b133d86", null ],
     [ "Tuple", "classstreamc_1_1Tuple.html#a810b033e7f99152bf2c0501e3b80bfa4", null ],
     [ "~Tuple", "classstreamc_1_1Tuple.html#aef7cf5862dc12a73e55dfc38e4527635", null ],
+    [ "append", "classstreamc_1_1Tuple.html#a525e0bc5d972957323a266a40dda47ce", null ],
     [ "get", "classstreamc_1_1Tuple.html#a09e84b313631835aa0e20e6d1a2e059a", null ],
     [ "get", "classstreamc_1_1Tuple.html#a467169737dc55f317a716364026a5876", null ],
     [ "getAttributes", "classstreamc_1_1Tuple.html#a091be128675d95b5f8babcd410192946", null ],
