@@ -60,7 +60,10 @@ public:
   }
   //init function with Operator context
   virtual void init(OperatorContext & context) = 0;
-  //process function with Operator context
+
+  /**
+   *  TODO
+   */
   virtual void process(OperatorContext & context) = 0;
 };
  

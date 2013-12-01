@@ -20,21 +20,22 @@ public:
   void drain();
 
   // implemented interface
-  bool isComplete();
+  bool isClosed();
   bool hasTuple();
   size_t getTupleCount();  
   bool waitTuple();
+  bool waitTuple(size_t n);
   Tuple & getFrontTuple();
   Tuple & getTupleAt(size_t index);
   void popTuple();
 
 private:
-  bool isCompleteNoLock();
+  bool isClosedNoLock();
 
 private:
   OperatorContextImpl * oper_;
   Scheduler * scheduler_;
-  bool isComplete_;
+  bool isClosed_;
   std::deque<Tuple> portQueue_;
   std::vector<OperatorContextImpl *> publishers_;
   std::mutex mutex_; 

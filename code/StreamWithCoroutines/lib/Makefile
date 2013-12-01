@@ -3,6 +3,7 @@
 # The Makefile provides the following targets to make:
 #   $ make           compile and link
 #   $ make objs      compile only (no linking)
+#   $ make docs     build documentation (requires doxygen)
 #   $ make clean     clean objects and the executable file
 #   $ make help      get the usage of the makefile
 
@@ -61,12 +62,16 @@ $(BINDIR)/$(LIBRARY): $(OBJS)
 	@mkdir -p $(dir $@)
 	$(LINK) $(OBJS) -shared -o "$(PWD)/$@"
 
+docs:
+	doxygen doc/doxy.conf
+
 ifneq ($(DEPS),)
   sinclude $(DEPS)
 endif
 
 clean:
 	$(RM) -r $(OBJDIR) $(BINDIR)
+	$(RM) -r docs/html
 
 help:
 	@echo 'Usage: make [TARGET]'
