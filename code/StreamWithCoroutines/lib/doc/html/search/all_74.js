@@ -1,12 +1,9 @@
 var searchData=
 [
+  ['tuple_20lambda_20macros',['Tuple lambda macros',['../group__Lambdas.html',1,'']]],
+  ['toconnection',['ToConnection',['../classstreamc_1_1ToConnection.html#a997d210dd1c4e9a8a6039300e5ccbe27',1,'streamc::ToConnection']]],
   ['toconnection',['ToConnection',['../classstreamc_1_1ToConnection.html',1,'streamc']]],
-  ['tuple',['Tuple',['../classstreamc_1_1Tuple.html',1,'streamc']]],
-  ['typekindtotype',['TypeKindToType',['../structstreamc_1_1TypeKindToType.html',1,'streamc']]],
-  ['typekindtotype_3c_20type_3a_3adouble_20_3e',['TypeKindToType&lt; Type::Double &gt;',['../structstreamc_1_1TypeKindToType_3_01Type_1_1Double_01_4.html',1,'streamc']]],
-  ['typekindtotype_3c_20type_3a_3adoublelist_20_3e',['TypeKindToType&lt; Type::DoubleList &gt;',['../structstreamc_1_1TypeKindToType_3_01Type_1_1DoubleList_01_4.html',1,'streamc']]],
-  ['typekindtotype_3c_20type_3a_3ainteger_20_3e',['TypeKindToType&lt; Type::Integer &gt;',['../structstreamc_1_1TypeKindToType_3_01Type_1_1Integer_01_4.html',1,'streamc']]],
-  ['typekindtotype_3c_20type_3a_3aintlist_20_3e',['TypeKindToType&lt; Type::IntList &gt;',['../structstreamc_1_1TypeKindToType_3_01Type_1_1IntList_01_4.html',1,'streamc']]],
-  ['typekindtotype_3c_20type_3a_3astring_20_3e',['TypeKindToType&lt; Type::String &gt;',['../structstreamc_1_1TypeKindToType_3_01Type_1_1String_01_4.html',1,'streamc']]],
-  ['typekindtotype_3c_20type_3a_3astringlist_20_3e',['TypeKindToType&lt; Type::StringList &gt;',['../structstreamc_1_1TypeKindToType_3_01Type_1_1StringList_01_4.html',1,'streamc']]]
+  ['tostring',['toString',['../classstreamc_1_1Value.html#a856f71e56a5b76dea162599ab87e0670',1,'streamc::Value']]],
+  ['tuple',['Tuple',['../classstreamc_1_1Tuple.html#acffe1b4c50591eaa89a7fbf41b133d86',1,'streamc::Tuple::Tuple()'],['../classstreamc_1_1Tuple.html#a810b033e7f99152bf2c0501e3b80bfa4',1,'streamc::Tuple::Tuple(Tuple const &amp;other)']]],
+  ['tuple',['Tuple',['../classstreamc_1_1Tuple.html',1,'streamc']]]
 ];

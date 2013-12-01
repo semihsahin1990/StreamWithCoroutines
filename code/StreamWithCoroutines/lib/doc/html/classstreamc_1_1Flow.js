@@ -3,7 +3,7 @@ var classstreamc_1_1Flow =
     [ "Flow", "classstreamc_1_1Flow.html#a546f4183476cf9fa3e8fbbf15e7300cb", null ],
     [ "~Flow", "classstreamc_1_1Flow.html#ac982d63ce9e93cd888a2f2c97e43106f", null ],
     [ "addConnection", "classstreamc_1_1Flow.html#a327c8847eff569b75f561a1b4de301dd", null ],
-    [ "addConnection", "classstreamc_1_1Flow.html#ad0a81f1a07a7cb8bfda94fb554dba8d0", null ],
+    [ "addConnection", "classstreamc_1_1Flow.html#a2e7fd93aef135c65b4c85963202602d8", null ],
     [ "addConnection", "classstreamc_1_1Flow.html#a24bc46e590b752d35cb075b5b18e72cc", null ],
     [ "addConnections", "classstreamc_1_1Flow.html#a792341f605ebd8bd92fbbdaef69c70e4", null ],
     [ "addOperator", "classstreamc_1_1Flow.html#a3c3f3c7e47189653deb6177e1cd269dc", null ],

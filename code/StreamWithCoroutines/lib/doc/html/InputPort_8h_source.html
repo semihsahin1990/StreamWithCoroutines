@@ -45,6 +45,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -68,6 +69,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
       <li><a href="files.html"><span>File&#160;List</span></a></li>
+      <li><a href="globals.html"><span>File&#160;Members</span></a></li>
     </ul>
   </div>
 </div><!-- top -->
@@ -90,7 +92,7 @@ $(document).ready(function(){initNavTree('InputPort_8h_source.html','');});
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Groups</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -126,19 +128,19 @@ $(document).ready(function(){initNavTree('InputPort_8h_source.html','');});
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classstreamc_1_1InputPort.html#abd43097e06f8f95c75374c632f3ef174">waitTuple</a>() = 0;</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classstreamc_1_1InputPort.html#abd43097e06f8f95c75374c632f3ef174">waitTuple</a>(<span class="keywordtype">size_t</span> n) = 0;  </div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;  </div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;  <span class="keyword">virtual</span> <a class="code" href="classstreamc_1_1Tuple.html">Tuple</a> &amp; <a class="code" href="classstreamc_1_1InputPort.html#a639e2184bd46e12a3e300b8a384bb035">getFrontTuple</a>() = 0;</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;  <span class="keyword">virtual</span> <a class="code" href="classstreamc_1_1Tuple.html">Tuple</a> &amp; <a class="code" href="classstreamc_1_1InputPort.html#a9b85c448940052d9acf0c6836b78d28d">getTupleAt</a>(<span class="keywordtype">size_t</span> index) = 0;</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classstreamc_1_1InputPort.html#abaca42570b2a29903171900150f862c4">popTuple</a>() = 0; </div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;};</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;} <span class="comment">// namespace streamc</span></div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classstreamc_1_1InputPort.html#abd43097e06f8f95c75374c632f3ef174">waitTuple</a>(<span class="keywordtype">size_t</span> n) = 0;  </div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;  </div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;  <span class="keyword">virtual</span> <a class="code" href="classstreamc_1_1Tuple.html">Tuple</a> &amp; <a class="code" href="classstreamc_1_1InputPort.html#a639e2184bd46e12a3e300b8a384bb035">getFrontTuple</a>() = 0;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;  <span class="keyword">virtual</span> <a class="code" href="classstreamc_1_1Tuple.html">Tuple</a> &amp; <a class="code" href="classstreamc_1_1InputPort.html#a9b85c448940052d9acf0c6836b78d28d">getTupleAt</a>(<span class="keywordtype">size_t</span> index) = 0;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classstreamc_1_1InputPort.html#abaca42570b2a29903171900150f862c4">popTuple</a>() = 0; </div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;};</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;} <span class="comment">// namespace streamc</span></div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;</div>
 <div class="ttc" id="classstreamc_1_1InputPort_html"><div class="ttname"><a href="classstreamc_1_1InputPort.html">streamc::InputPort</a></div><div class="ttdoc">Input port that provides tuple receiving services to operators. </div><div class="ttdef"><b>Definition:</b> InputPort.h:16</div></div>
-<div class="ttc" id="classstreamc_1_1Tuple_html"><div class="ttname"><a href="classstreamc_1_1Tuple.html">streamc::Tuple</a></div><div class="ttdef"><b>Definition:</b> Tuple.h:10</div></div>
+<div class="ttc" id="classstreamc_1_1Tuple_html"><div class="ttname"><a href="classstreamc_1_1Tuple.html">streamc::Tuple</a></div><div class="ttdoc">Tuple represending a set of named values. </div><div class="ttdef"><b>Definition:</b> Tuple.h:13</div></div>
 <div class="ttc" id="classstreamc_1_1InputPort_html_a7c91622eec2a01920a49d1d10946d087"><div class="ttname"><a href="classstreamc_1_1InputPort.html#a7c91622eec2a01920a49d1d10946d087">streamc::InputPort::getTupleCount</a></div><div class="ttdeci">virtual size_t getTupleCount()=0</div><div class="ttdoc">Get the current number of tuples queued in the input port. </div></div>
 <div class="ttc" id="classstreamc_1_1InputPort_html_a9b85c448940052d9acf0c6836b78d28d"><div class="ttname"><a href="classstreamc_1_1InputPort.html#a9b85c448940052d9acf0c6836b78d28d">streamc::InputPort::getTupleAt</a></div><div class="ttdeci">virtual Tuple &amp; getTupleAt(size_t index)=0</div><div class="ttdoc">Get the tuple at a given index within the input port queue. </div></div>
 <div class="ttc" id="classstreamc_1_1InputPort_html_abaca42570b2a29903171900150f862c4"><div class="ttname"><a href="classstreamc_1_1InputPort.html#abaca42570b2a29903171900150f862c4">streamc::InputPort::popTuple</a></div><div class="ttdeci">virtual void popTuple()=0</div><div class="ttdoc">Remove the first tuple from the input port queue. </div></div>
@@ -152,7 +154,7 @@ $(document).ready(function(){initNavTree('InputPort_8h_source.html','');});
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_f26e643a9842da0ce6dbe030c714fc5e.html">streamc</a></li><li class="navelem"><b>InputPort.h</b></li>
-    <li class="footer">Generated on Sun Dec 1 2013 14:14:12 for StreamC by
+    <li class="footer">Generated on Sun Dec 1 2013 21:14:34 for StreamC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

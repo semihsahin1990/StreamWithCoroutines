@@ -8,97 +8,165 @@
 namespace streamc
 {
 
+/** 
+ * Types supported by the Value class.
+ */
 enum class Type 
 {
-  Integer, 
-  Double, 
-  String, 
-  IntList, 
-  DoubleList, 
-  StringList 
+  Integer,     //! integer value type
+  Double,      //! double value type
+  String,      //! string value type
+  IntList,     //! integer list value type
+  DoubleList,  //! double list value type
+  StringList   //! string list value type
 };
 
+/**
+ * Convert a value type to the corresponding C++ type.  For instance,
+ * <code>ValueTypeToCppType<Type::Integer> x;</code> is equivalent to
+ * <code>int64_t x;</code>.
+ */
 template <Type T>
-struct TypeKindToType {};
+struct ValueTypeToCppType {};
 
+/// @cond hidden
 template<>
-struct TypeKindToType<Type::Integer> 
+struct ValueTypeToCppType<Type::Integer> 
 {
   typedef int64_t type;
 };
 template<>
-struct TypeKindToType<Type::Double> 
+struct ValueTypeToCppType<Type::Double> 
 {
   typedef double type;
 };
 template<>
-struct TypeKindToType<Type::String> 
+struct ValueTypeToCppType<Type::String> 
 {
   typedef std::string type;
 };
 
 template<>
-struct TypeKindToType<Type::IntList> 
+struct ValueTypeToCppType<Type::IntList> 
 {
   typedef std::vector<int64_t> type;
 };
 template<>
-struct TypeKindToType<Type::DoubleList> 
+struct ValueTypeToCppType<Type::DoubleList> 
 {
   typedef std::vector<double> type;
 };
 template<>
-struct TypeKindToType<Type::StringList> 
+struct ValueTypeToCppType<Type::StringList> 
 {
   typedef std::vector<std::string> type;
 };
+/// @endcond
 
+/**
+ * %Value that reprsents tuple attribute values.
+ */
 class Value
 {    
 public:
+  /**
+   * Construct a value from an integer.
+   *
+   * @param value integer value
+   */
   Value(int64_t const & value)
     : type_(Type::Integer)
   {
-    pointer.intPointer = new int64_t(value);
+    data.intData = value;
   }    
+
+  /**
+   * Construct a value from a double.
+   *
+   * @param value double value
+   */
   Value(double const & value)
     : type_(Type::Double)
   {
-    pointer.doublePointer = new double(value);
+    data.doubleData = value;
   }    
+
+  /**
+   * Construct a value from a string.
+   *
+   * @param value string value
+   */
   Value(std::string const & value) 
     : type_(Type::String)
   {
-    pointer.stringPointer = new std::string(value);
+    data.stringPointer = new std::string(value);
   }    
-  Value(std::vector<int64_t> const & list) 
+
+  /**
+   * Construct a value from an integer list.
+   *
+   * @param value integer list value
+   */
+  Value(std::vector<int64_t> const & value) 
     : type_(Type::IntList)
   {
-    pointer.intListPointer = new std::vector<int64_t>(list);
+    data.intListPointer = new std::vector<int64_t>(value);
   }    
-  Value(std::vector<double> const & list) 
+
+  /**
+   * Construct a value from a double list.
+   *
+   * @param value double list value
+   */
+  Value(std::vector<double> const & value) 
     : type_(Type::DoubleList)
   {
-    pointer.doubleListPointer = new std::vector<double>(list);
+    data.doubleListPointer = new std::vector<double>(value);
   }    
-  Value(std::vector<std::string> const & list) 
+
+  /**
+   * Construct a value from a string list.
+   *
+   * @param value string list value
+   */  
+  Value(std::vector<std::string> const & value) 
     : type_(Type::StringList)
   {      
-    pointer.stringListPointer = new std::vector<std::string>(list);
+    data.stringListPointer = new std::vector<std::string>(value);
   }    
+
+  /**
+   * Construct a value from another one (aka, copy constructor).
+   *
+   * @param other other value to construct from.
+   */
   Value(Value const & other) 
     : type_(other.type_)
   {
     allocAndSet(other);
   }
+
   ~Value()
   {
     free();
   }
+
+  /**
+   * Get the value type.
+   *
+   * @return the value type
+   */
   Type getType() const
   {
     return type_;
   }
+
+  /**
+   * Assign from another value (aka asignment operator).
+   *
+   * @param other other value to assign from
+   * @return this value
+   */
   Value & operator=(Value const & other)
   {
     if (type_!=other.type_) {
@@ -110,113 +178,259 @@ public:
     }
     return *this;
   }
+
+  /**
+   * Set value to the given integer. 
+   *
+   * @param value given integer
+   */
   void setValue(int64_t const & value)
   {
     if(type_ == Type::Integer) {
-      *pointer.intPointer = value;
+      data.intData = value;
     } else {
       free();
       type_ = Type::Integer;
-      pointer.intPointer = new int64_t(value);
+      data.intData = value;
     }
-  }    
+  } 
+
+  /**
+   * Set value to the given double.
+   *
+   * @param value given double
+   */   
   void setValue(double const & value)
   {
     if(type_ == Type::Double) {
-      *pointer.doublePointer = value;
+      data.doubleData = value;
     } else {
       free();
       type_ = Type::Double;
-      pointer.doublePointer = new double(value);
+      data.doubleData = value;
     }
   }    
+
+  /**
+   * Set value to the given string.
+   *
+   * @param value given string
+   */   
   void setValue(std::string const & value) 
   {
     if(type_ == Type::String) {
-      *pointer.stringPointer = value;
+      *(data.stringPointer) = value;
     } else {
       free();
       type_ = Type::String;
-      pointer.stringPointer = new std::string(value);
+      data.stringPointer = new std::string(value);
     }
   }    
+
+  /**
+   * Set value to the given integer list.
+   *
+   * @param value given integer list
+   */   
   void setValue(std::vector<int64_t> const & value) 
   {
     if(type_ == Type::IntList) {
-      *pointer.intListPointer = value;
+      *(data.intListPointer) = value;
     } else {
       free();
       type_ = Type::IntList;
-      pointer.intListPointer = new std::vector<int64_t>(value);
+      data.intListPointer = new std::vector<int64_t>(value);
     }
   }    
+
+  /**
+   * Set value to the given double list.
+   *
+   * @param value given double list
+   */   
   void setValue(std::vector<double> const & value) 
   {
     if(type_ == Type::DoubleList) {
-      *pointer.doubleListPointer = value;
+      *(data.doubleListPointer) = value;
     } else {
       free();
       type_ = Type::DoubleList;
-      pointer.doubleListPointer = new std::vector<double>(value);
+      data.doubleListPointer = new std::vector<double>(value);
     }
   }    
+
+  /**
+   * Set value to the given string list.
+   *
+   * @param value given string list
+   */   
   void setValue(std::vector<std::string> const & value) 
   {      
     if(type_ == Type::StringList) {
-      *pointer.stringListPointer = value;
+      *(data.stringListPointer) = value;
     } else {
       free();
       type_ = Type::StringList;
-      pointer.stringListPointer = new std::vector<std::string>(value);
+      data.stringListPointer = new std::vector<std::string>(value);
     }
   }        
+
+  /**
+   * Get the integer value.
+   *
+   * @return the integer value
+   */   
   int64_t & getIntValue() 
   {
-    return *pointer.intPointer;
+    return data.intData;
   }    
+
+  /**
+   * Get the integer value (const version).
+   *
+   * @return the integer value
+   */   
+  int64_t const & getIntValue() const
+  {
+    return data.intData;
+  }    
+
+  /**
+   * Get the double value.
+   *
+   * @return the double value
+   */   
   double & getDoubleValue() 
   {
-    return *pointer.doublePointer;
+    return data.doubleData;
   }    
+
+  /**
+   * Get the double value (const version).
+   *
+   * @return the double value
+   */   
+  double const & getDoubleValue() const
+  {
+    return data.doubleData;
+  }    
+
+  /**
+   * Get the string value.
+   *
+   * @return the string value
+   */   
   std::string & getStringValue() 
   {
-    return *pointer.stringPointer;
+    return *(data.stringPointer);
   }    
+
+  /**
+   * Get the string value (const version).
+   *
+   * @return the string value
+   */   
+  std::string const & getStringValue() const
+  {
+    return *(data.stringPointer);
+  }    
+
+  /**
+   * Get the integer list value.
+   *
+   * @return the integer list value
+   */   
   std::vector<int64_t> & getIntList() 
   {
-      return *pointer.intListPointer;
+    return *(data.intListPointer);
   }    
+
+  /**
+   * Get the integer list value (const version).
+   *
+   * @return the integer list value
+   */   
+  std::vector<int64_t> const & getIntList() const
+  {
+    return *(data.intListPointer);
+  }    
+
+  /**
+   * Get the double list value.
+   *
+   * @return the double list value
+   */   
   std::vector<double> & getDoubleList() 
   {
-    return *pointer.doubleListPointer;
+    return *(data.doubleListPointer);
   }    
+
+  /**
+   * Get the double list value (const version).
+   *
+   * @return the double list value
+   */   
+  std::vector<double> const & getDoubleList() const
+  {
+    return *(data.doubleListPointer);
+  }    
+
+  /**
+   * Get the string list value.
+   *
+   * @return the string list value
+   */   
   std::vector<std::string> & getStringList() 
   {
-    return *pointer.stringListPointer;
+    return *(data.stringListPointer);
   } 
+
+  /**
+   * Get the string list value (const version).
+   *
+   * @return the string list value
+   */   
+  std::vector<std::string> const & getStringList() const
+  {
+    return *(data.stringListPointer);
+  } 
+
+  /**
+   * Construct a value from a string representation.
+   *
+   * @param str the string representation 
+   * @param type the value type
+   * @return the constructed value
+   */ 
   static Value fromString(std::string const & str, Type type);
+
+  /**
+   * Construct a value to the string representation.
+   *
+   * @param value the value
+   */   
   static std::string toString(Value const & value);
 private:
   void set(Value const & other)
   {
     switch(type_) {
     case Type::Integer:
-      *pointer.intPointer = *other.pointer.intPointer;
+      data.intData = other.data.intData;
       break;
     case Type::Double:
-      *pointer.doublePointer = *other.pointer.doublePointer;
+      data.doubleData = other.data.doubleData;
       break;        
     case Type::String:
-      *pointer.stringPointer = *other.pointer.stringPointer;
+      *(data.stringPointer) = *(other.data.stringPointer);
       break;	
     case Type::IntList:
-      *pointer.intListPointer = *other.pointer.intListPointer;
+      *(data.intListPointer) = *(other.data.intListPointer);
       break;        
     case Type::DoubleList:
-      *pointer.doubleListPointer = *other.pointer.doubleListPointer;
+      *(data.doubleListPointer) = *(other.data.doubleListPointer);
       break;        
     case Type::StringList:
-      *pointer.stringListPointer = *other.pointer.stringListPointer;
+      *(data.stringListPointer) = *(other.data.stringListPointer);
       break;
     }      
   }   
@@ -224,22 +438,22 @@ private:
   {
     switch(type_){
     case Type::Integer:
-      pointer.intPointer = new int64_t(*other.pointer.intPointer);
+      data.intData = other.data.intData;
       break;        
     case Type::Double:
-      pointer.doublePointer = new double(*other.pointer.doublePointer);
+      data.doubleData = other.data.doubleData;
       break;        
     case Type::String:
-      pointer.stringPointer = new std::string(*other.pointer.stringPointer);
+      data.stringPointer = new std::string(*(other.data.stringPointer));
       break;	
     case Type::IntList:
-      pointer.intListPointer = new std::vector<int64_t>(*other.pointer.intListPointer);
+      data.intListPointer = new std::vector<int64_t>(*(other.data.intListPointer));
       break;        
     case Type::DoubleList:
-      pointer.doubleListPointer = new std::vector<double>(*other.pointer.doubleListPointer);
+      data.doubleListPointer = new std::vector<double>(*(other.data.doubleListPointer));
       break;        
     case Type::StringList:
-      pointer.stringListPointer = new std::vector<std::string>(*other.pointer.stringListPointer);
+      data.stringListPointer = new std::vector<std::string>(*(other.data.stringListPointer));
       break;
     }      
   }
@@ -247,35 +461,32 @@ private:
   {
     switch(type_){
     case Type::Integer:
-      delete pointer.intPointer;
-      break;        
     case Type::Double:
-      delete pointer.doublePointer;
       break;        
     case Type::String:
-      delete pointer.stringPointer;
+      delete data.stringPointer;
       break;	
     case Type::IntList:
-      delete pointer.intListPointer;
+      delete data.intListPointer;
       break;        
     case Type::DoubleList:
-      delete pointer.doubleListPointer;
+      delete data.doubleListPointer;
       break;        
     case Type::StringList:
-      delete pointer.stringListPointer;
+      delete data.stringListPointer;
       break;
     }
   }
 private:
   Type type_;    
   union Ptr {
-    int64_t * intPointer;
+    int64_t intData;
+    double doubleData;
     std::string * stringPointer;
-    double * doublePointer;
     std::vector<int64_t> * intListPointer;
     std::vector<double> * doubleListPointer;
     std::vector<std::string> * stringListPointer;
-  } pointer;
+  } data;
 };
 
 } // namespace streamc

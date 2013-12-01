@@ -45,6 +45,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -93,7 +94,7 @@ $(document).ready(function(){initNavTree('classstreamc_1_1Value.html','');});
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Groups</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -112,82 +113,972 @@ $(document).ready(function(){initNavTree('classstreamc_1_1Value.html','');});
 <div class="title">streamc::Value Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Value that reprsents tuple attribute values.  
+ <a href="classstreamc_1_1Value.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="Value_8h_source.html">streamc/Value.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a20580a87fd702953ca09147494825a1d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a20580a87fd702953ca09147494825a1d"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Value</b> (int64_t const &amp;value)</td></tr>
+<tr class="memitem:a20580a87fd702953ca09147494825a1d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Value.html#a20580a87fd702953ca09147494825a1d">Value</a> (int64_t const &amp;value)</td></tr>
+<tr class="memdesc:a20580a87fd702953ca09147494825a1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a value from an integer.  <a href="#a20580a87fd702953ca09147494825a1d">More...</a><br/></td></tr>
 <tr class="separator:a20580a87fd702953ca09147494825a1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a528df0c9697b0bf973b20dcafdac40e0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a528df0c9697b0bf973b20dcafdac40e0"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Value</b> (double const &amp;value)</td></tr>
+<tr class="memitem:a528df0c9697b0bf973b20dcafdac40e0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Value.html#a528df0c9697b0bf973b20dcafdac40e0">Value</a> (double const &amp;value)</td></tr>
+<tr class="memdesc:a528df0c9697b0bf973b20dcafdac40e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a value from a double.  <a href="#a528df0c9697b0bf973b20dcafdac40e0">More...</a><br/></td></tr>
 <tr class="separator:a528df0c9697b0bf973b20dcafdac40e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb128b67946dde153040333c5d7df478"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acb128b67946dde153040333c5d7df478"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Value</b> (std::string const &amp;value)</td></tr>
+<tr class="memitem:acb128b67946dde153040333c5d7df478"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Value.html#acb128b67946dde153040333c5d7df478">Value</a> (std::string const &amp;value)</td></tr>
+<tr class="memdesc:acb128b67946dde153040333c5d7df478"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a value from a string.  <a href="#acb128b67946dde153040333c5d7df478">More...</a><br/></td></tr>
 <tr class="separator:acb128b67946dde153040333c5d7df478"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af92403cc1646d2a5d8964cd25a1be9f7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af92403cc1646d2a5d8964cd25a1be9f7"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Value</b> (std::vector&lt; int64_t &gt; const &amp;list)</td></tr>
-<tr class="separator:af92403cc1646d2a5d8964cd25a1be9f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adbdb0b840064fcad9b0f492384f4fbb0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adbdb0b840064fcad9b0f492384f4fbb0"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Value</b> (std::vector&lt; double &gt; const &amp;list)</td></tr>
-<tr class="separator:adbdb0b840064fcad9b0f492384f4fbb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af01e30dc661672aefab8b0e28aa19847"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af01e30dc661672aefab8b0e28aa19847"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Value</b> (std::vector&lt; std::string &gt; const &amp;list)</td></tr>
-<tr class="separator:af01e30dc661672aefab8b0e28aa19847"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af9f5c67fca1fc094c078793a2986ba68"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af9f5c67fca1fc094c078793a2986ba68"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Value</b> (<a class="el" href="classstreamc_1_1Value.html">Value</a> const &amp;other)</td></tr>
+<tr class="memitem:a5809c12f0cc28c2ea5d662eb9bbc7323"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Value.html#a5809c12f0cc28c2ea5d662eb9bbc7323">Value</a> (std::vector&lt; int64_t &gt; const &amp;value)</td></tr>
+<tr class="memdesc:a5809c12f0cc28c2ea5d662eb9bbc7323"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a value from an integer list.  <a href="#a5809c12f0cc28c2ea5d662eb9bbc7323">More...</a><br/></td></tr>
+<tr class="separator:a5809c12f0cc28c2ea5d662eb9bbc7323"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64bbe61cc725c4e796727ed42f77b43c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Value.html#a64bbe61cc725c4e796727ed42f77b43c">Value</a> (std::vector&lt; double &gt; const &amp;value)</td></tr>
+<tr class="memdesc:a64bbe61cc725c4e796727ed42f77b43c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a value from a double list.  <a href="#a64bbe61cc725c4e796727ed42f77b43c">More...</a><br/></td></tr>
+<tr class="separator:a64bbe61cc725c4e796727ed42f77b43c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe279b319107e06fb25ac879286c831b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Value.html#abe279b319107e06fb25ac879286c831b">Value</a> (std::vector&lt; std::string &gt; const &amp;value)</td></tr>
+<tr class="memdesc:abe279b319107e06fb25ac879286c831b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a value from a string list.  <a href="#abe279b319107e06fb25ac879286c831b">More...</a><br/></td></tr>
+<tr class="separator:abe279b319107e06fb25ac879286c831b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9f5c67fca1fc094c078793a2986ba68"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Value.html#af9f5c67fca1fc094c078793a2986ba68">Value</a> (<a class="el" href="classstreamc_1_1Value.html">Value</a> const &amp;other)</td></tr>
+<tr class="memdesc:af9f5c67fca1fc094c078793a2986ba68"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a value from another one (aka, copy constructor).  <a href="#af9f5c67fca1fc094c078793a2986ba68">More...</a><br/></td></tr>
 <tr class="separator:af9f5c67fca1fc094c078793a2986ba68"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a99c84df8f9ac881ad98757b10d2f6294"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a99c84df8f9ac881ad98757b10d2f6294"></a>
-Type&#160;</td><td class="memItemRight" valign="bottom"><b>getType</b> () const </td></tr>
+<tr class="memitem:a99c84df8f9ac881ad98757b10d2f6294"><td class="memItemLeft" align="right" valign="top">Type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Value.html#a99c84df8f9ac881ad98757b10d2f6294">getType</a> () const </td></tr>
+<tr class="memdesc:a99c84df8f9ac881ad98757b10d2f6294"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the value type.  <a href="#a99c84df8f9ac881ad98757b10d2f6294">More...</a><br/></td></tr>
 <tr class="separator:a99c84df8f9ac881ad98757b10d2f6294"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa4d3837e95edd1237ce129f08fd47005"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa4d3837e95edd1237ce129f08fd47005"></a>
-<a class="el" href="classstreamc_1_1Value.html">Value</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classstreamc_1_1Value.html">Value</a> const &amp;other)</td></tr>
+<tr class="memitem:aa4d3837e95edd1237ce129f08fd47005"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstreamc_1_1Value.html">Value</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Value.html#aa4d3837e95edd1237ce129f08fd47005">operator=</a> (<a class="el" href="classstreamc_1_1Value.html">Value</a> const &amp;other)</td></tr>
+<tr class="memdesc:aa4d3837e95edd1237ce129f08fd47005"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assign from another value (aka asignment operator).  <a href="#aa4d3837e95edd1237ce129f08fd47005">More...</a><br/></td></tr>
 <tr class="separator:aa4d3837e95edd1237ce129f08fd47005"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8668ead8837856774f2383bb3eec0767"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8668ead8837856774f2383bb3eec0767"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setValue</b> (int64_t const &amp;value)</td></tr>
+<tr class="memitem:a8668ead8837856774f2383bb3eec0767"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Value.html#a8668ead8837856774f2383bb3eec0767">setValue</a> (int64_t const &amp;value)</td></tr>
+<tr class="memdesc:a8668ead8837856774f2383bb3eec0767"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set value to the given integer.  <a href="#a8668ead8837856774f2383bb3eec0767">More...</a><br/></td></tr>
 <tr class="separator:a8668ead8837856774f2383bb3eec0767"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1aa9f004616a5ff5326eef9811af3767"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1aa9f004616a5ff5326eef9811af3767"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setValue</b> (double const &amp;value)</td></tr>
+<tr class="memitem:a1aa9f004616a5ff5326eef9811af3767"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Value.html#a1aa9f004616a5ff5326eef9811af3767">setValue</a> (double const &amp;value)</td></tr>
+<tr class="memdesc:a1aa9f004616a5ff5326eef9811af3767"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set value to the given double.  <a href="#a1aa9f004616a5ff5326eef9811af3767">More...</a><br/></td></tr>
 <tr class="separator:a1aa9f004616a5ff5326eef9811af3767"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a181cdc9c2a76f25180c82d80d5991c63"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a181cdc9c2a76f25180c82d80d5991c63"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setValue</b> (std::string const &amp;value)</td></tr>
+<tr class="memitem:a181cdc9c2a76f25180c82d80d5991c63"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Value.html#a181cdc9c2a76f25180c82d80d5991c63">setValue</a> (std::string const &amp;value)</td></tr>
+<tr class="memdesc:a181cdc9c2a76f25180c82d80d5991c63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set value to the given string.  <a href="#a181cdc9c2a76f25180c82d80d5991c63">More...</a><br/></td></tr>
 <tr class="separator:a181cdc9c2a76f25180c82d80d5991c63"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a72d71a216b54f53d3244279e04f9a726"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a72d71a216b54f53d3244279e04f9a726"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setValue</b> (std::vector&lt; int64_t &gt; const &amp;value)</td></tr>
+<tr class="memitem:a72d71a216b54f53d3244279e04f9a726"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Value.html#a72d71a216b54f53d3244279e04f9a726">setValue</a> (std::vector&lt; int64_t &gt; const &amp;value)</td></tr>
+<tr class="memdesc:a72d71a216b54f53d3244279e04f9a726"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set value to the given integer list.  <a href="#a72d71a216b54f53d3244279e04f9a726">More...</a><br/></td></tr>
 <tr class="separator:a72d71a216b54f53d3244279e04f9a726"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af6260318393dfeefeac43decf90b91ab"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af6260318393dfeefeac43decf90b91ab"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setValue</b> (std::vector&lt; double &gt; const &amp;value)</td></tr>
+<tr class="memitem:af6260318393dfeefeac43decf90b91ab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Value.html#af6260318393dfeefeac43decf90b91ab">setValue</a> (std::vector&lt; double &gt; const &amp;value)</td></tr>
+<tr class="memdesc:af6260318393dfeefeac43decf90b91ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set value to the given double list.  <a href="#af6260318393dfeefeac43decf90b91ab">More...</a><br/></td></tr>
 <tr class="separator:af6260318393dfeefeac43decf90b91ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab3f15ff1c3f55078a7748be2af08733b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab3f15ff1c3f55078a7748be2af08733b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setValue</b> (std::vector&lt; std::string &gt; const &amp;value)</td></tr>
+<tr class="memitem:ab3f15ff1c3f55078a7748be2af08733b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Value.html#ab3f15ff1c3f55078a7748be2af08733b">setValue</a> (std::vector&lt; std::string &gt; const &amp;value)</td></tr>
+<tr class="memdesc:ab3f15ff1c3f55078a7748be2af08733b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set value to the given string list.  <a href="#ab3f15ff1c3f55078a7748be2af08733b">More...</a><br/></td></tr>
 <tr class="separator:ab3f15ff1c3f55078a7748be2af08733b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4f87632d1a29e8d8d489bca47c2a23fc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4f87632d1a29e8d8d489bca47c2a23fc"></a>
-int64_t &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getIntValue</b> ()</td></tr>
+<tr class="memitem:a4f87632d1a29e8d8d489bca47c2a23fc"><td class="memItemLeft" align="right" valign="top">int64_t &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Value.html#a4f87632d1a29e8d8d489bca47c2a23fc">getIntValue</a> ()</td></tr>
+<tr class="memdesc:a4f87632d1a29e8d8d489bca47c2a23fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the integer value.  <a href="#a4f87632d1a29e8d8d489bca47c2a23fc">More...</a><br/></td></tr>
 <tr class="separator:a4f87632d1a29e8d8d489bca47c2a23fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2c5c6e7a537028805eb5103ca3747027"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2c5c6e7a537028805eb5103ca3747027"></a>
-double &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getDoubleValue</b> ()</td></tr>
+<tr class="memitem:a57cca0ffb4896ddca3dd7a63b0b0d212"><td class="memItemLeft" align="right" valign="top">int64_t const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Value.html#a57cca0ffb4896ddca3dd7a63b0b0d212">getIntValue</a> () const </td></tr>
+<tr class="memdesc:a57cca0ffb4896ddca3dd7a63b0b0d212"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the integer value (const version).  <a href="#a57cca0ffb4896ddca3dd7a63b0b0d212">More...</a><br/></td></tr>
+<tr class="separator:a57cca0ffb4896ddca3dd7a63b0b0d212"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c5c6e7a537028805eb5103ca3747027"><td class="memItemLeft" align="right" valign="top">double &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Value.html#a2c5c6e7a537028805eb5103ca3747027">getDoubleValue</a> ()</td></tr>
+<tr class="memdesc:a2c5c6e7a537028805eb5103ca3747027"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the double value.  <a href="#a2c5c6e7a537028805eb5103ca3747027">More...</a><br/></td></tr>
 <tr class="separator:a2c5c6e7a537028805eb5103ca3747027"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae5df81add890a1e098a4df102bba36f3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae5df81add890a1e098a4df102bba36f3"></a>
-std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getStringValue</b> ()</td></tr>
+<tr class="memitem:afab1f078bdf2951f94e11f7e6ac64c31"><td class="memItemLeft" align="right" valign="top">double const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Value.html#afab1f078bdf2951f94e11f7e6ac64c31">getDoubleValue</a> () const </td></tr>
+<tr class="memdesc:afab1f078bdf2951f94e11f7e6ac64c31"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the double value (const version).  <a href="#afab1f078bdf2951f94e11f7e6ac64c31">More...</a><br/></td></tr>
+<tr class="separator:afab1f078bdf2951f94e11f7e6ac64c31"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5df81add890a1e098a4df102bba36f3"><td class="memItemLeft" align="right" valign="top">std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Value.html#ae5df81add890a1e098a4df102bba36f3">getStringValue</a> ()</td></tr>
+<tr class="memdesc:ae5df81add890a1e098a4df102bba36f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the string value.  <a href="#ae5df81add890a1e098a4df102bba36f3">More...</a><br/></td></tr>
 <tr class="separator:ae5df81add890a1e098a4df102bba36f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5e16c89127d4bb013778a0a7ca6a94f1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5e16c89127d4bb013778a0a7ca6a94f1"></a>
-std::vector&lt; int64_t &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getIntList</b> ()</td></tr>
+<tr class="memitem:a988c3a7b622e289a152430fa9e114da1"><td class="memItemLeft" align="right" valign="top">std::string const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Value.html#a988c3a7b622e289a152430fa9e114da1">getStringValue</a> () const </td></tr>
+<tr class="memdesc:a988c3a7b622e289a152430fa9e114da1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the string value (const version).  <a href="#a988c3a7b622e289a152430fa9e114da1">More...</a><br/></td></tr>
+<tr class="separator:a988c3a7b622e289a152430fa9e114da1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e16c89127d4bb013778a0a7ca6a94f1"><td class="memItemLeft" align="right" valign="top">std::vector&lt; int64_t &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Value.html#a5e16c89127d4bb013778a0a7ca6a94f1">getIntList</a> ()</td></tr>
+<tr class="memdesc:a5e16c89127d4bb013778a0a7ca6a94f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the integer list value.  <a href="#a5e16c89127d4bb013778a0a7ca6a94f1">More...</a><br/></td></tr>
 <tr class="separator:a5e16c89127d4bb013778a0a7ca6a94f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ecd411a5661cbbebd7e740a04265bc2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3ecd411a5661cbbebd7e740a04265bc2"></a>
-std::vector&lt; double &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getDoubleList</b> ()</td></tr>
+<tr class="memitem:a5231ba599919684f15ec19da3c2f831c"><td class="memItemLeft" align="right" valign="top">std::vector&lt; int64_t &gt; const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Value.html#a5231ba599919684f15ec19da3c2f831c">getIntList</a> () const </td></tr>
+<tr class="memdesc:a5231ba599919684f15ec19da3c2f831c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the integer list value (const version).  <a href="#a5231ba599919684f15ec19da3c2f831c">More...</a><br/></td></tr>
+<tr class="separator:a5231ba599919684f15ec19da3c2f831c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ecd411a5661cbbebd7e740a04265bc2"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Value.html#a3ecd411a5661cbbebd7e740a04265bc2">getDoubleList</a> ()</td></tr>
+<tr class="memdesc:a3ecd411a5661cbbebd7e740a04265bc2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the double list value.  <a href="#a3ecd411a5661cbbebd7e740a04265bc2">More...</a><br/></td></tr>
 <tr class="separator:a3ecd411a5661cbbebd7e740a04265bc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afe10597868a7c13e28eb37ab4d1e6b55"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afe10597868a7c13e28eb37ab4d1e6b55"></a>
-std::vector&lt; std::string &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getStringList</b> ()</td></tr>
+<tr class="memitem:aeda119622d5cf914a638df4e6b4a7cf9"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt; const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Value.html#aeda119622d5cf914a638df4e6b4a7cf9">getDoubleList</a> () const </td></tr>
+<tr class="memdesc:aeda119622d5cf914a638df4e6b4a7cf9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the double list value (const version).  <a href="#aeda119622d5cf914a638df4e6b4a7cf9">More...</a><br/></td></tr>
+<tr class="separator:aeda119622d5cf914a638df4e6b4a7cf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe10597868a7c13e28eb37ab4d1e6b55"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Value.html#afe10597868a7c13e28eb37ab4d1e6b55">getStringList</a> ()</td></tr>
+<tr class="memdesc:afe10597868a7c13e28eb37ab4d1e6b55"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the string list value.  <a href="#afe10597868a7c13e28eb37ab4d1e6b55">More...</a><br/></td></tr>
 <tr class="separator:afe10597868a7c13e28eb37ab4d1e6b55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab96be154bc41a736ea377669364604c7"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt; const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Value.html#ab96be154bc41a736ea377669364604c7">getStringList</a> () const </td></tr>
+<tr class="memdesc:ab96be154bc41a736ea377669364604c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the string list value (const version).  <a href="#ab96be154bc41a736ea377669364604c7">More...</a><br/></td></tr>
+<tr class="separator:ab96be154bc41a736ea377669364604c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a82fb0dc4ce987a3753e6beff49bb4567"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a82fb0dc4ce987a3753e6beff49bb4567"></a>
-static <a class="el" href="classstreamc_1_1Value.html">Value</a>&#160;</td><td class="memItemRight" valign="bottom"><b>fromString</b> (std::string const &amp;str, Type type)</td></tr>
+<tr class="memitem:a82fb0dc4ce987a3753e6beff49bb4567"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classstreamc_1_1Value.html">Value</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Value.html#a82fb0dc4ce987a3753e6beff49bb4567">fromString</a> (std::string const &amp;str, Type type)</td></tr>
+<tr class="memdesc:a82fb0dc4ce987a3753e6beff49bb4567"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a value from a string representation.  <a href="#a82fb0dc4ce987a3753e6beff49bb4567">More...</a><br/></td></tr>
 <tr class="separator:a82fb0dc4ce987a3753e6beff49bb4567"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a856f71e56a5b76dea162599ab87e0670"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a856f71e56a5b76dea162599ab87e0670"></a>
-static std::string&#160;</td><td class="memItemRight" valign="bottom"><b>toString</b> (<a class="el" href="classstreamc_1_1Value.html">Value</a> const &amp;value)</td></tr>
+<tr class="memitem:a856f71e56a5b76dea162599ab87e0670"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Value.html#a856f71e56a5b76dea162599ab87e0670">toString</a> (<a class="el" href="classstreamc_1_1Value.html">Value</a> const &amp;value)</td></tr>
+<tr class="memdesc:a856f71e56a5b76dea162599ab87e0670"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a value to the string representation.  <a href="#a856f71e56a5b76dea162599ab87e0670">More...</a><br/></td></tr>
 <tr class="separator:a856f71e56a5b76dea162599ab87e0670"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Value that reprsents tuple attribute values. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a20580a87fd702953ca09147494825a1d"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">streamc::Value::Value </td>
+          <td>(</td>
+          <td class="paramtype">int64_t const &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construct a value from an integer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>integer value </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a528df0c9697b0bf973b20dcafdac40e0"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">streamc::Value::Value </td>
+          <td>(</td>
+          <td class="paramtype">double const &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construct a value from a double. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>double value </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="acb128b67946dde153040333c5d7df478"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">streamc::Value::Value </td>
+          <td>(</td>
+          <td class="paramtype">std::string const &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construct a value from a string. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>string value </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a5809c12f0cc28c2ea5d662eb9bbc7323"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">streamc::Value::Value </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; int64_t &gt; const &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construct a value from an integer list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>integer list value </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a64bbe61cc725c4e796727ed42f77b43c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">streamc::Value::Value </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; double &gt; const &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construct a value from a double list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>double list value </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="abe279b319107e06fb25ac879286c831b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">streamc::Value::Value </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; std::string &gt; const &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construct a value from a string list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>string list value </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="af9f5c67fca1fc094c078793a2986ba68"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">streamc::Value::Value </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classstreamc_1_1Value.html">Value</a> const &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construct a value from another one (aka, copy constructor). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>other value to construct from. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a82fb0dc4ce987a3753e6beff49bb4567"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classstreamc_1_1Value.html">Value</a> streamc::Value::fromString </td>
+          <td>(</td>
+          <td class="paramtype">std::string const &amp;&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Type&#160;</td>
+          <td class="paramname"><em>type</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construct a value from a string representation. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>the string representation </td></tr>
+    <tr><td class="paramname">type</td><td>the value type </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the constructed value </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a3ecd411a5661cbbebd7e740a04265bc2"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;double&gt;&amp; streamc::Value::getDoubleList </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the double list value. </p>
+<dl class="section return"><dt>Returns</dt><dd>the double list value </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aeda119622d5cf914a638df4e6b4a7cf9"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;double&gt; const&amp; streamc::Value::getDoubleList </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the double list value (const version). </p>
+<dl class="section return"><dt>Returns</dt><dd>the double list value </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a2c5c6e7a537028805eb5103ca3747027"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double&amp; streamc::Value::getDoubleValue </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the double value. </p>
+<dl class="section return"><dt>Returns</dt><dd>the double value </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="afab1f078bdf2951f94e11f7e6ac64c31"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double const&amp; streamc::Value::getDoubleValue </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the double value (const version). </p>
+<dl class="section return"><dt>Returns</dt><dd>the double value </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a5e16c89127d4bb013778a0a7ca6a94f1"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;int64_t&gt;&amp; streamc::Value::getIntList </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the integer list value. </p>
+<dl class="section return"><dt>Returns</dt><dd>the integer list value </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a5231ba599919684f15ec19da3c2f831c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;int64_t&gt; const&amp; streamc::Value::getIntList </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the integer list value (const version). </p>
+<dl class="section return"><dt>Returns</dt><dd>the integer list value </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a4f87632d1a29e8d8d489bca47c2a23fc"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int64_t&amp; streamc::Value::getIntValue </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the integer value. </p>
+<dl class="section return"><dt>Returns</dt><dd>the integer value </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a57cca0ffb4896ddca3dd7a63b0b0d212"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int64_t const&amp; streamc::Value::getIntValue </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the integer value (const version). </p>
+<dl class="section return"><dt>Returns</dt><dd>the integer value </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="afe10597868a7c13e28eb37ab4d1e6b55"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::string&gt;&amp; streamc::Value::getStringList </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the string list value. </p>
+<dl class="section return"><dt>Returns</dt><dd>the string list value </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ab96be154bc41a736ea377669364604c7"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::string&gt; const&amp; streamc::Value::getStringList </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the string list value (const version). </p>
+<dl class="section return"><dt>Returns</dt><dd>the string list value </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ae5df81add890a1e098a4df102bba36f3"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string&amp; streamc::Value::getStringValue </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the string value. </p>
+<dl class="section return"><dt>Returns</dt><dd>the string value </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a988c3a7b622e289a152430fa9e114da1"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string const&amp; streamc::Value::getStringValue </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the string value (const version). </p>
+<dl class="section return"><dt>Returns</dt><dd>the string value </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a99c84df8f9ac881ad98757b10d2f6294"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Type streamc::Value::getType </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the value type. </p>
+<dl class="section return"><dt>Returns</dt><dd>the value type </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aa4d3837e95edd1237ce129f08fd47005"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classstreamc_1_1Value.html">Value</a>&amp; streamc::Value::operator= </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classstreamc_1_1Value.html">Value</a> const &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Assign from another value (aka asignment operator). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>other value to assign from </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this value </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a8668ead8837856774f2383bb3eec0767"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void streamc::Value::setValue </td>
+          <td>(</td>
+          <td class="paramtype">int64_t const &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set value to the given integer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>given integer </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a1aa9f004616a5ff5326eef9811af3767"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void streamc::Value::setValue </td>
+          <td>(</td>
+          <td class="paramtype">double const &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set value to the given double. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>given double </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a181cdc9c2a76f25180c82d80d5991c63"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void streamc::Value::setValue </td>
+          <td>(</td>
+          <td class="paramtype">std::string const &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set value to the given string. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>given string </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a72d71a216b54f53d3244279e04f9a726"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void streamc::Value::setValue </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; int64_t &gt; const &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set value to the given integer list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>given integer list </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="af6260318393dfeefeac43decf90b91ab"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void streamc::Value::setValue </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; double &gt; const &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set value to the given double list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>given double list </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="ab3f15ff1c3f55078a7748be2af08733b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void streamc::Value::setValue </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; std::string &gt; const &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set value to the given string list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>given string list </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a856f71e56a5b76dea162599ab87e0670"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::string streamc::Value::toString </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classstreamc_1_1Value.html">Value</a> const &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construct a value to the string representation. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>the value </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>streamc/<a class="el" href="Value_8h_source.html">Value.h</a></li>
 </ul>
@@ -197,7 +1088,7 @@ static std::string&#160;</td><td class="memItemRight" valign="bottom"><b>toStrin
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>streamc</b></li><li class="navelem"><a class="el" href="classstreamc_1_1Value.html">Value</a></li>
-    <li class="footer">Generated on Sun Dec 1 2013 14:14:12 for StreamC by
+    <li class="footer">Generated on Sun Dec 1 2013 21:14:34 for StreamC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

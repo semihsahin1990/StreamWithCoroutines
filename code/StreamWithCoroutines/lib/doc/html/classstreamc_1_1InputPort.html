@@ -45,6 +45,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -93,7 +94,7 @@ $(document).ready(function(){initNavTree('classstreamc_1_1InputPort.html','');})
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Groups</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -336,7 +337,8 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
 </div><div class="memdoc">
 
 <p>Wait until a given number of tuples are available. </p>
-<p>This function will block until a given number of tuples are available in the input port queue. It will return true, if the port is closed, no more tuples can be received from it, and the current number of available tuples are still less than the desired. A typical use is as follows:</p>
+<p>This function will block until a given number of tuples are available in the input port queue. It will return true, if the port is closed, no more tuples can be received from it, and the current number of available tuples are still less than the desired. Even if the required tuples are avaiabe, this function can block if the system decides to preempt the operator.</p>
+<p>A typical use is as follows:</p>
 <div class="fragment"><div class="line"><span class="keywordtype">bool</span> closed = iport.waitTuple(n);</div>
 <div class="line"><span class="keywordflow">if</span> (closed) </div>
 <div class="line">    <span class="keywordflow">break</span>;</div>
@@ -350,7 +352,7 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>true if <code>&lt;n/code&gt; tuples will never be available, false otherwise </code></dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>true if <code>n</code> tuples will never be available, false otherwise </dd></dl>
 
 </div>
 </div>
@@ -363,7 +365,7 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>streamc</b></li><li class="navelem"><a class="el" href="classstreamc_1_1InputPort.html">InputPort</a></li>
-    <li class="footer">Generated on Sun Dec 1 2013 14:14:12 for StreamC by
+    <li class="footer">Generated on Sun Dec 1 2013 21:14:34 for StreamC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

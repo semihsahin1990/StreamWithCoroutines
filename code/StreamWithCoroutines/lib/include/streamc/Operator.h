@@ -5,6 +5,7 @@
 #include "streamc/OutputPort.h"
 #include "streamc/OperatorContext.h"
 #include "streamc/HashHelpers.h"
+#include "streamc/Lambdas.h"
 
 #include <iostream>
 #include <vector>
@@ -13,10 +14,6 @@ namespace streamc
 {
   class Operator;
 }
-
-#define MEXP1(x) [] (Tuple & t_) { return x; }
-#define MEXP2(x) [] (Tuple & t0_, Tuple & t1_) { return x; }
-#define MEXPn(x) [] (std::vector<Tuple *> const & ts_) { return x; }
 
 namespace streamc
 {
@@ -86,7 +83,23 @@ public:
    *
    * This function is overriden to provide the implementation for the operator's
    * core logic. The <code>context</code> object is used to provide runtime
-   * services, such as accessing the ports.
+   * services, such as accessing the ports. For instance, a filter can be
+   * implemented as follows:
+   * @code{.cpp}
+     void Filter::process(OperatorContext & context) {
+         InputPort & iport = context.getInputPort(0);
+         OutputPort & oport = context.getOutputPort(0);
+         while (!context.isShutdownRequested()) {
+             bool closed = iport.waitTuple();
+             if (closed)
+                 break;
+             Tuple & tuple = iport.getFrontTuple();
+             if (passesFilter(tuple)) 
+                 oport.pushTuple(tuple);
+             iport.popTuple();
+         }
+     }
+     @endcode
    * @param context operator context
    */
   virtual void process(OperatorContext & context) = 0;

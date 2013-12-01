@@ -45,6 +45,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -93,7 +94,7 @@ $(document).ready(function(){initNavTree('classstreamc_1_1ToConnection.html','')
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Groups</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -110,19 +111,123 @@ $(document).ready(function(){initNavTree('classstreamc_1_1ToConnection.html','')
 <div class="title">streamc::ToConnection Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Out end of a connection (input port index, downstream operator) pair.  
+ <a href="classstreamc_1_1ToConnection.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="Flow_8h_source.html">streamc/Flow.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a997d210dd1c4e9a8a6039300e5ccbe27"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a997d210dd1c4e9a8a6039300e5ccbe27"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>ToConnection</b> (<a class="el" href="classstreamc_1_1Operator.html">Operator</a> &amp;downstreamOp, size_t inPort)</td></tr>
+<tr class="memitem:a997d210dd1c4e9a8a6039300e5ccbe27"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1ToConnection.html#a997d210dd1c4e9a8a6039300e5ccbe27">ToConnection</a> (<a class="el" href="classstreamc_1_1Operator.html">Operator</a> &amp;downstreamOp, size_t inPort)</td></tr>
+<tr class="memdesc:a997d210dd1c4e9a8a6039300e5ccbe27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct the connection.  <a href="#a997d210dd1c4e9a8a6039300e5ccbe27">More...</a><br/></td></tr>
 <tr class="separator:a997d210dd1c4e9a8a6039300e5ccbe27"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a680d2d786a10d96fa9f3b928ae85a6a6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a680d2d786a10d96fa9f3b928ae85a6a6"></a>
-size_t&#160;</td><td class="memItemRight" valign="bottom"><b>getInputPort</b> () const </td></tr>
+<tr class="memitem:a680d2d786a10d96fa9f3b928ae85a6a6"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1ToConnection.html#a680d2d786a10d96fa9f3b928ae85a6a6">getInputPort</a> () const </td></tr>
+<tr class="memdesc:a680d2d786a10d96fa9f3b928ae85a6a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the input port index.  <a href="#a680d2d786a10d96fa9f3b928ae85a6a6">More...</a><br/></td></tr>
 <tr class="separator:a680d2d786a10d96fa9f3b928ae85a6a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a60dfff82d47137283976ec2e77b62334"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a60dfff82d47137283976ec2e77b62334"></a>
-<a class="el" href="classstreamc_1_1Operator.html">Operator</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getOperator</b> () const </td></tr>
+<tr class="memitem:a60dfff82d47137283976ec2e77b62334"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstreamc_1_1Operator.html">Operator</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1ToConnection.html#a60dfff82d47137283976ec2e77b62334">getOperator</a> () const </td></tr>
+<tr class="memdesc:a60dfff82d47137283976ec2e77b62334"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the downstream operator.  <a href="#a60dfff82d47137283976ec2e77b62334">More...</a><br/></td></tr>
 <tr class="separator:a60dfff82d47137283976ec2e77b62334"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Out end of a connection (input port index, downstream operator) pair. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a997d210dd1c4e9a8a6039300e5ccbe27"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">streamc::ToConnection::ToConnection </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classstreamc_1_1Operator.html">Operator</a> &amp;&#160;</td>
+          <td class="paramname"><em>downstreamOp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>inPort</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construct the connection. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">downstreamOp</td><td>downstream operator </td></tr>
+    <tr><td class="paramname">inPort</td><td>input port index </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a680d2d786a10d96fa9f3b928ae85a6a6"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t streamc::ToConnection::getInputPort </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the input port index. </p>
+<dl class="section return"><dt>Returns</dt><dd>the input port index </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a60dfff82d47137283976ec2e77b62334"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classstreamc_1_1Operator.html">Operator</a>&amp; streamc::ToConnection::getOperator </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the downstream operator. </p>
+<dl class="section return"><dt>Returns</dt><dd>the downstream operator </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>streamc/<a class="el" href="Flow_8h_source.html">Flow.h</a></li>
 </ul>
@@ -132,7 +237,7 @@ size_t&#160;</td><td class="memItemRight" valign="bottom"><b>getInputPort</b> ()
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>streamc</b></li><li class="navelem"><a class="el" href="classstreamc_1_1ToConnection.html">ToConnection</a></li>
-    <li class="footer">Generated on Sun Dec 1 2013 14:14:12 for StreamC by
+    <li class="footer">Generated on Sun Dec 1 2013 21:14:34 for StreamC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

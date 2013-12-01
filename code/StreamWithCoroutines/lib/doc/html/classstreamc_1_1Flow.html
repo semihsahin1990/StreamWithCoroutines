@@ -45,6 +45,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -93,7 +94,7 @@ $(document).ready(function(){initNavTree('classstreamc_1_1Flow.html','');});
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Groups</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -110,51 +111,473 @@ $(document).ready(function(){initNavTree('classstreamc_1_1Flow.html','');});
 <div class="title">streamc::Flow Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Flow that represents a graph of stream processing operators.  
+ <a href="classstreamc_1_1Flow.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="Flow_8h_source.html">streamc/Flow.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a546f4183476cf9fa3e8fbbf15e7300cb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a546f4183476cf9fa3e8fbbf15e7300cb"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Flow</b> (std::string const &amp;name)</td></tr>
+<tr class="memitem:a546f4183476cf9fa3e8fbbf15e7300cb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Flow.html#a546f4183476cf9fa3e8fbbf15e7300cb">Flow</a> (std::string const &amp;name)</td></tr>
+<tr class="memdesc:a546f4183476cf9fa3e8fbbf15e7300cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a flow.  <a href="#a546f4183476cf9fa3e8fbbf15e7300cb">More...</a><br/></td></tr>
 <tr class="separator:a546f4183476cf9fa3e8fbbf15e7300cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7f9a2d19ddaecd8f7448b49ac14a56ab"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7f9a2d19ddaecd8f7448b49ac14a56ab"></a>
-std::string const &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getName</b> () const </td></tr>
+<tr class="memitem:a7f9a2d19ddaecd8f7448b49ac14a56ab"><td class="memItemLeft" align="right" valign="top">std::string const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Flow.html#a7f9a2d19ddaecd8f7448b49ac14a56ab">getName</a> () const </td></tr>
+<tr class="memdesc:a7f9a2d19ddaecd8f7448b49ac14a56ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the name of the flow.  <a href="#a7f9a2d19ddaecd8f7448b49ac14a56ab">More...</a><br/></td></tr>
 <tr class="separator:a7f9a2d19ddaecd8f7448b49ac14a56ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3c3f3c7e47189653deb6177e1cd269dc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3c3f3c7e47189653deb6177e1cd269dc"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>addOperator</b> (<a class="el" href="classstreamc_1_1Operator.html">Operator</a> &amp;op)</td></tr>
+<tr class="memitem:a3c3f3c7e47189653deb6177e1cd269dc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Flow.html#a3c3f3c7e47189653deb6177e1cd269dc">addOperator</a> (<a class="el" href="classstreamc_1_1Operator.html">Operator</a> &amp;op)</td></tr>
+<tr class="memdesc:a3c3f3c7e47189653deb6177e1cd269dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add an operator to the flow.  <a href="#a3c3f3c7e47189653deb6177e1cd269dc">More...</a><br/></td></tr>
 <tr class="separator:a3c3f3c7e47189653deb6177e1cd269dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a327c8847eff569b75f561a1b4de301dd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a327c8847eff569b75f561a1b4de301dd"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>addConnection</b> (<a class="el" href="classstreamc_1_1Operator.html">Operator</a> &amp;fromOp, uint32_t fromOutPort, <a class="el" href="classstreamc_1_1Operator.html">Operator</a> &amp;toOp, uint32_t toInPort)</td></tr>
-<tr class="separator:a327c8847eff569b75f561a1b4de301dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad0a81f1a07a7cb8bfda94fb554dba8d0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad0a81f1a07a7cb8bfda94fb554dba8d0"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>addConnection</b> (<a class="el" href="classstreamc_1_1FromConnection.html">FromConnection</a> const &amp;from, <a class="el" href="classstreamc_1_1ToConnection.html">ToConnection</a> const &amp;to)</td></tr>
-<tr class="separator:ad0a81f1a07a7cb8bfda94fb554dba8d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a24bc46e590b752d35cb075b5b18e72cc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a24bc46e590b752d35cb075b5b18e72cc"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>addConnection</b> (<a class="el" href="classstreamc_1_1Connection.html">Connection</a> const &amp;conn)</td></tr>
-<tr class="separator:a24bc46e590b752d35cb075b5b18e72cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a792341f605ebd8bd92fbbdaef69c70e4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a792341f605ebd8bd92fbbdaef69c70e4"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>addConnections</b> (<a class="el" href="classstreamc_1_1ConnectionChain.html">ConnectionChain</a> const &amp;conns)</td></tr>
-<tr class="separator:a792341f605ebd8bd92fbbdaef69c70e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a200a647bfbc9296574d51ff456380fa9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a200a647bfbc9296574d51ff456380fa9"></a>
-<a class="el" href="classstreamc_1_1Operator.html">Operator</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getOperatorByName</b> (std::string const &amp;opName) const </td></tr>
-<tr class="separator:a200a647bfbc9296574d51ff456380fa9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a618a8162976b140ad263a965de9e8d2b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a618a8162976b140ad263a965de9e8d2b"></a>
-std::vector&lt; <a class="el" href="classstreamc_1_1Operator.html">Operator</a> * &gt; const &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getOperators</b> () const </td></tr>
-<tr class="separator:a618a8162976b140ad263a965de9e8d2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa75caaf9f9b28952dab4e145085374dd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa75caaf9f9b28952dab4e145085374dd"></a>
-std::vector&lt; <a class="el" href="classstreamc_1_1ToConnection.html">ToConnection</a> &gt; const &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getOutConnections</b> (<a class="el" href="classstreamc_1_1Operator.html">Operator</a> &amp;op, size_t outPort) const </td></tr>
-<tr class="separator:aa75caaf9f9b28952dab4e145085374dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4877eb7265f3bb3147844c7c070a43e4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4877eb7265f3bb3147844c7c070a43e4"></a>
-std::vector&lt; <a class="el" href="classstreamc_1_1FromConnection.html">FromConnection</a> &gt;<br class="typebreak"/>
- const &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getInConnections</b> (<a class="el" href="classstreamc_1_1Operator.html">Operator</a> &amp;op, size_t inPort) const </td></tr>
-<tr class="separator:a4877eb7265f3bb3147844c7c070a43e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa1e571bef54139d36ba90d782a6f5c21"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa1e571bef54139d36ba90d782a6f5c21"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>printTopology</b> (std::ostream &amp;ostream) const </td></tr>
-<tr class="separator:aa1e571bef54139d36ba90d782a6f5c21"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa6ab6408022b01b939cd4e8dbf96cda6"><td class="memTemplParams" colspan="2"><a class="anchor" id="aa6ab6408022b01b939cd4e8dbf96cda6"></a>
-template&lt;typename T , typename... Args&gt; </td></tr>
-<tr class="memitem:aa6ab6408022b01b939cd4e8dbf96cda6"><td class="memTemplItemLeft" align="right" valign="top">T &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>createOperator</b> (std::string const &amp;name, Args &amp;&amp;...args)</td></tr>
+<tr class="memitem:aa6ab6408022b01b939cd4e8dbf96cda6"><td class="memTemplParams" colspan="2">template&lt;typename T , typename... Args&gt; </td></tr>
+<tr class="memitem:aa6ab6408022b01b939cd4e8dbf96cda6"><td class="memTemplItemLeft" align="right" valign="top">T &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Flow.html#aa6ab6408022b01b939cd4e8dbf96cda6">createOperator</a> (std::string const &amp;name, Args &amp;&amp;...args)</td></tr>
+<tr class="memdesc:aa6ab6408022b01b939cd4e8dbf96cda6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create an operator and add it to the flow.  <a href="#aa6ab6408022b01b939cd4e8dbf96cda6">More...</a><br/></td></tr>
 <tr class="separator:aa6ab6408022b01b939cd4e8dbf96cda6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a327c8847eff569b75f561a1b4de301dd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Flow.html#a327c8847eff569b75f561a1b4de301dd">addConnection</a> (<a class="el" href="classstreamc_1_1Operator.html">Operator</a> &amp;fromOp, uint32_t fromOutPort, <a class="el" href="classstreamc_1_1Operator.html">Operator</a> &amp;toOp, uint32_t toInPort)</td></tr>
+<tr class="memdesc:a327c8847eff569b75f561a1b4de301dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a connection to the flow.  <a href="#a327c8847eff569b75f561a1b4de301dd">More...</a><br/></td></tr>
+<tr class="separator:a327c8847eff569b75f561a1b4de301dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e7fd93aef135c65b4c85963202602d8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Flow.html#a2e7fd93aef135c65b4c85963202602d8">addConnection</a> (<a class="el" href="classstreamc_1_1FromConnection.html">FromConnection</a> const &amp;fromConn, <a class="el" href="classstreamc_1_1ToConnection.html">ToConnection</a> const &amp;toConn)</td></tr>
+<tr class="memdesc:a2e7fd93aef135c65b4c85963202602d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a connection to the flow.  <a href="#a2e7fd93aef135c65b4c85963202602d8">More...</a><br/></td></tr>
+<tr class="separator:a2e7fd93aef135c65b4c85963202602d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24bc46e590b752d35cb075b5b18e72cc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Flow.html#a24bc46e590b752d35cb075b5b18e72cc">addConnection</a> (<a class="el" href="classstreamc_1_1Connection.html">Connection</a> const &amp;conn)</td></tr>
+<tr class="memdesc:a24bc46e590b752d35cb075b5b18e72cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a connection to the flow.  <a href="#a24bc46e590b752d35cb075b5b18e72cc">More...</a><br/></td></tr>
+<tr class="separator:a24bc46e590b752d35cb075b5b18e72cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a792341f605ebd8bd92fbbdaef69c70e4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Flow.html#a792341f605ebd8bd92fbbdaef69c70e4">addConnections</a> (<a class="el" href="classstreamc_1_1ConnectionChain.html">ConnectionChain</a> const &amp;conns)</td></tr>
+<tr class="memdesc:a792341f605ebd8bd92fbbdaef69c70e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a series of connections to the flow.  <a href="#a792341f605ebd8bd92fbbdaef69c70e4">More...</a><br/></td></tr>
+<tr class="separator:a792341f605ebd8bd92fbbdaef69c70e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a200a647bfbc9296574d51ff456380fa9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstreamc_1_1Operator.html">Operator</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Flow.html#a200a647bfbc9296574d51ff456380fa9">getOperatorByName</a> (std::string const &amp;opName) const </td></tr>
+<tr class="memdesc:a200a647bfbc9296574d51ff456380fa9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get an operator by name.  <a href="#a200a647bfbc9296574d51ff456380fa9">More...</a><br/></td></tr>
+<tr class="separator:a200a647bfbc9296574d51ff456380fa9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a618a8162976b140ad263a965de9e8d2b"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classstreamc_1_1Operator.html">Operator</a> * &gt; const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Flow.html#a618a8162976b140ad263a965de9e8d2b">getOperators</a> () const </td></tr>
+<tr class="memdesc:a618a8162976b140ad263a965de9e8d2b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a list of all the operators.  <a href="#a618a8162976b140ad263a965de9e8d2b">More...</a><br/></td></tr>
+<tr class="separator:a618a8162976b140ad263a965de9e8d2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa75caaf9f9b28952dab4e145085374dd"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classstreamc_1_1ToConnection.html">ToConnection</a> &gt; const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Flow.html#aa75caaf9f9b28952dab4e145085374dd">getOutConnections</a> (<a class="el" href="classstreamc_1_1Operator.html">Operator</a> &amp;op, size_t outPort) const </td></tr>
+<tr class="memdesc:aa75caaf9f9b28952dab4e145085374dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get all out connections of an operator on a given output port.  <a href="#aa75caaf9f9b28952dab4e145085374dd">More...</a><br/></td></tr>
+<tr class="separator:aa75caaf9f9b28952dab4e145085374dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4877eb7265f3bb3147844c7c070a43e4"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classstreamc_1_1FromConnection.html">FromConnection</a> &gt;<br class="typebreak"/>
+ const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Flow.html#a4877eb7265f3bb3147844c7c070a43e4">getInConnections</a> (<a class="el" href="classstreamc_1_1Operator.html">Operator</a> &amp;op, size_t inPort) const </td></tr>
+<tr class="memdesc:a4877eb7265f3bb3147844c7c070a43e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get all in connections of an operator on a given input port.  <a href="#a4877eb7265f3bb3147844c7c070a43e4">More...</a><br/></td></tr>
+<tr class="separator:a4877eb7265f3bb3147844c7c070a43e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1e571bef54139d36ba90d782a6f5c21"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Flow.html#aa1e571bef54139d36ba90d782a6f5c21">printTopology</a> (std::ostream &amp;ostream) const </td></tr>
+<tr class="memdesc:aa1e571bef54139d36ba90d782a6f5c21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the topology.  <a href="#aa1e571bef54139d36ba90d782a6f5c21">More...</a><br/></td></tr>
+<tr class="separator:aa1e571bef54139d36ba90d782a6f5c21"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Flow that represents a graph of stream processing operators. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a546f4183476cf9fa3e8fbbf15e7300cb"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">streamc::Flow::Flow </td>
+          <td>(</td>
+          <td class="paramtype">std::string const &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Construct a flow. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>name of the flow </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a327c8847eff569b75f561a1b4de301dd"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void streamc::Flow::addConnection </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classstreamc_1_1Operator.html">Operator</a> &amp;&#160;</td>
+          <td class="paramname"><em>fromOp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>fromOutPort</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classstreamc_1_1Operator.html">Operator</a> &amp;&#160;</td>
+          <td class="paramname"><em>toOp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>toInPort</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Add a connection to the flow. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fromOp</td><td>from opeator of the connection </td></tr>
+    <tr><td class="paramname">fromOutPort</td><td>from output port of the connection </td></tr>
+    <tr><td class="paramname">toOp</td><td>to opeator of the connection </td></tr>
+    <tr><td class="paramname">toInPort</td><td>to input port of the connection </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a2e7fd93aef135c65b4c85963202602d8"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void streamc::Flow::addConnection </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classstreamc_1_1FromConnection.html">FromConnection</a> const &amp;&#160;</td>
+          <td class="paramname"><em>fromConn</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classstreamc_1_1ToConnection.html">ToConnection</a> const &amp;&#160;</td>
+          <td class="paramname"><em>toConn</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Add a connection to the flow. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fromConn</td><td>the from connection </td></tr>
+    <tr><td class="paramname">toConn</td><td>the to connection </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a24bc46e590b752d35cb075b5b18e72cc"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void streamc::Flow::addConnection </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classstreamc_1_1Connection.html">Connection</a> const &amp;&#160;</td>
+          <td class="paramname"><em>conn</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Add a connection to the flow. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">conn</td><td>the connect to add </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a792341f605ebd8bd92fbbdaef69c70e4"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void streamc::Flow::addConnections </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classstreamc_1_1ConnectionChain.html">ConnectionChain</a> const &amp;&#160;</td>
+          <td class="paramname"><em>conns</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Add a series of connections to the flow. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">conns</td><td>the connection chain to be added to the flow </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a3c3f3c7e47189653deb6177e1cd269dc"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void streamc::Flow::addOperator </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classstreamc_1_1Operator.html">Operator</a> &amp;&#160;</td>
+          <td class="paramname"><em>op</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Add an operator to the flow. </p>
+<p>This operator is owned by the flow and will be destructed. As such, it should be a dynamically allocated operator. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">op</td><td>operator to be added to the flow </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="aa6ab6408022b01b939cd4e8dbf96cda6"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , typename... Args&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">T&amp; streamc::Flow::createOperator </td>
+          <td>(</td>
+          <td class="paramtype">std::string const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Args &amp;&amp;...&#160;</td>
+          <td class="paramname"><em>args</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Create an operator and add it to the flow. </p>
+<p>This function instantiates an operator and adds it it the flow. It is the preferred way to add operator's to a flow. Example: </p>
+<div class="fragment"><div class="line">Operator &amp; op = flow.createOperator&lt;FileSource&gt;(<span class="stringliteral">&quot;op-name&quot;</span>)</div>
+<div class="line">   .set_fileName(<span class="stringliteral">&quot;in.data&quot;</span>)</div>
+<div class="line">   .set_fileFormat({{<span class="stringliteral">&quot;name&quot;</span>, Type::String}, {<span class="stringliteral">&quot;age&quot;</span>, Type::Integer}});</div>
+</div><!-- fragment --><p> or alternatively: </p>
+<div class="fragment"><div class="line">Operator &amp; op = flow.createOperator&lt;FileSource&gt;(<span class="stringliteral">&quot;op-name&quot;</span>, </div>
+<div class="line">    <span class="stringliteral">&quot;in.data&quot;</span>, {{<span class="stringliteral">&quot;name&quot;</span>, Type::String}, {<span class="stringliteral">&quot;age&quot;</span>, Type::Integer}});</div>
+</div><!-- fragment --> <dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>operator class </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>name of the operator </td></tr>
+    <tr><td class="paramname">args</td><td>the arguments of the operator's constructor </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the operator that is created </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a4877eb7265f3bb3147844c7c070a43e4"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="classstreamc_1_1FromConnection.html">FromConnection</a>&gt; const&amp; streamc::Flow::getInConnections </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classstreamc_1_1Operator.html">Operator</a> &amp;&#160;</td>
+          <td class="paramname"><em>op</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>inPort</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get all in connections of an operator on a given input port. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">op</td><td>the operator </td></tr>
+    <tr><td class="paramname">inPort</td><td>the input port index </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the list of all from connections of the operator on the given input port </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a7f9a2d19ddaecd8f7448b49ac14a56ab"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string const&amp; streamc::Flow::getName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the name of the flow. </p>
+<dl class="section return"><dt>Returns</dt><dd>the name of the flow </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a200a647bfbc9296574d51ff456380fa9"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classstreamc_1_1Operator.html">Operator</a>&amp; streamc::Flow::getOperatorByName </td>
+          <td>(</td>
+          <td class="paramtype">std::string const &amp;&#160;</td>
+          <td class="paramname"><em>opName</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get an operator by name. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">opName</td><td>name of the operator </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the operator in the flow with the given name </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a618a8162976b140ad263a965de9e8d2b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="classstreamc_1_1Operator.html">Operator</a> *&gt; const&amp; streamc::Flow::getOperators </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get a list of all the operators. </p>
+<dl class="section return"><dt>Returns</dt><dd>the list of all operators </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aa75caaf9f9b28952dab4e145085374dd"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="classstreamc_1_1ToConnection.html">ToConnection</a>&gt; const&amp; streamc::Flow::getOutConnections </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classstreamc_1_1Operator.html">Operator</a> &amp;&#160;</td>
+          <td class="paramname"><em>op</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>outPort</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get all out connections of an operator on a given output port. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">op</td><td>the operator </td></tr>
+    <tr><td class="paramname">outPort</td><td>the output port index </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the list of all to connections of the operator on the given output port </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aa1e571bef54139d36ba90d782a6f5c21"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void streamc::Flow::printTopology </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramname"><em>ostream</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Print the topology. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ostream</td><td>the output stream to print to </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>streamc/<a class="el" href="Flow_8h_source.html">Flow.h</a></li>
 </ul>
@@ -164,7 +587,7 @@ template&lt;typename T , typename... Args&gt; </td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>streamc</b></li><li class="navelem"><a class="el" href="classstreamc_1_1Flow.html">Flow</a></li>
-    <li class="footer">Generated on Sun Dec 1 2013 14:14:12 for StreamC by
+    <li class="footer">Generated on Sun Dec 1 2013 21:14:34 for StreamC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

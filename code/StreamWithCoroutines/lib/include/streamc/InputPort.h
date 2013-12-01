@@ -64,7 +64,10 @@ public:
    * This function will block until a given number of tuples are available in
    * the input port queue. It will return true, if the port is closed, no more
    * tuples can be received from it, and the current number of available tuples
-   * are still less than the desired. A typical use is as follows:
+   * are still less than the desired. Even if the required tuples are avaiabe,
+   * this function can block if the system decides to preempt the operator.
+   *
+   * A typical use is as follows:
    * 
    * @code{.cpp}
      bool closed = iport.waitTuple(n);
@@ -76,7 +79,7 @@ public:
      }
      @endcode
    * @param n number of tuples to wait for
-   * @return true if <code><n/code> tuples will never be available, false otherwise
+   * @return true if <code>n</code> tuples will never be available, false otherwise
    */
   virtual bool waitTuple(size_t n) = 0;  
   

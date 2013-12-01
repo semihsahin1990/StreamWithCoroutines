@@ -30,7 +30,7 @@ public:
   /**
    * Get the output port at a given index
    *
-   * @param inputPort the input port index
+   * @param outputPort the input port index
    * @return the input port object
    */
   virtual OutputPort & getOutputPort(size_t outputPort) = 0;

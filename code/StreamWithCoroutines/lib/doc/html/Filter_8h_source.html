@@ -45,6 +45,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -68,6 +69,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
       <li><a href="files.html"><span>File&#160;List</span></a></li>
+      <li><a href="globals.html"><span>File&#160;Members</span></a></li>
     </ul>
   </div>
 </div><!-- top -->
@@ -90,7 +92,7 @@ $(document).ready(function(){initNavTree('Filter_8h_source.html','');});
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Groups</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -113,24 +115,29 @@ $(document).ready(function(){initNavTree('Filter_8h_source.html','');});
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="keyword">namespace </span>streamc </div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;{</div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;</div>
-<div class="line"><a name="l00010"></a><span class="lineno"><a class="line" href="classstreamc_1_1Filter.html">   10</a></span>&#160;<span class="keyword">class </span><a class="code" href="classstreamc_1_1Filter.html">Filter</a> : <span class="keyword">public</span> <a class="code" href="classstreamc_1_1Operator.html">Operator</a></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;{</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;  <a class="code" href="classstreamc_1_1Filter.html">Filter</a>(std::string <span class="keyword">const</span> &amp; name);</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;  <a class="code" href="classstreamc_1_1Filter.html">Filter</a>(std::string <span class="keyword">const</span> &amp; name, std::function&lt;<span class="keywordtype">bool</span> (<a class="code" href="classstreamc_1_1Tuple.html">Tuple</a> &amp;)&gt; filter);</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;  <a class="code" href="classstreamc_1_1Filter.html">Filter</a> &amp; set_filter(std::function&lt;<span class="keywordtype">bool</span> (<a class="code" href="classstreamc_1_1Tuple.html">Tuple</a> &amp;)&gt; filter);</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classstreamc_1_1Filter.html#a2681b2e803ca4974913aa160cca6f81f">process</a>(<a class="code" href="classstreamc_1_1OperatorContext.html">OperatorContext</a> &amp; context) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;  std::function&lt;bool (Tuple &amp;)&gt; filter_;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;};</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;} <span class="comment">// namespace streamc</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno"><a class="line" href="classstreamc_1_1Filter.html">   13</a></span>&#160;<span class="keyword">class </span><a class="code" href="classstreamc_1_1Filter.html">Filter</a> : <span class="keyword">public</span> <a class="code" href="classstreamc_1_1Operator.html">Operator</a></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;{</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;  <a class="code" href="classstreamc_1_1Filter.html#a993b938430558ff40f201ff5119b31b4">Filter</a>(std::string <span class="keyword">const</span> &amp; name);</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
-<div class="ttc" id="classstreamc_1_1Tuple_html"><div class="ttname"><a href="classstreamc_1_1Tuple.html">streamc::Tuple</a></div><div class="ttdef"><b>Definition:</b> Tuple.h:10</div></div>
-<div class="ttc" id="classstreamc_1_1Filter_html"><div class="ttname"><a href="classstreamc_1_1Filter.html">streamc::Filter</a></div><div class="ttdef"><b>Definition:</b> Filter.h:10</div></div>
-<div class="ttc" id="classstreamc_1_1Filter_html_a2681b2e803ca4974913aa160cca6f81f"><div class="ttname"><a href="classstreamc_1_1Filter.html#a2681b2e803ca4974913aa160cca6f81f">streamc::Filter::process</a></div><div class="ttdeci">void process(OperatorContext &amp;context) override</div><div class="ttdoc">Perform the main processing of the operator. </div></div>
-<div class="ttc" id="classstreamc_1_1Operator_html"><div class="ttname"><a href="classstreamc_1_1Operator.html">streamc::Operator</a></div><div class="ttdoc">Base class for implementing streaming operators. </div><div class="ttdef"><b>Definition:</b> Operator.h:27</div></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;  <a class="code" href="classstreamc_1_1Filter.html#a993b938430558ff40f201ff5119b31b4">Filter</a>(std::string <span class="keyword">const</span> &amp; name, std::function&lt;<span class="keywordtype">bool</span> (<a class="code" href="classstreamc_1_1Tuple.html">Tuple</a> &amp;)&gt; filter);</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;  <a class="code" href="classstreamc_1_1Filter.html">Filter</a> &amp; <a class="code" href="classstreamc_1_1Filter.html#a9f4f2c49a2fc98cea4f3bffa72c370ec">set_filter</a>(std::function&lt;<span class="keywordtype">bool</span> (<a class="code" href="classstreamc_1_1Tuple.html">Tuple</a> &amp;)&gt; filter);</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classstreamc_1_1Filter.html#a2681b2e803ca4974913aa160cca6f81f">process</a>(<a class="code" href="classstreamc_1_1OperatorContext.html">OperatorContext</a> &amp; context) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;  std::function&lt;bool (Tuple &amp;)&gt; filter_;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;};</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;} <span class="comment">// namespace streamc</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
+<div class="ttc" id="classstreamc_1_1Tuple_html"><div class="ttname"><a href="classstreamc_1_1Tuple.html">streamc::Tuple</a></div><div class="ttdoc">Tuple represending a set of named values. </div><div class="ttdef"><b>Definition:</b> Tuple.h:13</div></div>
+<div class="ttc" id="classstreamc_1_1Filter_html"><div class="ttname"><a href="classstreamc_1_1Filter.html">streamc::Filter</a></div><div class="ttdoc">Filter that evaluates tuples against a given condition. </div><div class="ttdef"><b>Definition:</b> Filter.h:13</div></div>
+<div class="ttc" id="classstreamc_1_1Filter_html_a2681b2e803ca4974913aa160cca6f81f"><div class="ttname"><a href="classstreamc_1_1Filter.html#a2681b2e803ca4974913aa160cca6f81f">streamc::Filter::process</a></div><div class="ttdeci">void process(OperatorContext &amp;context) override</div><div class="ttdoc">The process function that contains the filter logic. </div></div>
+<div class="ttc" id="classstreamc_1_1Operator_html"><div class="ttname"><a href="classstreamc_1_1Operator.html">streamc::Operator</a></div><div class="ttdoc">Base class for implementing streaming operators. </div><div class="ttdef"><b>Definition:</b> Operator.h:24</div></div>
+<div class="ttc" id="classstreamc_1_1Filter_html_a9f4f2c49a2fc98cea4f3bffa72c370ec"><div class="ttname"><a href="classstreamc_1_1Filter.html#a9f4f2c49a2fc98cea4f3bffa72c370ec">streamc::Filter::set_filter</a></div><div class="ttdeci">Filter &amp; set_filter(std::function&lt; bool(Tuple &amp;)&gt; filter)</div><div class="ttdoc">Set the filter. </div></div>
+<div class="ttc" id="classstreamc_1_1Filter_html_a993b938430558ff40f201ff5119b31b4"><div class="ttname"><a href="classstreamc_1_1Filter.html#a993b938430558ff40f201ff5119b31b4">streamc::Filter::Filter</a></div><div class="ttdeci">Filter(std::string const &amp;name)</div><div class="ttdoc">Construct a filter. </div></div>
 <div class="ttc" id="classstreamc_1_1OperatorContext_html"><div class="ttname"><a href="classstreamc_1_1OperatorContext.html">streamc::OperatorContext</a></div><div class="ttdoc">Operator context that provides runtime services for operators. </div><div class="ttdef"><b>Definition:</b> OperatorContext.h:17</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
@@ -138,7 +145,7 @@ $(document).ready(function(){initNavTree('Filter_8h_source.html','');});
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_f26e643a9842da0ce6dbe030c714fc5e.html">streamc</a></li><li class="navelem"><a class="el" href="dir_65270f768a49b2e8430ce1f6dbbc0be0.html">operators</a></li><li class="navelem"><b>Filter.h</b></li>
-    <li class="footer">Generated on Sun Dec 1 2013 14:14:12 for StreamC by
+    <li class="footer">Generated on Sun Dec 1 2013 21:14:34 for StreamC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

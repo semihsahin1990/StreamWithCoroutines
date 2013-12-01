@@ -13,6 +13,7 @@ namespace streamc
 
 class RuntimeLoggerSinks;
 
+/// @cond hidden
 class RuntimeLogger
 {
 public:
@@ -51,5 +52,4 @@ private:
   BOOST_LOG_SEV(RuntimeLogger::getInfrastructureInternalLogger(), lvl) << \
       __BASE_FILE__ << ":" << __LINE__ << " - " << body;
 
-
-
+/// @endcond

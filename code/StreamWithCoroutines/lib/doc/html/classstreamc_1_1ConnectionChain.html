@@ -45,6 +45,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -93,7 +94,7 @@ $(document).ready(function(){initNavTree('classstreamc_1_1ConnectionChain.html',
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Groups</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -110,6 +111,11 @@ $(document).ready(function(){initNavTree('classstreamc_1_1ConnectionChain.html',
 <div class="title">streamc::ConnectionChain Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>A connection chain, which represents a complete series of connections.  
+ <a href="classstreamc_1_1ConnectionChain.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="Flow_8h_source.html">streamc/Flow.h</a>&gt;</code></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for streamc::ConnectionChain:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -118,22 +124,96 @@ $(document).ready(function(){initNavTree('classstreamc_1_1ConnectionChain.html',
  <div class="center">
   <img src="classstreamc_1_1ConnectionChain.png" usemap="#streamc::ConnectionChain_map" alt=""/>
   <map id="streamc::ConnectionChain_map" name="streamc::ConnectionChain_map">
-<area href="classstreamc_1_1OpenConnectionChain.html" alt="streamc::OpenConnectionChain" shape="rect" coords="0,56,190,80"/>
+<area href="classstreamc_1_1OpenConnectionChain.html" title="A connection chain with a dangling output port at the end. " alt="streamc::OpenConnectionChain" shape="rect" coords="0,56,190,80"/>
 </map>
  </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a06564cc17ecb6e3ed2951892ef85bb52"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a06564cc17ecb6e3ed2951892ef85bb52"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>ConnectionChain</b> (<a class="el" href="classstreamc_1_1OpenConnectionChain.html">OpenConnectionChain</a> &amp;&amp;other)</td></tr>
-<tr class="separator:a06564cc17ecb6e3ed2951892ef85bb52"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad0dd9db25e613cb1ff53baa05ee22b99"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad0dd9db25e613cb1ff53baa05ee22b99"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>addConnection</b> (<a class="el" href="classstreamc_1_1Connection.html">Connection</a> const &amp;conn)</td></tr>
-<tr class="separator:ad0dd9db25e613cb1ff53baa05ee22b99"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad69e08a42a3df8024c5f6de613407993"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad69e08a42a3df8024c5f6de613407993"></a>
-std::vector&lt; <a class="el" href="classstreamc_1_1Connection.html">Connection</a> &gt; const &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getConnections</b> () const </td></tr>
+<tr class="memitem:af59a46a4123f90855c71cabd31ccd9c9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af59a46a4123f90855c71cabd31ccd9c9"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1ConnectionChain.html#af59a46a4123f90855c71cabd31ccd9c9">ConnectionChain</a> ()</td></tr>
+<tr class="memdesc:af59a46a4123f90855c71cabd31ccd9c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct an empty connection chain (aka the default constructor). <br/></td></tr>
+<tr class="separator:af59a46a4123f90855c71cabd31ccd9c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada737eeb6fa0218392415f22a8b59002"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1ConnectionChain.html#ada737eeb6fa0218392415f22a8b59002">ConnectionChain</a> (<a class="el" href="classstreamc_1_1OpenConnectionChain.html">OpenConnectionChain</a> &amp;&amp;other, <a class="el" href="classstreamc_1_1Connection.html">Connection</a> const &amp;conn)</td></tr>
+<tr class="memdesc:ada737eeb6fa0218392415f22a8b59002"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a connection chain from an open connection chain temporary and a connection.  <a href="#ada737eeb6fa0218392415f22a8b59002">More...</a><br/></td></tr>
+<tr class="separator:ada737eeb6fa0218392415f22a8b59002"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad69e08a42a3df8024c5f6de613407993"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classstreamc_1_1Connection.html">Connection</a> &gt; const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1ConnectionChain.html#ad69e08a42a3df8024c5f6de613407993">getConnections</a> () const </td></tr>
+<tr class="memdesc:ad69e08a42a3df8024c5f6de613407993"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get all the connections.  <a href="#ad69e08a42a3df8024c5f6de613407993">More...</a><br/></td></tr>
 <tr class="separator:ad69e08a42a3df8024c5f6de613407993"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>A connection chain, which represents a complete series of connections. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="ada737eeb6fa0218392415f22a8b59002"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">streamc::ConnectionChain::ConnectionChain </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classstreamc_1_1OpenConnectionChain.html">OpenConnectionChain</a> &amp;&amp;&#160;</td>
+          <td class="paramname"><em>other</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classstreamc_1_1Connection.html">Connection</a> const &amp;&#160;</td>
+          <td class="paramname"><em>conn</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construct a connection chain from an open connection chain temporary and a connection. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>the open connection chain temporary </td></tr>
+    <tr><td class="paramname">conn</td><td>the connection </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="ad69e08a42a3df8024c5f6de613407993"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="classstreamc_1_1Connection.html">Connection</a>&gt; const&amp; streamc::ConnectionChain::getConnections </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get all the connections. </p>
+<dl class="section return"><dt>Returns</dt><dd>all the connections </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>streamc/<a class="el" href="Flow_8h_source.html">Flow.h</a></li>
 </ul>
@@ -143,7 +223,7 @@ std::vector&lt; <a class="el" href="classstreamc_1_1Connection.html">Connection<
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>streamc</b></li><li class="navelem"><a class="el" href="classstreamc_1_1ConnectionChain.html">ConnectionChain</a></li>
-    <li class="footer">Generated on Sun Dec 1 2013 14:14:12 for StreamC by
+    <li class="footer">Generated on Sun Dec 1 2013 21:14:34 for StreamC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

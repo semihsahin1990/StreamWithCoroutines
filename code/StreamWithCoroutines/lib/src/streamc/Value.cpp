@@ -101,18 +101,18 @@ string Value::toString(Value const & value)
 {
   switch(value.getType()) {
   case Type::Integer:
-    return to_string(*value.pointer.intPointer);
+    return to_string(value.data.intData);
   case Type::Double:
-    return to_string(*value.pointer.doublePointer);
+    return to_string(value.data.doubleData);
   case Type::String:
-    return *value.pointer.stringPointer;
+    return *(value.data.stringPointer);
     //TODO: return to_string_literal(*value.stringPointer);
   case Type::IntList:
-    return to_string_vec(*value.pointer.intListPointer);
+    return to_string_vec(*(value.data.intListPointer));
   case Type::DoubleList:
-    return to_string_vec(*value.pointer.doubleListPointer);
+    return to_string_vec(*(value.data.doubleListPointer));
   case Type::StringList:
-    return to_string_vec(*value.pointer.stringListPointer);
+    return to_string_vec(*(value.data.stringListPointer));
   }          
 }
 

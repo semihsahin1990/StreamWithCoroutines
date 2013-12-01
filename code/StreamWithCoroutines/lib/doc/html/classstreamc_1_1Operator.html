@@ -45,6 +45,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="modules.html"><span>Modules</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -93,7 +94,7 @@ $(document).ready(function(){initNavTree('classstreamc_1_1Operator.html','');});
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Groups</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -124,9 +125,9 @@ $(document).ready(function(){initNavTree('classstreamc_1_1Operator.html','');});
  <div class="center">
   <img src="classstreamc_1_1Operator.png" usemap="#streamc::Operator_map" alt=""/>
   <map id="streamc::Operator_map" name="streamc::Operator_map">
-<area href="classstreamc_1_1FileSink.html" alt="streamc::FileSink" shape="rect" coords="0,56,124,80"/>
-<area href="classstreamc_1_1FileSource.html" alt="streamc::FileSource" shape="rect" coords="134,56,258,80"/>
-<area href="classstreamc_1_1Filter.html" alt="streamc::Filter" shape="rect" coords="268,56,392,80"/>
+<area href="classstreamc_1_1FileSink.html" title="File sink that writes tuples to a file. " alt="streamc::FileSink" shape="rect" coords="0,56,124,80"/>
+<area href="classstreamc_1_1FileSource.html" title="File source that reads tuples from a file. " alt="streamc::FileSource" shape="rect" coords="134,56,258,80"/>
+<area href="classstreamc_1_1Filter.html" title="Filter that evaluates tuples against a given condition. " alt="streamc::Filter" shape="rect" coords="268,56,392,80"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -352,8 +353,21 @@ Protected Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Perform the main processing of the operator. </p>
-<p>This function is overriden to provide the implementation for the operator's core logic. The <code>context</code> object is used to provide runtime services, such as accessing the ports. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>This function is overriden to provide the implementation for the operator's core logic. The <code>context</code> object is used to provide runtime services, such as accessing the ports. For instance, a filter can be implemented as follows: </p>
+<div class="fragment"><div class="line"><span class="keywordtype">void</span> <a class="code" href="classstreamc_1_1Filter.html#a2681b2e803ca4974913aa160cca6f81f">Filter::process</a>(OperatorContext &amp; context) {</div>
+<div class="line">    InputPort &amp; iport = context.getInputPort(0);</div>
+<div class="line">    OutputPort &amp; oport = context.getOutputPort(0);</div>
+<div class="line">    <span class="keywordflow">while</span> (!context.isShutdownRequested()) {</div>
+<div class="line">        <span class="keywordtype">bool</span> closed = iport.waitTuple();</div>
+<div class="line">        <span class="keywordflow">if</span> (closed)</div>
+<div class="line">            <span class="keywordflow">break</span>;</div>
+<div class="line">        Tuple &amp; tuple = iport.getFrontTuple();</div>
+<div class="line">        <span class="keywordflow">if</span> (passesFilter(tuple)) </div>
+<div class="line">            oport.pushTuple(tuple);</div>
+<div class="line">        iport.popTuple();</div>
+<div class="line">    }</div>
+<div class="line">}</div>
+</div><!-- fragment --> <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">context</td><td>operator context </td></tr>
   </table>
@@ -373,7 +387,7 @@ Protected Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>streamc</b></li><li class="navelem"><a class="el" href="classstreamc_1_1Operator.html">Operator</a></li>
-    <li class="footer">Generated on Sun Dec 1 2013 14:14:12 for StreamC by
+    <li class="footer">Generated on Sun Dec 1 2013 21:14:34 for StreamC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>
