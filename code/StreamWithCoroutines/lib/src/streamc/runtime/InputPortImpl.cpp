@@ -12,7 +12,7 @@ using namespace streamc;
 
 //constructor
 InputPortImpl::InputPortImpl(OperatorContextImpl & oper, Scheduler & scheduler)
-  : oper_(&oper), scheduler_(&scheduler), isComplete_(false) 
+  : oper_(&oper), scheduler_(&scheduler), isClosed_(false) 
 {}
 
 //add publisher operator(operator context) to this port
@@ -33,67 +33,56 @@ void InputPortImpl::pushTuple(Tuple const & tuple)
   scheduler_->markInputPortAsWritten(*this);
 }
 
-//return isCompleteNoLock()
-bool InputPortImpl::isComplete() 
+bool InputPortImpl::isClosed() 
 {
   lock_guard<mutex> lock(mutex_);
-  return isCompleteNoLock();
+  return isClosedNoLock();
 }
 
-/*
-  if isComplete_ is true return true
-  if queue is not empty return false
-  if all publishers are complete, then set isComplete as true and return true, otherwise return false
-*/
-bool InputPortImpl::isCompleteNoLock()
+bool InputPortImpl::isClosedNoLock()
 {
-  if (isComplete_)
-    return true; 
-  if (!portQueue_.empty())
-    return false;
-  bool allComplete = true;
-  for (OperatorContextImpl * opc : publishers_) {
-    if (!opc->isComplete()) {
-      allComplete = false;
-      break;
-    }
-  }
-  if (allComplete) {
-    isComplete_ = true;
+  if (isClosed_)
     return true;
-  }
-  return false;
+  for (OperatorContextImpl * opc : publishers_)
+    if (!opc->isComplete()) 
+      return false;
+  isClosed_ = true;
+  return true;
 }
 
-// return whether queue has tuple or not
 bool InputPortImpl::hasTuple() 
 {
   lock_guard<mutex> lock(mutex_);
   return !portQueue_.empty();
 }
 
-//return the size of the queue
 size_t InputPortImpl::getTupleCount() 
 {
   lock_guard<mutex> lock(mutex_);
   return portQueue_.size();
 }
 
-// return true iff port is completed
+// return true if wait cannot be completed
 bool InputPortImpl::waitTuple() 
+{
+  return waitTuple(1);
+}
+
+// return true if wait cannot be completed
+bool InputPortImpl::waitTuple(size_t n) 
 {
   bool needToWait = true;
   while (needToWait) {
     {
       lock_guard<mutex> lock(mutex_);
-      if (!portQueue_.empty())
+      if (portQueue_.size()>=n)
         needToWait = false;
-      else if (isCompleteNoLock())
+      else if (isClosedNoLock())
         return true;
     }
     if (needToWait) {
       // we need to ask the scheduler to move us into blocked state
-      scheduler_->markOperatorAsReadBlocked(*oper_, { {this, 1} });  
+      scheduler_->markOperatorAsReadBlocked(*oper_, { {this, n} });  
       // Reaching here does not mean that we do not need to wait anymore,
       // as it might be the case that the scheduler has woken us because
       // the port has closed! That is why we have the while loop above.
@@ -104,6 +93,7 @@ bool InputPortImpl::waitTuple()
   }
   return false;
 }
+
 
 // return the next tuple
 Tuple & InputPortImpl::getFrontTuple() 

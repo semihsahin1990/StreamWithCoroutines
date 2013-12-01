@@ -3,6 +3,7 @@
 # The Makefile provides the following targets to make:
 #   $ make           compile and link
 #   $ make objs      compile only (no linking)
+#   $ make docs     build documentation (requires doxygen)
 #   $ make clean     clean objects and the executable file
 #   $ make help      get the usage of the makefile
 
@@ -22,7 +23,7 @@ LDFLAGS   = -L /opt/local/libcpp-software/lib -Wl,-rpath,/opt/local/libcpp-softw
 
 ## Implicit Section: change the following only when necessary.
 CXX      = clang++ 
-CXXFLAGS = -g -O2 -fPIC -Wall -std=c++11 -stdlib=libc++ 
+CXXFLAGS = -g -O2 -fPIC -Wall -std=c++11 -stdlib=libc++ -fcolor-diagnostics
 SRCDIRS  = $(shell find $(SRCDIR) -type d)
 INCDIRS  = $(shell find $(INCDIR) -type d)
 INCFLAGS = $(addprefix -I ,$(SRCDIRS)) $(addprefix -I ,$(INCDIRS)) $(INCLUDES)
@@ -34,8 +35,9 @@ OBJS    = $(patsubst $(SRCDIR)/%,$(OBJDIR)/%,$(SOURCES:.cpp=.o))
 DEPS    = $(OBJS:.o=.d)
 
 ## Define some useful variables.
+CDP	= clang++
 DEP_OPT = -MM -MP
-DEPEND  = $(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INCFLAGS) $(CCDFLAGS) $(DEP_OPT)
+DEPEND  = $(CDP) $(CPPFLAGS) $(CXXFLAGS) $(INCFLAGS) $(DEP_OPT)
 COMPILE = $(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INCFLAGS) 
 LINK    = $(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 
@@ -60,12 +62,16 @@ $(BINDIR)/$(LIBRARY): $(OBJS)
 	@mkdir -p $(dir $@)
 	$(LINK) $(OBJS) -shared -o "$(PWD)/$@"
 
+docs:
+	doxygen doc/doxy.conf
+
 ifneq ($(DEPS),)
   sinclude $(DEPS)
 endif
 
 clean:
 	$(RM) -r $(OBJDIR) $(BINDIR)
+	$(RM) -r docs/html
 
 help:
 	@echo 'Usage: make [TARGET]'

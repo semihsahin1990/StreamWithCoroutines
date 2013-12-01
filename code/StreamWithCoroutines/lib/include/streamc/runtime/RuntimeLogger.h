@@ -2,7 +2,6 @@
 
 #include "streamc/LogLevel.h"
 
-#include <boost/log/sinks.hpp>
 #include <boost/log/sources/logger.hpp>
 #include <boost/log/sources/record_ostream.hpp>
 #include <boost/log/sources/severity_channel_logger.hpp>
@@ -11,6 +10,8 @@
 
 namespace streamc 
 {
+
+class RuntimeLoggerSinks;
 
 class RuntimeLogger
 {
@@ -37,12 +38,11 @@ public:
     return globalLogger;
   }
 private:
-  typedef boost::log::sinks::synchronous_sink<
-      boost::log::sinks::text_file_backend> sink_t;
   logger_mt infLogger_;
-  logger_mt appLogger_;
-  boost::shared_ptr<sink_t> infSink_;
-  boost::shared_ptr<sink_t> appSink_;
+  logger_mt appLogger_; 
+  // we need to include this file form operators, erase types to avoid including 
+  // crazy number of boosh headers into operator code to avoid high compilation times 
+  std::unique_ptr<RuntimeLoggerSinks> sinks_;
 };
 
 } // namespace streamc

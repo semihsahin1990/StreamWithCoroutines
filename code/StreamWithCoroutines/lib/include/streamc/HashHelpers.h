@@ -2,6 +2,8 @@
 
 #include <functional>
 
+/// @cond hidden
+
 namespace streamc
 {
   class Operator;
@@ -33,3 +35,5 @@ namespace std
     }
   };
 }
+
+/// @endcond

@@ -17,22 +17,18 @@ Filter & Filter::set_filter(std::function<bool (Tuple &)> filter)
   return *this;
 }
 
-void Filter::init(OperatorContext & context)
-{
-  iport_ = & context.getInputPort(0);
-  oport_ = & context.getOutputPort(0);
-}
-
-
 void Filter::process(OperatorContext & context)
 {
+  InputPort & iport = context.getInputPort(0);
+  OutputPort & oport = context.getOutputPort(0);
+
   while (!context.isShutdownRequested()) {
-    bool closed = iport_->waitTuple();
+    bool closed = iport.waitTuple();
     if (closed)
       break;
-    Tuple & tuple = iport_->getFrontTuple();
+    Tuple & tuple = iport.getFrontTuple();
     if (filter_(tuple)) 
-      oport_->pushTuple(tuple);
-    iport_->popTuple();
+      oport.pushTuple(tuple);
+    iport.popTuple();
   }
 }

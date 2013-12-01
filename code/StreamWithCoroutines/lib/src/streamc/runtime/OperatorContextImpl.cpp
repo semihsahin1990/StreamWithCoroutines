@@ -25,13 +25,6 @@ bool OperatorContextImpl::isShutdownRequested()
   return flowContext_->isShutdownRequested();
 }
 
-//init operator with this operator context
-void OperatorContextImpl::initOper() 
-{
-  oper_->init(*this);
-  coroStarted_ = false;
-}
-
 // run the operator. when it returns, set isComplete_ as true and mark operator
 // as completed.
 void OperatorContextImpl::coroBody(coro_t::caller_type & caller)
