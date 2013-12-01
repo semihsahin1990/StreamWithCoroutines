@@ -49,7 +49,7 @@ private:
 
 /**
  * @defgroup FlowOps Flow construction operators
- * Flow construction operators.
+ * %Flow construction operators.
  */
 
 /** @addtogroup FlowOps 

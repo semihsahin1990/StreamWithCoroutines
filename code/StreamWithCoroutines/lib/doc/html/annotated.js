@@ -17,7 +17,6 @@ var annotated =
       [ "FileSource", "classstreamc_1_1FileSource.html", "classstreamc_1_1FileSource" ],
       [ "Filter", "classstreamc_1_1Filter.html", "classstreamc_1_1Filter" ],
       [ "OutputPort", "classstreamc_1_1OutputPort.html", "classstreamc_1_1OutputPort" ],
-      [ "Ports", "classstreamc_1_1Ports.html", null ],
       [ "Tuple", "classstreamc_1_1Tuple.html", "classstreamc_1_1Tuple" ],
       [ "ValueTypeToCppType", "structstreamc_1_1ValueTypeToCppType.html", null ],
       [ "Value", "classstreamc_1_1Value.html", "classstreamc_1_1Value" ]

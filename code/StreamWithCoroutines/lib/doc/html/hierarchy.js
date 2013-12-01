@@ -17,7 +17,6 @@ var hierarchy =
     ] ],
     [ "streamc::OperatorContext", "classstreamc_1_1OperatorContext.html", null ],
     [ "streamc::OutputPort", "classstreamc_1_1OutputPort.html", null ],
-    [ "streamc::Ports", "classstreamc_1_1Ports.html", null ],
     [ "streamc::ToConnection", "classstreamc_1_1ToConnection.html", null ],
     [ "streamc::Tuple", "classstreamc_1_1Tuple.html", null ],
     [ "streamc::Value", "classstreamc_1_1Value.html", null ],
