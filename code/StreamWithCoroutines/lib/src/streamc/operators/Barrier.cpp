@@ -4,6 +4,7 @@
 using namespace streamc;
 using namespace std;
 
+// TODO: change to multuple input ports
 Barrier::Barrier(std::string const & name)
   : Operator(name, 2, 1)
 {}
@@ -14,13 +15,13 @@ void Barrier::process(OperatorContext & context)
   InputPort & iport0 = context.getInputPort(0);
   InputPort & iport1 = context.getInputPort(1);
   OutputPort & oport = context.getOutputPort(0);
-
+  unordered_map<InputPort*, size_t> waitSpec = {{&iport0, 1}, {&iport1, 1}};
+  
   while(!context.isShutdownRequested()) {
     /*
       TODO: will be replaced by 
-      bool closed = context.waitOnPorts({iport0, 1}, {iport1, 1});
+      bool closed = context.waitOnPorts(waitSpec);
     */
-
     bool closed = iport0.waitTuple();   
     if(closed)
       break;
