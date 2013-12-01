@@ -8,16 +8,11 @@ Barrier::Barrier(std::string const & name)
   : Operator(name, 2, 1)
 {}
 
-void Barrier::init(OperatorContext & context)
+void Barrier::process(OperatorContext & context)
 {
   iport1_ = & context.getInputPort(0);
   iport2_ = & context.getInputPort(1);
   oport_ = & context.getOutputPort(0);
-}
-
-
-void Barrier::process(OperatorContext & context)
-{
   vector<InputPort *> iports;
 
   iports.push_back(iport1_);
