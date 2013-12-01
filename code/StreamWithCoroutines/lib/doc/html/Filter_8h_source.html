@@ -112,32 +112,32 @@ $(document).ready(function(){initNavTree('Filter_8h_source.html','');});
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;functional&gt;</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;</div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="keyword">namespace </span>streamc </div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="keyword">namespace </span>streamc { <span class="keyword">namespace </span>operators</div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;{</div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;</div>
-<div class="line"><a name="l00013"></a><span class="lineno"><a class="line" href="classstreamc_1_1Filter.html">   13</a></span>&#160;<span class="keyword">class </span><a class="code" href="classstreamc_1_1Filter.html">Filter</a> : <span class="keyword">public</span> <a class="code" href="classstreamc_1_1Operator.html">Operator</a></div>
+<div class="line"><a name="l00013"></a><span class="lineno"><a class="line" href="classstreamc_1_1operators_1_1Filter.html">   13</a></span>&#160;<span class="keyword">class </span><a class="code" href="classstreamc_1_1operators_1_1Filter.html">Filter</a> : <span class="keyword">public</span> <a class="code" href="classstreamc_1_1Operator.html">Operator</a></div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;{</div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;  <a class="code" href="classstreamc_1_1Filter.html#a993b938430558ff40f201ff5119b31b4">Filter</a>(std::string <span class="keyword">const</span> &amp; name);</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;  <a class="code" href="classstreamc_1_1operators_1_1Filter.html#a4400ff4a48809618824794b00540a871">Filter</a>(std::string <span class="keyword">const</span> &amp; name);</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;  <a class="code" href="classstreamc_1_1Filter.html#a993b938430558ff40f201ff5119b31b4">Filter</a>(std::string <span class="keyword">const</span> &amp; name, std::function&lt;<span class="keywordtype">bool</span> (<a class="code" href="classstreamc_1_1Tuple.html">Tuple</a> &amp;)&gt; filter);</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;  <a class="code" href="classstreamc_1_1operators_1_1Filter.html#a4400ff4a48809618824794b00540a871">Filter</a>(std::string <span class="keyword">const</span> &amp; name, std::function&lt;<span class="keywordtype">bool</span> (<a class="code" href="classstreamc_1_1Tuple.html">Tuple</a> &amp;)&gt; filter);</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;  <a class="code" href="classstreamc_1_1Filter.html">Filter</a> &amp; <a class="code" href="classstreamc_1_1Filter.html#a9f4f2c49a2fc98cea4f3bffa72c370ec">set_filter</a>(std::function&lt;<span class="keywordtype">bool</span> (<a class="code" href="classstreamc_1_1Tuple.html">Tuple</a> &amp;)&gt; filter);</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;  <a class="code" href="classstreamc_1_1operators_1_1Filter.html">Filter</a> &amp; <a class="code" href="classstreamc_1_1operators_1_1Filter.html#a3d2283fd75f29a2a1122cd0044077f1f">set_filter</a>(std::function&lt;<span class="keywordtype">bool</span> (<a class="code" href="classstreamc_1_1Tuple.html">Tuple</a> &amp;)&gt; filter);</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classstreamc_1_1Filter.html#a2681b2e803ca4974913aa160cca6f81f">process</a>(<a class="code" href="classstreamc_1_1OperatorContext.html">OperatorContext</a> &amp; context) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classstreamc_1_1operators_1_1Filter.html#ad5938663ccdd1c68418b7f71fe360cda">process</a>(<a class="code" href="classstreamc_1_1OperatorContext.html">OperatorContext</a> &amp; context) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="keyword">private</span>:</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;  std::function&lt;bool (Tuple &amp;)&gt; filter_;</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;};</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;} <span class="comment">// namespace streamc</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;} } <span class="comment">// namespace streamc::operators</span></div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
 <div class="ttc" id="classstreamc_1_1Tuple_html"><div class="ttname"><a href="classstreamc_1_1Tuple.html">streamc::Tuple</a></div><div class="ttdoc">Tuple represending a set of named values. </div><div class="ttdef"><b>Definition:</b> Tuple.h:13</div></div>
-<div class="ttc" id="classstreamc_1_1Filter_html"><div class="ttname"><a href="classstreamc_1_1Filter.html">streamc::Filter</a></div><div class="ttdoc">Filter that evaluates tuples against a given condition. </div><div class="ttdef"><b>Definition:</b> Filter.h:13</div></div>
-<div class="ttc" id="classstreamc_1_1Filter_html_a2681b2e803ca4974913aa160cca6f81f"><div class="ttname"><a href="classstreamc_1_1Filter.html#a2681b2e803ca4974913aa160cca6f81f">streamc::Filter::process</a></div><div class="ttdeci">void process(OperatorContext &amp;context) override</div><div class="ttdoc">The process function that contains the filter logic. </div></div>
+<div class="ttc" id="classstreamc_1_1operators_1_1Filter_html"><div class="ttname"><a href="classstreamc_1_1operators_1_1Filter.html">streamc::operators::Filter</a></div><div class="ttdoc">Filter that evaluates tuples against a given condition. </div><div class="ttdef"><b>Definition:</b> Filter.h:13</div></div>
+<div class="ttc" id="classstreamc_1_1operators_1_1Filter_html_a3d2283fd75f29a2a1122cd0044077f1f"><div class="ttname"><a href="classstreamc_1_1operators_1_1Filter.html#a3d2283fd75f29a2a1122cd0044077f1f">streamc::operators::Filter::set_filter</a></div><div class="ttdeci">Filter &amp; set_filter(std::function&lt; bool(Tuple &amp;)&gt; filter)</div><div class="ttdoc">Set the filter. </div></div>
 <div class="ttc" id="classstreamc_1_1Operator_html"><div class="ttname"><a href="classstreamc_1_1Operator.html">streamc::Operator</a></div><div class="ttdoc">Base class for implementing streaming operators. </div><div class="ttdef"><b>Definition:</b> Operator.h:24</div></div>
-<div class="ttc" id="classstreamc_1_1Filter_html_a9f4f2c49a2fc98cea4f3bffa72c370ec"><div class="ttname"><a href="classstreamc_1_1Filter.html#a9f4f2c49a2fc98cea4f3bffa72c370ec">streamc::Filter::set_filter</a></div><div class="ttdeci">Filter &amp; set_filter(std::function&lt; bool(Tuple &amp;)&gt; filter)</div><div class="ttdoc">Set the filter. </div></div>
-<div class="ttc" id="classstreamc_1_1Filter_html_a993b938430558ff40f201ff5119b31b4"><div class="ttname"><a href="classstreamc_1_1Filter.html#a993b938430558ff40f201ff5119b31b4">streamc::Filter::Filter</a></div><div class="ttdeci">Filter(std::string const &amp;name)</div><div class="ttdoc">Construct a filter. </div></div>
+<div class="ttc" id="classstreamc_1_1operators_1_1Filter_html_a4400ff4a48809618824794b00540a871"><div class="ttname"><a href="classstreamc_1_1operators_1_1Filter.html#a4400ff4a48809618824794b00540a871">streamc::operators::Filter::Filter</a></div><div class="ttdeci">Filter(std::string const &amp;name)</div><div class="ttdoc">Construct a filter. </div></div>
+<div class="ttc" id="classstreamc_1_1operators_1_1Filter_html_ad5938663ccdd1c68418b7f71fe360cda"><div class="ttname"><a href="classstreamc_1_1operators_1_1Filter.html#ad5938663ccdd1c68418b7f71fe360cda">streamc::operators::Filter::process</a></div><div class="ttdeci">void process(OperatorContext &amp;context) override</div><div class="ttdoc">The process function that contains the filter logic. </div></div>
 <div class="ttc" id="classstreamc_1_1OperatorContext_html"><div class="ttname"><a href="classstreamc_1_1OperatorContext.html">streamc::OperatorContext</a></div><div class="ttdoc">Operator context that provides runtime services for operators. </div><div class="ttdef"><b>Definition:</b> OperatorContext.h:17</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
@@ -145,7 +145,7 @@ $(document).ready(function(){initNavTree('Filter_8h_source.html','');});
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_f26e643a9842da0ce6dbe030c714fc5e.html">streamc</a></li><li class="navelem"><a class="el" href="dir_65270f768a49b2e8430ce1f6dbbc0be0.html">operators</a></li><li class="navelem"><b>Filter.h</b></li>
-    <li class="footer">Generated on Sun Dec 1 2013 21:46:19 for StreamC by
+    <li class="footer">Generated on Sun Dec 1 2013 21:52:28 for StreamC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

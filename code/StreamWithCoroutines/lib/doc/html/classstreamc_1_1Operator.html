@@ -125,10 +125,10 @@ $(document).ready(function(){initNavTree('classstreamc_1_1Operator.html','');});
  <div class="center">
   <img src="classstreamc_1_1Operator.png" usemap="#streamc::Operator_map" alt=""/>
   <map id="streamc::Operator_map" name="streamc::Operator_map">
-<area href="classstreamc_1_1Barrier.html" alt="streamc::Barrier" shape="rect" coords="0,56,124,80"/>
-<area href="classstreamc_1_1FileSink.html" title="File sink that writes tuples to a file. " alt="streamc::FileSink" shape="rect" coords="134,56,258,80"/>
-<area href="classstreamc_1_1FileSource.html" title="File source that reads tuples from a file. " alt="streamc::FileSource" shape="rect" coords="268,56,392,80"/>
-<area href="classstreamc_1_1Filter.html" title="Filter that evaluates tuples against a given condition. " alt="streamc::Filter" shape="rect" coords="402,56,526,80"/>
+<area href="classstreamc_1_1operators_1_1Barrier.html" alt="streamc::operators::Barrier" shape="rect" coords="0,56,184,80"/>
+<area href="classstreamc_1_1operators_1_1FileSink.html" title="File sink that writes tuples to a file. " alt="streamc::operators::FileSink" shape="rect" coords="194,56,378,80"/>
+<area href="classstreamc_1_1operators_1_1FileSource.html" title="File source that reads tuples from a file. " alt="streamc::operators::FileSource" shape="rect" coords="388,56,572,80"/>
+<area href="classstreamc_1_1operators_1_1Filter.html" title="Filter that evaluates tuples against a given condition. " alt="streamc::operators::Filter" shape="rect" coords="582,56,766,80"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -355,7 +355,7 @@ Protected Member Functions</h2></td></tr>
 
 <p>Perform the main processing of the operator. </p>
 <p>This function is overriden to provide the implementation for the operator's core logic. The <code>context</code> object is used to provide runtime services, such as accessing the ports. For instance, a filter can be implemented as follows: </p>
-<div class="fragment"><div class="line"><span class="keywordtype">void</span> <a class="code" href="classstreamc_1_1Filter.html#a2681b2e803ca4974913aa160cca6f81f">Filter::process</a>(OperatorContext &amp; context) {</div>
+<div class="fragment"><div class="line"><span class="keywordtype">void</span> Filter::process(OperatorContext &amp; context) {</div>
 <div class="line">    InputPort &amp; iport = context.getInputPort(0);</div>
 <div class="line">    OutputPort &amp; oport = context.getOutputPort(0);</div>
 <div class="line">    <span class="keywordflow">while</span> (!context.isShutdownRequested()) {</div>
@@ -375,7 +375,7 @@ Protected Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p>Implemented in <a class="el" href="classstreamc_1_1FileSource.html#a1ead0a0f596c7f98a96ece58aca01f7b">streamc::FileSource</a>, <a class="el" href="classstreamc_1_1Filter.html#a2681b2e803ca4974913aa160cca6f81f">streamc::Filter</a>, <a class="el" href="classstreamc_1_1FileSink.html#a263b7b4837baee3e7959b9f079b1a50d">streamc::FileSink</a>, and <a class="el" href="classstreamc_1_1Barrier.html#aa11c8dc7ad45d899938dbe286ff636df">streamc::Barrier</a>.</p>
+<p>Implemented in <a class="el" href="classstreamc_1_1operators_1_1FileSource.html#aabde10169341279b724afd8a7c78745e">streamc::operators::FileSource</a>, <a class="el" href="classstreamc_1_1operators_1_1Filter.html#ad5938663ccdd1c68418b7f71fe360cda">streamc::operators::Filter</a>, <a class="el" href="classstreamc_1_1operators_1_1FileSink.html#a43ecedc4dd0cd77ac12e6e6902381206">streamc::operators::FileSink</a>, and <a class="el" href="classstreamc_1_1operators_1_1Barrier.html#a700886fb9deb460e932d9c43bfa923f0">streamc::operators::Barrier</a>.</p>
 
 </div>
 </div>
@@ -388,7 +388,7 @@ Protected Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>streamc</b></li><li class="navelem"><a class="el" href="classstreamc_1_1Operator.html">Operator</a></li>
-    <li class="footer">Generated on Sun Dec 1 2013 21:46:19 for StreamC by
+    <li class="footer">Generated on Sun Dec 1 2013 21:52:28 for StreamC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

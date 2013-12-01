@@ -4,7 +4,7 @@
 #include <vector>
 #include <functional>
 
-namespace streamc 
+namespace streamc { namespace operators
 {
 
 /**
@@ -46,6 +46,6 @@ private:
   std::function<bool (Tuple &)> filter_;
 };
 
-} // namespace streamc
+} } // namespace streamc::operators
 
 

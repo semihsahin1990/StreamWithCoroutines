@@ -1,6 +1,7 @@
 #include "streamc/operators/Filter.h"
 
 using namespace streamc;
+using namespace streamc::operators;
 using namespace std;
 
 Filter::Filter(std::string const & name, std::function<bool (Tuple &)> filter)

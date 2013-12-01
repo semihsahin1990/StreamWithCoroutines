@@ -3,7 +3,7 @@
 #include <iostream>
 #include <vector>
 
-namespace streamc 
+namespace streamc { namespace operators
 {
 
 class Barrier : public Operator
@@ -14,6 +14,6 @@ public:
 private:
 };
 
-} // namespace streamc
+} } // namespace streamc::operators
 
 

@@ -7,6 +7,7 @@
 #include <regex>
 
 using namespace streamc;
+using namespace streamc::operators;
 using namespace std;
 
 FileSink::FileSink(std::string const & name, std::string const & fileName)

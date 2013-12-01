@@ -8,6 +8,7 @@
 #include <regex>
 
 using namespace streamc;
+using namespace streamc::operators;
 using namespace std;
 
 FileSource::FileSource(std::string const & name, std::string const & fileName,

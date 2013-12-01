@@ -3,7 +3,7 @@
 #include <iostream>
 #include <vector>
 
-namespace streamc 
+namespace streamc { namespace operators
 {
 
 /**
@@ -45,6 +45,6 @@ private:
   std::string fileName_;
 };
 
-} // namespace streamc
+} } // namespace streamc::operators
 
 

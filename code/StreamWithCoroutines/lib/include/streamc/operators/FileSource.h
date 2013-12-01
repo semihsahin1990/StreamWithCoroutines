@@ -3,7 +3,7 @@
 #include <iostream>
 #include <vector>
 
-namespace streamc 
+namespace streamc { namespace operators
 {
 
 /**
@@ -64,6 +64,6 @@ private:
   std::vector<std::pair<std::string, Type>> attributes_;
 };
 
-} // namespace streamc
+} } // namespace streamc::operators
  
 

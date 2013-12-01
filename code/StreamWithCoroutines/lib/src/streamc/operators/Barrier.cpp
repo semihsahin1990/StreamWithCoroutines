@@ -2,6 +2,7 @@
 #include "streamc/runtime/PortsImpl.h"
 
 using namespace streamc;
+using namespace streamc::operators;
 using namespace std;
 
 // TODO: change to multuple input ports

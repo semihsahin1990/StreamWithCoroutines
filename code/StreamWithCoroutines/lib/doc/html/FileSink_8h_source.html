@@ -111,39 +111,39 @@ $(document).ready(function(){initNavTree('FileSink_8h_source.html','');});
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &lt;iostream&gt;</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;</div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="keyword">namespace </span>streamc </div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="keyword">namespace </span>streamc { <span class="keyword">namespace </span>operators</div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;{</div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;</div>
-<div class="line"><a name="l00012"></a><span class="lineno"><a class="line" href="classstreamc_1_1FileSink.html">   12</a></span>&#160;<span class="keyword">class </span><a class="code" href="classstreamc_1_1FileSink.html">FileSink</a> : <span class="keyword">public</span> <a class="code" href="classstreamc_1_1Operator.html">Operator</a></div>
+<div class="line"><a name="l00012"></a><span class="lineno"><a class="line" href="classstreamc_1_1operators_1_1FileSink.html">   12</a></span>&#160;<span class="keyword">class </span><a class="code" href="classstreamc_1_1operators_1_1FileSink.html">FileSink</a> : <span class="keyword">public</span> <a class="code" href="classstreamc_1_1Operator.html">Operator</a></div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;{</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;  <a class="code" href="classstreamc_1_1FileSink.html#a8b9cb0d6fc04c1857150109c97529e01">FileSink</a>(std::string <span class="keyword">const</span> &amp; name);</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;  <a class="code" href="classstreamc_1_1operators_1_1FileSink.html#acdea9fac669e511b84e1b4b18be9be40">FileSink</a>(std::string <span class="keyword">const</span> &amp; name);</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;  <a class="code" href="classstreamc_1_1FileSink.html#a8b9cb0d6fc04c1857150109c97529e01">FileSink</a>(std::string <span class="keyword">const</span> &amp; name, std::string <span class="keyword">const</span> &amp; fileName);</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;  <a class="code" href="classstreamc_1_1operators_1_1FileSink.html#acdea9fac669e511b84e1b4b18be9be40">FileSink</a>(std::string <span class="keyword">const</span> &amp; name, std::string <span class="keyword">const</span> &amp; fileName);</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;  <a class="code" href="classstreamc_1_1FileSink.html">FileSink</a> &amp; <a class="code" href="classstreamc_1_1FileSink.html#a7aa29f17210c30a678cb1da3106ef60a">set_fileName</a>(std::string <span class="keyword">const</span> &amp; fileName);</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;  <a class="code" href="classstreamc_1_1operators_1_1FileSink.html">FileSink</a> &amp; <a class="code" href="classstreamc_1_1operators_1_1FileSink.html#aaf9f5bada84f4b75cfe5093ae69b67fd">set_fileName</a>(std::string <span class="keyword">const</span> &amp; fileName);</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classstreamc_1_1FileSink.html#a263b7b4837baee3e7959b9f079b1a50d">process</a>(<a class="code" href="classstreamc_1_1OperatorContext.html">OperatorContext</a> &amp; context) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classstreamc_1_1operators_1_1FileSink.html#a43ecedc4dd0cd77ac12e6e6902381206">process</a>(<a class="code" href="classstreamc_1_1OperatorContext.html">OperatorContext</a> &amp; context) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="keyword">private</span>:</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;  std::string fileName_;</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;};</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;} <span class="comment">// namespace streamc</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;} } <span class="comment">// namespace streamc::operators</span></div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
-<div class="ttc" id="classstreamc_1_1FileSink_html"><div class="ttname"><a href="classstreamc_1_1FileSink.html">streamc::FileSink</a></div><div class="ttdoc">File sink that writes tuples to a file. </div><div class="ttdef"><b>Definition:</b> FileSink.h:12</div></div>
-<div class="ttc" id="classstreamc_1_1FileSink_html_a7aa29f17210c30a678cb1da3106ef60a"><div class="ttname"><a href="classstreamc_1_1FileSink.html#a7aa29f17210c30a678cb1da3106ef60a">streamc::FileSink::set_fileName</a></div><div class="ttdeci">FileSink &amp; set_fileName(std::string const &amp;fileName)</div><div class="ttdoc">Set the file name. </div></div>
-<div class="ttc" id="classstreamc_1_1FileSink_html_a8b9cb0d6fc04c1857150109c97529e01"><div class="ttname"><a href="classstreamc_1_1FileSink.html#a8b9cb0d6fc04c1857150109c97529e01">streamc::FileSink::FileSink</a></div><div class="ttdeci">FileSink(std::string const &amp;name)</div><div class="ttdoc">Construct a file sink. </div></div>
+<div class="ttc" id="classstreamc_1_1operators_1_1FileSink_html"><div class="ttname"><a href="classstreamc_1_1operators_1_1FileSink.html">streamc::operators::FileSink</a></div><div class="ttdoc">File sink that writes tuples to a file. </div><div class="ttdef"><b>Definition:</b> FileSink.h:12</div></div>
+<div class="ttc" id="classstreamc_1_1operators_1_1FileSink_html_acdea9fac669e511b84e1b4b18be9be40"><div class="ttname"><a href="classstreamc_1_1operators_1_1FileSink.html#acdea9fac669e511b84e1b4b18be9be40">streamc::operators::FileSink::FileSink</a></div><div class="ttdeci">FileSink(std::string const &amp;name)</div><div class="ttdoc">Construct a file sink. </div></div>
 <div class="ttc" id="classstreamc_1_1Operator_html"><div class="ttname"><a href="classstreamc_1_1Operator.html">streamc::Operator</a></div><div class="ttdoc">Base class for implementing streaming operators. </div><div class="ttdef"><b>Definition:</b> Operator.h:24</div></div>
+<div class="ttc" id="classstreamc_1_1operators_1_1FileSink_html_aaf9f5bada84f4b75cfe5093ae69b67fd"><div class="ttname"><a href="classstreamc_1_1operators_1_1FileSink.html#aaf9f5bada84f4b75cfe5093ae69b67fd">streamc::operators::FileSink::set_fileName</a></div><div class="ttdeci">FileSink &amp; set_fileName(std::string const &amp;fileName)</div><div class="ttdoc">Set the file name. </div></div>
 <div class="ttc" id="classstreamc_1_1OperatorContext_html"><div class="ttname"><a href="classstreamc_1_1OperatorContext.html">streamc::OperatorContext</a></div><div class="ttdoc">Operator context that provides runtime services for operators. </div><div class="ttdef"><b>Definition:</b> OperatorContext.h:17</div></div>
-<div class="ttc" id="classstreamc_1_1FileSink_html_a263b7b4837baee3e7959b9f079b1a50d"><div class="ttname"><a href="classstreamc_1_1FileSink.html#a263b7b4837baee3e7959b9f079b1a50d">streamc::FileSink::process</a></div><div class="ttdeci">void process(OperatorContext &amp;context) override</div><div class="ttdoc">The process function that contains the file sink logic. </div></div>
+<div class="ttc" id="classstreamc_1_1operators_1_1FileSink_html_a43ecedc4dd0cd77ac12e6e6902381206"><div class="ttname"><a href="classstreamc_1_1operators_1_1FileSink.html#a43ecedc4dd0cd77ac12e6e6902381206">streamc::operators::FileSink::process</a></div><div class="ttdeci">void process(OperatorContext &amp;context) override</div><div class="ttdoc">The process function that contains the file sink logic. </div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_f26e643a9842da0ce6dbe030c714fc5e.html">streamc</a></li><li class="navelem"><a class="el" href="dir_65270f768a49b2e8430ce1f6dbbc0be0.html">operators</a></li><li class="navelem"><b>FileSink.h</b></li>
-    <li class="footer">Generated on Sun Dec 1 2013 21:46:19 for StreamC by
+    <li class="footer">Generated on Sun Dec 1 2013 21:52:28 for StreamC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

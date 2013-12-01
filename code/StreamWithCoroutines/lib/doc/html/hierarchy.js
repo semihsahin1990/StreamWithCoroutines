@@ -10,10 +10,10 @@ var hierarchy =
     [ "streamc::FromConnection", "classstreamc_1_1FromConnection.html", null ],
     [ "streamc::InputPort", "classstreamc_1_1InputPort.html", null ],
     [ "streamc::Operator", "classstreamc_1_1Operator.html", [
-      [ "streamc::Barrier", "classstreamc_1_1Barrier.html", null ],
-      [ "streamc::FileSink", "classstreamc_1_1FileSink.html", null ],
-      [ "streamc::FileSource", "classstreamc_1_1FileSource.html", null ],
-      [ "streamc::Filter", "classstreamc_1_1Filter.html", null ]
+      [ "streamc::operators::Barrier", "classstreamc_1_1operators_1_1Barrier.html", null ],
+      [ "streamc::operators::FileSink", "classstreamc_1_1operators_1_1FileSink.html", null ],
+      [ "streamc::operators::FileSource", "classstreamc_1_1operators_1_1FileSource.html", null ],
+      [ "streamc::operators::Filter", "classstreamc_1_1operators_1_1Filter.html", null ]
     ] ],
     [ "streamc::OperatorContext", "classstreamc_1_1OperatorContext.html", null ],
     [ "streamc::OutputPort", "classstreamc_1_1OutputPort.html", null ],

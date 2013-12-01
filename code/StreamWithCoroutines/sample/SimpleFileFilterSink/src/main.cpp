@@ -10,6 +10,7 @@
 
 using namespace std;
 using namespace streamc;
+using namespace streamc::operators;
 
 int main()
 {
