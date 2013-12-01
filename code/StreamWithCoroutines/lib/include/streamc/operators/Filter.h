@@ -8,20 +8,20 @@ namespace streamc { namespace operators
 {
 
 /**
- * %Filter that evaluates tuples against a given condition.
+ * %Filter operator that evaluates tuples against a given condition.
  */
 class Filter : public Operator
 {
 public:
   /**
-   * Construct a filter.
+   * Construct a filter operator.
    *
    * @param name name of the operator
    */
   Filter(std::string const & name);
 
   /**
-   * Construct a filter.
+   * Construct a filter operator.
    *
    * @param name name of the operator
    * @param filter the filter condition
@@ -29,9 +29,9 @@ public:
   Filter(std::string const & name, std::function<bool (Tuple &)> filter);
 
   /**
-   * Set the filter.
+   * Set the filter paramter.
    *
-   * @param filter the filter
+   * @param filter the filter paramter
    * @return self
    */
   Filter & set_filter(std::function<bool (Tuple &)> filter);
