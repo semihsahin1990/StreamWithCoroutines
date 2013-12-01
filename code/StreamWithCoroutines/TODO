@@ -1,0 +1,27 @@
+Generation I: [100%]
+- Basic infrastructure [100%]
+- Pluggable scheduler [100%]
+
+Generation II:
+- Smarter schedulers [0%]
+- Sample applications [5%]
+- Tests [0%]
+* Paper about the system [0%] 
+
+Generation III: 
+- User-directed operator fission [0%]
+- Elastic fission for stateless operators [0%]
+- Scheduler extensions for elasticity [0%]
+
+Generation IV: 
+- Partitioned stateful operators [0%]
+- Migration for partitioned stateful operators [0%]
+- Elastic fission for partitioned stateful operators [0%]
+* Paper about the system [0%]
+
+Generation V: 
+- Runtime support for regions in fission [0%]
+- Runtime support for shuffles in fission [0%]
+- ...
+
+
