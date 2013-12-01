@@ -10,28 +10,30 @@ Barrier::Barrier(std::string const & name)
 
 void Barrier::process(OperatorContext & context)
 {
-  iport1_ = & context.getInputPort(0);
-  iport2_ = & context.getInputPort(1);
-  oport_ = & context.getOutputPort(0);
-  vector<InputPort *> iports;
+  Tuple resultTuple;
+  InputPort & iport0 = context.getInputPort(0);
+  InputPort & iport1 = context.getInputPort(1);
+  OutputPort & oport = context.getOutputPort(0);
 
-  iports.push_back(iport1_);
-  iports.push_back(iport2_);
+  while(!context.isShutdownRequested()) {
+    /*
+      TODO: will be replaced by 
+      bool closed = context.waitOnPorts({iport0, 1}, {iport1, 1});
+    */
 
-  while(!context.isShutdownRequested())
-  {
-    bool closed = PortsImpl::waitTupleFromAll(iports);
-
+    bool closed = iport0.waitTuple();   
     if(closed)
       break;
-
-    Tuple resultTuple;
-    resultTuple.append(iport1_->getFrontTuple());
-    resultTuple.append(iport2_->getFrontTuple());
+    closed = iport1.waitTuple();   
+    if(closed)
+      break;
     
-    oport_->pushTuple(resultTuple);
+    resultTuple.append(iport0.getFrontTuple());
+    resultTuple.append(iport1.getFrontTuple());
+    
+    oport.pushTuple(resultTuple);
 
-    iport1_->popTuple();
-    iport2_->popTuple();
+    iport0.popTuple();
+    iport1.popTuple();
   }
 }
