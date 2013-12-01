@@ -5,8 +5,8 @@ var classstreamc_1_1InputPort =
     [ "getTupleAt", "classstreamc_1_1InputPort.html#a9b85c448940052d9acf0c6836b78d28d", null ],
     [ "getTupleCount", "classstreamc_1_1InputPort.html#a7c91622eec2a01920a49d1d10946d087", null ],
     [ "hasTuple", "classstreamc_1_1InputPort.html#a21f1fef90df423fc6da42d74e02e60ea", null ],
-    [ "isComplete", "classstreamc_1_1InputPort.html#a12a5036938aea36fd611ea7e211f060f", null ],
+    [ "isClosed", "classstreamc_1_1InputPort.html#aa89eec1df747856cc07eab16aeda6b82", null ],
     [ "popTuple", "classstreamc_1_1InputPort.html#abaca42570b2a29903171900150f862c4", null ],
     [ "waitTuple", "classstreamc_1_1InputPort.html#abd43097e06f8f95c75374c632f3ef174", null ],
-    [ "waitTuple", "classstreamc_1_1InputPort.html#a796d2d287bc80cbd2e777876d4456f0b", null ]
+    [ "waitTuple", "classstreamc_1_1InputPort.html#a6a8b9da4f0d08705c85af375d9426781", null ]
 ];

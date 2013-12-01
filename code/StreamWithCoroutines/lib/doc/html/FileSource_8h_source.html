@@ -121,20 +121,17 @@ $(document).ready(function(){initNavTree('FileSource_8h_source.html','');});
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;             std::vector&lt;std::pair&lt;std::string, Type&gt;&gt; <span class="keyword">const</span> &amp; attributes);  </div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;  <a class="code" href="classstreamc_1_1FileSource.html">FileSource</a> &amp; set_fileName(std::string <span class="keyword">const</span> &amp; fileName);</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;  <a class="code" href="classstreamc_1_1FileSource.html">FileSource</a> &amp; set_fileFormat(std::vector&lt;std::pair&lt;std::string, Type&gt;&gt; <span class="keyword">const</span> &amp; attributes);</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;  <span class="keywordtype">void</span> init(<a class="code" href="classstreamc_1_1OperatorContext.html">OperatorContext</a> &amp; context) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classstreamc_1_1FileSource.html#a1ead0a0f596c7f98a96ece58aca01f7b">process</a>(<a class="code" href="classstreamc_1_1OperatorContext.html">OperatorContext</a> &amp; context) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;  std::string fileName_;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;  std::vector&lt;std::pair&lt;std::string, Type&gt;&gt; attributes_;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;  <a class="code" href="classstreamc_1_1OutputPort.html">OutputPort</a> * oport_;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;};</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;} <span class="comment">// namespace streamc</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;</div>
-<div class="ttc" id="classstreamc_1_1FileSource_html_a1ead0a0f596c7f98a96ece58aca01f7b"><div class="ttname"><a href="classstreamc_1_1FileSource.html#a1ead0a0f596c7f98a96ece58aca01f7b">streamc::FileSource::process</a></div><div class="ttdeci">void process(OperatorContext &amp;context) override</div><div class="ttdoc">TODO. </div></div>
-<div class="ttc" id="classstreamc_1_1OutputPort_html"><div class="ttname"><a href="classstreamc_1_1OutputPort.html">streamc::OutputPort</a></div><div class="ttdef"><b>Definition:</b> OutputPort.h:10</div></div>
-<div class="ttc" id="classstreamc_1_1Operator_html"><div class="ttname"><a href="classstreamc_1_1Operator.html">streamc::Operator</a></div><div class="ttdef"><b>Definition:</b> Operator.h:24</div></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classstreamc_1_1FileSource.html#a1ead0a0f596c7f98a96ece58aca01f7b">process</a>(<a class="code" href="classstreamc_1_1OperatorContext.html">OperatorContext</a> &amp; context) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;  std::string fileName_;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;  std::vector&lt;std::pair&lt;std::string, Type&gt;&gt; attributes_;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;};</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;} <span class="comment">// namespace streamc</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
+<div class="ttc" id="classstreamc_1_1FileSource_html_a1ead0a0f596c7f98a96ece58aca01f7b"><div class="ttname"><a href="classstreamc_1_1FileSource.html#a1ead0a0f596c7f98a96ece58aca01f7b">streamc::FileSource::process</a></div><div class="ttdeci">void process(OperatorContext &amp;context) override</div><div class="ttdoc">Perform the main processing of the operator. </div></div>
+<div class="ttc" id="classstreamc_1_1Operator_html"><div class="ttname"><a href="classstreamc_1_1Operator.html">streamc::Operator</a></div><div class="ttdoc">Base class for implementing streaming operators. </div><div class="ttdef"><b>Definition:</b> Operator.h:27</div></div>
 <div class="ttc" id="classstreamc_1_1FileSource_html"><div class="ttname"><a href="classstreamc_1_1FileSource.html">streamc::FileSource</a></div><div class="ttdef"><b>Definition:</b> FileSource.h:9</div></div>
 <div class="ttc" id="classstreamc_1_1OperatorContext_html"><div class="ttname"><a href="classstreamc_1_1OperatorContext.html">streamc::OperatorContext</a></div><div class="ttdoc">Operator context that provides runtime services for operators. </div><div class="ttdef"><b>Definition:</b> OperatorContext.h:17</div></div>
 </div><!-- fragment --></div><!-- contents -->
@@ -143,7 +140,7 @@ $(document).ready(function(){initNavTree('FileSource_8h_source.html','');});
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_f26e643a9842da0ce6dbe030c714fc5e.html">streamc</a></li><li class="navelem"><a class="el" href="dir_65270f768a49b2e8430ce1f6dbbc0be0.html">operators</a></li><li class="navelem"><b>FileSource.h</b></li>
-    <li class="footer">Generated on Sun Dec 1 2013 13:36:10 for StreamC by
+    <li class="footer">Generated on Sun Dec 1 2013 14:14:12 for StreamC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

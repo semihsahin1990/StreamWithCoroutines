@@ -105,11 +105,17 @@ $(document).ready(function(){initNavTree('classstreamc_1_1Operator.html','');});
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="classstreamc_1_1Operator-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">streamc::Operator Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Base class for implementing streaming operators.  
+ <a href="classstreamc_1_1Operator.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="Operator_8h_source.html">streamc/Operator.h</a>&gt;</code></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for streamc::Operator:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -126,29 +132,238 @@ $(document).ready(function(){initNavTree('classstreamc_1_1Operator.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a22e8542708f73e88d5f74af809d62fed"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a22e8542708f73e88d5f74af809d62fed"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Operator</b> (std::string const &amp;name, size_t numInputPorts, size_t numOutputPorts)</td></tr>
-<tr class="separator:a22e8542708f73e88d5f74af809d62fed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acd9f603ceba11eb8492bb6cefbfd11fe"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acd9f603ceba11eb8492bb6cefbfd11fe"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Operator</b> (size_t numInputPorts, size_t numOutputPorts)</td></tr>
-<tr class="separator:acd9f603ceba11eb8492bb6cefbfd11fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8847368779e34b5db8a1b5c65a77332a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8847368779e34b5db8a1b5c65a77332a"></a>
-std::string const &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getName</b> () const </td></tr>
+<tr class="memitem:a8847368779e34b5db8a1b5c65a77332a"><td class="memItemLeft" align="right" valign="top">std::string const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Operator.html#a8847368779e34b5db8a1b5c65a77332a">getName</a> () const </td></tr>
+<tr class="memdesc:a8847368779e34b5db8a1b5c65a77332a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the name of the operator.  <a href="#a8847368779e34b5db8a1b5c65a77332a">More...</a><br/></td></tr>
 <tr class="separator:a8847368779e34b5db8a1b5c65a77332a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aed817d3c4466e7c093a20d2f89c9d8c8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aed817d3c4466e7c093a20d2f89c9d8c8"></a>
-size_t&#160;</td><td class="memItemRight" valign="bottom"><b>getNumberOfInputPorts</b> () const </td></tr>
+<tr class="memitem:aed817d3c4466e7c093a20d2f89c9d8c8"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Operator.html#aed817d3c4466e7c093a20d2f89c9d8c8">getNumberOfInputPorts</a> () const </td></tr>
+<tr class="memdesc:aed817d3c4466e7c093a20d2f89c9d8c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of input ports of the operator.  <a href="#aed817d3c4466e7c093a20d2f89c9d8c8">More...</a><br/></td></tr>
 <tr class="separator:aed817d3c4466e7c093a20d2f89c9d8c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae914749812e969e9a7e11495892f4b57"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae914749812e969e9a7e11495892f4b57"></a>
-size_t&#160;</td><td class="memItemRight" valign="bottom"><b>getNumberOfOutputPorts</b> () const </td></tr>
+<tr class="memitem:ae914749812e969e9a7e11495892f4b57"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Operator.html#ae914749812e969e9a7e11495892f4b57">getNumberOfOutputPorts</a> () const </td></tr>
+<tr class="memdesc:ae914749812e969e9a7e11495892f4b57"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of output ports of the operator.  <a href="#ae914749812e969e9a7e11495892f4b57">More...</a><br/></td></tr>
 <tr class="separator:ae914749812e969e9a7e11495892f4b57"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0db048d234008aa39f920d65292792c6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0db048d234008aa39f920d65292792c6"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>init</b> (<a class="el" href="classstreamc_1_1OperatorContext.html">OperatorContext</a> &amp;context)=0</td></tr>
-<tr class="separator:a0db048d234008aa39f920d65292792c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe596a251f7861051ce974eb706c4cc0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abe596a251f7861051ce974eb706c4cc0"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Operator.html#abe596a251f7861051ce974eb706c4cc0">process</a> (<a class="el" href="classstreamc_1_1OperatorContext.html">OperatorContext</a> &amp;context)=0</td></tr>
-<tr class="memdesc:abe596a251f7861051ce974eb706c4cc0"><td class="mdescLeft">&#160;</td><td class="mdescRight">TODO. <br/></td></tr>
+<tr class="memitem:abe596a251f7861051ce974eb706c4cc0"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Operator.html#abe596a251f7861051ce974eb706c4cc0">process</a> (<a class="el" href="classstreamc_1_1OperatorContext.html">OperatorContext</a> &amp;context)=0</td></tr>
+<tr class="memdesc:abe596a251f7861051ce974eb706c4cc0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform the main processing of the operator.  <a href="#abe596a251f7861051ce974eb706c4cc0">More...</a><br/></td></tr>
 <tr class="separator:abe596a251f7861051ce974eb706c4cc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a22e8542708f73e88d5f74af809d62fed"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Operator.html#a22e8542708f73e88d5f74af809d62fed">Operator</a> (std::string const &amp;name, size_t numInputPorts, size_t numOutputPorts)</td></tr>
+<tr class="memdesc:a22e8542708f73e88d5f74af809d62fed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct with explicit name.  <a href="#a22e8542708f73e88d5f74af809d62fed">More...</a><br/></td></tr>
+<tr class="separator:a22e8542708f73e88d5f74af809d62fed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd9f603ceba11eb8492bb6cefbfd11fe"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Operator.html#acd9f603ceba11eb8492bb6cefbfd11fe">Operator</a> (size_t numInputPorts, size_t numOutputPorts)</td></tr>
+<tr class="memdesc:acd9f603ceba11eb8492bb6cefbfd11fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct with implicit name.  <a href="#acd9f603ceba11eb8492bb6cefbfd11fe">More...</a><br/></td></tr>
+<tr class="separator:acd9f603ceba11eb8492bb6cefbfd11fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Base class for implementing streaming operators. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a22e8542708f73e88d5f74af809d62fed"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">streamc::Operator::Operator </td>
+          <td>(</td>
+          <td class="paramtype">std::string const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>numInputPorts</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>numOutputPorts</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construct with explicit name. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>name of the operator </td></tr>
+    <tr><td class="paramname">numInputPorts</td><td>number of input ports of the operator </td></tr>
+    <tr><td class="paramname">numOutputPorts</td><td>number of output ports of the operator </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="acd9f603ceba11eb8492bb6cefbfd11fe"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">streamc::Operator::Operator </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>numInputPorts</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>numOutputPorts</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construct with implicit name. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">numInputPorts</td><td>number of input ports of the operator </td></tr>
+    <tr><td class="paramname">numOutputPorts</td><td>number of output ports of the operator </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a8847368779e34b5db8a1b5c65a77332a"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string const&amp; streamc::Operator::getName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the name of the operator. </p>
+<dl class="section return"><dt>Returns</dt><dd>the name of the operator </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aed817d3c4466e7c093a20d2f89c9d8c8"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t streamc::Operator::getNumberOfInputPorts </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the number of input ports of the operator. </p>
+<dl class="section return"><dt>Returns</dt><dd>the number of input ports of the operato </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ae914749812e969e9a7e11495892f4b57"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t streamc::Operator::getNumberOfOutputPorts </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the number of output ports of the operator. </p>
+<dl class="section return"><dt>Returns</dt><dd>the number of output ports of the operato </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="abe596a251f7861051ce974eb706c4cc0"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void streamc::Operator::process </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classstreamc_1_1OperatorContext.html">OperatorContext</a> &amp;&#160;</td>
+          <td class="paramname"><em>context</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Perform the main processing of the operator. </p>
+<p>This function is overriden to provide the implementation for the operator's core logic. The <code>context</code> object is used to provide runtime services, such as accessing the ports. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">context</td><td>operator context </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implemented in <a class="el" href="classstreamc_1_1FileSource.html#a1ead0a0f596c7f98a96ece58aca01f7b">streamc::FileSource</a>, <a class="el" href="classstreamc_1_1Filter.html#a2681b2e803ca4974913aa160cca6f81f">streamc::Filter</a>, and <a class="el" href="classstreamc_1_1FileSink.html#a263b7b4837baee3e7959b9f079b1a50d">streamc::FileSink</a>.</p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>streamc/<a class="el" href="Operator_8h_source.html">Operator.h</a></li>
 </ul>
@@ -158,7 +373,7 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>streamc</b></li><li class="navelem"><a class="el" href="classstreamc_1_1Operator.html">Operator</a></li>
-    <li class="footer">Generated on Sun Dec 1 2013 13:36:10 for StreamC by
+    <li class="footer">Generated on Sun Dec 1 2013 14:14:12 for StreamC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

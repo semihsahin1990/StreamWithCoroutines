@@ -118,9 +118,9 @@ $(document).ready(function(){initNavTree('classstreamc_1_1InputPort.html','');})
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a12a5036938aea36fd611ea7e211f060f"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1InputPort.html#a12a5036938aea36fd611ea7e211f060f">isComplete</a> ()=0</td></tr>
-<tr class="memdesc:a12a5036938aea36fd611ea7e211f060f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check whether the input port is complete.  <a href="#a12a5036938aea36fd611ea7e211f060f">More...</a><br/></td></tr>
-<tr class="separator:a12a5036938aea36fd611ea7e211f060f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa89eec1df747856cc07eab16aeda6b82"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1InputPort.html#aa89eec1df747856cc07eab16aeda6b82">isClosed</a> ()=0</td></tr>
+<tr class="memdesc:aa89eec1df747856cc07eab16aeda6b82"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check whether the input port is closed.  <a href="#aa89eec1df747856cc07eab16aeda6b82">More...</a><br/></td></tr>
+<tr class="separator:aa89eec1df747856cc07eab16aeda6b82"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a21f1fef90df423fc6da42d74e02e60ea"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1InputPort.html#a21f1fef90df423fc6da42d74e02e60ea">hasTuple</a> ()=0</td></tr>
 <tr class="memdesc:a21f1fef90df423fc6da42d74e02e60ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check whether the input port has a tuple.  <a href="#a21f1fef90df423fc6da42d74e02e60ea">More...</a><br/></td></tr>
 <tr class="separator:a21f1fef90df423fc6da42d74e02e60ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -130,17 +130,18 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:abd43097e06f8f95c75374c632f3ef174"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1InputPort.html#abd43097e06f8f95c75374c632f3ef174">waitTuple</a> ()=0</td></tr>
 <tr class="memdesc:abd43097e06f8f95c75374c632f3ef174"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wait until a tuple is available.  <a href="#abd43097e06f8f95c75374c632f3ef174">More...</a><br/></td></tr>
 <tr class="separator:abd43097e06f8f95c75374c632f3ef174"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a796d2d287bc80cbd2e777876d4456f0b"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1InputPort.html#a796d2d287bc80cbd2e777876d4456f0b">waitTuple</a> (unsigned n)=0</td></tr>
-<tr class="memdesc:a796d2d287bc80cbd2e777876d4456f0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wait until a given number of tuples are available.  <a href="#a796d2d287bc80cbd2e777876d4456f0b">More...</a><br/></td></tr>
-<tr class="separator:a796d2d287bc80cbd2e777876d4456f0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a8b9da4f0d08705c85af375d9426781"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1InputPort.html#a6a8b9da4f0d08705c85af375d9426781">waitTuple</a> (size_t n)=0</td></tr>
+<tr class="memdesc:a6a8b9da4f0d08705c85af375d9426781"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wait until a given number of tuples are available.  <a href="#a6a8b9da4f0d08705c85af375d9426781">More...</a><br/></td></tr>
+<tr class="separator:a6a8b9da4f0d08705c85af375d9426781"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a639e2184bd46e12a3e300b8a384bb035"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classstreamc_1_1Tuple.html">Tuple</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1InputPort.html#a639e2184bd46e12a3e300b8a384bb035">getFrontTuple</a> ()=0</td></tr>
 <tr class="memdesc:a639e2184bd46e12a3e300b8a384bb035"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the tuple at the front of the input port queue.  <a href="#a639e2184bd46e12a3e300b8a384bb035">More...</a><br/></td></tr>
 <tr class="separator:a639e2184bd46e12a3e300b8a384bb035"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9b85c448940052d9acf0c6836b78d28d"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classstreamc_1_1Tuple.html">Tuple</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1InputPort.html#a9b85c448940052d9acf0c6836b78d28d">getTupleAt</a> (size_t index)=0</td></tr>
 <tr class="memdesc:a9b85c448940052d9acf0c6836b78d28d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the tuple at a given index within the input port queue.  <a href="#a9b85c448940052d9acf0c6836b78d28d">More...</a><br/></td></tr>
 <tr class="separator:a9b85c448940052d9acf0c6836b78d28d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abaca42570b2a29903171900150f862c4"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1InputPort.html#abaca42570b2a29903171900150f862c4">popTuple</a> ()=0</td></tr>
-<tr class="memdesc:abaca42570b2a29903171900150f862c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove the first tuple from the input port queue.  <a href="#abaca42570b2a29903171900150f862c4">More...</a><br/></td></tr>
+<tr class="memitem:abaca42570b2a29903171900150f862c4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abaca42570b2a29903171900150f862c4"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1InputPort.html#abaca42570b2a29903171900150f862c4">popTuple</a> ()=0</td></tr>
+<tr class="memdesc:abaca42570b2a29903171900150f862c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove the first tuple from the input port queue. <br/></td></tr>
 <tr class="separator:abaca42570b2a29903171900150f862c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -253,7 +254,7 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a12a5036938aea36fd611ea7e211f060f"></a>
+<a class="anchor" id="aa89eec1df747856cc07eab16aeda6b82"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -261,7 +262,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual bool streamc::InputPort::isComplete </td>
+          <td class="memname">virtual bool streamc::InputPort::isClosed </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -274,37 +275,9 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Check whether the input port is complete. </p>
-<p>A complete input port cannot have any future tuples. </p>
+<p>Check whether the input port is closed. </p>
+<p>An input port is closed if it cannot receive any future tuples. It may still have tuples in its queue, that may be consumed. </p>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> if the port is complete, <code>false</code> otherwise. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="abaca42570b2a29903171900150f862c4"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void streamc::InputPort::popTuple </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Remove the first tuple from the input port queue. </p>
-<ul>
-<li></li>
-</ul>
 
 </div>
 </div>
@@ -331,16 +304,16 @@ Public Member Functions</h2></td></tr>
 
 <p>Wait until a tuple is available. </p>
 <p>This function will block until a tuple is available in the input port queue. It will return true, if the port is closed and no more tuples can be received from it. A typical use is as follows: </p>
-<div class="fragment"><div class="line"><span class="keywordtype">bool</span> completed = iport.waitTuple();</div>
-<div class="line"><span class="keywordflow">if</span> (completed) </div>
+<div class="fragment"><div class="line"><span class="keywordtype">bool</span> closed = iport.waitTuple();</div>
+<div class="line"><span class="keywordflow">if</span> (closed) </div>
 <div class="line">    <span class="keywordflow">break</span>;</div>
 <div class="line">Tuple &amp; tuple = iport.getFrontTuple();    </div>
 <div class="line"><span class="comment">// do something with the tuple</span></div>
-</div><!-- fragment --> <dl class="section return"><dt>Returns</dt><dd>true if tuple is not available, false otherwise </dd></dl>
+</div><!-- fragment --> <dl class="section return"><dt>Returns</dt><dd>true if a tuple will never be available, false otherwise </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a796d2d287bc80cbd2e777876d4456f0b"></a>
+<a class="anchor" id="a6a8b9da4f0d08705c85af375d9426781"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -350,7 +323,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">virtual bool streamc::InputPort::waitTuple </td>
           <td>(</td>
-          <td class="paramtype">unsigned&#160;</td>
+          <td class="paramtype">size_t&#160;</td>
           <td class="paramname"><em>n</em></td><td>)</td>
           <td></td>
         </tr>
@@ -364,10 +337,10 @@ Public Member Functions</h2></td></tr>
 
 <p>Wait until a given number of tuples are available. </p>
 <p>This function will block until a given number of tuples are available in the input port queue. It will return true, if the port is closed, no more tuples can be received from it, and the current number of available tuples are still less than the desired. A typical use is as follows:</p>
-<div class="fragment"><div class="line"><span class="keywordtype">bool</span> completed = iport.waitTuple(n);</div>
-<div class="line"><span class="keywordflow">if</span> (completed) </div>
+<div class="fragment"><div class="line"><span class="keywordtype">bool</span> closed = iport.waitTuple(n);</div>
+<div class="line"><span class="keywordflow">if</span> (closed) </div>
 <div class="line">    <span class="keywordflow">break</span>;</div>
-<div class="line"><span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> i=0; i&lt;n; ++i) {</div>
+<div class="line"><span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i=0; i&lt;n; ++i) {</div>
 <div class="line">  Tuple &amp; tuple = iport.getTupleAt(i);    </div>
 <div class="line">  <span class="comment">// do something with the tuple</span></div>
 <div class="line">}</div>
@@ -377,7 +350,7 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>true if <code>&lt;n/code&gt; tuples are not available, false otherwise </code></dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>true if <code>&lt;n/code&gt; tuples will never be available, false otherwise </code></dd></dl>
 
 </div>
 </div>
@@ -390,7 +363,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>streamc</b></li><li class="navelem"><a class="el" href="classstreamc_1_1InputPort.html">InputPort</a></li>
-    <li class="footer">Generated on Sun Dec 1 2013 13:36:10 for StreamC by
+    <li class="footer">Generated on Sun Dec 1 2013 14:14:12 for StreamC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

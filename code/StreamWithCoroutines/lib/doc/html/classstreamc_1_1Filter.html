@@ -118,7 +118,7 @@ $(document).ready(function(){initNavTree('classstreamc_1_1Filter.html','');});
  <div class="center">
   <img src="classstreamc_1_1Filter.png" usemap="#streamc::Filter_map" alt=""/>
   <map id="streamc::Filter_map" name="streamc::Filter_map">
-<area href="classstreamc_1_1Operator.html" alt="streamc::Operator" shape="rect" coords="0,0,113,24"/>
+<area href="classstreamc_1_1Operator.html" title="Base class for implementing streaming operators. " alt="streamc::Operator" shape="rect" coords="0,0,113,24"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -133,30 +133,66 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a9f4f2c49a2fc98cea4f3bffa72c370ec"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9f4f2c49a2fc98cea4f3bffa72c370ec"></a>
 <a class="el" href="classstreamc_1_1Filter.html">Filter</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>set_filter</b> (std::function&lt; bool(<a class="el" href="classstreamc_1_1Tuple.html">Tuple</a> &amp;)&gt; filter)</td></tr>
 <tr class="separator:a9f4f2c49a2fc98cea4f3bffa72c370ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b6acce95581d51bbeb75e36e58fa4fc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1b6acce95581d51bbeb75e36e58fa4fc"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>init</b> (<a class="el" href="classstreamc_1_1OperatorContext.html">OperatorContext</a> &amp;context) override</td></tr>
-<tr class="separator:a1b6acce95581d51bbeb75e36e58fa4fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2681b2e803ca4974913aa160cca6f81f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2681b2e803ca4974913aa160cca6f81f"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Filter.html#a2681b2e803ca4974913aa160cca6f81f">process</a> (<a class="el" href="classstreamc_1_1OperatorContext.html">OperatorContext</a> &amp;context) override</td></tr>
-<tr class="memdesc:a2681b2e803ca4974913aa160cca6f81f"><td class="mdescLeft">&#160;</td><td class="mdescRight">TODO. <br/></td></tr>
+<tr class="memitem:a2681b2e803ca4974913aa160cca6f81f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Filter.html#a2681b2e803ca4974913aa160cca6f81f">process</a> (<a class="el" href="classstreamc_1_1OperatorContext.html">OperatorContext</a> &amp;context) override</td></tr>
+<tr class="memdesc:a2681b2e803ca4974913aa160cca6f81f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform the main processing of the operator.  <a href="#a2681b2e803ca4974913aa160cca6f81f">More...</a><br/></td></tr>
 <tr class="separator:a2681b2e803ca4974913aa160cca6f81f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classstreamc_1_1Operator"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classstreamc_1_1Operator')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classstreamc_1_1Operator.html">streamc::Operator</a></td></tr>
-<tr class="memitem:a22e8542708f73e88d5f74af809d62fed inherit pub_methods_classstreamc_1_1Operator"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a22e8542708f73e88d5f74af809d62fed"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Operator</b> (std::string const &amp;name, size_t numInputPorts, size_t numOutputPorts)</td></tr>
-<tr class="separator:a22e8542708f73e88d5f74af809d62fed inherit pub_methods_classstreamc_1_1Operator"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acd9f603ceba11eb8492bb6cefbfd11fe inherit pub_methods_classstreamc_1_1Operator"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acd9f603ceba11eb8492bb6cefbfd11fe"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Operator</b> (size_t numInputPorts, size_t numOutputPorts)</td></tr>
-<tr class="separator:acd9f603ceba11eb8492bb6cefbfd11fe inherit pub_methods_classstreamc_1_1Operator"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8847368779e34b5db8a1b5c65a77332a inherit pub_methods_classstreamc_1_1Operator"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8847368779e34b5db8a1b5c65a77332a"></a>
-std::string const &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getName</b> () const </td></tr>
+<tr class="memitem:a8847368779e34b5db8a1b5c65a77332a inherit pub_methods_classstreamc_1_1Operator"><td class="memItemLeft" align="right" valign="top">std::string const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Operator.html#a8847368779e34b5db8a1b5c65a77332a">getName</a> () const </td></tr>
+<tr class="memdesc:a8847368779e34b5db8a1b5c65a77332a inherit pub_methods_classstreamc_1_1Operator"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the name of the operator.  <a href="#a8847368779e34b5db8a1b5c65a77332a">More...</a><br/></td></tr>
 <tr class="separator:a8847368779e34b5db8a1b5c65a77332a inherit pub_methods_classstreamc_1_1Operator"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aed817d3c4466e7c093a20d2f89c9d8c8 inherit pub_methods_classstreamc_1_1Operator"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aed817d3c4466e7c093a20d2f89c9d8c8"></a>
-size_t&#160;</td><td class="memItemRight" valign="bottom"><b>getNumberOfInputPorts</b> () const </td></tr>
+<tr class="memitem:aed817d3c4466e7c093a20d2f89c9d8c8 inherit pub_methods_classstreamc_1_1Operator"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Operator.html#aed817d3c4466e7c093a20d2f89c9d8c8">getNumberOfInputPorts</a> () const </td></tr>
+<tr class="memdesc:aed817d3c4466e7c093a20d2f89c9d8c8 inherit pub_methods_classstreamc_1_1Operator"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of input ports of the operator.  <a href="#aed817d3c4466e7c093a20d2f89c9d8c8">More...</a><br/></td></tr>
 <tr class="separator:aed817d3c4466e7c093a20d2f89c9d8c8 inherit pub_methods_classstreamc_1_1Operator"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae914749812e969e9a7e11495892f4b57 inherit pub_methods_classstreamc_1_1Operator"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae914749812e969e9a7e11495892f4b57"></a>
-size_t&#160;</td><td class="memItemRight" valign="bottom"><b>getNumberOfOutputPorts</b> () const </td></tr>
+<tr class="memitem:ae914749812e969e9a7e11495892f4b57 inherit pub_methods_classstreamc_1_1Operator"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Operator.html#ae914749812e969e9a7e11495892f4b57">getNumberOfOutputPorts</a> () const </td></tr>
+<tr class="memdesc:ae914749812e969e9a7e11495892f4b57 inherit pub_methods_classstreamc_1_1Operator"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of output ports of the operator.  <a href="#ae914749812e969e9a7e11495892f4b57">More...</a><br/></td></tr>
 <tr class="separator:ae914749812e969e9a7e11495892f4b57 inherit pub_methods_classstreamc_1_1Operator"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pro_methods_classstreamc_1_1Operator"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classstreamc_1_1Operator')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classstreamc_1_1Operator.html">streamc::Operator</a></td></tr>
+<tr class="memitem:a22e8542708f73e88d5f74af809d62fed inherit pro_methods_classstreamc_1_1Operator"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Operator.html#a22e8542708f73e88d5f74af809d62fed">Operator</a> (std::string const &amp;name, size_t numInputPorts, size_t numOutputPorts)</td></tr>
+<tr class="memdesc:a22e8542708f73e88d5f74af809d62fed inherit pro_methods_classstreamc_1_1Operator"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct with explicit name.  <a href="#a22e8542708f73e88d5f74af809d62fed">More...</a><br/></td></tr>
+<tr class="separator:a22e8542708f73e88d5f74af809d62fed inherit pro_methods_classstreamc_1_1Operator"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd9f603ceba11eb8492bb6cefbfd11fe inherit pro_methods_classstreamc_1_1Operator"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Operator.html#acd9f603ceba11eb8492bb6cefbfd11fe">Operator</a> (size_t numInputPorts, size_t numOutputPorts)</td></tr>
+<tr class="memdesc:acd9f603ceba11eb8492bb6cefbfd11fe inherit pro_methods_classstreamc_1_1Operator"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct with implicit name.  <a href="#acd9f603ceba11eb8492bb6cefbfd11fe">More...</a><br/></td></tr>
+<tr class="separator:acd9f603ceba11eb8492bb6cefbfd11fe inherit pro_methods_classstreamc_1_1Operator"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a2681b2e803ca4974913aa160cca6f81f"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void streamc::Filter::process </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classstreamc_1_1OperatorContext.html">OperatorContext</a> &amp;&#160;</td>
+          <td class="paramname"><em>context</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Perform the main processing of the operator. </p>
+<p>This function is overriden to provide the implementation for the operator's core logic. The <code>context</code> object is used to provide runtime services, such as accessing the ports. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">context</td><td>operator context </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="classstreamc_1_1Operator.html#abe596a251f7861051ce974eb706c4cc0">streamc::Operator</a>.</p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>streamc/operators/<a class="el" href="Filter_8h_source.html">Filter.h</a></li>
 </ul>
@@ -166,7 +202,7 @@ size_t&#160;</td><td class="memItemRight" valign="bottom"><b>getNumberOfOutputPo
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>streamc</b></li><li class="navelem"><a class="el" href="classstreamc_1_1Filter.html">Filter</a></li>
-    <li class="footer">Generated on Sun Dec 1 2013 13:36:10 for StreamC by
+    <li class="footer">Generated on Sun Dec 1 2013 14:14:12 for StreamC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

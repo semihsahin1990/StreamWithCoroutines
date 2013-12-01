@@ -52,7 +52,7 @@ public:
   virtual ~Operator() {}
 
   /**
-   *  Get the name of the operator.
+   * Get the name of the operator.
    *
    * @return the name of the operator
    */
@@ -62,7 +62,7 @@ public:
   }
 
   /**
-   *  Get the number of input ports of the operator.
+   * Get the number of input ports of the operator.
    *
    * @return the number of input ports of the operato
    */
@@ -72,7 +72,7 @@ public:
   }
 
   /**
-   *  Get the number of output ports of the operator.
+   * Get the number of output ports of the operator.
    *
    * @return the number of output ports of the operato
    */
@@ -82,11 +82,16 @@ public:
   }
 
   /**
-   *  TODO
+   * Perform the main processing of the operator.
+   *
+   * This function is overriden to provide the implementation for the operator's
+   * core logic. The <code>context</code> object is used to provide runtime
+   * services, such as accessing the ports.
+   * @param context operator context
    */
   virtual void process(OperatorContext & context) = 0;
+
 private:
-  //properties of an operator
   std::string name_;
   size_t numInputPorts_;
   size_t numOutputPorts_;
