@@ -23,11 +23,6 @@ FileSink & FileSink::set_fileName(std::string const & fileName)
   return *this;
 }
 
-void FileSink::init(OperatorContext & context)
-{
-  iport_ = & context.getInputPort(0);
-}
-
 void FileSink::process(OperatorContext & context)
 {
   ofstream output;
@@ -36,11 +31,12 @@ void FileSink::process(OperatorContext & context)
     SC_APPLOG(Error, "Error in opening output file: " << fileName_ << ", details: " << strerror(errno));
     return;
   }
+  InputPort & iport = context.getInputPort(0);
   while (!context.isShutdownRequested()) {
-    bool closed = iport_->waitTuple();
+    bool closed = iport.waitTuple();
     if (closed)
       break;
-    Tuple & tuple = iport_->getFrontTuple();
+    Tuple & tuple = iport.getFrontTuple();
     auto const & attributes = tuple.getAttributes();
     if (!attributes.empty()) {
       auto it=attributes.begin();
@@ -49,6 +45,6 @@ void FileSink::process(OperatorContext & context)
         output << "," << Value::toString(*(it->second));
     }
     output << "\n";
-    iport_->popTuple();
+    iport.popTuple();
   } 
 }

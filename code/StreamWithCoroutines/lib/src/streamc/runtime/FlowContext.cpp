@@ -72,12 +72,6 @@ void FlowContext::run(int numThreads)
     }
   }
   
-  // init all operators
-  for (Operator * oper : opers) {
-    OperatorContextImpl * operatorContext = operatorContexts_[oper].get();
-    operatorContext->initOper();
-  }
-
   // create threads and add threads to the scheduler
   for (int i=0; i<numThreads; ++i) { 
     auto thread = new WorkerThread(i, *scheduler_);

@@ -21,50 +21,75 @@ namespace streamc
 namespace streamc
 {
 
+/**
+ * Base class for implementing streaming operators.
+ */
 class Operator
 {
-
-private:
-  //properties of an operator
-  std::string name_;
-  size_t numInputPorts_;
-  size_t numOutputPorts_;
-
-public:
-  //constructor with name, numInputPorts, numOutputPorts
+protected:
+  /**
+   * Construct with explicit name.
+   *
+   * @param name name of the operator
+   * @param numInputPorts number of input ports of the operator
+   * @param numOutputPorts number of output ports of the operator
+   */
   Operator(std::string const & name, size_t numInputPorts, size_t numOutputPorts)
     : name_(name), numInputPorts_(numInputPorts), numOutputPorts_(numOutputPorts) 
   {}
-  //constructor with numInputPorts, numOutputPorts
+
+  /**
+   * Construct with implicit name.
+   *
+   * @param numInputPorts number of input ports of the operator
+   * @param numOutputPorts number of output ports of the operator
+   */
   Operator(size_t numInputPorts, size_t numOutputPorts)
     : Operator("op@addr_"+std::to_string(reinterpret_cast<uintptr_t>(this)), 
                numInputPorts, numOutputPorts) 
   {}
-  //destructor
-  virtual ~Operator() 
-  {}
-  //get name
+public:
+  virtual ~Operator() {}
+
+  /**
+   *  Get the name of the operator.
+   *
+   * @return the name of the operator
+   */
   std::string const & getName() const
   {
     return name_;
   }
-  //get numInputPorts
+
+  /**
+   *  Get the number of input ports of the operator.
+   *
+   * @return the number of input ports of the operato
+   */
   size_t getNumberOfInputPorts() const
   {
     return numInputPorts_;
   }
-  //get numOutputPorts
+
+  /**
+   *  Get the number of output ports of the operator.
+   *
+   * @return the number of output ports of the operato
+   */
   size_t getNumberOfOutputPorts() const
   {
     return numOutputPorts_;
   }
-  //init function with Operator context
-  virtual void init(OperatorContext & context) = 0;
 
   /**
    *  TODO
    */
   virtual void process(OperatorContext & context) = 0;
+private:
+  //properties of an operator
+  std::string name_;
+  size_t numInputPorts_;
+  size_t numOutputPorts_;
 };
  
 }

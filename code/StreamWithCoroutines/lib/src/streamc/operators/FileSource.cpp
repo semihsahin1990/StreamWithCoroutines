@@ -35,11 +35,6 @@ FileSource & FileSource::set_fileFormat(std::vector<std::pair<std::string, Type>
   return *this;
 }
 
-void FileSource::init(OperatorContext & context)
-{
-  oport_ = & context.getOutputPort(0);
-}
-
 void FileSource::process(OperatorContext & context)
 {
   Tuple tuple;
@@ -51,6 +46,7 @@ void FileSource::process(OperatorContext & context)
     SC_APPLOG(Error, "Error in opening input file: " << fileName_ << ", details: "<< strerror(errno));
     return;
   }
+  OutputPort & oport = context.getOutputPort(0);
   while (!context.isShutdownRequested()) {
     line.clear();
     getline(input, line);
@@ -75,7 +71,7 @@ void FileSource::process(OperatorContext & context)
       tuple.setAttribute(name, Value::fromString(token, type));
     }
     if (!error)
-      oport_->pushTuple(tuple);
+      oport.pushTuple(tuple);
   } 
 }
 
