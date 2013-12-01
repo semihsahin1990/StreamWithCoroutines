@@ -46,6 +46,17 @@ public:
     }
     return *this;
   }
+  
+  void append(Tuple const & tuple)
+  {
+    auto tupleValues = tuple.getAttributes();
+
+    for(auto it = tupleValues.begin(); it!= tupleValues.end(); it++)
+    {
+      setAttribute(it->first, *(it->second));
+    }
+  }
+
   void setAttribute(std::string const & name, Value const & value) 
   {
     auto it = values_.find(name);
@@ -174,7 +185,5 @@ typename TypeKindToType<T>::type const & Tuple::get(std::string const & name) co
 {
   return streamc::get<T>(const_cast<Tuple &>(*this), name);
 }
-
-
 
 }

@@ -1,0 +1,10 @@
+2013-Nov-30 20:45:47.428920: <0x00007f3feee9f740> [Info] src/streamc/runtime/WorkerThread.cpp:19 - Launched worker thread # 0
+2013-Nov-30 20:45:47.429223: <0x00007f3febab5700> [Info] src/streamc/runtime/WorkerThread.cpp:24 - Worker thread #0 started running
+2013-Nov-30 20:45:47.429608: <0x00007f3feee9f740> [Info] src/streamc/runtime/WorkerThread.cpp:19 - Launched worker thread # 1
+2013-Nov-30 20:45:47.429656: <0x00007f3feb2b4700> [Info] src/streamc/runtime/WorkerThread.cpp:24 - Worker thread #1 started running
+2013-Nov-30 20:45:53.765297: <0x00007f3febab5700> [Info] src/streamc/runtime/WorkerThread.cpp:31 - Worker thread #0 completed running
+2013-Nov-30 20:45:53.765303: <0x00007f3feee9f740> [Info] src/streamc/runtime/WorkerThread.cpp:36 - Joining worker thread #0
+2013-Nov-30 20:45:53.765406: <0x00007f3feee9f740> [Info] src/streamc/runtime/WorkerThread.cpp:38 - Joined worker thread #0
+2013-Nov-30 20:45:53.765423: <0x00007f3feb2b4700> [Info] src/streamc/runtime/WorkerThread.cpp:31 - Worker thread #1 completed running
+2013-Nov-30 20:45:53.765430: <0x00007f3feee9f740> [Info] src/streamc/runtime/WorkerThread.cpp:36 - Joining worker thread #1
+2013-Nov-30 20:45:53.765474: <0x00007f3feee9f740> [Info] src/streamc/runtime/WorkerThread.cpp:38 - Joined worker thread #1
