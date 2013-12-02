@@ -133,6 +133,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a9a8598681f1561cdf90ad44c45342105"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1operators_1_1Barrier.html#a9a8598681f1561cdf90ad44c45342105">Barrier</a> (std::string const &amp;name)</td></tr>
 <tr class="memdesc:a9a8598681f1561cdf90ad44c45342105"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a barrier operator.  <a href="#a9a8598681f1561cdf90ad44c45342105">More...</a><br/></td></tr>
 <tr class="separator:a9a8598681f1561cdf90ad44c45342105"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8bd7c7dedf1473e240692be0111a0d4b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1operators_1_1Barrier.html#a8bd7c7dedf1473e240692be0111a0d4b">Barrier</a> (std::string const &amp;name, int numInputs)</td></tr>
+<tr class="memdesc:a8bd7c7dedf1473e240692be0111a0d4b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a barrier operator.  <a href="#a8bd7c7dedf1473e240692be0111a0d4b">More...</a><br/></td></tr>
+<tr class="separator:a8bd7c7dedf1473e240692be0111a0d4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a700886fb9deb460e932d9c43bfa923f0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1operators_1_1Barrier.html#a700886fb9deb460e932d9c43bfa923f0">process</a> (<a class="el" href="classstreamc_1_1OperatorContext.html">OperatorContext</a> &amp;context) override</td></tr>
 <tr class="memdesc:a700886fb9deb460e932d9c43bfa923f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">The process function that contains the barrier logic.  <a href="#a700886fb9deb460e932d9c43bfa923f0">More...</a><br/></td></tr>
 <tr class="separator:a700886fb9deb460e932d9c43bfa923f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -181,9 +184,45 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Construct a barrier operator. </p>
+<p>By default, the barrier will have two input ports. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">name</td><td>name of the operator </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a8bd7c7dedf1473e240692be0111a0d4b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">streamc::operators::Barrier::Barrier </td>
+          <td>(</td>
+          <td class="paramtype">std::string const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>numInputs</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Construct a barrier operator. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>name of the operator </td></tr>
+    <tr><td class="paramname">numInputs</td><td>the number of input ports </td></tr>
   </table>
   </dd>
 </dl>
@@ -234,7 +273,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>streamc</b></li><li class="navelem"><b>operators</b></li><li class="navelem"><a class="el" href="classstreamc_1_1operators_1_1Barrier.html">Barrier</a></li>
-    <li class="footer">Generated on Mon Dec 2 2013 11:47:01 for StreamC by
+    <li class="footer">Generated on Mon Dec 2 2013 17:05:24 for StreamC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

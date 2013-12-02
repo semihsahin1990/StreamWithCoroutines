@@ -126,19 +126,19 @@ $(document).ready(function(){initNavTree('InputPort_8h_source.html','');});
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">size_t</span> <a class="code" href="classstreamc_1_1InputPort.html#a7c91622eec2a01920a49d1d10946d087">getTupleCount</a>() = 0;</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classstreamc_1_1InputPort.html#abd43097e06f8f95c75374c632f3ef174">waitTuple</a>() = 0;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classstreamc_1_1InputPort.html#abd43097e06f8f95c75374c632f3ef174">waitTuple</a>(<span class="keywordtype">size_t</span> n) = 0;  </div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;  </div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;  <span class="keyword">virtual</span> <a class="code" href="classstreamc_1_1Tuple.html">Tuple</a> &amp; <a class="code" href="classstreamc_1_1InputPort.html#a639e2184bd46e12a3e300b8a384bb035">getFrontTuple</a>() = 0;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;  <span class="keyword">virtual</span> <a class="code" href="classstreamc_1_1Tuple.html">Tuple</a> &amp; <a class="code" href="classstreamc_1_1InputPort.html#a9b85c448940052d9acf0c6836b78d28d">getTupleAt</a>(<span class="keywordtype">size_t</span> index) = 0;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classstreamc_1_1InputPort.html#abaca42570b2a29903171900150f862c4">popTuple</a>() = 0; </div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;};</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;} <span class="comment">// namespace streamc</span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classstreamc_1_1InputPort.html#abd43097e06f8f95c75374c632f3ef174">waitTuple</a>() = 0;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classstreamc_1_1InputPort.html#abd43097e06f8f95c75374c632f3ef174">waitTuple</a>(<span class="keywordtype">size_t</span> n) = 0;  </div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;  </div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;  <span class="keyword">virtual</span> <a class="code" href="classstreamc_1_1Tuple.html">Tuple</a> &amp; <a class="code" href="classstreamc_1_1InputPort.html#a639e2184bd46e12a3e300b8a384bb035">getFrontTuple</a>() = 0;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;  <span class="keyword">virtual</span> <a class="code" href="classstreamc_1_1Tuple.html">Tuple</a> &amp; <a class="code" href="classstreamc_1_1InputPort.html#a9b85c448940052d9acf0c6836b78d28d">getTupleAt</a>(<span class="keywordtype">size_t</span> index) = 0;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classstreamc_1_1InputPort.html#abaca42570b2a29903171900150f862c4">popTuple</a>() = 0; </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;};</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;} <span class="comment">// namespace streamc</span></div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;</div>
 <div class="ttc" id="classstreamc_1_1InputPort_html"><div class="ttname"><a href="classstreamc_1_1InputPort.html">streamc::InputPort</a></div><div class="ttdoc">Input port that provides tuple receiving services to operators. </div><div class="ttdef"><b>Definition:</b> InputPort.h:16</div></div>
 <div class="ttc" id="classstreamc_1_1Tuple_html"><div class="ttname"><a href="classstreamc_1_1Tuple.html">streamc::Tuple</a></div><div class="ttdoc">Tuple represending a set of named values. </div><div class="ttdef"><b>Definition:</b> Tuple.h:13</div></div>
 <div class="ttc" id="classstreamc_1_1InputPort_html_a7c91622eec2a01920a49d1d10946d087"><div class="ttname"><a href="classstreamc_1_1InputPort.html#a7c91622eec2a01920a49d1d10946d087">streamc::InputPort::getTupleCount</a></div><div class="ttdeci">virtual size_t getTupleCount()=0</div><div class="ttdoc">Get the current number of tuples queued in the input port. </div></div>
@@ -154,7 +154,7 @@ $(document).ready(function(){initNavTree('InputPort_8h_source.html','');});
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_f26e643a9842da0ce6dbe030c714fc5e.html">streamc</a></li><li class="navelem"><b>InputPort.h</b></li>
-    <li class="footer">Generated on Mon Dec 2 2013 11:47:01 for StreamC by
+    <li class="footer">Generated on Mon Dec 2 2013 17:05:23 for StreamC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

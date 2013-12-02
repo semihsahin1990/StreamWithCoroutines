@@ -131,6 +131,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a36771bcc87dee706775666789137e8e6"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1OperatorContext.html#a36771bcc87dee706775666789137e8e6">isShutdownRequested</a> ()=0</td></tr>
 <tr class="memdesc:a36771bcc87dee706775666789137e8e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check whether shutdown is requested.  <a href="#a36771bcc87dee706775666789137e8e6">More...</a><br/></td></tr>
 <tr class="separator:a36771bcc87dee706775666789137e8e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade5e50c79591bae0d5d33bb8f8c50a6a"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1OperatorContext.html#ade5e50c79591bae0d5d33bb8f8c50a6a">waitOnPorts</a> (std::unordered_map&lt; <a class="el" href="classstreamc_1_1InputPort.html">InputPort</a> *, size_t &gt; const &amp;spec)=0</td></tr>
+<tr class="memdesc:ade5e50c79591bae0d5d33bb8f8c50a6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wait until given number of tuples are available from each given port.  <a href="#ade5e50c79591bae0d5d33bb8f8c50a6a">More...</a><br/></td></tr>
+<tr class="separator:ade5e50c79591bae0d5d33bb8f8c50a6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Operator context that provides runtime services for operators. </p>
@@ -261,6 +264,40 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ade5e50c79591bae0d5d33bb8f8c50a6a"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool streamc::OperatorContext::waitOnPorts </td>
+          <td>(</td>
+          <td class="paramtype">std::unordered_map&lt; <a class="el" href="classstreamc_1_1InputPort.html">InputPort</a> *, size_t &gt; const &amp;&#160;</td>
+          <td class="paramname"><em>spec</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Wait until given number of tuples are available from each given port. </p>
+<p>This function will block until the wait condition is satisfied, that is the required number of input tuples are awailable in the port queues of each of the specified input ports. It will return true, if one or more of the ports are closed and the wait condition cannot be satisfied anymore. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">spec</td><td>the wait spec, that is the required number of tuples from the specified ports </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the wait spec can never be satisfied, false if it is currently satisfied </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>streamc/<a class="el" href="OperatorContext_8h_source.html">OperatorContext.h</a></li>
 </ul>
@@ -270,7 +307,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>streamc</b></li><li class="navelem"><a class="el" href="classstreamc_1_1OperatorContext.html">OperatorContext</a></li>
-    <li class="footer">Generated on Mon Dec 2 2013 11:47:01 for StreamC by
+    <li class="footer">Generated on Mon Dec 2 2013 17:05:24 for StreamC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

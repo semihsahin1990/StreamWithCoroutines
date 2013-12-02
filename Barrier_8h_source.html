@@ -117,26 +117,28 @@ $(document).ready(function(){initNavTree('Barrier_8h_source.html','');});
 <div class="line"><a name="l00012"></a><span class="lineno"><a class="line" href="classstreamc_1_1operators_1_1Barrier.html">   12</a></span>&#160;<span class="keyword">class </span><a class="code" href="classstreamc_1_1operators_1_1Barrier.html">Barrier</a> : <span class="keyword">public</span> <a class="code" href="classstreamc_1_1Operator.html">Operator</a></div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;{</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;  <a class="code" href="classstreamc_1_1operators_1_1Barrier.html#a9a8598681f1561cdf90ad44c45342105">Barrier</a>(std::string <span class="keyword">const</span> &amp; name);</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classstreamc_1_1operators_1_1Barrier.html#a700886fb9deb460e932d9c43bfa923f0">process</a>(<a class="code" href="classstreamc_1_1OperatorContext.html">OperatorContext</a> &amp; context) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;};</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;} } <span class="comment">// namespace streamc::operators</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;  <a class="code" href="classstreamc_1_1operators_1_1Barrier.html#a9a8598681f1561cdf90ad44c45342105">Barrier</a>(std::string <span class="keyword">const</span> &amp; name);</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;  <a class="code" href="classstreamc_1_1operators_1_1Barrier.html#a9a8598681f1561cdf90ad44c45342105">Barrier</a>(std::string <span class="keyword">const</span> &amp; name, <span class="keywordtype">int</span> numInputs);</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classstreamc_1_1operators_1_1Barrier.html#a700886fb9deb460e932d9c43bfa923f0">process</a>(<a class="code" href="classstreamc_1_1OperatorContext.html">OperatorContext</a> &amp; context) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;};</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;} } <span class="comment">// namespace streamc::operators</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;</div>
 <div class="ttc" id="classstreamc_1_1operators_1_1Barrier_html_a700886fb9deb460e932d9c43bfa923f0"><div class="ttname"><a href="classstreamc_1_1operators_1_1Barrier.html#a700886fb9deb460e932d9c43bfa923f0">streamc::operators::Barrier::process</a></div><div class="ttdeci">void process(OperatorContext &amp;context) override</div><div class="ttdoc">The process function that contains the barrier logic. </div></div>
 <div class="ttc" id="classstreamc_1_1operators_1_1Barrier_html"><div class="ttname"><a href="classstreamc_1_1operators_1_1Barrier.html">streamc::operators::Barrier</a></div><div class="ttdoc">Barrier operator that combines tupels from different inputs. </div><div class="ttdef"><b>Definition:</b> Barrier.h:12</div></div>
 <div class="ttc" id="classstreamc_1_1operators_1_1Barrier_html_a9a8598681f1561cdf90ad44c45342105"><div class="ttname"><a href="classstreamc_1_1operators_1_1Barrier.html#a9a8598681f1561cdf90ad44c45342105">streamc::operators::Barrier::Barrier</a></div><div class="ttdeci">Barrier(std::string const &amp;name)</div><div class="ttdoc">Construct a barrier operator. </div></div>
 <div class="ttc" id="classstreamc_1_1Operator_html"><div class="ttname"><a href="classstreamc_1_1Operator.html">streamc::Operator</a></div><div class="ttdoc">Base class for implementing streaming operators. </div><div class="ttdef"><b>Definition:</b> Operator.h:24</div></div>
-<div class="ttc" id="classstreamc_1_1OperatorContext_html"><div class="ttname"><a href="classstreamc_1_1OperatorContext.html">streamc::OperatorContext</a></div><div class="ttdoc">Operator context that provides runtime services for operators. </div><div class="ttdef"><b>Definition:</b> OperatorContext.h:18</div></div>
+<div class="ttc" id="classstreamc_1_1OperatorContext_html"><div class="ttname"><a href="classstreamc_1_1OperatorContext.html">streamc::OperatorContext</a></div><div class="ttdoc">Operator context that provides runtime services for operators. </div><div class="ttdef"><b>Definition:</b> OperatorContext.h:19</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_f26e643a9842da0ce6dbe030c714fc5e.html">streamc</a></li><li class="navelem"><a class="el" href="dir_65270f768a49b2e8430ce1f6dbbc0be0.html">operators</a></li><li class="navelem"><b>Barrier.h</b></li>
-    <li class="footer">Generated on Mon Dec 2 2013 11:47:01 for StreamC by
+    <li class="footer">Generated on Mon Dec 2 2013 17:05:23 for StreamC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

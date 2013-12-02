@@ -109,29 +109,33 @@ $(document).ready(function(){initNavTree('OperatorContext_8h_source.html','');})
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor"></span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &lt;cstddef&gt;</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;</div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="keyword">namespace </span>streamc</div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;{</div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="keyword">class </span>InputPort;</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">class </span>OutputPort;</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">class </span>Tuple;</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;</div>
-<div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="classstreamc_1_1OperatorContext.html">   18</a></span>&#160;<span class="keyword">class </span><a class="code" href="classstreamc_1_1OperatorContext.html">OperatorContext</a></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;{</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;  <span class="keyword">virtual</span> ~<a class="code" href="classstreamc_1_1OperatorContext.html">OperatorContext</a>() {}</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;  <span class="keyword">virtual</span> <a class="code" href="classstreamc_1_1InputPort.html">InputPort</a> &amp; <a class="code" href="classstreamc_1_1OperatorContext.html#ac1bcc3789d7f7d37b936240c02182650">getInputPort</a>(<span class="keywordtype">size_t</span> inputPort) = 0;</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;  <span class="keyword">virtual</span> <a class="code" href="classstreamc_1_1OutputPort.html">OutputPort</a> &amp; <a class="code" href="classstreamc_1_1OperatorContext.html#a3c67583c2fe273c37c0e5443ca497864">getOutputPort</a>(<span class="keywordtype">size_t</span> outputPort) = 0;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;  <span class="keyword">virtual</span> <a class="code" href="classstreamc_1_1Tuple.html">Tuple</a> &amp; <a class="code" href="classstreamc_1_1OperatorContext.html#a2885229325e5868672bd47ed6be74f00">getStateStore</a>() = 0;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classstreamc_1_1OperatorContext.html#a36771bcc87dee706775666789137e8e6">isShutdownRequested</a>() = 0;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;};</div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;unordered_map&gt;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;</div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="keyword">namespace </span>streamc</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;{</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">class </span>InputPort;</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">class </span>OutputPort;</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keyword">class </span>Tuple;</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;</div>
+<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="classstreamc_1_1OperatorContext.html">   19</a></span>&#160;<span class="keyword">class </span><a class="code" href="classstreamc_1_1OperatorContext.html">OperatorContext</a></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;{</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;  <span class="keyword">virtual</span> ~<a class="code" href="classstreamc_1_1OperatorContext.html">OperatorContext</a>() {}</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;  <span class="keyword">virtual</span> <a class="code" href="classstreamc_1_1InputPort.html">InputPort</a> &amp; <a class="code" href="classstreamc_1_1OperatorContext.html#ac1bcc3789d7f7d37b936240c02182650">getInputPort</a>(<span class="keywordtype">size_t</span> inputPort) = 0;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;  <span class="keyword">virtual</span> <a class="code" href="classstreamc_1_1OutputPort.html">OutputPort</a> &amp; <a class="code" href="classstreamc_1_1OperatorContext.html#a3c67583c2fe273c37c0e5443ca497864">getOutputPort</a>(<span class="keywordtype">size_t</span> outputPort) = 0;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;  <span class="keyword">virtual</span> <a class="code" href="classstreamc_1_1Tuple.html">Tuple</a> &amp; <a class="code" href="classstreamc_1_1OperatorContext.html#a2885229325e5868672bd47ed6be74f00">getStateStore</a>() = 0;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classstreamc_1_1OperatorContext.html#a36771bcc87dee706775666789137e8e6">isShutdownRequested</a>() = 0;</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;} <span class="comment">// namespace streamc</span></div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classstreamc_1_1OperatorContext.html#ade5e50c79591bae0d5d33bb8f8c50a6a">waitOnPorts</a>(std::unordered_map&lt;InputPort *, size_t&gt; <span class="keyword">const</span> &amp; spec) = 0;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;};</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;} <span class="comment">// namespace streamc</span></div>
 <div class="ttc" id="classstreamc_1_1OperatorContext_html_a3c67583c2fe273c37c0e5443ca497864"><div class="ttname"><a href="classstreamc_1_1OperatorContext.html#a3c67583c2fe273c37c0e5443ca497864">streamc::OperatorContext::getOutputPort</a></div><div class="ttdeci">virtual OutputPort &amp; getOutputPort(size_t outputPort)=0</div><div class="ttdoc">Get the output port at a given index. </div></div>
 <div class="ttc" id="classstreamc_1_1InputPort_html"><div class="ttname"><a href="classstreamc_1_1InputPort.html">streamc::InputPort</a></div><div class="ttdoc">Input port that provides tuple receiving services to operators. </div><div class="ttdef"><b>Definition:</b> InputPort.h:16</div></div>
 <div class="ttc" id="classstreamc_1_1Tuple_html"><div class="ttname"><a href="classstreamc_1_1Tuple.html">streamc::Tuple</a></div><div class="ttdoc">Tuple represending a set of named values. </div><div class="ttdef"><b>Definition:</b> Tuple.h:13</div></div>
@@ -139,14 +143,15 @@ $(document).ready(function(){initNavTree('OperatorContext_8h_source.html','');})
 <div class="ttc" id="classstreamc_1_1OperatorContext_html_a2885229325e5868672bd47ed6be74f00"><div class="ttname"><a href="classstreamc_1_1OperatorContext.html#a2885229325e5868672bd47ed6be74f00">streamc::OperatorContext::getStateStore</a></div><div class="ttdeci">virtual Tuple &amp; getStateStore()=0</div><div class="ttdoc">Get the state store of the operator. </div></div>
 <div class="ttc" id="classstreamc_1_1OperatorContext_html_a36771bcc87dee706775666789137e8e6"><div class="ttname"><a href="classstreamc_1_1OperatorContext.html#a36771bcc87dee706775666789137e8e6">streamc::OperatorContext::isShutdownRequested</a></div><div class="ttdeci">virtual bool isShutdownRequested()=0</div><div class="ttdoc">Check whether shutdown is requested. </div></div>
 <div class="ttc" id="classstreamc_1_1OperatorContext_html_ac1bcc3789d7f7d37b936240c02182650"><div class="ttname"><a href="classstreamc_1_1OperatorContext.html#ac1bcc3789d7f7d37b936240c02182650">streamc::OperatorContext::getInputPort</a></div><div class="ttdeci">virtual InputPort &amp; getInputPort(size_t inputPort)=0</div><div class="ttdoc">Get the input port at a given index. </div></div>
-<div class="ttc" id="classstreamc_1_1OperatorContext_html"><div class="ttname"><a href="classstreamc_1_1OperatorContext.html">streamc::OperatorContext</a></div><div class="ttdoc">Operator context that provides runtime services for operators. </div><div class="ttdef"><b>Definition:</b> OperatorContext.h:18</div></div>
+<div class="ttc" id="classstreamc_1_1OperatorContext_html"><div class="ttname"><a href="classstreamc_1_1OperatorContext.html">streamc::OperatorContext</a></div><div class="ttdoc">Operator context that provides runtime services for operators. </div><div class="ttdef"><b>Definition:</b> OperatorContext.h:19</div></div>
+<div class="ttc" id="classstreamc_1_1OperatorContext_html_ade5e50c79591bae0d5d33bb8f8c50a6a"><div class="ttname"><a href="classstreamc_1_1OperatorContext.html#ade5e50c79591bae0d5d33bb8f8c50a6a">streamc::OperatorContext::waitOnPorts</a></div><div class="ttdeci">virtual bool waitOnPorts(std::unordered_map&lt; InputPort *, size_t &gt; const &amp;spec)=0</div><div class="ttdoc">Wait until given number of tuples are available from each given port. </div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_f26e643a9842da0ce6dbe030c714fc5e.html">streamc</a></li><li class="navelem"><b>OperatorContext.h</b></li>
-    <li class="footer">Generated on Mon Dec 2 2013 11:47:01 for StreamC by
+    <li class="footer">Generated on Mon Dec 2 2013 17:05:23 for StreamC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>
