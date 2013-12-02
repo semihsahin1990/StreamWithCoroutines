@@ -11,8 +11,8 @@
 using namespace std;
 using namespace streamc;
 
-OutputPortImpl::OutputPortImpl(OperatorContextImpl & oper, Scheduler & scheduler)
-  : oper_(&oper), scheduler_(&scheduler)
+OutputPortImpl::OutputPortImpl(OperatorContextImpl & oper, FlowContext & flowContext, Scheduler & scheduler)
+  : oper_(&oper), flowContext_(&flowContext), scheduler_(&scheduler)
 {}
 
 // add (subscriber operator(operator context), portNo) pair to this port
@@ -39,12 +39,17 @@ void OutputPortImpl::pushTuple(Tuple const & tuple)
     unordered_map<InputPortImpl *, size_t> waitSpec;
     {
       lock_guard<mutex> lock(mutex_);
-      for(auto const & opPortPair : subscribers_) {
-        OperatorContextImpl * op = opPortPair.first;
-        size_t inPort = opPortPair.second;
-        InputPortImpl & iport = op->getInputPortImpl(inPort);      
-        if (iport.getTupleCount()>=FlowContext::getMaxQueueSize()) 
-          waitSpec[&iport] = FlowContext::getMaxQueueSize();
+      // If there is a global shutdown request, we don't care about queue
+      // sizes, we push and return, so that our own operator can exit its
+      // main loop as well
+      if (!flowContext_->isShutdownRequested()) {
+        for(auto const & opPortPair : subscribers_) {
+          OperatorContextImpl * op = opPortPair.first;
+          size_t inPort = opPortPair.second;
+          InputPortImpl & iport = op->getInputPortImpl(inPort);      
+          if (iport.getTupleCount()>=FlowContext::getMaxQueueSize()) 
+            waitSpec[&iport] = FlowContext::getMaxQueueSize();
+        }
       }      
       if (waitSpec.size()==0) { // no need to wait
         needToWait = false;
@@ -57,7 +62,12 @@ void OutputPortImpl::pushTuple(Tuple const & tuple)
     }
     if (needToWait) {
       // we need to ask the scheduler to move us into bloked state
-      scheduler_->markOperatorAsWriteBlocked(*oper_, waitSpec);  
+      scheduler_->markOperatorAsWriteBlocked(*oper_, waitSpec); 
+      // Scheduler returns back to us either because the downstream ports 
+      // are now full, or because one of the dowstream operators are complete
+      // due to global shutdown request and their intput port is full. In the
+      // latter case, we should submit the tuple (potentially exceeding the 
+      // limit and go back to operator code, so that our operator exists as well.
     } else {
       // we need to check with the scheduler to see if we need to preempt
       scheduler_->checkOperatorForPreemption(*oper_);

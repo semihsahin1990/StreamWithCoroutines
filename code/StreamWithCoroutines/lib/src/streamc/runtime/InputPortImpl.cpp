@@ -16,9 +16,19 @@ InputPortImpl::InputPortImpl(OperatorContextImpl & oper, Scheduler & scheduler)
 {}
 
 //add publisher operator(operator context) to this port
-void InputPortImpl::addPublisher(OperatorContextImpl & oper)
+void InputPortImpl::addPublisher(OperatorContextImpl & oper, size_t outPort)
 {
-  publishers_.push_back(&oper);
+  publishers_.push_back(std::make_pair(&oper, outPort));
+}
+
+size_t InputPortImpl::getNumberOfPublishers()
+{
+  return publishers_.size();
+}
+
+pair<OperatorContextImpl *, size_t> InputPortImpl::getPublisher(size_t index)
+{
+  return publishers_[index];
 }
 
 // push tuple to the queue
@@ -43,9 +53,10 @@ bool InputPortImpl::isClosedNoLock()
 {
   if (isClosed_)
     return true;
-  for (OperatorContextImpl * opc : publishers_)
-    if (!opc->isComplete()) 
+  for (auto const & opcOportPair : publishers_) {
+    if (!opcOportPair.first->isComplete()) 
       return false;
+  }
   isClosed_ = true;
   return true;
 }

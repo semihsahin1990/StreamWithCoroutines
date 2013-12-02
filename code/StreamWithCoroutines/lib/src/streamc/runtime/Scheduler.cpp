@@ -1,16 +1,18 @@
 #include "streamc/runtime/Scheduler.h"
 
+#include "streamc/runtime/FlowContext.h"
 #include "streamc/runtime/OperatorContextImpl.h"
 #include "streamc/runtime/WorkerThread.h"
 #include "streamc/runtime/SchedulerPlugin.h"
 #include "streamc/runtime/RandomScheduling.h"
+#include "streamc/runtime/InputPortImpl.h"
 #include "streamc/runtime/OutputPortImpl.h"
 
 using namespace std;
 using namespace streamc;
 
-Scheduler::Scheduler() 
-  : stopped_(false), plugin_(new RandomScheduling()) 
+Scheduler::Scheduler(FlowContext & flowContext) 
+  : stopped_(false), flowContext_(flowContext), plugin_(new RandomScheduling()) 
 {}
 
 Scheduler::~Scheduler() 
@@ -77,6 +79,25 @@ void Scheduler::markOperatorAsCompleted(OperatorContextImpl & oper)
       OperatorInfo & doinfo = *(operContexts_[&doper]);
       if (doinfo.getState()==OperatorInfo::ReadBlocked)
         updateOperatorState(doper, OperatorInfo::Ready);
+    }
+  }
+  // It is possible that the upstream operators that are currently in blocked
+  // state may need to be put into Ready state, as this operator's completion
+  // may be due to a global shutdown, and the upstream operator cannot see the
+  // global shutdown unless it is put into ready state. It is ok to superfluously 
+  // take out an operator out of blocked state, as it will check again upon wake 
+  // up to see if it needs to wait again or not, and that code already has a 
+  // special check for a global shutdown.
+  if (flowContext_.isShutdownRequested()) {
+    for (size_t i=0, iu=oper.getNumberOfInputPorts(); i<iu; ++i)  {
+      InputPortImpl & iport = oper.getInputPortImpl(i);
+      for (size_t j=0, ju=iport.getNumberOfPublishers(); j<ju; ++j)  {
+        pair<OperatorContextImpl *, size_t> publisher = iport.getPublisher(j);
+        OperatorContextImpl & uoper = *publisher.first;
+        OperatorInfo & uoinfo = *(operContexts_[&uoper]);
+        if (uoinfo.getState()==OperatorInfo::WriteBlocked)
+          updateOperatorState(uoper, OperatorInfo::Ready);
+      }
     }
   }
 }

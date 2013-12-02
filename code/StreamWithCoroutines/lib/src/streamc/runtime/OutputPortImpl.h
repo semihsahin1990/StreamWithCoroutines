@@ -9,12 +9,13 @@ namespace streamc
 {
 
 class OperatorContextImpl;
+class FlowContext;
 class Scheduler;
 
 class OutputPortImpl : public OutputPort
 {  
 public:
-  OutputPortImpl(OperatorContextImpl & oper, Scheduler & scheduler);
+  OutputPortImpl(OperatorContextImpl & oper, FlowContext & flowContext, Scheduler & scheduler);
 
   size_t getNumberOfSubscribers();
   void addSubscriber(OperatorContextImpl & oper, size_t inPort); 
@@ -25,6 +26,7 @@ public:
 
 private:
   OperatorContextImpl * oper_;
+  FlowContext * flowContext_;
   Scheduler * scheduler_;
   std::vector<std::pair<OperatorContextImpl *, size_t>> subscribers_;
   std::mutex mutex_; 

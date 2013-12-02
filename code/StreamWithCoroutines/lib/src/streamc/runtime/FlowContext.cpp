@@ -17,7 +17,7 @@ FlowContext::FlowContext(Flow & flow)
   : flow_(flow), numCompleted_(0), isShutdownRequested_(false)
 {
   // create the scheduler
-  scheduler_.reset(new Scheduler());
+  scheduler_.reset(new Scheduler(*this));
 
   // get operators
   vector<Operator *> const & opers = flow_.getOperators();
@@ -40,14 +40,14 @@ FlowContext::FlowContext(Flow & flow)
       // add publishers
       for (auto const & conn : conns) {
         Operator * ooper = &conn.getOperator();
-        port->addPublisher(*operatorContexts_[ooper]);
+        port->addPublisher(*operatorContexts_[ooper], conn.getOutputPort());
       }
       operatorContext->addInputPort(port);
     }
 
     // add output ports
     for (size_t i=0; i<oper->getNumberOfOutputPorts(); ++i) {
-      OutputPortImpl * port = new OutputPortImpl(*operatorContext, *scheduler_);
+      OutputPortImpl * port = new OutputPortImpl(*operatorContext, *this, *scheduler_);
       vector<connectors::ToConnection> const & conns = flow_.getOutConnections(*oper, i);
 
       //add subscribers

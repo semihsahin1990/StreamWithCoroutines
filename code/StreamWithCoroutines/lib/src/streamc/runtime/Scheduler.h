@@ -12,13 +12,14 @@ namespace streamc
 
 class WorkerThread;
 class OperatorContextImpl;
+class FlowContext;
 class InputPortImpl;
 class SchedulerPlugin;
 
 class Scheduler : public SchedulerPluginService
 {
 public:
-  Scheduler();
+  Scheduler(FlowContext & flowContext);
   ~Scheduler();
   void addThread(WorkerThread & thread);
   void removeThreads();
@@ -43,6 +44,7 @@ public: // interfaces for SchdulerPluginService
   std::unordered_set<OperatorContextImpl *> const & getReadyOperators() const { return readyOperators_; }
 private:
   bool stopped_;
+  FlowContext & flowContext_;
   std::vector<std::unique_ptr<ThreadInfo>> threadInfos_;
   std::vector<std::unique_ptr<OperatorInfo>> operatorInfos_;
   std::unique_ptr<SchedulerPlugin> plugin_;

@@ -15,7 +15,9 @@ class InputPortImpl: public InputPort
 {
 public:
   InputPortImpl(OperatorContextImpl & oper, Scheduler & scheduler);
-  void addPublisher(OperatorContextImpl & oper);
+  size_t getNumberOfPublishers();
+  void addPublisher(OperatorContextImpl & oper, size_t outPort);
+  std::pair<OperatorContextImpl *, size_t> getPublisher(size_t index);
   void pushTuple(Tuple const & tuple);
   void drain();
 
@@ -37,7 +39,7 @@ private:
   Scheduler * scheduler_;
   bool isClosed_;
   std::deque<Tuple> portQueue_;
-  std::vector<OperatorContextImpl *> publishers_;
+  std::vector<std::pair<OperatorContextImpl *, size_t>> publishers_;
   std::mutex mutex_; 
 };
 
