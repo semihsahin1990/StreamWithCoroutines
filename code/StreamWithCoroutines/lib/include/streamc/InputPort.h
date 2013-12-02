@@ -54,7 +54,8 @@ public:
      Tuple & tuple = iport.getFrontTuple();    
      // do something with the tuple
      @endcode
-   * @return true if a tuple will never be available, false otherwise
+   * @return true if a tuple will never be available, false if there is a tuple
+   * currently available
    */
   virtual bool waitTuple() = 0;
 
@@ -79,7 +80,8 @@ public:
      }
      @endcode
    * @param n number of tuples to wait for
-   * @return true if <code>n</code> tuples will never be available, false otherwise
+   * @return true if <code>n</code> tuples will never be available, false 
+   * if currently there are <code>n</code> tuples
    */
   virtual bool waitTuple(size_t n) = 0;  
   

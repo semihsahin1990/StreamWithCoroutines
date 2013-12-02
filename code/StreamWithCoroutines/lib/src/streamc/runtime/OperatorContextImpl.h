@@ -44,6 +44,7 @@ public:
   // interface to be implemented
   InputPort & getInputPort(size_t inputPort) override;
   OutputPort & getOutputPort(size_t outputPort) override;
+  bool waitOnPorts(std::unordered_map<InputPort *, size_t> const & spec);
   Tuple & getStateStore() override;
   bool isShutdownRequested() override;
 

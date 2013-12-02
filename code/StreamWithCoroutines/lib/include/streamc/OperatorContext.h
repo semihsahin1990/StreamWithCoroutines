@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+#include <unordered_map>
 
 namespace streamc
 {
@@ -60,6 +61,21 @@ public:
    * @return <code>true</code> if the shutdown is requested, <code>false</code> otherwise
    */
   virtual bool isShutdownRequested() = 0;
+
+  /**
+   * Wait until given number of tuples are available from each given port.
+   *
+   * This function will block until the wait condition is satisfied, that is 
+   * the required number of input tuples are awailable in the port queues of 
+   * each of the specified input ports. It will return true, if one or more of 
+   * the ports are closed and the wait condition cannot be satisfied anymore. 
+   * @param spec the wait spec, that is the required number of tuples from the 
+   * specified ports
+   * @return true if the wait spec can never be satisfied, false if it is 
+   * currently satisfied
+   */
+   virtual bool waitOnPorts(std::unordered_map<InputPort *, size_t> const & spec) = 0;
+
 };
 
 } // namespace streamc

@@ -15,9 +15,18 @@ public:
   /**
    * Construct a barrier operator.
    *
+   * By default, the barrier will have two input ports.
    * @param name name of the operator
    */  
   Barrier(std::string const & name);
+
+  /**
+   * Construct a barrier operator.
+   *
+   * @param name name of the operator
+   * @param numInputs the number of input ports 
+   */  
+  Barrier(std::string const & name, int numInputs);
 
   /**
    * The process function that contains the barrier logic.

@@ -60,7 +60,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 
 $(BINDIR)/$(LIBRARY): $(OBJS)
 	@mkdir -p $(dir $@)
-	$(LINK) $(OBJS) -shared -o $@
+	$(LINK) $(OBJS) -shared -o "$(PWD)/$@"
 
 docs:
 	doxygen doc/doxy.conf

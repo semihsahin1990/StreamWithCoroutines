@@ -94,3 +94,21 @@ InputPort & OperatorContextImpl::getInputPort(size_t inputPort) {
 OutputPort & OperatorContextImpl::getOutputPort(size_t outputPort) { 
   return getOutputPortImpl(outputPort); 
 }
+
+// return true if will never be satisfied
+bool OperatorContextImpl::waitOnPorts(unordered_map<InputPort *, size_t> const & spec)
+{
+  // TODO: Improve this code to use scheduler's multi-port wait capabilities
+  // Look at InputPortImpl's waitTuple implementation to get the main idea
+  bool closed = false;
+  for(auto const & portCountPair : spec) {
+    bool portClosed = portCountPair.first->waitTuple(portCountPair.second);
+    if (portClosed) {
+      closed = true;
+      break;
+    }
+  }
+  return closed;
+}
+
+
