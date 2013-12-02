@@ -148,6 +148,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aabde10169341279b724afd8a7c78745e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1operators_1_1FileSource.html#aabde10169341279b724afd8a7c78745e">process</a> (<a class="el" href="classstreamc_1_1OperatorContext.html">OperatorContext</a> &amp;context) override</td></tr>
 <tr class="memdesc:aabde10169341279b724afd8a7c78745e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The process function that contains the file source logic.  <a href="#aabde10169341279b724afd8a7c78745e">More...</a><br/></td></tr>
 <tr class="separator:aabde10169341279b724afd8a7c78745e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a9e45995816b8ccf1e7e71a085f0121"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1operators_1_1FileSource.html#a2a9e45995816b8ccf1e7e71a085f0121">initState</a> (<a class="el" href="classstreamc_1_1OperatorContext.html">OperatorContext</a> &amp;context) override</td></tr>
+<tr class="memdesc:a2a9e45995816b8ccf1e7e71a085f0121"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize file reader state.  <a href="#a2a9e45995816b8ccf1e7e71a085f0121">More...</a><br/></td></tr>
+<tr class="separator:a2a9e45995816b8ccf1e7e71a085f0121"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9bbf509f8432acc82b3a1e8c206cc17f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1operators_1_1FileSource.html#a9bbf509f8432acc82b3a1e8c206cc17f">saveState</a> (<a class="el" href="classstreamc_1_1OperatorContext.html">OperatorContext</a> &amp;context) override</td></tr>
+<tr class="memdesc:a9bbf509f8432acc82b3a1e8c206cc17f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sace the file reader state.  <a href="#a9bbf509f8432acc82b3a1e8c206cc17f">More...</a><br/></td></tr>
+<tr class="separator:a9bbf509f8432acc82b3a1e8c206cc17f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classstreamc_1_1Operator"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classstreamc_1_1Operator')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classstreamc_1_1Operator.html">streamc::Operator</a></td></tr>
 <tr class="memitem:a8847368779e34b5db8a1b5c65a77332a inherit pub_methods_classstreamc_1_1Operator"><td class="memItemLeft" align="right" valign="top">std::string const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Operator.html#a8847368779e34b5db8a1b5c65a77332a">getName</a> () const </td></tr>
 <tr class="memdesc:a8847368779e34b5db8a1b5c65a77332a inherit pub_methods_classstreamc_1_1Operator"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the name of the operator.  <a href="#a8847368779e34b5db8a1b5c65a77332a">More...</a><br/></td></tr>
@@ -274,6 +280,40 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a2a9e45995816b8ccf1e7e71a085f0121"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void streamc::operators::FileSource::initState </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classstreamc_1_1OperatorContext.html">OperatorContext</a> &amp;&#160;</td>
+          <td class="paramname"><em>context</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Initialize file reader state. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">context</td><td>the operator context </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented from <a class="el" href="classstreamc_1_1Operator.html#a4c1ee22a4ad62e28c9aefe325a5a8906">streamc::Operator</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="aabde10169341279b724afd8a7c78745e"></a>
 <div class="memitem">
 <div class="memproto">
@@ -305,6 +345,40 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 
 <p>Implements <a class="el" href="classstreamc_1_1Operator.html#abe596a251f7861051ce974eb706c4cc0">streamc::Operator</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a9bbf509f8432acc82b3a1e8c206cc17f"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void streamc::operators::FileSource::saveState </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classstreamc_1_1OperatorContext.html">OperatorContext</a> &amp;&#160;</td>
+          <td class="paramname"><em>context</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sace the file reader state. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">context</td><td>the operator context </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented from <a class="el" href="classstreamc_1_1Operator.html#a8d29b937da132696864bb23b4be30253">streamc::Operator</a>.</p>
 
 </div>
 </div>
@@ -367,7 +441,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>streamc</b></li><li class="navelem"><b>operators</b></li><li class="navelem"><a class="el" href="classstreamc_1_1operators_1_1FileSource.html">FileSource</a></li>
-    <li class="footer">Generated on Sun Dec 1 2013 23:26:41 for StreamC by
+    <li class="footer">Generated on Mon Dec 2 2013 10:56:44 for StreamC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

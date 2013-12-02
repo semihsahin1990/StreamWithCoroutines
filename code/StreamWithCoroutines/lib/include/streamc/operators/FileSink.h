@@ -41,8 +41,25 @@ public:
    * @param context the operator context
    */
   void process(OperatorContext & context) override;
+
+  /**
+   * Initialize file reader state.
+   * 
+   * @param context the operator context
+   */
+  void initState(OperatorContext & context) override;
+
+  /**
+   * Sace the file reader state.
+   *
+   * @param context the operator context
+   */
+  void saveState(OperatorContext & context) override;
 private:
+  // parameters
   std::string fileName_;
+  // state
+  std::streampos filePos_;
 };
 
 } } // namespace streamc::operators

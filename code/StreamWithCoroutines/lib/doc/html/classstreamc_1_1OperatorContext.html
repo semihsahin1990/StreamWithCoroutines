@@ -125,13 +125,16 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3c67583c2fe273c37c0e5443ca497864"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classstreamc_1_1OutputPort.html">OutputPort</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1OperatorContext.html#a3c67583c2fe273c37c0e5443ca497864">getOutputPort</a> (size_t outputPort)=0</td></tr>
 <tr class="memdesc:a3c67583c2fe273c37c0e5443ca497864"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the output port at a given index.  <a href="#a3c67583c2fe273c37c0e5443ca497864">More...</a><br/></td></tr>
 <tr class="separator:a3c67583c2fe273c37c0e5443ca497864"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2885229325e5868672bd47ed6be74f00"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classstreamc_1_1Tuple.html">Tuple</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1OperatorContext.html#a2885229325e5868672bd47ed6be74f00">getStateStore</a> ()=0</td></tr>
+<tr class="memdesc:a2885229325e5868672bd47ed6be74f00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the state store of the operator.  <a href="#a2885229325e5868672bd47ed6be74f00">More...</a><br/></td></tr>
+<tr class="separator:a2885229325e5868672bd47ed6be74f00"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a36771bcc87dee706775666789137e8e6"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1OperatorContext.html#a36771bcc87dee706775666789137e8e6">isShutdownRequested</a> ()=0</td></tr>
 <tr class="memdesc:a36771bcc87dee706775666789137e8e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check whether shutdown is requested.  <a href="#a36771bcc87dee706775666789137e8e6">More...</a><br/></td></tr>
 <tr class="separator:a36771bcc87dee706775666789137e8e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Operator context that provides runtime services for operators. </p>
-<p>These services include acccessing input and output ports, and checking whethere shutdown is requested. </p>
+<p>These services include acccessing input and output ports, operator state store, and checking whethere shutdown is requested. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="ac1bcc3789d7f7d37b936240c02182650"></a>
 <div class="memitem">
@@ -199,6 +202,33 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a2885229325e5868672bd47ed6be74f00"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="classstreamc_1_1Tuple.html">Tuple</a>&amp; streamc::OperatorContext::getStateStore </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the state store of the operator. </p>
+<p>This store is used to <a class="el" href="classstreamc_1_1Operator.html#a4c1ee22a4ad62e28c9aefe325a5a8906">init </a> and <a class="el" href="classstreamc_1_1Operator.html#a8d29b937da132696864bb23b4be30253">save </a> state to support restarts. </p>
+<dl class="section return"><dt>Returns</dt><dd>the state store of the operator </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a36771bcc87dee706775666789137e8e6"></a>
 <div class="memitem">
 <div class="memproto">
@@ -240,7 +270,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>streamc</b></li><li class="navelem"><a class="el" href="classstreamc_1_1OperatorContext.html">OperatorContext</a></li>
-    <li class="footer">Generated on Sun Dec 1 2013 23:26:41 for StreamC by
+    <li class="footer">Generated on Mon Dec 2 2013 10:56:44 for StreamC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

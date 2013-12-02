@@ -154,6 +154,17 @@ public:
   }
 
   /**
+   * Check whether an attribute with the given name exist.
+   * 
+   * @param name the attribute
+   * @return true if the attribute exists, false otherwise 
+   */ 
+  bool hasAttribute(std::string const & name)
+  {
+    return (values_.count(name) > 0);
+  }
+
+  /**
    * Set value of an attribute to a string list.
    * 
    * @param name name of the attribute

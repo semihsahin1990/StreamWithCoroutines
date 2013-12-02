@@ -24,12 +24,34 @@ FileSink & FileSink::set_fileName(std::string const & fileName)
   return *this;
 }
 
+void FileSink::initState(OperatorContext & context)
+{
+  Tuple & store = context.getStateStore();
+  filePos_ = 0;
+  if (store.hasAttribute("pos")) {
+    int64_t pos = store.get<Type::Integer>("pos");
+    filePos_ = static_cast<streampos>(pos);
+  }
+}
+
+void FileSink::saveState(OperatorContext & context) 
+{
+  Tuple & store = context.getStateStore();
+  int64_t pos = static_cast<streampos>(filePos_);
+  store.setAttribute("pos", pos);
+}
+
 void FileSink::process(OperatorContext & context)
 {
   ofstream output;
   output.open(fileName_.c_str(), ios::out);
   if (!output) {
     SC_APPLOG(Error, "Error in opening output file: " << fileName_ << ", details: " << strerror(errno));
+    return;
+  }
+  output.seekp(filePos_);
+  if (!output) {
+    SC_APPLOG(Error, "Error in seeking to location: " << filePos_ << ", in output file: " << fileName_ << ", details: "<< strerror(errno));
     return;
   }
   InputPort & iport = context.getInputPort(0);
@@ -47,5 +69,6 @@ void FileSink::process(OperatorContext & context)
     }
     output << "\n";
     iport.popTuple();
+    filePos_ = output.tellp();
   } 
 }

@@ -36,6 +36,23 @@ FileSource & FileSource::set_fileFormat(std::vector<std::pair<std::string, Type>
   return *this;
 }
 
+void FileSource::initState(OperatorContext & context)
+{
+  Tuple & store = context.getStateStore();
+  filePos_ = 0;
+  if (store.hasAttribute("pos")) {
+    int64_t pos = store.get<Type::Integer>("pos");
+    filePos_ = static_cast<streampos>(pos);
+  } 
+}
+
+void FileSource::saveState(OperatorContext & context) 
+{
+  Tuple & store = context.getStateStore();
+  int64_t pos = static_cast<streampos>(filePos_);
+  store.setAttribute("pos", pos);
+}
+
 void FileSource::process(OperatorContext & context)
 {
   Tuple tuple;
@@ -47,13 +64,18 @@ void FileSource::process(OperatorContext & context)
     SC_APPLOG(Error, "Error in opening input file: " << fileName_ << ", details: "<< strerror(errno));
     return;
   }
+  input.seekg(filePos_);
+  if (!input) {
+    SC_APPLOG(Error, "Error in seeking to location: " << filePos_ << ", in input file: " << fileName_ << ", details: "<< strerror(errno));
+    return;
+  }
   OutputPort & oport = context.getOutputPort(0);
   while (!context.isShutdownRequested()) {
     line.clear();
     getline(input, line);
     if (!input && !input.eof()) {
       SC_APPLOG(Error, "Error in reading from input file: " << fileName_ << ", details: "<< strerror(errno));
-      return;        
+      break;        
     }
     if(line.size()==0 && input.eof())
       break;   
@@ -73,6 +95,7 @@ void FileSource::process(OperatorContext & context)
     }
     if (!error)
       oport.pushTuple(tuple);
+    filePos_ = input.tellg();
   } 
 }
 

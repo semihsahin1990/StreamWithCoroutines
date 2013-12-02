@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['savestate',['saveState',['../classstreamc_1_1Operator.html#a8d29b937da132696864bb23b4be30253',1,'streamc::Operator::saveState()'],['../classstreamc_1_1operators_1_1FileSink.html#a2a3a0d6958a444e9a37d3b8ddd3cdc04',1,'streamc::operators::FileSink::saveState()'],['../classstreamc_1_1operators_1_1FileSource.html#a9bbf509f8432acc82b3a1e8c206cc17f',1,'streamc::operators::FileSource::saveState()']]],
   ['set_5ffileformat',['set_fileFormat',['../classstreamc_1_1operators_1_1FileSource.html#a60f63bf64e1d1abe33695ded1807477f',1,'streamc::operators::FileSource']]],
   ['set_5ffilename',['set_fileName',['../classstreamc_1_1operators_1_1FileSink.html#aaf9f5bada84f4b75cfe5093ae69b67fd',1,'streamc::operators::FileSink::set_fileName()'],['../classstreamc_1_1operators_1_1FileSource.html#a504b61480c0979ac16bda0374c215155',1,'streamc::operators::FileSource::set_fileName()']]],
   ['set_5ffilter',['set_filter',['../classstreamc_1_1operators_1_1Filter.html#a3d2283fd75f29a2a1122cd0044077f1f',1,'streamc::operators::Filter']]],

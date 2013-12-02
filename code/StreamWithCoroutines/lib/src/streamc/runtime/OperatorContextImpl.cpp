@@ -12,7 +12,7 @@ using namespace streamc;
 
 //constructor with flowContext and operator
 OperatorContextImpl::OperatorContextImpl(FlowContext * flowContext, Operator * oper)
-  : flowContext_(flowContext), oper_(oper), isComplete_(false)
+  : flowContext_(flowContext), oper_(oper), isComplete_(false), stateStore_(new Tuple())
 {}
 
 //destructor
@@ -35,6 +35,21 @@ void OperatorContextImpl::coroBody(coro_t::caller_type & caller)
     iportPtr->drain();
   isComplete_.store(true);
   flowContext_->markOperatorCompleted(oper_);  
+}
+
+void OperatorContextImpl::initOper() 
+{
+  oper_->initState(*this);
+}
+
+void OperatorContextImpl::saveOper() 
+{
+  oper_->saveState(*this);
+}
+
+Tuple & OperatorContextImpl::getStateStore() 
+{
+  return *stateStore_;
 }
 
 void OperatorContextImpl::runOper() 

@@ -154,34 +154,40 @@ $(document).ready(function(){initNavTree('Operator_8h_source.html','');});
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="keyword">  </span>{</div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keywordflow">return</span> numOutputPorts_;</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;  }</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    </div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classstreamc_1_1Operator.html#abe596a251f7861051ce974eb706c4cc0">process</a>(<a class="code" href="classstreamc_1_1OperatorContext.html">OperatorContext</a> &amp; context) = 0;</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;  std::string name_;</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;  <span class="keywordtype">size_t</span> numInputPorts_;</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;  <span class="keywordtype">size_t</span> numOutputPorts_;</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;};</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160; </div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;}</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;</div>
+<div class="line"><a name="l00114"></a><span class="lineno"><a class="line" href="classstreamc_1_1Operator.html#a4c1ee22a4ad62e28c9aefe325a5a8906">  114</a></span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classstreamc_1_1Operator.html#a4c1ee22a4ad62e28c9aefe325a5a8906">initState</a>(<a class="code" href="classstreamc_1_1OperatorContext.html">OperatorContext</a> &amp; context) {}</div>
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;</div>
+<div class="line"><a name="l00123"></a><span class="lineno"><a class="line" href="classstreamc_1_1Operator.html#a8d29b937da132696864bb23b4be30253">  123</a></span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classstreamc_1_1Operator.html#a8d29b937da132696864bb23b4be30253">saveState</a>(<a class="code" href="classstreamc_1_1OperatorContext.html">OperatorContext</a> &amp; context) {}</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;  std::string name_;</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;  <span class="keywordtype">size_t</span> numInputPorts_;</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;  <span class="keywordtype">size_t</span> numOutputPorts_;</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;};</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160; </div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;}</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;</div>
 <div class="ttc" id="classstreamc_1_1Operator_html_a22e8542708f73e88d5f74af809d62fed"><div class="ttname"><a href="classstreamc_1_1Operator.html#a22e8542708f73e88d5f74af809d62fed">streamc::Operator::Operator</a></div><div class="ttdeci">Operator(std::string const &amp;name, size_t numInputPorts, size_t numOutputPorts)</div><div class="ttdoc">Construct with explicit name. </div><div class="ttdef"><b>Definition:</b> Operator.h:34</div></div>
+<div class="ttc" id="classstreamc_1_1Operator_html_a8d29b937da132696864bb23b4be30253"><div class="ttname"><a href="classstreamc_1_1Operator.html#a8d29b937da132696864bb23b4be30253">streamc::Operator::saveState</a></div><div class="ttdeci">virtual void saveState(OperatorContext &amp;context)</div><div class="ttdoc">Save the operator state. </div><div class="ttdef"><b>Definition:</b> Operator.h:123</div></div>
 <div class="ttc" id="classstreamc_1_1Operator_html_acd9f603ceba11eb8492bb6cefbfd11fe"><div class="ttname"><a href="classstreamc_1_1Operator.html#acd9f603ceba11eb8492bb6cefbfd11fe">streamc::Operator::Operator</a></div><div class="ttdeci">Operator(size_t numInputPorts, size_t numOutputPorts)</div><div class="ttdoc">Construct with implicit name. </div><div class="ttdef"><b>Definition:</b> Operator.h:44</div></div>
 <div class="ttc" id="classstreamc_1_1Operator_html_a8847368779e34b5db8a1b5c65a77332a"><div class="ttname"><a href="classstreamc_1_1Operator.html#a8847368779e34b5db8a1b5c65a77332a">streamc::Operator::getName</a></div><div class="ttdeci">std::string const &amp; getName() const </div><div class="ttdoc">Get the name of the operator. </div><div class="ttdef"><b>Definition:</b> Operator.h:56</div></div>
 <div class="ttc" id="classstreamc_1_1Operator_html_aed817d3c4466e7c093a20d2f89c9d8c8"><div class="ttname"><a href="classstreamc_1_1Operator.html#aed817d3c4466e7c093a20d2f89c9d8c8">streamc::Operator::getNumberOfInputPorts</a></div><div class="ttdeci">size_t getNumberOfInputPorts() const </div><div class="ttdoc">Get the number of input ports of the operator. </div><div class="ttdef"><b>Definition:</b> Operator.h:66</div></div>
 <div class="ttc" id="classstreamc_1_1Operator_html"><div class="ttname"><a href="classstreamc_1_1Operator.html">streamc::Operator</a></div><div class="ttdoc">Base class for implementing streaming operators. </div><div class="ttdef"><b>Definition:</b> Operator.h:24</div></div>
 <div class="ttc" id="classstreamc_1_1Operator_html_abe596a251f7861051ce974eb706c4cc0"><div class="ttname"><a href="classstreamc_1_1Operator.html#abe596a251f7861051ce974eb706c4cc0">streamc::Operator::process</a></div><div class="ttdeci">virtual void process(OperatorContext &amp;context)=0</div><div class="ttdoc">Perform the main processing of the operator. </div></div>
-<div class="ttc" id="classstreamc_1_1OperatorContext_html"><div class="ttname"><a href="classstreamc_1_1OperatorContext.html">streamc::OperatorContext</a></div><div class="ttdoc">Operator context that provides runtime services for operators. </div><div class="ttdef"><b>Definition:</b> OperatorContext.h:17</div></div>
+<div class="ttc" id="classstreamc_1_1OperatorContext_html"><div class="ttname"><a href="classstreamc_1_1OperatorContext.html">streamc::OperatorContext</a></div><div class="ttdoc">Operator context that provides runtime services for operators. </div><div class="ttdef"><b>Definition:</b> OperatorContext.h:18</div></div>
 <div class="ttc" id="Lambdas_8h_html"><div class="ttname"><a href="Lambdas_8h.html">Lambdas.h</a></div><div class="ttdoc">The source file for the tuple lamda macros. </div></div>
 <div class="ttc" id="classstreamc_1_1Operator_html_ae914749812e969e9a7e11495892f4b57"><div class="ttname"><a href="classstreamc_1_1Operator.html#ae914749812e969e9a7e11495892f4b57">streamc::Operator::getNumberOfOutputPorts</a></div><div class="ttdeci">size_t getNumberOfOutputPorts() const </div><div class="ttdoc">Get the number of output ports of the operator. </div><div class="ttdef"><b>Definition:</b> Operator.h:76</div></div>
+<div class="ttc" id="classstreamc_1_1Operator_html_a4c1ee22a4ad62e28c9aefe325a5a8906"><div class="ttname"><a href="classstreamc_1_1Operator.html#a4c1ee22a4ad62e28c9aefe325a5a8906">streamc::Operator::initState</a></div><div class="ttdeci">virtual void initState(OperatorContext &amp;context)</div><div class="ttdoc">Initialize the operator state. </div><div class="ttdef"><b>Definition:</b> Operator.h:114</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_f26e643a9842da0ce6dbe030c714fc5e.html">streamc</a></li><li class="navelem"><b>Operator.h</b></li>
-    <li class="footer">Generated on Sun Dec 1 2013 23:26:41 for StreamC by
+    <li class="footer">Generated on Mon Dec 2 2013 10:56:44 for StreamC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

@@ -23,7 +23,7 @@ LDFLAGS   = -L /opt/local/libcpp-software/lib -Wl,-rpath,/opt/local/libcpp-softw
 
 ## Implicit Section: change the following only when necessary.
 CXX      = clang++ 
-CXXFLAGS = -g -O2 -fPIC -Wall -std=c++11 -stdlib=libc++ -fcolor-diagnostics
+CXXFLAGS = -g -O2 -fPIC -Wall -std=c++11 -stdlib=libc++ 
 SRCDIRS  = $(shell find $(SRCDIR) -type d)
 INCDIRS  = $(shell find $(INCDIR) -type d)
 INCFLAGS = $(addprefix -I ,$(SRCDIRS)) $(addprefix -I ,$(INCDIRS)) $(INCLUDES)

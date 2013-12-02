@@ -154,6 +154,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:abc04c35d900edc4600f11b3ab6750c71"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Tuple.html#abc04c35d900edc4600f11b3ab6750c71">setAttribute</a> (std::string const &amp;name, std::vector&lt; double &gt; const &amp;value)</td></tr>
 <tr class="memdesc:abc04c35d900edc4600f11b3ab6750c71"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set value of an attribute to a double list.  <a href="#abc04c35d900edc4600f11b3ab6750c71">More...</a><br/></td></tr>
 <tr class="separator:abc04c35d900edc4600f11b3ab6750c71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b11856196c435a3f40f83cadb147bf6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Tuple.html#a7b11856196c435a3f40f83cadb147bf6">hasAttribute</a> (std::string const &amp;name)</td></tr>
+<tr class="memdesc:a7b11856196c435a3f40f83cadb147bf6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check whether an attribute with the given name exist.  <a href="#a7b11856196c435a3f40f83cadb147bf6">More...</a><br/></td></tr>
+<tr class="separator:a7b11856196c435a3f40f83cadb147bf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a165c4262a00f97e2c8d997bcf46e79fe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Tuple.html#a165c4262a00f97e2c8d997bcf46e79fe">setAttribute</a> (std::string const &amp;name, std::vector&lt; std::string &gt; const &amp;value)</td></tr>
 <tr class="memdesc:a165c4262a00f97e2c8d997bcf46e79fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set value of an attribute to a string list.  <a href="#a165c4262a00f97e2c8d997bcf46e79fe">More...</a><br/></td></tr>
 <tr class="separator:a165c4262a00f97e2c8d997bcf46e79fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -751,6 +754,39 @@ template&lt;Type T&gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a7b11856196c435a3f40f83cadb147bf6"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool streamc::Tuple::hasAttribute </td>
+          <td>(</td>
+          <td class="paramtype">std::string const &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Check whether an attribute with the given name exist. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>the attribute </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the attribute exists, false otherwise </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a46a4441fea0bbd7515dd661219304ecd"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1126,7 +1162,7 @@ template&lt;Type T&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>streamc</b></li><li class="navelem"><a class="el" href="classstreamc_1_1Tuple.html">Tuple</a></li>
-    <li class="footer">Generated on Sun Dec 1 2013 23:26:41 for StreamC by
+    <li class="footer">Generated on Mon Dec 2 2013 10:56:44 for StreamC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

@@ -146,6 +146,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:abe596a251f7861051ce974eb706c4cc0"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Operator.html#abe596a251f7861051ce974eb706c4cc0">process</a> (<a class="el" href="classstreamc_1_1OperatorContext.html">OperatorContext</a> &amp;context)=0</td></tr>
 <tr class="memdesc:abe596a251f7861051ce974eb706c4cc0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform the main processing of the operator.  <a href="#abe596a251f7861051ce974eb706c4cc0">More...</a><br/></td></tr>
 <tr class="separator:abe596a251f7861051ce974eb706c4cc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c1ee22a4ad62e28c9aefe325a5a8906"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Operator.html#a4c1ee22a4ad62e28c9aefe325a5a8906">initState</a> (<a class="el" href="classstreamc_1_1OperatorContext.html">OperatorContext</a> &amp;context)</td></tr>
+<tr class="memdesc:a4c1ee22a4ad62e28c9aefe325a5a8906"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the operator state.  <a href="#a4c1ee22a4ad62e28c9aefe325a5a8906">More...</a><br/></td></tr>
+<tr class="separator:a4c1ee22a4ad62e28c9aefe325a5a8906"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d29b937da132696864bb23b4be30253"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreamc_1_1Operator.html#a8d29b937da132696864bb23b4be30253">saveState</a> (<a class="el" href="classstreamc_1_1OperatorContext.html">OperatorContext</a> &amp;context)</td></tr>
+<tr class="memdesc:a8d29b937da132696864bb23b4be30253"><td class="mdescLeft">&#160;</td><td class="mdescRight">Save the operator state.  <a href="#a8d29b937da132696864bb23b4be30253">More...</a><br/></td></tr>
+<tr class="separator:a8d29b937da132696864bb23b4be30253"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
@@ -331,6 +337,41 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a4c1ee22a4ad62e28c9aefe325a5a8906"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void streamc::Operator::initState </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classstreamc_1_1OperatorContext.html">OperatorContext</a> &amp;&#160;</td>
+          <td class="paramname"><em>context</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Initialize the operator state. </p>
+<p>This function can be overriden to initialize the operator state, in case the operator is being restarted, rather than starting afresh. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">context</td><td>the operator context </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="classstreamc_1_1operators_1_1FileSource.html#a2a9e45995816b8ccf1e7e71a085f0121">streamc::operators::FileSource</a>, and <a class="el" href="classstreamc_1_1operators_1_1FileSink.html#a5cf1dcd97f0b08a40f4b61717308163e">streamc::operators::FileSink</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="abe596a251f7861051ce974eb706c4cc0"></a>
 <div class="memitem">
 <div class="memproto">
@@ -379,6 +420,41 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a8d29b937da132696864bb23b4be30253"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void streamc::Operator::saveState </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classstreamc_1_1OperatorContext.html">OperatorContext</a> &amp;&#160;</td>
+          <td class="paramname"><em>context</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Save the operator state. </p>
+<p>This function can be overriden to initialize save operator state, so that the operator can be restarted later. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">context</td><td>the operator context </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="classstreamc_1_1operators_1_1FileSource.html#a9bbf509f8432acc82b3a1e8c206cc17f">streamc::operators::FileSource</a>, and <a class="el" href="classstreamc_1_1operators_1_1FileSink.html#a2a3a0d6958a444e9a37d3b8ddd3cdc04">streamc::operators::FileSink</a>.</p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>streamc/<a class="el" href="Operator_8h_source.html">Operator.h</a></li>
 </ul>
@@ -388,7 +464,7 @@ Protected Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>streamc</b></li><li class="navelem"><a class="el" href="classstreamc_1_1Operator.html">Operator</a></li>
-    <li class="footer">Generated on Sun Dec 1 2013 23:26:41 for StreamC by
+    <li class="footer">Generated on Mon Dec 2 2013 10:56:44 for StreamC by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.5 </li>
   </ul>

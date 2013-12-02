@@ -20,14 +20,14 @@ public:
   void drain();
 
   // implemented interface
-  bool isClosed();
-  bool hasTuple();
-  size_t getTupleCount();  
-  bool waitTuple();
-  bool waitTuple(size_t n);
-  Tuple & getFrontTuple();
-  Tuple & getTupleAt(size_t index);
-  void popTuple();
+  bool isClosed() override;
+  bool hasTuple() override;
+  size_t getTupleCount() override;  
+  bool waitTuple() override;
+  bool waitTuple(size_t n) override;
+  Tuple & getFrontTuple() override;
+  Tuple & getTupleAt(size_t index) override;
+  void popTuple() override;
 
 private:
   bool isClosedNoLock();

@@ -15,14 +15,13 @@ class OutputPortImpl : public OutputPort
 {  
 public:
   OutputPortImpl(OperatorContextImpl & oper, Scheduler & scheduler);
-  // add (subscriber operator,portNo) pair to this port
-  void addSubscriber(OperatorContextImpl & oper, size_t inPort); 
 
   size_t getNumberOfSubscribers();
+  void addSubscriber(OperatorContextImpl & oper, size_t inPort); 
   std::pair<OperatorContextImpl *, size_t> getSubscriber(size_t index);
 
-  // push tuple to the input port of each subscriber
-  void pushTuple(Tuple const & tuple);
+  // implemented interface
+  void pushTuple(Tuple const & tuple) override;
 
 private:
   OperatorContextImpl * oper_;

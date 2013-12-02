@@ -16,6 +16,7 @@ class Operator;
 class FlowContext;
 class InputPortImpl;
 class OutputPortImpl;
+class Tuple;
 
 class OperatorContextImpl : public OperatorContext
 {
@@ -25,8 +26,12 @@ public:
   Operator & getOperator() { return *oper_; }
   void addInputPort(InputPortImpl * port);
   void addOutputPort(OutputPortImpl * port);
+  void initOper();
   void runOper();
   void yieldOper();
+  void saveOper();
+
+
 
   bool isComplete() const { return isComplete_.load(); }
   size_t getNumberOfInputPorts() { return inputs_.size(); }
@@ -35,9 +40,10 @@ public:
   OutputPortImpl & getOutputPortImpl(size_t outputPort) { return *outputs_[outputPort]; }
 
   // interface to be implemented
-  InputPort & getInputPort(size_t inputPort);
-  OutputPort & getOutputPort(size_t outputPort);
-  bool isShutdownRequested();
+  InputPort & getInputPort(size_t inputPort) override;
+  OutputPort & getOutputPort(size_t outputPort) override;
+  Tuple & getStateStore() override;
+  bool isShutdownRequested() override;
 
 private:
   typedef boost::coroutines::coroutine<void()> coro_t;
@@ -50,6 +56,7 @@ private:
   FlowContext * flowContext_;
   Operator * oper_;
   std::atomic<bool> isComplete_;
+  std::unique_ptr<Tuple> stateStore_;
   std::vector<std::unique_ptr<InputPortImpl>> inputs_;
   std::vector<std::unique_ptr<OutputPortImpl>> outputs_;
   std::mutex mutex_;

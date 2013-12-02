@@ -19,6 +19,7 @@ var classstreamc_1_1Tuple =
     [ "getStringAttribute", "classstreamc_1_1Tuple.html#adef29936dd46a5333b00b5efe1ee2848", null ],
     [ "getStringListAttribute", "classstreamc_1_1Tuple.html#a4bbd6d6a458f2c822bdfb97769bc2cb1", null ],
     [ "getStringListAttribute", "classstreamc_1_1Tuple.html#ad2f8abe170770f6c4e1a8ca89ac1c733", null ],
+    [ "hasAttribute", "classstreamc_1_1Tuple.html#a7b11856196c435a3f40f83cadb147bf6", null ],
     [ "operator=", "classstreamc_1_1Tuple.html#a46a4441fea0bbd7515dd661219304ecd", null ],
     [ "removeAttribute", "classstreamc_1_1Tuple.html#a571e95c272ded07c4e069b06cf6fe74e", null ],
     [ "setAttribute", "classstreamc_1_1Tuple.html#a0afda289f589f4c594453822b6f5a4e5", null ],

@@ -77,7 +77,7 @@ public:
   {
     return numOutputPorts_;
   }
-
+    
   /**
    * Perform the main processing of the operator.
    *
@@ -103,6 +103,24 @@ public:
    * @param context operator context
    */
   virtual void process(OperatorContext & context) = 0;
+
+  /**
+    Initialize the operator state.
+    
+    This function can be overriden to initialize the operator state, in case the
+    operator is being restarted, rather than starting afresh.
+    @param context the operator context
+   */
+  virtual void initState(OperatorContext & context) {}
+
+  /**
+    Save the operator state.
+    
+    This function can be overriden to initialize save operator state, so that 
+    the operator can be restarted later.
+    @param context the operator context
+   */
+  virtual void saveState(OperatorContext & context) {}
 
 private:
   std::string name_;
