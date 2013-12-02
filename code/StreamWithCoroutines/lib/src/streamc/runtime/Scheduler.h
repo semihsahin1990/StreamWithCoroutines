@@ -21,6 +21,7 @@ public:
   Scheduler();
   ~Scheduler();
   void addThread(WorkerThread & thread);
+  void removeThreads();
   void addOperatorContext(OperatorContextImpl & oper);
   void start();
   void stop();
@@ -47,9 +48,9 @@ private:
   std::unique_ptr<SchedulerPlugin> plugin_;
   // scheduler state, including indices
   std::unordered_map<WorkerThread *, ThreadInfo *> threads_;
-  std::unordered_map<OperatorContextImpl *, OperatorInfo *> operContexts_;
   std::unordered_set<WorkerThread *> waitingThreads_;
   std::unordered_set<WorkerThread *> readyThreads_;
+  std::unordered_map<OperatorContextImpl *, OperatorInfo *> operContexts_;
   std::unordered_map<InputPortImpl *, OperatorContextImpl *> readBlockedOperators_;
   std::unordered_map<InputPortImpl *, std::unordered_set<OperatorContextImpl *>> writeBlockedOperators_;
   std::unordered_set<OperatorContextImpl *> readyOperators_;

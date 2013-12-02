@@ -18,12 +18,22 @@ Scheduler::~Scheduler()
 
 void Scheduler::addThread(WorkerThread & thread)
 {
+  unique_lock<mutex> lock(mutex_);
   threadInfos_.push_back(unique_ptr<ThreadInfo>(new ThreadInfo(&thread)));
   threads_[&thread] = threadInfos_.back().get();
 }
 
+void Scheduler::removeThreads()
+{
+  unique_lock<mutex> lock(mutex_);
+  assert(waitingThreads_.empty());
+  assert(readyThreads_.empty());
+  threads_.clear();
+  threadInfos_.clear();
+}
 void Scheduler::addOperatorContext(OperatorContextImpl & context)
 {
+  unique_lock<mutex> lock(mutex_);
   operatorInfos_.push_back(unique_ptr<OperatorInfo>(new OperatorInfo(context)));
   operContexts_[&context] = operatorInfos_.back().get();
 }
@@ -31,10 +41,13 @@ void Scheduler::addOperatorContext(OperatorContextImpl & context)
 void Scheduler::start()
 {
   unique_lock<mutex> lock(mutex_);
-  for (auto & threadInfoPair : threads_)
+  for (auto & threadInfoPair : threads_) 
     readyThreads_.insert(threadInfoPair.first);
-  for (auto & operInfoPair : operContexts_)
+  for (auto & operInfoPair : operContexts_) {
+    operInfoPair.first->init();
+    operInfoPair.second->init();
     readyOperators_.insert(operInfoPair.first);  
+  }
 }
 
 void Scheduler::stop()

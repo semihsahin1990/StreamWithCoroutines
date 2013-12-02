@@ -9,16 +9,30 @@ using namespace std;
 using namespace streamc;
 
 OperatorInfo::ReadWaitCondition::ReadWaitCondition(OperatorContextImpl & oper)
+  : oper_(&oper)
 {
-  for (size_t i=0, iu=oper.getNumberOfInputPorts(); i<iu; ++i) 
-    portWaits_[&oper.getInputPortImpl(i)] = ThresholdAndCount(0, 0);
+  init();
+}
+
+void OperatorInfo::ReadWaitCondition::init()
+{
+  portWaits_.clear();
+  for (size_t i=0, iu=oper_->getNumberOfInputPorts(); i<iu; ++i) 
+    portWaits_[&oper_->getInputPortImpl(i)] = ThresholdAndCount(0, 0);
 }
 
 OperatorInfo::WriteWaitCondition::WriteWaitCondition(OperatorContextImpl & oper)
+  : oper_(&oper)
 {
-  size_t nOports = oper.getNumberOfOutputPorts();
+  init();
+}
+
+void OperatorInfo::WriteWaitCondition::init()
+{
+  portWaits_.clear();
+  size_t nOports = oper_->getNumberOfOutputPorts();
   for (size_t o=0; o<nOports; ++o) {
-    OutputPortImpl & oport = oper.getOutputPortImpl(o);
+    OutputPortImpl & oport = oper_->getOutputPortImpl(o);
     size_t nSubs = oport.getNumberOfSubscribers();
     for (size_t s=0; s<nSubs; ++s) {
       pair<OperatorContextImpl *, size_t> subs = oport.getSubscriber(s);

@@ -44,7 +44,7 @@ void FileSink::saveState(OperatorContext & context)
 void FileSink::process(OperatorContext & context)
 {
   ofstream output;
-  output.open(fileName_.c_str(), ios::out);
+  output.open(fileName_.c_str(), (filePos_>0) ? (ios::out|ios::app) : ios::out);
   if (!output) {
     SC_APPLOG(Error, "Error in opening output file: " << fileName_ << ", details: " << strerror(errno));
     return;

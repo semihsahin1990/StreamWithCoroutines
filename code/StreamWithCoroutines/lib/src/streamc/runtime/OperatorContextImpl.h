@@ -23,6 +23,8 @@ class OperatorContextImpl : public OperatorContext
 public:
   OperatorContextImpl(FlowContext * flowContext, Operator * oper);
   ~OperatorContextImpl();
+  void init();
+  
   Operator & getOperator() { return *oper_; }
   void addInputPort(InputPortImpl * port);
   void addOutputPort(OutputPortImpl * port);

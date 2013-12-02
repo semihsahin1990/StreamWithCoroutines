@@ -13,21 +13,8 @@ using namespace streamc;
 
 size_t FlowContext::maxQueueSize_ = 10000; // TODO: make changable, and perhaps per port?
 
-//constructor with flow, initially none of the operators is completed and shutdown is not requested.
 FlowContext::FlowContext(Flow & flow)
   : flow_(flow), numCompleted_(0), isShutdownRequested_(false)
-{}
-
-//destructor 
-FlowContext::~FlowContext()
-{}
-
-/*
-create operator contexts for each operator in the flow
-add input and output ports to each operator context
-run the flow with numThreads thread
-*/
-void FlowContext::run(int numThreads)
 {
   // create the scheduler
   scheduler_.reset(new Scheduler());
@@ -71,18 +58,28 @@ void FlowContext::run(int numThreads)
       operatorContext->addOutputPort(port);
     }
   }
-  
-  // create threads and add threads to the scheduler
-  for (int i=0; i<numThreads; ++i) { 
-    auto thread = new WorkerThread(i, *scheduler_);
-    threads_.push_back(unique_ptr<WorkerThread>(thread));
-    scheduler_->addThread(*threads_[i]);
-  }
-
   // add operator contexts to the schduler
   for (Operator * oper : opers) {
     auto & opcPtr = operatorContexts_[oper];
     scheduler_->addOperatorContext(*opcPtr);
+  }
+}
+
+FlowContext::~FlowContext()
+{}
+
+void FlowContext::run(int numThreads)
+{
+  // reset the shutdown requested (in case we are being rerun)
+  isShutdownRequested_.store(false);
+  
+  // create threads and add threads to the scheduler 
+  scheduler_->removeThreads();
+  threads_.clear();
+  for (int i=0; i<numThreads; ++i) { 
+    auto thread = new WorkerThread(i, *scheduler_);
+    threads_.push_back(unique_ptr<WorkerThread>(thread));
+    scheduler_->addThread(*threads_[i]);
   }
  
   // start the scheduler and all the threads

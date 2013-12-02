@@ -20,7 +20,8 @@ public:
                      Completed // no more work to do
   };
   ThreadInfo() {}
-  ThreadInfo(WorkerThread * thread) : thread_(thread), state_(Ready), oper_(NULL) {}
+  ThreadInfo(WorkerThread * thread) : thread_(thread), state_(Ready), oper_(nullptr) {}
+  void init() { state_ = Ready; oper_ = nullptr; }
   WorkerThread & getThread() { return *thread_; }
   ThreadState getState() { return state_; }
   void setState(ThreadState state) { state_ = state; }
@@ -51,6 +52,7 @@ public:
     typedef std::unordered_map<InputPortImpl *, ThresholdAndCount> PortWaitList;
     ReadWaitCondition() {}
     ReadWaitCondition(OperatorContextImpl & oper);
+    void init();
     void setWaitThreshold(InputPortImpl & iport, size_t thresh);
     size_t getWaitThreshold(InputPortImpl & iport);
     bool computeReadiness();
@@ -58,6 +60,7 @@ public:
     void reset(); 
     PortWaitList const & getWaitList() { return portWaits_; }
   private:
+    OperatorContextImpl * oper_;
     PortWaitList portWaits_;
   };
   class WriteWaitCondition
@@ -66,12 +69,14 @@ public:
     typedef std::unordered_map<InputPortImpl *, ThresholdAndCount> PortWaitList;
     WriteWaitCondition() {}
     WriteWaitCondition(OperatorContextImpl & oper);
+    void init();
     void setWaitThreshold(InputPortImpl & iport, size_t thresh);
     size_t getWaitThreshold(InputPortImpl & iport);
     bool computeReadiness();
     bool isReady(InputPortImpl & iport);
     PortWaitList const & getWaitList() { return portWaits_; }
   private:
+    OperatorContextImpl * oper_;
     PortWaitList portWaits_;
   };
 public:
@@ -82,8 +87,9 @@ public:
                        Completed     // no work to do
   };
   OperatorInfo() {}
-  OperatorInfo(OperatorContextImpl & oper) : oper_(&oper), state_(Ready), thread_(NULL) , 
+  OperatorInfo(OperatorContextImpl & oper) : oper_(&oper), state_(Ready), thread_(nullptr) , 
                                              readCond_(oper), writeCond_(oper) {}
+  void init() { state_=Ready; thread_ = nullptr; readCond_.init(); writeCond_.init(); }
   OperatorContextImpl & getOperatorContext() { return *oper_; }
   OperatorState getState() { return state_; }
   void setState(OperatorState state) { state_ = state; }

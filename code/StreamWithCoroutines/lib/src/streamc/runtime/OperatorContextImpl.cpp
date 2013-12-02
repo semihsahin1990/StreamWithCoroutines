@@ -19,6 +19,12 @@ OperatorContextImpl::OperatorContextImpl(FlowContext * flowContext, Operator * o
 OperatorContextImpl::~OperatorContextImpl()
 {}
 
+void OperatorContextImpl::init()
+{
+  isComplete_.store(false);
+  coroStarted_ = false;
+}
+
 //returns whether shutdown is requested or not
 bool OperatorContextImpl::isShutdownRequested()
 {
