@@ -55,7 +55,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 
 $(BINDIR)/$(PROGRAM): $(OBJS)
 	@mkdir -p $(dir $@)
-	$(LINK) $(OBJS) -o "$(PWD)/$@"
+	$(LINK) $(OBJS) -o $@
 
 ifneq ($(DEPS),)
   sinclude $(DEPS)

@@ -23,7 +23,7 @@ int main()
 
   Operator & fltF = flow.createOperator<Filter>("fltF")
     .set_filter(MEXP1( t_.get<Type::String>("grade") != "F" ));
-
+  
   Operator & fltG = flow.createOperator<Filter>("fltG")
     .set_filter(MEXP1( t_.get<Type::String>("name") != "Bugra" ));
 
