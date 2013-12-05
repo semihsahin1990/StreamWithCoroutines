@@ -29,8 +29,10 @@ public:
   // return the operator to execute, nullptr if the thread should exit
   OperatorContextImpl * getThreadWork(WorkerThread & thread);
   void markOperatorAsCompleted(OperatorContextImpl & oper);
-  void markOperatorAsReadBlocked(OperatorContextImpl & oper, std::unordered_map<InputPortImpl *, size_t> const & waitSpec);  
-  void markOperatorAsWriteBlocked(OperatorContextImpl & oper, std::unordered_map<InputPortImpl *, size_t> const & waitSpec);  
+  void markOperatorAsReadBlocked(OperatorContextImpl & oper, 
+    std::unordered_map<InputPortImpl *, size_t> const & waitSpec, bool conjunctive);  
+  void markOperatorAsWriteBlocked(OperatorContextImpl & oper, 
+    std::unordered_map<InputPortImpl *, size_t> const & waitSpec);  
   void markInputPortAsWritten(InputPortImpl & iport);
   void markInputPortAsRead(InputPortImpl & iport);
   void checkOperatorForPreemption(OperatorContextImpl & oper);

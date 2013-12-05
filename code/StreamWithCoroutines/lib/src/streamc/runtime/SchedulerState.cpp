@@ -9,7 +9,7 @@ using namespace std;
 using namespace streamc;
 
 OperatorInfo::ReadWaitCondition::ReadWaitCondition(OperatorContextImpl & oper)
-  : oper_(&oper)
+  : kind_(Conjunctive), oper_(&oper)
 {
   init();
 }
@@ -64,16 +64,31 @@ size_t OperatorInfo::WriteWaitCondition::getWaitThreshold(InputPortImpl & iport)
 
 bool OperatorInfo::ReadWaitCondition::computeReadiness()
 {
-  bool ready = true;
-  for (auto & portCondPair : portWaits_) {
-    InputPortImpl * iport = portCondPair.first;
-    size_t thresh = portCondPair.second.threshold;
-    size_t & count = portCondPair.second.currentCount;
-    count = iport->getTupleCount();
-    if (count < thresh) 
-      ready = false;    
+  if (kind_==Disjunctive) {
+    bool ready = false;
+    for (auto & portCondPair : portWaits_) {
+      InputPortImpl * iport = portCondPair.first;
+      size_t thresh = portCondPair.second.threshold;
+      size_t & count = portCondPair.second.currentCount;
+      count = iport->getTupleCount();
+     if (count >= thresh) 
+        ready = true;    
+      // do not early out, as we need to update current counts
+    }
+    return ready;
+  } else {
+    bool ready = true;
+    for (auto & portCondPair : portWaits_) {
+      InputPortImpl * iport = portCondPair.first;
+      size_t thresh = portCondPair.second.threshold;
+      size_t & count = portCondPair.second.currentCount;
+      count = iport->getTupleCount();
+     if (count < thresh) 
+        ready = false;    
+      // do not early out, as we need to update current counts
+    }
+    return ready;
   }
-  return ready;
 }
 
 bool OperatorInfo::WriteWaitCondition::computeReadiness()

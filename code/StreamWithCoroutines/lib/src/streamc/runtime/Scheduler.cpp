@@ -103,12 +103,16 @@ void Scheduler::markOperatorAsCompleted(OperatorContextImpl & oper)
 }
 
 void Scheduler::markOperatorAsReadBlocked(OperatorContextImpl & oper, 
-      std::unordered_map<InputPortImpl *, size_t> const & waitSpec)
+      std::unordered_map<InputPortImpl *, size_t> const & waitSpec, bool conjunctive)
 {
   {
     unique_lock<mutex> lock(mutex_);  
     OperatorInfo & oinfo = *(operContexts_[&oper]);
     OperatorInfo::ReadWaitCondition & waitCond = oinfo.getReadWaitCondition();
+    if (conjunctive)
+      waitCond.makeConjunctive();
+    else
+      waitCond.makeDisjunctive();
     for (auto & portSizePair : waitSpec)
       waitCond.setWaitThreshold(*portSizePair.first, portSizePair.second);
     if (!waitCond.computeReadiness())  
@@ -147,7 +151,7 @@ void Scheduler::markInputPortAsWritten(InputPortImpl & iport)
   OperatorContextImpl & oper = *(it->second);
   OperatorInfo & oinfo = *(operContexts_[&oper]);
   OperatorInfo::ReadWaitCondition & waitCond = oinfo.getReadWaitCondition();
-  if (waitCond.computeReadiness()) 
+  if (waitCond.computeReadiness())
     updateOperatorState(oper, OperatorInfo::Ready);
   else if(waitCond.isReady(iport)) 
     readBlockedOperators_.erase(&iport); // not waiting on this port anymore

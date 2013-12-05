@@ -93,7 +93,7 @@ bool InputPortImpl::waitTuple(size_t n)
     }
     if (needToWait) {
       // we need to ask the scheduler to move us into blocked state
-      scheduler_->markOperatorAsReadBlocked(*oper_, { {this, n} });  
+      scheduler_->markOperatorAsReadBlocked(*oper_, { {this, n} }, true);  
       // Reaching here does not mean that we do not need to wait anymore,
       // as it might be the case that the scheduler has woken us because
       // the port has closed! That is why we have the while loop above.

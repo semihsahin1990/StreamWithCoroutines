@@ -49,24 +49,27 @@ public:
   class ReadWaitCondition
   {
   public:
-    typedef std::unordered_map<InputPortImpl *, ThresholdAndCount> PortWaitList;
-    ReadWaitCondition() {}
+    enum Kind { Conjunctive, Disjunctive }; 
+    ReadWaitCondition() : kind_(Conjunctive) {}
     ReadWaitCondition(OperatorContextImpl & oper);
     void init();
     void setWaitThreshold(InputPortImpl & iport, size_t thresh);
     size_t getWaitThreshold(InputPortImpl & iport);
+    void makeConjunctive() { kind_ = Conjunctive; }
+    void makeDisjunctive() { kind_ = Disjunctive; }
     bool computeReadiness();
     bool isReady(InputPortImpl & iport);
     void reset(); 
+    typedef std::unordered_map<InputPortImpl *, ThresholdAndCount> PortWaitList;
     PortWaitList const & getWaitList() { return portWaits_; }
   private:
+    Kind kind_;
     OperatorContextImpl * oper_;
     PortWaitList portWaits_;
   };
   class WriteWaitCondition
   {
   public:
-    typedef std::unordered_map<InputPortImpl *, ThresholdAndCount> PortWaitList;
     WriteWaitCondition() {}
     WriteWaitCondition(OperatorContextImpl & oper);
     void init();
@@ -74,6 +77,7 @@ public:
     size_t getWaitThreshold(InputPortImpl & iport);
     bool computeReadiness();
     bool isReady(InputPortImpl & iport);
+    typedef std::unordered_map<InputPortImpl *, ThresholdAndCount> PortWaitList;    
     PortWaitList const & getWaitList() { return portWaits_; }
   private:
     OperatorContextImpl * oper_;
