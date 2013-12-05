@@ -33,8 +33,6 @@ public:
   void yieldOper();
   void saveOper();
 
-
-
   bool isComplete() const { return isComplete_.load(); }
   size_t getNumberOfInputPorts() { return inputs_.size(); }
   size_t getNumberOfOutputPorts() { return outputs_.size(); }
