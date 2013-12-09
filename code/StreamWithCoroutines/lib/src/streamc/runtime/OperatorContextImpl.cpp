@@ -76,13 +76,13 @@ void OperatorContextImpl::yieldOper()
   (*coroCaller_)();
 }
 
-//add inputPort to the context
+// add inputPort to the context
 void OperatorContextImpl::addInputPort(InputPortImpl * port)
 {
   inputs_.push_back(std::unique_ptr<InputPortImpl>(port));
 }
 
-//add outputPort to the context
+// add outputPort to the context
 void OperatorContextImpl::addOutputPort(OutputPortImpl * port)
 {
   outputs_.push_back(std::unique_ptr<OutputPortImpl>(port));
@@ -99,37 +99,32 @@ OutputPort & OperatorContextImpl::getOutputPort(size_t outputPort) {
 // return true if will never be satisfied
 bool OperatorContextImpl::waitOnAllPorts(unordered_map<InputPort *, size_t> const & spec)
 {
-  unordered_map<InputPortImpl *, size_t> waitSpec;
-  for(auto const & portCountPair : spec){
-        waitSpec[static_cast<InputPortImpl *>(portCountPair.first)] = portCountPair.second;
-  }
+  typedef unordered_map<InputPortImpl *, size_t> SpecType;
+  SpecType & waitSpec = const_cast<SpecType &>(reinterpret_cast<SpecType const &>(spec));
 
   bool needToWait = true;
-  while(needToWait){
-    {
-      bool allAvailable = true;
-      for(auto const & portCountPair : spec){
-        bool portAvailable = portCountPair.first->getTupleCount() >= portCountPair.second;
-
-        if(!portAvailable){
-          allAvailable = false;
-          break;
-        }
+  while (needToWait) {
+    bool allAvailable = true;
+    for (auto const & portCountPair : waitSpec){
+      bool portAvailable = portCountPair.first->getTupleCount() >= portCountPair.second;
+      if (!portAvailable){
+        allAvailable = false;
+        break;
       }
-
-      if(allAvailable){
-        needToWait = false;
-      } else { 
-        for(auto const & portCountPair : spec){
-          bool portClosed = static_cast<InputPortImpl *>(portCountPair.first)->isClosed();
-          // TODO: Tuples may have arrived, check that
-          if(portClosed)
-            return true;
-        }
+    }
+    if (allAvailable) {
+      needToWait = false;
+    } else { 
+      for(auto const & portCountPair : waitSpec){
+        bool portClosed = portCountPair.first->isClosed();
+        // tuple count may have changed since our last check
+        bool portAvailable = portCountPair.first->getTupleCount() >= portCountPair.second;
+        if (portClosed && !portAvailable)
+          return true;
       }
     }
 
-    if(needToWait){
+    if (needToWait){
       scheduler_->markOperatorAsReadBlocked(*this, waitSpec, true);
     } else {
       scheduler_->checkOperatorForPreemption(*this);
@@ -139,45 +134,43 @@ bool OperatorContextImpl::waitOnAllPorts(unordered_map<InputPort *, size_t> cons
   return false;
 }
 
+// return true if will never be satisfied
 bool OperatorContextImpl::waitOnAnyPort(unordered_map<InputPort *, size_t> const & spec)
 {
-  unordered_map<InputPortImpl *, size_t> waitSpec;
-  for(auto const & portCountPair : spec){
-        waitSpec[static_cast<InputPortImpl *>(portCountPair.first)] = portCountPair.second;
-  }
+  typedef unordered_map<InputPortImpl *, size_t> SpecType;
+  SpecType & waitSpec = const_cast<SpecType &>(reinterpret_cast<SpecType const &>(spec));
 
   bool needToWait = true;
-  while(needToWait){
-    {
-      bool oneAvailable = false;
-      for(auto const & portCountPair : spec){
-        bool portAvailable = portCountPair.first->getTupleCount() >= portCountPair.second;
-
-        if(portAvailable){
-          oneAvailable = true;
-          break;
-        }
-      }
-
-      if(oneAvailable){
-        needToWait = false;
-      } else{
-        bool allClosed = true;
-        for(auto const & portCountPair : spec){
-            bool portClosed = static_cast<InputPortImpl *>(portCountPair.first)->isClosed();
-            // TODO: Tuples may have arrived, check that
-            if(!portClosed){
-              allClosed = false;
-              break;
-            }
-        }
-
-        if(allClosed)
-          return true;
+  while (needToWait) {
+    bool oneAvailable = false;
+    for (auto const & portCountPair : waitSpec) {
+      bool portAvailable = portCountPair.first->getTupleCount() >= portCountPair.second;
+      if (portAvailable) {
+        oneAvailable = true;
+        break;
       }
     }
+ 
+    if (oneAvailable) {
+      needToWait = false;
+    } else {
+      bool cannotSatisfy = true;
+      for (auto const & portCountPair : waitSpec) {
+        bool portClosed = portCountPair.first->isClosed();
+        // tuple count may have changed since our last check
+        bool portAvailable = portCountPair.first->getTupleCount() >= portCountPair.second;
+        if (!portClosed || portAvailable) {
+          cannotSatisfy = false;
+          if (portAvailable)
+            needToWait = false;
+          break;  
+        }
+      }
+      if(cannotSatisfy)
+        return true;
+    }
 
-    if(needToWait){
+    if (needToWait) {
       scheduler_->markOperatorAsReadBlocked(*this, waitSpec, true);
     } else {
       scheduler_->checkOperatorForPreemption(*this);

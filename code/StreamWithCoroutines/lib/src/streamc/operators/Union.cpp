@@ -21,15 +21,16 @@ void Union::process(OperatorContext & context)
   
   OutputPort & oport = context.getOutputPort(0);
 
-  while(!context.isShutdownRequested()) {
+  while (!context.isShutdownRequested()) {
     bool closed = context.waitOnAnyPort(waitSpec);
     if(closed)
       break;
     
-    for (size_t i=0; i<nInputs; ++i){
-      if(context.getInputPort(i).hasTuple()){
-        oport.pushTuple(context.getInputPort(i).getFrontTuple());
-        context.getInputPort(i).popTuple();
+    for (size_t i=0; i<nInputs; ++i) {
+      InputPort & iport = context.getInputPort(i);
+      if (iport.hasTuple()) {
+        oport.pushTuple(iport.getFrontTuple());
+        iport.popTuple();
       }
     }
   }

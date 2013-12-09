@@ -28,7 +28,6 @@ int main()
 
   Operator & myUnion = flow.createOperator<Union>("union");
 
-  
   Operator & snk = flow.createOperator<FileSink>("snk")
     .set_fileName("data/out.dat"); 
   
