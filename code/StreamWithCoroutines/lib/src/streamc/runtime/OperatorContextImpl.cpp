@@ -99,9 +99,6 @@ OutputPort & OperatorContextImpl::getOutputPort(size_t outputPort) {
 // return true if will never be satisfied
 bool OperatorContextImpl::waitOnAllPorts(unordered_map<InputPort *, size_t> const & spec)
 {
-  // TODO: Improve this code to use scheduler's multi-port wait capabilities
-  // Look at InputPortImpl's waitTuple implementation to get the main idea
-
   unordered_map<InputPortImpl *, size_t> waitSpec;
   for(auto const & portCountPair : spec){
         waitSpec[static_cast<InputPortImpl *>(portCountPair.first)] = portCountPair.second;
@@ -122,9 +119,10 @@ bool OperatorContextImpl::waitOnAllPorts(unordered_map<InputPort *, size_t> cons
 
       if(allAvailable){
         needToWait = false;
-      } else{
+      } else { 
         for(auto const & portCountPair : spec){
           bool portClosed = static_cast<InputPortImpl *>(portCountPair.first)->isClosed();
+          // TODO: Tuples may have arrived, check that
           if(portClosed)
             return true;
         }
@@ -167,6 +165,7 @@ bool OperatorContextImpl::waitOnAnyPort(unordered_map<InputPort *, size_t> const
         bool allClosed = true;
         for(auto const & portCountPair : spec){
             bool portClosed = static_cast<InputPortImpl *>(portCountPair.first)->isClosed();
+            // TODO: Tuples may have arrived, check that
             if(!portClosed){
               allClosed = false;
               break;
