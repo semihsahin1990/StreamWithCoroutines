@@ -7,29 +7,29 @@ namespace streamc { namespace operators
 {
 
 /**
- * %Barrier operator that combines tuples from different inputs.
+ * %Union operator that receives tuples from different inputs.
  */
-class Barrier : public Operator
+class Union : public Operator
 {
 public:
   /**
-   * Construct a barrier operator.
+   * Construct a union operator.
    *
-   * By default, the barrier will have two input ports.
+   * By default, the union will have two input ports.
    * @param name name of the operator
    */  
-  Barrier(std::string const & name);
+  Union(std::string const & name);
 
   /**
-   * Construct a barrier operator.
+   * Construct a union operator.
    *
    * @param name name of the operator
    * @param numInputs the number of input ports 
    */  
-  Barrier(std::string const & name, int numInputs);
+  Union(std::string const & name, int numInputs);
 
   /**
-   * The process function that contains the barrier logic.
+   * The process function that contains the union logic.
    *
    * @param context the operator context
    */  

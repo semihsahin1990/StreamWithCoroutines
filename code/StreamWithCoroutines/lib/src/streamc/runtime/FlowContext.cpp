@@ -24,7 +24,7 @@ FlowContext::FlowContext(Flow & flow)
 
   // create operator context for each operator
   for (Operator * oper : opers) {
-    OperatorContextImpl * operatorContext = new OperatorContextImpl(this, oper);
+    OperatorContextImpl * operatorContext = new OperatorContextImpl(this, oper, *scheduler_);
     operatorContexts_[oper] = unique_ptr<OperatorContextImpl>(operatorContext);
   }
   

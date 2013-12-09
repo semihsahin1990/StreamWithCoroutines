@@ -4,6 +4,7 @@
 #include "streamc/runtime/FlowContext.h"
 #include "streamc/runtime/InputPortImpl.h"
 #include "streamc/runtime/OutputPortImpl.h"
+#include "streamc/runtime/Scheduler.h"
 
 #include <functional>
 
@@ -11,8 +12,8 @@ using namespace std;
 using namespace streamc;
 
 //constructor with flowContext and operator
-OperatorContextImpl::OperatorContextImpl(FlowContext * flowContext, Operator * oper)
-  : flowContext_(flowContext), oper_(oper), isComplete_(false), stateStore_(new Tuple())
+OperatorContextImpl::OperatorContextImpl(FlowContext * flowContext, Operator * oper, Scheduler & scheduler)
+  : flowContext_(flowContext), oper_(oper), scheduler_(&scheduler), isComplete_(false), stateStore_(new Tuple())
 {}
 
 //destructor
@@ -96,19 +97,94 @@ OutputPort & OperatorContextImpl::getOutputPort(size_t outputPort) {
 }
 
 // return true if will never be satisfied
-bool OperatorContextImpl::waitOnPorts(unordered_map<InputPort *, size_t> const & spec)
+bool OperatorContextImpl::waitOnAllPorts(unordered_map<InputPort *, size_t> const & spec)
 {
   // TODO: Improve this code to use scheduler's multi-port wait capabilities
   // Look at InputPortImpl's waitTuple implementation to get the main idea
-  bool closed = false;
-  for(auto const & portCountPair : spec) {
-    bool portClosed = portCountPair.first->waitTuple(portCountPair.second);
-    if (portClosed) {
-      closed = true;
-      break;
+
+  unordered_map<InputPortImpl *, size_t> waitSpec;
+  for(auto const & portCountPair : spec){
+        waitSpec[static_cast<InputPortImpl *>(portCountPair.first)] = portCountPair.second;
+  }
+
+  bool needToWait = true;
+  while(needToWait){
+    {
+      bool allAvailable = true;
+      for(auto const & portCountPair : spec){
+        bool portAvailable = portCountPair.first->getTupleCount() >= portCountPair.second;
+
+        if(!portAvailable){
+          allAvailable = false;
+          break;
+        }
+      }
+
+      if(allAvailable){
+        needToWait = false;
+      } else{
+        for(auto const & portCountPair : spec){
+          bool portClosed = static_cast<InputPortImpl *>(portCountPair.first)->isClosed();
+          if(portClosed)
+            return true;
+        }
+      }
+    }
+
+    if(needToWait){
+      scheduler_->markOperatorAsReadBlocked(*this, waitSpec, true);
+    } else {
+      scheduler_->checkOperatorForPreemption(*this);
     }
   }
-  return closed;
+
+  return false;
 }
 
+bool OperatorContextImpl::waitOnAnyPort(unordered_map<InputPort *, size_t> const & spec)
+{
+  unordered_map<InputPortImpl *, size_t> waitSpec;
+  for(auto const & portCountPair : spec){
+        waitSpec[static_cast<InputPortImpl *>(portCountPair.first)] = portCountPair.second;
+  }
+
+  bool needToWait = true;
+  while(needToWait){
+    {
+      bool oneAvailable = false;
+      for(auto const & portCountPair : spec){
+        bool portAvailable = portCountPair.first->getTupleCount() >= portCountPair.second;
+
+        if(portAvailable){
+          oneAvailable = true;
+          break;
+        }
+      }
+
+      if(oneAvailable){
+        needToWait = false;
+      } else{
+        bool allClosed = true;
+        for(auto const & portCountPair : spec){
+            bool portClosed = static_cast<InputPortImpl *>(portCountPair.first)->isClosed();
+            if(!portClosed){
+              allClosed = false;
+              break;
+            }
+        }
+
+        if(allClosed)
+          return true;
+      }
+    }
+
+    if(needToWait){
+      scheduler_->markOperatorAsReadBlocked(*this, waitSpec, true);
+    } else {
+      scheduler_->checkOperatorForPreemption(*this);
+    }
+  }
+
+  return false;
+}
 

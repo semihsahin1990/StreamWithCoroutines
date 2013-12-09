@@ -16,12 +16,13 @@ class Operator;
 class FlowContext;
 class InputPortImpl;
 class OutputPortImpl;
+class Scheduler;
 class Tuple;
 
 class OperatorContextImpl : public OperatorContext
 {
 public:
-  OperatorContextImpl(FlowContext * flowContext, Operator * oper);
+  OperatorContextImpl(FlowContext * flowContext, Operator * oper, Scheduler & scheduler);
   ~OperatorContextImpl();
   void init();
   
@@ -42,7 +43,8 @@ public:
   // interface to be implemented
   InputPort & getInputPort(size_t inputPort) override;
   OutputPort & getOutputPort(size_t outputPort) override;
-  bool waitOnPorts(std::unordered_map<InputPort *, size_t> const & spec);
+  bool waitOnAllPorts(std::unordered_map<InputPort *, size_t> const & spec);
+  bool waitOnAnyPort(std::unordered_map<InputPort *, size_t> const & spec);
   Tuple & getStateStore() override;
   bool isShutdownRequested() override;
 
@@ -56,6 +58,7 @@ private:
 private:
   FlowContext * flowContext_;
   Operator * oper_;
+  Scheduler * scheduler_;
   std::atomic<bool> isComplete_;
   std::unique_ptr<Tuple> stateStore_;
   std::vector<std::unique_ptr<InputPortImpl>> inputs_;

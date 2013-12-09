@@ -15,19 +15,22 @@ Barrier::Barrier(std::string const & name, int numInputs)
 void Barrier::process(OperatorContext & context)
 {
   Tuple resultTuple;
-  OutputPort & oport = context.getOutputPort(0);
+  
   size_t nInputs = getNumberOfInputPorts();
   unordered_map<InputPort*, size_t> waitSpec;
   for (size_t i=0; i<nInputs; ++i)
       waitSpec[&context.getInputPort(i)] = 1;
   
+  OutputPort & oport = context.getOutputPort(0);
+
   while(!context.isShutdownRequested()) {
-    bool closed = context.waitOnPorts(waitSpec);
+    bool closed = context.waitOnAllPorts(waitSpec);
     if(closed)
       break;
     
     for (size_t i=0; i<nInputs; ++i) 
       resultTuple.append(context.getInputPort(i).getFrontTuple());
+
     oport.pushTuple(resultTuple);
 
     for (size_t i=0; i<nInputs; ++i) 

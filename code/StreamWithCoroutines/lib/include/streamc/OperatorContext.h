@@ -74,7 +74,13 @@ public:
    * @return true if the wait spec can never be satisfied, false if it is 
    * currently satisfied
    */
-   virtual bool waitOnPorts(std::unordered_map<InputPort *, size_t> const & spec) = 0;
+   virtual bool waitOnAllPorts(std::unordered_map<InputPort *, size_t> const & spec) = 0;
+
+   /**
+    *
+    *
+   */
+   virtual bool waitOnAnyPort(std::unordered_map<InputPort *, size_t> const & spec) = 0;
 
 };
 
