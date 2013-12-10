@@ -8,14 +8,18 @@
 
 ## Customizable Section: adapt those variables to suit your program.
 
+THISDIR := $(dir $(lastword $(MAKEFILE_LIST)))
+
 OBJDIR  = obj
 SRCDIR  = src
 BINDIR  = bin
 
 CPPFLAGS  = -DBOOST_LOG_DYN_LINK
-INCLUDES  = -I ../../lib/include -isystem /opt/local/libcpp-software/include
-LDFLAGS   = -L ../../lib/bin -L /opt/local/libcpp-software/lib -Wl,-rpath,../../lib/bin -Wl,-rpath,/opt/local/libcpp-software/lib \
-	-lstreamc -lboost_log-mt -lboost_log_setup-mt -lboost_coroutine-mt -lboost_context-mt -lboost_system-mt -lboost_thread-mt
+INCLUDES  = -I $(THISDIR)../core/include -isystem /opt/local/libcpp-software/include
+LDFLAGS   = -L $(THISDIR)../core/bin -L /opt/local/libcpp-software/lib \
+        -Wl,-rpath,$(THISDIR)../core/bin -Wl,-rpath,/opt/local/libcpp-software/lib \
+	-lstreamc -lboost_log-mt -lboost_log_setup-mt -lboost_coroutine-mt \
+        -lboost_context-mt -lboost_system-mt -lboost_thread-mt
 
 ## Implicit Section: change the following only when necessary.
 

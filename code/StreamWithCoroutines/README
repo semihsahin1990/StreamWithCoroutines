@@ -1,13 +1,13 @@
 StreamC - Co-routine based implementation of stream processing
 
 To build the library:
-  cd lib
+  cd core
   make
 
-To try out a sample:
-  cd sample/<SampleName>
+To try out a test:
+  cd tests/<TestGroup>_tests/<Sample>_test
   make
-  ./main
+  ./bin/<Sample>_test
 
 Documentation is at:
   http://semihsahin1990.github.io/StreamWithCoroutines/annotated.html
