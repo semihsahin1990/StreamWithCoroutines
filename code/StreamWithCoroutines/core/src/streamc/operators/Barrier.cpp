@@ -14,8 +14,6 @@ Barrier::Barrier(std::string const & name, int numInputs)
 
 void Barrier::process(OperatorContext & context)
 {
-  Tuple resultTuple;
-  
   size_t nInputs = getNumberOfInputPorts();
   unordered_map<InputPort*, size_t> waitSpec;
   for (size_t i=0; i<nInputs; ++i)
@@ -28,6 +26,7 @@ void Barrier::process(OperatorContext & context)
     if(closed)
       break;
     
+    Tuple resultTuple;
     for (size_t i=0; i<nInputs; ++i) 
       resultTuple.append(context.getInputPort(i).getFrontTuple());
 

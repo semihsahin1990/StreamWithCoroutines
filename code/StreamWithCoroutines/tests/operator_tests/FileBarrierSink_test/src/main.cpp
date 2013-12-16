@@ -21,19 +21,30 @@ int main()
   Operator & src1 = flow.createOperator<FileSource>("src1")
     .set_fileName("data/in1.dat")
     .set_fileFormat({{"name1",Type::String}, {"grade1",Type::String}});
-
+  
   Operator & src2 = flow.createOperator<FileSource>("src2")
     .set_fileName("data/in2.dat")
     .set_fileFormat({{"name2",Type::String}, {"grade2",Type::String}});
+  
+  Operator & src3 = flow.createOperator<FileSource>("src3")
+    .set_fileName("data/in3.dat")
+    .set_fileFormat({{"name3",Type::String}, {"grade3",Type::String}});
+  
+  Operator & src4 = flow.createOperator<FileSource>("src4")
+    .set_fileName("data/in4.dat")
+    .set_fileFormat({{"name4",Type::String}, {"grade4",Type::String}});
 
-  Operator & barrier = flow.createOperator<Barrier>("barrier");
+  Operator & barrier = flow.createOperator<Barrier>("barrier", 3);
 
   Operator & snk = flow.createOperator<FileSink>("snk")
-    .set_fileName("data/out.dat"); 
-  
-  flow.addConnections( (src1,0) >> (0,barrier,0) >> (0,snk) ); 
+    .set_fileName("data/out.dat");
+
+  flow.addConnection( (src1,0) >> (0,barrier));
   flow.addConnection( (src2,0) >> (1,barrier));
-  
+  flow.addConnection( (src3,0) >> (1,barrier));
+  flow.addConnection( (src4,0) >> (2,barrier));
+  flow.addConnection( (barrier,0) >> (0,snk));
+
   // flow.printTopology(std::cout);
 
   // alternatives:
