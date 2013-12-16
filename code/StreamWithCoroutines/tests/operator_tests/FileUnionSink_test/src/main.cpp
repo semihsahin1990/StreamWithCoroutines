@@ -18,7 +18,7 @@ int main()
 {
   Flow flow("simple union");
   
-Operator & src1 = flow.createOperator<FileSource>("src1")
+  Operator & src1 = flow.createOperator<FileSource>("src1")
     .set_fileName("data/in1.dat")
     .set_fileFormat({{"name1",Type::String}, {"grade1",Type::String}});
   
