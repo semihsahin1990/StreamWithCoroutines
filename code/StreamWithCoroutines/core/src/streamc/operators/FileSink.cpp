@@ -10,17 +10,28 @@ using namespace streamc;
 using namespace streamc::operators;
 using namespace std;
 
+FileSink::FileSink(std::string const & name, std::string const & fileName,
+                       std::vector<std::pair<std::string, Type>> const & attributes)
+  : Operator(name, 1, 0), fileName_(fileName), attributes_(attributes) 
+{}
+
 FileSink::FileSink(std::string const & name, std::string const & fileName)
-  : Operator(name, 1, 0), fileName_(fileName)
+  : FileSink(name, fileName, {})
 {}
 
 FileSink::FileSink(std::string const & name)
-  : FileSink(name, "")
+  : FileSink(name, "", {})
 {}
 
 FileSink & FileSink::set_fileName(std::string const & fileName)
 {
   fileName_ = fileName;
+  return *this;
+}
+
+FileSink & FileSink::set_fileFormat(std::vector<std::pair<std::string, Type>> const & attributes)
+{
+  attributes_ = attributes;
   return *this;
 }
 
@@ -59,13 +70,14 @@ void FileSink::process(OperatorContext & context)
     bool closed = iport.waitTuple();
     if (closed)
       break;
+
     Tuple & tuple = iport.getFrontTuple();
-    auto const & attributes = tuple.getAttributes();
-    if (!attributes.empty()) {
-      auto it=attributes.begin();
-      output << Value::toString(*(it->second));
-      for (++it; it!=attributes.end(); ++it) 
-        output << "," << Value::toString(*(it->second));
+    auto const & tupleAttributes = tuple.getAttributes();
+    if (!tupleAttributes.empty()) {
+      auto it = attributes_.begin();
+      output << Value::toString(*(tupleAttributes.at((*it).first)));
+      for(++it; it!=attributes_.end(); ++it)
+        output << "," << Value::toString(*(tupleAttributes.at((*it).first)));
     }
     output << "\n";
     iport.popTuple();

@@ -28,7 +28,8 @@ int main()
     .set_filter(MEXP1( t_.get<Type::String>("name") != "Bugra" ));
 
   Operator & snk = flow.createOperator<FileSink>("snk")
-    .set_fileName("data/out.dat"); 
+    .set_fileName("data/out.dat")
+    .set_fileFormat({{"name",Type::String}, {"grade",Type::String}});
   	
   flow.addConnections( (src,0) >> (0,fltF,0) >> (0,fltG,0) >> (0,snk) ); 
   // flow.printTopology(std::cout);
