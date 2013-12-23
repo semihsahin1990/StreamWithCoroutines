@@ -36,7 +36,7 @@ void InputPortImpl::pushTuple(Tuple const & tuple)
 {
   {
     lock_guard<mutex> lock(mutex_);
-    portQueue_.push_back(tuple);
+    portQueue_.push_back(make_pair(tuple, chrono::high_resolution_clock::now()));
   }
 
   // scheduler has to check if this causes the operator to go into ready state 
@@ -112,7 +112,7 @@ Tuple & InputPortImpl::getFrontTuple()
   lock_guard<mutex> lock(mutex_);
   if (portQueue_.size()==0)
     throw runtime_error("getFrontTuple() called on empty queue, oper="+oper_->getOperator().getName());
-  return portQueue_.front();
+  return portQueue_.front().first; /* AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA*/
 }
 
 // return the index-th tuple
@@ -122,7 +122,7 @@ Tuple & InputPortImpl::getTupleAt(size_t index)
   size_t size = portQueue_.size();
   if (size<=index)
     throw runtime_error("getTupleAt("+to_string(index)+") called on queue of size "+to_string(size)+", oper="+oper_->getOperator().getName());
-  return portQueue_[index];
+  return portQueue_[index].first;
 }
 
 // remove the next tuple
