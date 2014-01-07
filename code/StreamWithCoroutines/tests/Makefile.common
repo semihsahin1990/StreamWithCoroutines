@@ -30,7 +30,8 @@ INCFLAGS = $(addprefix -I ,$(SRCDIRS)) $(INCLUDES)
 
 ## Stable Section: usually no need to be changed. 
 SHELL   = /bin/sh
-SOURCES = $(wildcard $(addsuffix /*.cpp,$(SRCDIRS)))
+SOURCES := $(wildcard $(addsuffix /*.cpp,$(SRCDIRS)))
+SOURCES := $(filter-out src/test.cpp, $(SOURCES))
 OBJS    = $(patsubst $(SRCDIR)/%,$(OBJDIR)/%,$(SOURCES:.cpp=.o))
 DEPS    = $(OBJS:.o=.d)
 
@@ -64,6 +65,9 @@ $(BINDIR)/$(PROGRAM): $(OBJS)
 ifneq ($(DEPS),)
   sinclude $(DEPS)
 endif
+
+test:
+	clang++ src/test.cpp -o bin/test -lpthread -lgtest $(CXXFLAGS)
 
 clean:
 	$(RM) -r $(OBJDIR) $(BINDIR)
