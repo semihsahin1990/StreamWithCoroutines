@@ -5,6 +5,8 @@
 #include "streamc/operators/Filter.h"
 #include "streamc/operators/Barrier.h"
 
+#include "gtest/gtest.h"
+
 #include <cstdlib>
 #include <thread>
 #include <chrono>
@@ -14,8 +16,15 @@ using namespace streamc;
 using namespace streamc::operators;
 using namespace streamc::connectors;
 
+TEST (FileBarrierSink_test, CheckOutputSize) {
+   EXPECT_EQ(5, 5);
+}
+
 int main()
 {
+  ::testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+  
   Flow flow("simple barrier");
   
   Operator & src1 = flow.createOperator<FileSource>("src1")

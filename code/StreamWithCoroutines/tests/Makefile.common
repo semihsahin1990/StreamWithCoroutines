@@ -19,20 +19,19 @@ INCLUDES  = -I $(THISDIR)../core/include -isystem /opt/local/libcpp-software/inc
 LDFLAGS   = -L $(THISDIR)../core/bin -L /opt/local/libcpp-software/lib \
         -Wl,-rpath,$(THISDIR)../core/bin -Wl,-rpath,/opt/local/libcpp-software/lib \
 	-lstreamc -lboost_log-mt -lboost_log_setup-mt -lboost_coroutine-mt \
-        -lboost_context-mt -lboost_system-mt -lboost_thread-mt
+        -lboost_context-mt -lboost_system-mt -lboost_thread-mt 
 
 ## Implicit Section: change the following only when necessary.
 
 CXX      = clang++ 
-CXXFLAGS = -g -O2 -fPIC -Wall -std=c++11 -stdlib=libc++ 
+CXXFLAGS = -g -O2 -fPIC -Wall -std=c++11 -stdlib=libc++
 SRCDIRS  = $(shell find $(SRCDIR) -type d)
 INCFLAGS = $(addprefix -I ,$(SRCDIRS)) $(INCLUDES)
 
 ## Stable Section: usually no need to be changed. 
 SHELL   = /bin/sh
-SOURCES := $(wildcard $(addsuffix /*.cpp,$(SRCDIRS)))
-SOURCES := $(filter-out src/test.cpp, $(SOURCES))
-OBJS    = $(patsubst $(SRCDIR)/%,$(OBJDIR)/%,$(SOURCES:.cpp=.o))
+SRCS 	= $(wildcard $(addsuffix /*.cpp,$(SRCDIRS)))
+OBJS    = $(patsubst $(SRCDIR)/%,$(OBJDIR)/%,$(SRCS:.cpp=.o))
 DEPS    = $(OBJS:.o=.d)
 
 ## Define some useful variables.
@@ -66,9 +65,6 @@ ifneq ($(DEPS),)
   sinclude $(DEPS)
 endif
 
-test:
-	clang++ src/test.cpp -o bin/test -lpthread -lgtest $(CXXFLAGS)
-
 clean:
 	$(RM) -r $(OBJDIR) $(BINDIR)
 
@@ -85,7 +81,7 @@ help:
 show:
 	@echo 'PROGRAM     :' $(PROGRAM)
 	@echo 'SRCDIRS     :' $(SRCDIRS)
-	@echo 'SOURCES     :' $(SOURCES)
+	@echo 'SRCS  	   :' $(SRCS)
 	@echo 'OBJS        :' $(OBJS)
 	@echo 'DEPS        :' $(DEPS)
 	@echo 'DEPEND      :' $(DEPEND)
