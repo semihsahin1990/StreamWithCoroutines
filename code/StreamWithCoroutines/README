@@ -13,3 +13,26 @@ Documentation is at:
   http://semihsahin1990.github.io/StreamWithCoroutines/annotated.html
 
 
+Dependencies:
+  Clang and libc++
+  	http://clang.llvm.org/get_started.html
+	http://libcxx.llvm.org/	
+
+  Boost built with libc++ and clang
+  	Note: the build system expects boost to be installed at '/opt/local/libcpp-software'
+
+  	./bootstrap.sh --prefix=/opt/local/libcpp-software
+	sudo ./b2 toolset=clang cxxflags="-stdlib=libc++" linkflags="-stdlib=libc++" --layout=tagged  install
+
+  Google Test built with libc++ and clang
+  	Note: the build system expects gtest to be installed at '/opt/local/libcpp-software'
+
+	export CC=/usr/bin/clang
+	export CXX=/usr/bin/clang++
+	export CXXFLAGS="-stdlib=libc++" 
+	export LDFLAGS="-stdlib=libc++"
+	cmake ..	
+  	cp  *.a /opt/local/libcpp-software/lib/
+	cp -fr ../include/* /opt/local/libcpp-software/include/
+
+ 
