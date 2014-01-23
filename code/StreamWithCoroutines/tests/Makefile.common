@@ -18,8 +18,9 @@ CPPFLAGS  = -DBOOST_LOG_DYN_LINK
 INCLUDES  = -I $(THISDIR)../core/include -isystem /opt/local/libcpp-software/include
 LDFLAGS   = -L $(THISDIR)../core/bin -L /opt/local/libcpp-software/lib \
         -Wl,-rpath,$(THISDIR)../core/bin -Wl,-rpath,/opt/local/libcpp-software/lib \
-	-lstreamc -lboost_log-mt -lboost_log_setup-mt -lboost_coroutine-mt \
-        -lboost_context-mt -lboost_system-mt -lboost_thread-mt 
+        -lstreamc -lboost_log-mt -lboost_log_setup-mt -lboost_coroutine-mt \
+        -lboost_context-mt -lboost_system-mt -lboost_thread-mt \
+        -lgtest 
 
 ## Implicit Section: change the following only when necessary.
 
