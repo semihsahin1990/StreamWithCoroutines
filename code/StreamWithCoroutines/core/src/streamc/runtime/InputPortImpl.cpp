@@ -105,14 +105,13 @@ bool InputPortImpl::waitTuple(size_t n)
   return false;
 }
 
-
 // return the next tuple
 Tuple & InputPortImpl::getFrontTuple() 
 {
   lock_guard<mutex> lock(mutex_);
   if (portQueue_.size()==0)
     throw runtime_error("getFrontTuple() called on empty queue, oper="+oper_->getOperator().getName());
-  return portQueue_.front().first; /* AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA*/
+  return portQueue_.front().first; 
 }
 
 // return the index-th tuple
