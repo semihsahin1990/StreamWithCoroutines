@@ -61,13 +61,14 @@ void OutputPortImpl::pushTuple(Tuple const & tuple)
       }
     }
     if (needToWait) {
-      // we need to ask the scheduler to move us into bloked state
+      // we need to ask the scheduler to move us into blocked state
       scheduler_->markOperatorAsWriteBlocked(*oper_, waitSpec); 
       // Scheduler returns back to us either because the downstream ports 
-      // are now full, or because one of the dowstream operators are complete
-      // due to global shutdown request and their intput port is full. In the
-      // latter case, we should submit the tuple (potentially exceeding the 
-      // limit and go back to operator code, so that our operator exists as well.
+      // are now not full (safe to submit), or because one of the dowstream 
+      // operators are complete due to global shutdown request and their intput 
+      // port is full. In the latter case, we should submit the tuple (potentially 
+      // exceeding the limit and go back to operator code, so that our operator 
+      // exists as well.
     } else {
       // we need to check with the scheduler to see if we need to preempt
       scheduler_->checkOperatorForPreemption(*oper_);
