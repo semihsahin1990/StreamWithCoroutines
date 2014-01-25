@@ -135,7 +135,7 @@ void InputPortImpl::popTuple()
   scheduler_->markInputPortAsRead(*this);
 }
 
-// remove the next tuple
+// remove all the tuples
 void InputPortImpl::drain() 
 {
   {
