@@ -29,10 +29,8 @@ public:
   Operator & getOperator() { return *oper_; }
   void addInputPort(InputPortImpl * port);
   void addOutputPort(OutputPortImpl * port);
-  void initOper();
   void runOper();
   void yieldOper();
-  void saveOper();
 
   bool isComplete() const { return isComplete_.load(); }
   size_t getNumberOfInputPorts() { return inputs_.size(); }

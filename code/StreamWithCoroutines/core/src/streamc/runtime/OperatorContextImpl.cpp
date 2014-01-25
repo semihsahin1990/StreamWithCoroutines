@@ -37,21 +37,11 @@ bool OperatorContextImpl::isShutdownRequested()
 void OperatorContextImpl::coroBody(coro_t::caller_type & caller)
 {
   coroCaller_ = & caller;
+  oper_->initState(*this);
   oper_->process(*this);
-  for (auto & iportPtr : inputs_) 
-    iportPtr->drain();
+  oper_->saveState(*this);
   isComplete_.store(true);
   flowContext_->markOperatorCompleted(oper_);  
-}
-
-void OperatorContextImpl::initOper() 
-{
-  oper_->initState(*this);
-}
-
-void OperatorContextImpl::saveOper() 
-{
-  oper_->saveState(*this);
 }
 
 Tuple & OperatorContextImpl::getStateStore() 

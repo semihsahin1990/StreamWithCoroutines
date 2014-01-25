@@ -195,16 +195,6 @@ OperatorContextImpl * Scheduler::getThreadWork(WorkerThread & thread)
 {
   unique_lock<mutex> lock(mutex_);  
   OperatorContextImpl * assignment = nullptr;
-  // TODO: There is a bug. When the shutdown is requested there might
-  // be some operators stuck in Waiting state with a tuple in their
-  // coroutine stack to be submitted when the state goes to Ready. To
-  // solve this, we need to make sure that all operators are removed
-  // from the Wait state and terminate by finding out the shutdown.
-  // This requires two changes: 
-  // 1. Make sure the stop request on the scheduler changes all 
-  // operator states into Ready
-  // 2. In the below code, continue to schedule work to threads 
-  // until there are no ready operators.
   if (!stopped_) {
     updateThreadState(thread, ThreadInfo::Waiting);
     assignment = plugin_->findOperatorToExecute(*this, thread); 
