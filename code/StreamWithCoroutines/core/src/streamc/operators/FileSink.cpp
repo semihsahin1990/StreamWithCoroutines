@@ -83,5 +83,4 @@ void FileSink::process(OperatorContext & context)
     iport.popTuple();
     filePos_ = output.tellp();
   } 
-  output.close();
 }
