@@ -13,7 +13,7 @@ public:
   // return the operator to execute or nullptr if there is no operator to execute
   virtual OperatorContextImpl * findOperatorToExecute(SchedulerPluginService & service,
                                                       WorkerThread & thread) = 0;  
-  // return true of the operator is to be preempted
+  // return true if the operator is to be preempted
   virtual bool checkOperatorForPreemption(SchedulerPluginService & service,
                                           OperatorContextImpl & oper) = 0;
 };
