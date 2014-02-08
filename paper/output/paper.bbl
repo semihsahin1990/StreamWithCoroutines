@@ -1,0 +1,9 @@
+\begin{thebibliography}{1}
+
+\bibitem{ref:STREAM}
+A.~Arasu, B.~Babcock, S.~Babu, M.~Datar, K.~Ito, R.~Motwani, I.~Nishizawa,
+  U.~Srivastava, D.~Thomas, R.~Varma, and J.~Widom.
+\newblock {STREAM}: {T}he {S}tanford stream data manager.
+\newblock {\em {IEEE} Data Engineering Bulletin}, 26(1), 2003.
+
+\end{thebibliography}
