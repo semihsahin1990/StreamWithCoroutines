@@ -1,0 +1,13 @@
+\section{schedulers}\label{sec:schedulers}
+for throughput:\\*
+$
+\underset{o}{\operatorname{argmax}}
+	\min(	
+		\underset{i \in \overleftarrow{c}(o)} {\min}
+			\frac {\left| Q_i (o) \right|} {\overleftarrow{\zeta_i}(o)},
+		\underset{i \in \overrightarrow{c}(o)} {\min}	
+			( \underset{(j, o') \in \overrightarrow{L_i}(o)} {\min} 
+				\frac {\zeta - \left| Q_j (o') \right|} {\overrightarrow{\zeta_i}(o)}
+			)
+		)
+$
