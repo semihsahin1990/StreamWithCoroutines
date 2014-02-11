@@ -171,7 +171,7 @@ TEST_F(FileBarrierSink_test, OutputTest) {
   EXPECT_EQ(43200, attCounts["B"]);
   EXPECT_EQ(86400, attCounts["C"]);
   EXPECT_EQ(43200, attCounts["D"]);
-  EXPECT_EQ(43200, attCounts["F"]);
+  EXPECT_EQ(432000, attCounts["F"]);
 
   EXPECT_EQ(100800, outputLength);
 }
