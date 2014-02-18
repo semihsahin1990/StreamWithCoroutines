@@ -7,6 +7,7 @@
 #include "streamc/runtime/RandomScheduling.h"
 #include "streamc/runtime/InputPortImpl.h"
 #include "streamc/runtime/OutputPortImpl.h"
+#include <iostream>
 
 using namespace std;
 using namespace streamc;
@@ -223,6 +224,7 @@ void Scheduler::updateOperatorState(OperatorContextImpl & oper, OperatorInfo::Op
   OperatorInfo::OperatorState oldState = oinfo.getState();
   if (oldState==state)
     return; // no change
+
   oinfo.setState(state);
   if (oldState==OperatorInfo::ReadBlocked) { // must be moving into ready state
     // remove the operator from the read waiting list of its input ports
@@ -241,6 +243,10 @@ void Scheduler::updateOperatorState(OperatorContextImpl & oper, OperatorInfo::Op
     readyOperators_.erase(&oper);    
   } else if (oldState==OperatorInfo::Running) {
     oinfo.setEndTime(chrono::high_resolution_clock::now());
+    size_t numberOfInputPorts = oper.getNumberOfInputPorts();
+    for(int i=0; i<numberOfInputPorts; i++) {
+      //oinfo.updateIPortProfile(i);
+    }
   }
   if (state==OperatorInfo::OperatorInfo::ReadBlocked) {
     OperatorInfo::ReadWaitCondition & waitCond = oinfo.getReadWaitCondition();
@@ -264,6 +270,10 @@ void Scheduler::updateOperatorState(OperatorContextImpl & oper, OperatorInfo::Op
         threads_[thread]->getCV().notify_one();
     }
   } else if (state==OperatorInfo::OperatorInfo::Running) {
+    size_t numberOfInputPorts = oper.getNumberOfInputPorts();
+    for(int i=0; i<numberOfInputPorts; i++) {
+      oinfo.resetIPortCounter(oper.getInputPortImpl(i));
+    }
     oinfo.setBeginTime(chrono::high_resolution_clock::now());
   }
 }

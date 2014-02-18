@@ -111,6 +111,12 @@ Tuple & InputPortImpl::getFrontTuple()
   lock_guard<mutex> lock(mutex_);
   if (portQueue_.size()==0)
     throw runtime_error("getFrontTuple() called on empty queue, oper="+oper_->getOperator().getName());
+
+  // can be done in popTuple()
+  auto operContexts = scheduler_->getOperators();
+  OperatorInfo & oinfo = *(operContexts[oper_]);
+  oinfo.updateIPortCounter(*this);
+
   return portQueue_.front().first; 
 }
 

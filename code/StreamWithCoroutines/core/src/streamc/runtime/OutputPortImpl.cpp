@@ -56,6 +56,11 @@ void OutputPortImpl::pushTuple(Tuple const & tuple)
         for(auto const & opPortPair : subscribers_) {
           OperatorContextImpl * op = opPortPair.first;
           size_t inPort = opPortPair.second;
+
+          auto operContexts = scheduler_->getOperators();
+          OperatorInfo & oinfo = *(operContexts[oper_]);
+          oinfo.updateOPortCounter(*this);
+
           op->getInputPortImpl(inPort).pushTuple(tuple);
         }
       }

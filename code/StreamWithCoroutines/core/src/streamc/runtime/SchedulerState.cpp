@@ -122,5 +122,3 @@ void OperatorInfo::ReadWaitCondition::reset()
   for (auto & portCondPair : portWaits_)
     portCondPair.second.threshold = 0;
 }
-
-

@@ -2,15 +2,16 @@
 
 #include "streamc/runtime/HashHelpers.h"
 #include "streamc/runtime/SchedulerState.h"
+#include "streamc/runtime/OperatorContextImpl.h"
 
 #include <chrono>
 #include <condition_variable>
 #include <unordered_set>
 #include <unordered_map>
-
+#include <vector>
+#include <iostream>
 namespace streamc
 {
-
 class ThreadInfo
 {
 public:
@@ -46,6 +47,14 @@ public:
     ThresholdAndCount(size_t thresholdIn, size_t currentCountIn)
       : threshold(thresholdIn), currentCount(currentCountIn) {}
   };
+  struct ProfileAndCounter
+  {
+    double profile;
+    size_t counter;
+    ProfileAndCounter() {}
+    ProfileAndCounter(double profileIn, size_t counterIn)
+      : profile(profileIn), counter(counterIn) {}
+  };
   class ReadWaitCondition
   {
   public:
@@ -77,7 +86,7 @@ public:
     size_t getWaitThreshold(InputPortImpl & iport);
     bool computeReadiness();
     bool isReady(InputPortImpl & iport);
-    typedef std::unordered_map<InputPortImpl *, ThresholdAndCount> PortWaitList;    
+    typedef std::unordered_map<InputPortImpl *, ThresholdAndCount> PortWaitList;
     PortWaitList const & getWaitList() { return portWaits_; }
   private:
     OperatorContextImpl * oper_;
@@ -93,7 +102,7 @@ public:
   OperatorInfo() {}
   OperatorInfo(OperatorContextImpl & oper) : oper_(&oper), state_(Ready), thread_(nullptr) , 
                                              readCond_(oper), writeCond_(oper) {}
-  void init() { state_=Ready; thread_ = nullptr; readCond_.init(); writeCond_.init(); }
+  void init() { state_=Ready; thread_ = nullptr; readCond_.init(); writeCond_.init(); initProfileLists(); }
   OperatorContextImpl & getOperatorContext() { return *oper_; }
   OperatorState getState() { return state_; }
   void setState(OperatorState state) { state_ = state; }
@@ -105,6 +114,36 @@ public:
   std::chrono::high_resolution_clock::time_point getBeginTime() { return beginTime_; }
   void setEndTime(std::chrono::high_resolution_clock::time_point endTime) { endTime_ = endTime; }
   std::chrono::high_resolution_clock::time_point getEndTime() { return endTime_; }
+
+  // TODO: update profile
+  void updateIPortProfile(InputPortImpl &iport) { iportProfileList_[&iport].profile = -1; }
+  double getIPortProfile(InputPortImpl &iport) { return iportProfileList_[&iport].profile; }
+  void updateIPortCounter(InputPortImpl &iport) { iportProfileList_[&iport].counter++; }
+  void resetIPortCounter(InputPortImpl &iport) { iportProfileList_[&iport].counter = 0; }
+
+  void updateOPortProfile(OutputPortImpl &oport) { oportProfileList_[&oport].profile = -1; }
+  double getOPortProfile(OutputPortImpl &oport) { return oportProfileList_[&oport].profile; }
+  void updateOPortCounter(OutputPortImpl &oport) { oportProfileList_[&oport].counter++; }
+  void resetOPortCounter(OutputPortImpl &oport) { oportProfileList_[&oport].counter = 0; }
+
+  void initProfileLists() {
+    size_t nIPorts = oper_->getNumberOfInputPorts();
+    for(int i=0; i<nIPorts; i++) {
+      InputPortImpl &iport = oper_->getInputPortImpl(i);
+      iportProfileList_[&iport].profile = 0;
+      iportProfileList_[&iport].counter = 0;
+    }
+
+    size_t nOports = oper_->getNumberOfOutputPorts();
+    for(int i=0; i<nOports; i++) {
+      OutputPortImpl &oport = oper_->getOutputPortImpl(i);
+      oportProfileList_[&oport].profile = 0;
+      oportProfileList_[&oport].counter = 0;
+    }
+
+
+  }
+
 private:
   OperatorContextImpl * oper_;
   OperatorState state_;
@@ -113,6 +152,8 @@ private:
   std::chrono::high_resolution_clock::time_point endTime_;
   ReadWaitCondition readCond_;
   WriteWaitCondition writeCond_;
+  std::unordered_map<InputPortImpl *, ProfileAndCounter> iportProfileList_;
+  std::unordered_map<OutputPortImpl *, ProfileAndCounter> oportProfileList_;
 };
 
 } /* namespace streamc */
