@@ -1,7 +1,10 @@
 #include "streamc/runtime/RandomScheduling.h"
 
 #include "streamc/runtime/SchedulerPluginService.h"
-
+//
+#include <iostream>
+#include <typeinfo>
+//
 using namespace std;
 using namespace streamc;
 
@@ -22,8 +25,10 @@ OperatorContextImpl * RandomScheduling::
                           WorkerThread & thread) 
 { 
   unordered_set<OperatorContextImpl *> const & opers = service.getReadyOperators();
+
   if (opers.size()==0)
     return nullptr;
+
   size_t l = randgen_() % opers.size(); 
   auto it = opers.begin();
   for (size_t i=0; i<l; ++i, it++);
