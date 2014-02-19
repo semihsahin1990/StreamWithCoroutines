@@ -244,13 +244,11 @@ void Scheduler::updateOperatorState(OperatorContextImpl & oper, OperatorInfo::Op
   } else if (oldState==OperatorInfo::Running) {
     oinfo.setEndTime(chrono::high_resolution_clock::now());
     size_t numberOfInputPorts = oper.getNumberOfInputPorts();
-    for(int i=0; i<numberOfInputPorts; i++) {
+    for(int i=0; i<numberOfInputPorts; i++) 
       oinfo.updateIPortProfile(oper.getInputPortImpl(i));
-    }
     size_t numberOfOutputPorts = oper.getNumberOfOutputPorts();
-    for(int i=0; i<numberOfOutputPorts; i++) {
+    for(int i=0; i<numberOfOutputPorts; i++) 
       oinfo.updateOPortProfile(oper.getOutputPortImpl(i));
-    }
   }
   if (state==OperatorInfo::OperatorInfo::ReadBlocked) {
     OperatorInfo::ReadWaitCondition & waitCond = oinfo.getReadWaitCondition();
@@ -275,15 +273,11 @@ void Scheduler::updateOperatorState(OperatorContextImpl & oper, OperatorInfo::Op
     }
   } else if (state==OperatorInfo::OperatorInfo::Running) {
     size_t numberOfInputPorts = oper.getNumberOfInputPorts();
-    for(int i=0; i<numberOfInputPorts; i++) {
+    for(int i=0; i<numberOfInputPorts; i++) 
       oinfo.resetIPortCounter(oper.getInputPortImpl(i));
-    }
-
     size_t numberOfOutputPorts = oper.getNumberOfOutputPorts();
-    for(int i=0; i<numberOfOutputPorts; i++) {
+    for(int i=0; i<numberOfOutputPorts; i++) 
       oinfo.resetOPortCounter(oper.getOutputPortImpl(i));
-    }
-
     oinfo.setBeginTime(chrono::high_resolution_clock::now());
   }
 }

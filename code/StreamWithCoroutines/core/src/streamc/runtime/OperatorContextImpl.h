@@ -38,6 +38,8 @@ public:
   InputPortImpl & getInputPortImpl(size_t inputPort) { return *inputs_[inputPort]; }
   OutputPortImpl & getOutputPortImpl(size_t outputPort) { return *outputs_[outputPort]; }
 
+  // TODO: OperatorInfo & getOperatorInfo(OperatorContextImpl *) eklenecek
+
   // interface to be implemented
   InputPort & getInputPort(size_t inputPort) override;
   OutputPort & getOutputPort(size_t outputPort) override;

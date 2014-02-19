@@ -38,8 +38,8 @@ private:
   OperatorContextImpl * oper_;
   Scheduler * scheduler_;
   bool isClosed_;
-  //std::deque<Tuple> portQueue_;
-  std::deque<std::pair<Tuple, std::chrono::high_resolution_clock::time_point>> portQueue_;
+  typedef std::chrono::high_resolution_clock::time_point Timestamp;
+  std::deque<std::pair<Tuple, Timestamp>> portQueue_;
   std::vector<std::pair<OperatorContextImpl *, size_t>> publishers_;
   std::mutex mutex_; 
 };

@@ -112,11 +112,6 @@ Tuple & InputPortImpl::getFrontTuple()
   if (portQueue_.size()==0)
     throw runtime_error("getFrontTuple() called on empty queue, oper="+oper_->getOperator().getName());
 
-  // can be done in popTuple()
-  auto operContexts = scheduler_->getOperators();
-  OperatorInfo & oinfo = *(operContexts[oper_]);
-  oinfo.updateIPortCounter(*this);
-
   return portQueue_.front().first; 
 }
 
@@ -137,6 +132,11 @@ void InputPortImpl::popTuple()
     lock_guard<mutex> lock(mutex_);
     portQueue_.pop_front();
   }
+  
+  // update consumption counters
+  OperatorInfo & oinfo = scheduler_.getOperatorInfo(oper_);
+  oinfo.updateIPortCounter(*this);
+  
   // scheduler has to check if this causes other operators to go into ready state 
   scheduler_->markInputPortAsRead(*this);
 }

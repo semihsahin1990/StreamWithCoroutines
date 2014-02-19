@@ -54,6 +54,7 @@ public:
     ProfileAndCounter() {}
     ProfileAndCounter(double profileIn, size_t counterIn)
       : profile(profileIn), counter(counterIn) {}
+    // update metodu da burada olsun
   };
   class ReadWaitCondition
   {
@@ -142,14 +143,14 @@ public:
     size_t nIPorts = oper_->getNumberOfInputPorts();
     for(int i=0; i<nIPorts; i++) {
       InputPortImpl &iport = oper_->getInputPortImpl(i);
-      iportProfileList_[&iport].profile = 0;
+      iportProfileList_[&iport].profile = 0; // TODO: initial deger bulunacak
       iportProfileList_[&iport].counter = 0;
     }
 
     size_t nOports = oper_->getNumberOfOutputPorts();
     for(int i=0; i<nOports; i++) {
       OutputPortImpl &oport = oper_->getOutputPortImpl(i);
-      oportProfileList_[&oport].profile = 0;
+      oportProfileList_[&oport].profile = 0; // TODO: initial deger bulunacak
       oportProfileList_[&oport].counter = 0;
     }
   }

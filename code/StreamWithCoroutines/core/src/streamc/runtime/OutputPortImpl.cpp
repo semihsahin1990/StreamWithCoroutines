@@ -53,14 +53,14 @@ void OutputPortImpl::pushTuple(Tuple const & tuple)
       }      
       if (waitSpec.size()==0) { // no need to wait
         needToWait = false;
+
+        // update production counters
+        OperatorInfo & oinfo = scheduler_.getOperatorInfo(oper_);
+        oinfo.updateOPortCounter(*this);
+
         for(auto const & opPortPair : subscribers_) {
           OperatorContextImpl * op = opPortPair.first;
           size_t inPort = opPortPair.second;
-
-          auto operContexts = scheduler_->getOperators();
-          OperatorInfo & oinfo = *(operContexts[oper_]);
-          oinfo.updateOPortCounter(*this);
-
           op->getInputPortImpl(inPort).pushTuple(tuple);
         }
       }
