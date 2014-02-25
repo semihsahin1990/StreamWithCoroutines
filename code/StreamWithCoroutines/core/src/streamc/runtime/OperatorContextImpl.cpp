@@ -5,6 +5,7 @@
 #include "streamc/runtime/InputPortImpl.h"
 #include "streamc/runtime/OutputPortImpl.h"
 #include "streamc/runtime/Scheduler.h"
+#include "streamc/runtime/SchedulerState.h"
 
 #include <functional>
 
@@ -86,9 +87,15 @@ OutputPort & OperatorContextImpl::getOutputPort(size_t outputPort) {
   return getOutputPortImpl(outputPort); 
 }
 
+OperatorInfo & OperatorContextImpl::getOperatorInfo() {
+  return scheduler_->getOperatorInfo(this);
+}
+
 // return true if will never be satisfied
 bool OperatorContextImpl::waitOnAllPorts(unordered_map<InputPort *, size_t> const & spec)
 {
+  OperatorInfo & oinfo = getOperatorInfo();
+  oinfo.updateConjCount();
   typedef unordered_map<InputPortImpl *, size_t> SpecType;
   SpecType & waitSpec = const_cast<SpecType &>(reinterpret_cast<SpecType const &>(spec));
 
@@ -127,6 +134,8 @@ bool OperatorContextImpl::waitOnAllPorts(unordered_map<InputPort *, size_t> cons
 // return true if will never be satisfied
 bool OperatorContextImpl::waitOnAnyPort(unordered_map<InputPort *, size_t> const & spec)
 {
+  OperatorInfo & oinfo = getOperatorInfo();
+  oinfo.updateDisjCount();
   typedef unordered_map<InputPortImpl *, size_t> SpecType;
   SpecType & waitSpec = const_cast<SpecType &>(reinterpret_cast<SpecType const &>(spec));
 

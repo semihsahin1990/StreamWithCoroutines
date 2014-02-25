@@ -19,6 +19,7 @@ public:
   void addPublisher(OperatorContextImpl & oper, size_t outPort);
   std::pair<OperatorContextImpl *, size_t> getPublisher(size_t index);
   void pushTuple(Tuple const & tuple);
+  std::chrono::high_resolution_clock::time_point & getFrontTimestamp();
   void drain();
 
   // implemented interface

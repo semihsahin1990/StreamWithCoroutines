@@ -5,6 +5,8 @@
 #include "streamc/runtime/WorkerThread.h"
 #include "streamc/runtime/SchedulerPlugin.h"
 #include "streamc/runtime/RandomScheduling.h"
+#include "streamc/runtime/MinLatencyScheduling.h"
+#include "streamc/runtime/MaxThroughputScheduling.h"
 #include "streamc/runtime/InputPortImpl.h"
 #include "streamc/runtime/OutputPortImpl.h"
 #include <iostream>
@@ -13,7 +15,7 @@ using namespace std;
 using namespace streamc;
 
 Scheduler::Scheduler(FlowContext & flowContext) 
-  : stopped_(false), flowContext_(flowContext), plugin_(new RandomScheduling()) 
+  : stopped_(false), flowContext_(flowContext), plugin_(new MinLatencyScheduling()) 
 {}
 
 Scheduler::~Scheduler() 
@@ -49,7 +51,7 @@ void Scheduler::start()
   for (auto & operInfoPair : operContexts_) {
     operInfoPair.first->init();
     operInfoPair.second->init();
-    readyOperators_.insert(operInfoPair.first);  
+    readyOperators_.insert(operInfoPair.first);
   }
 }
 
@@ -190,6 +192,10 @@ void Scheduler::checkOperatorForPreemption(OperatorContextImpl & oper)
   }
   if (preempt)
     oper.yieldOper(); // co-routine jumps back to the WorkerThread
+}
+
+OperatorInfo & Scheduler::getOperatorInfo(OperatorContextImpl *oper) {
+  return *(operContexts_[oper]);
 }
 
 OperatorContextImpl * Scheduler::getThreadWork(WorkerThread & thread)

@@ -30,12 +30,13 @@ public:
   OperatorContextImpl * getThreadWork(WorkerThread & thread);
   void markOperatorAsCompleted(OperatorContextImpl & oper);
   void markOperatorAsReadBlocked(OperatorContextImpl & oper, 
-    std::unordered_map<InputPortImpl *, size_t> const & waitSpec, bool conjunctive);  
+  std::unordered_map<InputPortImpl *, size_t> const & waitSpec, bool conjunctive);  
   void markOperatorAsWriteBlocked(OperatorContextImpl & oper, 
-    std::unordered_map<InputPortImpl *, size_t> const & waitSpec);  
+  std::unordered_map<InputPortImpl *, size_t> const & waitSpec);  
   void markInputPortAsWritten(InputPortImpl & iport);
   void markInputPortAsRead(InputPortImpl & iport);
   void checkOperatorForPreemption(OperatorContextImpl & oper);
+  OperatorInfo & getOperatorInfo(OperatorContextImpl *oper);
 private:
   void updateThreadState(WorkerThread & thread, ThreadInfo::ThreadState state);
   void updateOperatorState(OperatorContextImpl & oper, OperatorInfo::OperatorState state);

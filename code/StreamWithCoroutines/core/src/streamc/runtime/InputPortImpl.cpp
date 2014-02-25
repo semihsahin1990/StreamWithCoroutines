@@ -115,6 +115,15 @@ Tuple & InputPortImpl::getFrontTuple()
   return portQueue_.front().first; 
 }
 
+std::chrono::high_resolution_clock::time_point & InputPortImpl::getFrontTimestamp() 
+{
+  lock_guard<mutex> lock(mutex_);
+  if (portQueue_.size()==0)
+    throw runtime_error("getFrontTimestamp() called on empty queue, oper="+oper_->getOperator().getName());
+
+  return portQueue_.front().second; 
+}
+
 // return the index-th tuple
 Tuple & InputPortImpl::getTupleAt(size_t index) 
 {
@@ -134,7 +143,7 @@ void InputPortImpl::popTuple()
   }
   
   // update consumption counters
-  OperatorInfo & oinfo = scheduler_.getOperatorInfo(oper_);
+  OperatorInfo & oinfo = scheduler_->getOperatorInfo(oper_);
   oinfo.updateIPortCounter(*this);
   
   // scheduler has to check if this causes other operators to go into ready state 

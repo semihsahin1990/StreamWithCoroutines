@@ -55,7 +55,7 @@ void OutputPortImpl::pushTuple(Tuple const & tuple)
         needToWait = false;
 
         // update production counters
-        OperatorInfo & oinfo = scheduler_.getOperatorInfo(oper_);
+        OperatorInfo & oinfo = scheduler_->getOperatorInfo(oper_);
         oinfo.updateOPortCounter(*this);
 
         for(auto const & opPortPair : subscribers_) {

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "streamc/runtime/HashHelpers.h"
-#include "streamc/runtime/SchedulerState.h"
 #include "streamc/runtime/OperatorContextImpl.h"
 
 #include <chrono>
@@ -103,7 +102,8 @@ public:
   OperatorInfo() {}
   OperatorInfo(OperatorContextImpl & oper) : oper_(&oper), state_(Ready), thread_(nullptr) , 
                                              readCond_(oper), writeCond_(oper) {}
-  void init() { state_=Ready; thread_ = nullptr; readCond_.init(); writeCond_.init(); initProfileLists(); }
+  void init() { state_=Ready; thread_ = nullptr; readCond_.init(); writeCond_.init();
+              initProfileLists(); conjCount=0; disjCount=0; }
   OperatorContextImpl & getOperatorContext() { return *oper_; }
   OperatorState getState() { return state_; }
   void setState(OperatorState state) { state_ = state; }
@@ -155,7 +155,12 @@ public:
     }
   }
 
+  void updateConjCount() { conjCount++; }
+  void updateDisjCount() { disjCount++; }
+  bool isConjuntive() { return conjCount > disjCount; }
+
 private:
+  size_t conjCount, disjCount;
   OperatorContextImpl * oper_;
   OperatorState state_;
   WorkerThread * thread_; // last thread that executed this operator

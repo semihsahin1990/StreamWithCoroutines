@@ -1,13 +1,15 @@
-#include "streamc/runtime/RandomScheduling.h"
+#include "streamc/runtime/MinLatencyScheduling.h"
 
 #include "streamc/runtime/SchedulerPluginService.h"
+#include "streamc/runtime/InputPortImpl.h"
+#include "streamc/Operator.h"
 
 using namespace std;
 using namespace streamc;
-
+#include <iostream>
 #include <unordered_set>
 
-RandomScheduling::RandomScheduling(uint64_t epochMicrosecs/*=1000*/) 
+MinLatencyScheduling::MinLatencyScheduling(uint64_t epochMicrosecs/*=1000*/) 
   : epochMicrosecs_(epochMicrosecs) 
 {
   constexpr double clockPeriodInMicrosec = 
@@ -17,7 +19,7 @@ RandomScheduling::RandomScheduling(uint64_t epochMicrosecs/*=1000*/)
   randgen_.seed(mt19937_64::default_seed);
 }
 
-OperatorContextImpl * RandomScheduling::
+OperatorContextImpl * MinLatencyScheduling::
     findOperatorToExecute(SchedulerPluginService & service,
                           WorkerThread & thread) 
 { 
@@ -26,13 +28,29 @@ OperatorContextImpl * RandomScheduling::
   if (opers.size()==0)
     return nullptr;
 
-  size_t l = randgen_() % opers.size(); 
-  auto it = opers.begin();
-  for (size_t i=0; i<l; ++i, it++);
-  return *it;
+  auto it=opers.begin();
+  chrono::high_resolution_clock::time_point min = chrono::high_resolution_clock::now();
+  OperatorContextImpl *selected = *it;
+
+  for(++it; it!=opers.end(); it++) {
+    OperatorContextImpl *oper = *it;
+    size_t numberOfInputPorts = oper->getNumberOfInputPorts();
+    for(size_t i=0; i<numberOfInputPorts; i++) {
+      InputPortImpl & iportImpl = oper->getInputPortImpl(i);
+      if(iportImpl.getTupleCount() != 0) {
+        chrono::high_resolution_clock::time_point timestamp = iportImpl.getFrontTimestamp();
+        if(timestamp < min) {
+          min = timestamp;
+          selected = *it;
+        }
+      }
+    }
+  }
+
+  return selected;
 }
 
-bool RandomScheduling::
+bool MinLatencyScheduling::
     checkOperatorForPreemption(SchedulerPluginService & service,
                                OperatorContextImpl & oper) 
 {

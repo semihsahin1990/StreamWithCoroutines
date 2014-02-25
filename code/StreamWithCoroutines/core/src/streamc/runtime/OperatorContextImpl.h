@@ -18,6 +18,7 @@ class InputPortImpl;
 class OutputPortImpl;
 class Scheduler;
 class Tuple;
+class OperatorInfo;
 
 class OperatorContextImpl : public OperatorContext
 {
@@ -37,8 +38,7 @@ public:
   size_t getNumberOfOutputPorts() { return outputs_.size(); }
   InputPortImpl & getInputPortImpl(size_t inputPort) { return *inputs_[inputPort]; }
   OutputPortImpl & getOutputPortImpl(size_t outputPort) { return *outputs_[outputPort]; }
-
-  // TODO: OperatorInfo & getOperatorInfo(OperatorContextImpl *) eklenecek
+  OperatorInfo & getOperatorInfo();
 
   // interface to be implemented
   InputPort & getInputPort(size_t inputPort) override;
