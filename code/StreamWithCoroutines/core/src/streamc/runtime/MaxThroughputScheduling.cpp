@@ -36,8 +36,10 @@ OperatorContextImpl * MaxThroughputScheduling::
 
   for(++it; it!=opers.end(); it++) {
     double runningTime = estimateRunningTime(*it);
-    if(runningTime > maxRunningTime)
+    if(runningTime > maxRunningTime) {
       maxRunningTime = runningTime;
+      selected = *it;
+    }
   } 
   return selected;
 }
@@ -75,17 +77,16 @@ double MaxThroughputScheduling::estimateRunningTime(OperatorContextImpl *oper) {
   // output ports
   size_t numberOfOutputPorts = oper->getNumberOfOutputPorts();
   size_t capacity = FlowContext::getMaxQueueSize();
-  //size_t capacity = 5;
   for(size_t i=0; i<numberOfOutputPorts; i++) {
     OutputPortImpl & oportImpl = oper->getOutputPortImpl(i);
-      double profile = oinfo.getOPortProfile(oportImpl);
-      pair<OperatorContextImpl *, size_t> subscriber = oportImpl.getSubscriber(0);
-      InputPortImpl & iportImpl = (subscriber.first) -> getInputPortImpl(subscriber.second);
+    double profile = oinfo.getOPortProfile(oportImpl);
+    pair<OperatorContextImpl *, size_t> subscriber = oportImpl.getSubscriber(0);
+    InputPortImpl & iportImpl = (subscriber.first) -> getInputPortImpl(subscriber.second);
 
-      double runningTime = (capacity-iportImpl.getTupleCount()) / profile;
-
-      if(min==-1 || runningTime<min)
-        min = runningTime;
+    double runningTime = (capacity-iportImpl.getTupleCount()) / profile;
+    
+    if(min==-1 || runningTime<min)
+      min = runningTime;
   }
 
   return min;
