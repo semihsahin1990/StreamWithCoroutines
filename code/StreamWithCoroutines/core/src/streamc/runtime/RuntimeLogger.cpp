@@ -41,6 +41,8 @@ RuntimeLogger::RuntimeLogger()
     appLogger_(keywords::channel = "app"),
     sinks_(new RuntimeLoggerSinks())
 {
+  string const logDir = "logs";
+
   logging::formatter fmt = expr::format("%1%: <%2%> [%3%] %4%")
             % expr::attr<boost::posix_time::ptime>("TimeStamp")            
             % expr::attr<attrs::current_thread_id::value_type>("ThreadID")
@@ -51,7 +53,7 @@ RuntimeLogger::RuntimeLogger()
   size_t maxFiles = 10;
   boost::shared_ptr<sinks::text_file_backend> backend =
     boost::make_shared< sinks::text_file_backend >(
-      keywords::file_name = "scInf_%Y-%m-%d_%H-%M-%S.%N.log",  
+      keywords::file_name = logDir+"/scInf_%Y-%m-%d_%H-%M-%S.%N.log",  
       keywords::rotation_size = fileSize
       //keywords::time_based_rotation = sinks::file::rotation_at_time_point(12, 0, 0) 
     );
@@ -60,14 +62,14 @@ RuntimeLogger::RuntimeLogger()
   sinks_->infSink->set_filter(severity >= Error && channel == "inf");
   sinks_->infSink->set_formatter(fmt);
   sinks_->infSink->locked_backend()->set_file_collector(sinks::file::make_collector(
-        keywords::target = "logs",                      
+        keywords::target = logDir,                      
         keywords::max_size = maxFiles * fileSize
   ));
   logging::core::get()->add_sink(sinks_->infSink);
 
   backend =
     boost::make_shared< sinks::text_file_backend >(
-      keywords::file_name = "scApp_%Y-%m-%d_%H-%M-%S.%N.log",  
+      keywords::file_name = logDir + "/scApp_%Y-%m-%d_%H-%M-%S.%N.log",  
       keywords::rotation_size = fileSize
       //keywords::time_based_rotation = sinks::file::rotation_at_time_point(12, 0, 0) 
     );
@@ -76,7 +78,7 @@ RuntimeLogger::RuntimeLogger()
   sinks_->appSink->set_filter(severity >= Error && channel == "app");
   sinks_->appSink->set_formatter(fmt);
   sinks_->appSink->locked_backend()->set_file_collector(sinks::file::make_collector(
-        keywords::target = "logs",                      
+        keywords::target = logDir,                      
         keywords::max_size = maxFiles * fileSize
   ));
   logging::core::get()->add_sink(sinks_->appSink);
