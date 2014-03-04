@@ -304,4 +304,3 @@ void Scheduler::updateThreadState(WorkerThread & thread, ThreadInfo::ThreadState
   else if (state==ThreadInfo::Ready)
     readyThreads_.insert(&thread);
 }
-

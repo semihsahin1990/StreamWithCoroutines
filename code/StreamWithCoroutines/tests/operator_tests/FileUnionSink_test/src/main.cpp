@@ -2,7 +2,6 @@
 #include "streamc/FlowRunner.h"
 #include "streamc/operators/FileSource.h"
 #include "streamc/operators/FileSink.h"
-#include "streamc/operators/Filter.h"
 #include "streamc/operators/Union.h"
 
 #include "gtest/gtest.h"
@@ -17,7 +16,6 @@ using namespace std;
 using namespace streamc;
 using namespace streamc::operators;
 using namespace streamc::connectors;
-
 
 class FileUnionSink_test : public ::testing::Test {
 public:

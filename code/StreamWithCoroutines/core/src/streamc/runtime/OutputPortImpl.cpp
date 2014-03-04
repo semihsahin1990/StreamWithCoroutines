@@ -80,4 +80,3 @@ void OutputPortImpl::pushTuple(Tuple const & tuple)
     }
   }
 }
-

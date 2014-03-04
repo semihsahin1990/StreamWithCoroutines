@@ -98,4 +98,3 @@ void FileSource::process(OperatorContext & context)
     filePos_ = input.tellg();
   } 
 }
-

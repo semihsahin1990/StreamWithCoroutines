@@ -170,7 +170,7 @@ bool OperatorContextImpl::waitOnAnyPort(unordered_map<InputPort *, size_t> const
     }
 
     if (needToWait) {
-      scheduler_->markOperatorAsReadBlocked(*this, waitSpec, true);
+      scheduler_->markOperatorAsReadBlocked(*this, waitSpec, false);
     } else {
       scheduler_->checkOperatorForPreemption(*this);
     }
@@ -178,4 +178,3 @@ bool OperatorContextImpl::waitOnAnyPort(unordered_map<InputPort *, size_t> const
 
   return false;
 }
-
