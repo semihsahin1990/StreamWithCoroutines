@@ -1,12 +1,12 @@
 #include "streamc/Flow.h"
 #include "streamc/FlowRunner.h"
-#include "ReverseTreeCreator.h"
+#include "TreeCreator.h"
 
 using namespace std;
 using namespace streamc;
 
 int main(int argc, char *argv[]) {
-	ReverseTreeCreator creator(5);
+	TreeCreator creator(4,3);
 
 	Flow &flow = creator.getFlow();
 
