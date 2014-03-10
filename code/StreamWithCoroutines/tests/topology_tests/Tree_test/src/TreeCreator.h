@@ -12,7 +12,7 @@ public:
 private:
 	size_t depth_;
 	size_t n_;
-	std::vector<streamc::Operator *> sinks_;
 	std::vector<streamc::Operator *> splits_;
+	std::vector<streamc::Operator *> sinks_;
 	streamc::Flow flow_;
 };

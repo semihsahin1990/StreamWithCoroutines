@@ -2,6 +2,7 @@
 #include "TreeCreator.h"
 #include "streamc/operators/FileSource.h"
 #include "streamc/operators/Split.h"
+#include "streamc/operators/Merge.h"
 #include "streamc/operators/FileSink.h"
 #include <boost/functional/hash.hpp>
 
@@ -25,6 +26,7 @@ TreeCreator::TreeCreator(size_t depth, size_t n)
   			.set_hashFunction(MEXP1( t_.get<Type::String>("name") != "Bugra" ? 0 : 1));
   		splits_.push_back(&split);
   	}
+
   	// create sinks
   	size_t numberOfSinks = pow(n_, depth_-2);
   	for(size_t i=0; i<numberOfSinks; i++) {
@@ -40,16 +42,13 @@ TreeCreator::TreeCreator(size_t depth, size_t n)
   	size_t nSplitToSplit = (pow(n_, depth_-3)-1)/(n_-1);
   	for(size_t i=0; i<nSplitToSplit; i++) {
   		for(size_t j=0; j<n_; j++) {
-  			cout<<"id: "<<i<<" port: "<<j<<" -->> "<<"id: "<<i*n_+j+1<<endl;
   			flow_.addConnection((*splits_[i], j) >> (0, *splits_[i*n_+j+1]));
   		}
   	}
 
-  	cout<<"splits to sinks"<<endl;
   	size_t sinkID = 0;
   	for(size_t i=nSplitToSplit; i<numberOfSplits; i++) {
   		for(size_t j=0; j<n_; j++, sinkID++) {
-  			cout<<"id: "<<i<<" port: "<<j<<" -->> "<<"id: "<<sinkID<<endl;
   			flow_.addConnection((*splits_[i], j) >> (0, *sinks_[sinkID]));
   		}
   	}

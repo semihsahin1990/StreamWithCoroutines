@@ -39,8 +39,10 @@ void Split::process(OperatorContext & context)
 
     Tuple & tuple = iport.getFrontTuple();
     int hashValue = hashFunction_(tuple);
+    int oPortNo = hashValue%nOutputs;
+    OutputPort & oport = context.getOutputPort(oPortNo);
     tuple.setAttribute("seqNo", (int64_t)seqNo);
-    context.getOutputPort(hashValue%nOutputs).pushTuple(tuple);
+    oport.pushTuple(tuple);
     iport.popTuple();
     seqNo++;
   }
