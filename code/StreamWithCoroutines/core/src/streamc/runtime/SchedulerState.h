@@ -121,8 +121,10 @@ public:
     double oldValue = iportProfileList_[&iport].profile;
     size_t portCounter = iportProfileList_[&iport].counter;
     double timeElapsed = (double)(std::chrono::duration_cast<std::chrono::microseconds>(endTime_ - beginTime_).count());
-
-    iportProfileList_[&iport].profile = factor * oldValue + (1-factor) * portCounter/timeElapsed;
+    if(oldValue == 0)
+      iportProfileList_[&iport].profile =  portCounter/timeElapsed;
+    else
+      iportProfileList_[&iport].profile = factor * oldValue + (1-factor) * portCounter/timeElapsed;
   }
   double getIPortProfile(InputPortImpl &iport) { return iportProfileList_[&iport].profile; }
   void updateIPortCounter(InputPortImpl &iport) { iportProfileList_[&iport].counter++; }
@@ -132,8 +134,10 @@ public:
     double oldValue = oportProfileList_[&oport].profile;
     size_t portCounter = oportProfileList_[&oport].counter;
     double timeElapsed = (double)(std::chrono::duration_cast<std::chrono::microseconds>(endTime_ - beginTime_).count());
-
-    oportProfileList_[&oport].profile = factor * oldValue + (1-factor) * portCounter/timeElapsed;
+    if(oldValue == 0)
+      oportProfileList_[&oport].profile =  portCounter/timeElapsed;
+    else
+      oportProfileList_[&oport].profile = factor * oldValue + (1-factor) * portCounter/timeElapsed;
   }
   double getOPortProfile(OutputPortImpl &oport) { return oportProfileList_[&oport].profile; }
   void updateOPortCounter(OutputPortImpl &oport) { oportProfileList_[&oport].counter++; }
