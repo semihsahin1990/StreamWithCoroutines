@@ -23,14 +23,15 @@ OperatorContextImpl * MinLatencyScheduling::
     findOperatorToExecute(SchedulerPluginService & service,
                           WorkerThread & thread) 
 { 
+ 
   unordered_set<OperatorContextImpl *> const & opers = service.getReadyOperators();
 
   if (opers.size()==0)
     return nullptr;
 
   auto it=opers.begin();
+  OperatorContextImpl * selected = *it;
   chrono::high_resolution_clock::time_point min = chrono::high_resolution_clock::now();
-  OperatorContextImpl *selected = *it;
 
   for(++it; it!=opers.end(); it++) {
     OperatorContextImpl *oper = *it;
@@ -46,7 +47,7 @@ OperatorContextImpl * MinLatencyScheduling::
       }
     }
   }
-
+  
   return selected;
 }
 
@@ -62,3 +63,4 @@ bool MinLatencyScheduling::
   std::chrono::microseconds timeDiffInMicrosecs = duration_cast<std::chrono::microseconds>(timeDiff); 
   return (timeDiffInMicrosecs.count() >= epochMicrosecs_);
 }
+

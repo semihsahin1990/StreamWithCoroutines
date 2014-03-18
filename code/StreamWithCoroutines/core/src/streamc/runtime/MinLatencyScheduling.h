@@ -22,7 +22,7 @@ public:
                                           OperatorContextImpl & oper);
 private:
 	uint64_t epochMicrosecs_;
-  	std::mt19937_64 randgen_;
+  std::mt19937_64 randgen_;
 };
 
 } /* namespace streamc */

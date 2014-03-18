@@ -8,7 +8,7 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <iostream>
-#define factor 0.85
+
 namespace streamc
 {
 class ThreadInfo
@@ -37,6 +37,8 @@ private:
   
 class OperatorInfo
 {
+private:
+  static constexpr double const decayFactor_ = 0.85; 
 public:
   struct ThresholdAndCount
   {
@@ -124,7 +126,7 @@ public:
     if(oldValue == 0)
       iportProfileList_[&iport].profile =  portCounter/timeElapsed;
     else
-      iportProfileList_[&iport].profile = factor * oldValue + (1-factor) * portCounter/timeElapsed;
+      iportProfileList_[&iport].profile = decayFactor_ * oldValue + (1-decayFactor_) * (portCounter/timeElapsed);
   }
   double getIPortProfile(InputPortImpl &iport) { return iportProfileList_[&iport].profile; }
   void updateIPortCounter(InputPortImpl &iport) { iportProfileList_[&iport].counter++; }
@@ -137,7 +139,7 @@ public:
     if(oldValue == 0)
       oportProfileList_[&oport].profile =  portCounter/timeElapsed;
     else
-      oportProfileList_[&oport].profile = factor * oldValue + (1-factor) * portCounter/timeElapsed;
+      oportProfileList_[&oport].profile = decayFactor_ * oldValue + (1-decayFactor_) * (portCounter/timeElapsed);
   }
   double getOPortProfile(OutputPortImpl &oport) { return oportProfileList_[&oport].profile; }
   void updateOPortCounter(OutputPortImpl &oport) { oportProfileList_[&oport].counter++; }
