@@ -5,6 +5,7 @@
 class TreeCreator
 {
 public:
+  // TODO: add cost and add busy operator
 	TreeCreator(size_t depth, size_t n);
 	size_t getDepth() { return depth_; }
 	streamc::Flow & getFlow() { return flow_; }
