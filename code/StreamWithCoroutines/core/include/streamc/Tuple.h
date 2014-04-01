@@ -252,6 +252,29 @@ public:
   }
 
   /**
+   * Get the timestamp value of the attribute with the given name.
+   * 
+   * @param name name of the attribute
+   * @return the timestamp value of the attribute 
+   */
+  std::chrono::high_resolution_clock::time_point & getTimestampAttribute(std::string const & name) 
+  {
+    return values_[name]->getTimestampValue();
+  }
+
+  /**
+   * Get the timestamp value of the attribute with the given name (const version).
+   * 
+   * @param name name of the attribute
+   * @return the timestamp value of the attribute 
+   */
+   /*
+  std::chrono::high_resolution_clock::time_point const & getTimestampAttribute(std::string const & name) const
+  {
+    return values_.find(name)->second->getTimestampValue();
+  }
+  */
+  /**
    * Get the string value of the attribute with the given name.
    * 
    * @param name name of the attribute

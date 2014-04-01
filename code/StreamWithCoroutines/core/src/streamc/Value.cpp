@@ -85,9 +85,10 @@ Value Value::fromString(string const & str, Type type)
     return Value(from_string<int64_t>(str));
   case Type::Double:
     return Value(from_string<double>(str));
+  case Type::Timestamp:
+    return Value("TODO");
   case Type::String:
     return str;
-    //TODO: return Value(from_string_literal(str));
   case Type::IntList:
     return Value(from_string_vec<int64_t>(str));
   case Type::DoubleList:
@@ -104,9 +105,10 @@ string Value::toString(Value const & value)
     return to_string(value.data.intData);
   case Type::Double:
     return to_string(value.data.doubleData);
+  case Type::Timestamp:
+    return "";
   case Type::String:
     return *(value.data.stringPointer);
-    //TODO: return to_string_literal(*value.stringPointer);
   case Type::IntList:
     return to_string_vec(*(value.data.intListPointer));
   case Type::DoubleList:
