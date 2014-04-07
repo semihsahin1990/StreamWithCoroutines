@@ -9,13 +9,15 @@
 #include "streamc/runtime/MaxThroughputScheduling.h"
 #include "streamc/runtime/InputPortImpl.h"
 #include "streamc/runtime/OutputPortImpl.h"
+#include "streamc/Operator.h"
+#include "streamc/Logger.h"
 #include <iostream>
 
 using namespace std;
 using namespace streamc;
 
 Scheduler::Scheduler(FlowContext & flowContext) 
-  : stopped_(false), flowContext_(flowContext), plugin_(new MinLatencyScheduling()) 
+  : stopped_(false), flowContext_(flowContext), plugin_(new MaxThroughputScheduling()) 
 {}
 
 Scheduler::~Scheduler() 
@@ -230,7 +232,7 @@ void Scheduler::updateOperatorState(OperatorContextImpl & oper, OperatorInfo::Op
   OperatorInfo::OperatorState oldState = oinfo.getState();
   if (oldState==state)
     return; // no change
-
+  SC_APPLOG(Trace, oper.getOperator().getName() << " state: "<<state);
   oinfo.setState(state);
   if (oldState==OperatorInfo::ReadBlocked) { // must be moving into ready state
     // remove the operator from the read waiting list of its input ports

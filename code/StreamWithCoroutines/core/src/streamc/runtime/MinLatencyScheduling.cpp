@@ -46,7 +46,7 @@ OperatorContextImpl * MinLatencyScheduling::
       }
     }
   }
-
+  
   return selected;
 }
 

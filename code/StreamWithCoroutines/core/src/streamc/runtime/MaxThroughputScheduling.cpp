@@ -80,13 +80,14 @@ double MaxThroughputScheduling::estimateRunningTime(OperatorContextImpl *oper) {
   for(size_t i=0; i<numberOfOutputPorts; i++) {
     OutputPortImpl & oportImpl = oper->getOutputPortImpl(i);
     double profile = oinfo.getOPortProfile(oportImpl);
-    pair<OperatorContextImpl *, size_t> subscriber = oportImpl.getSubscriber(0);
-    InputPortImpl & iportImpl = (subscriber.first) -> getInputPortImpl(subscriber.second);
-
-    double runningTime = (capacity-iportImpl.getTupleCount()) / profile;
-    
-    if(min==-1 || runningTime<min)
-      min = runningTime;
+    size_t numberOfSubscribers = oportImpl.getNumberOfSubscribers();
+    for(size_t j=0; j<numberOfSubscribers; j++) {
+      pair<OperatorContextImpl *, size_t> subscriber = oportImpl.getSubscriber(j);
+      InputPortImpl & iportImpl = (subscriber.first) -> getInputPortImpl(subscriber.second);
+      double runningTime = (capacity-iportImpl.getTupleCount()) / profile;
+      if(min==-1 || runningTime<min)
+        min = runningTime;
+      }
   }
 
   return min;
