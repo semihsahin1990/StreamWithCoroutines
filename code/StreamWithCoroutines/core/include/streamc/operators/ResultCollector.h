@@ -29,8 +29,8 @@ public:
   void process(OperatorContext & context) override;
 private:
   size_t tupleCounter_;
-  uint64_t totalLatency_;
-  uint64_t maxLatency_;
+  uint64_t minLatency_, maxLatency_;
+  double mean_, deviation_;
 };
 
 } } // namespace streamc::operators
