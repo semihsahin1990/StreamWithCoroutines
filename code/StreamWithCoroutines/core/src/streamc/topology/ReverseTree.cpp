@@ -4,7 +4,7 @@
 #include "streamc/operators/Timestamper.h"
 #include "streamc/operators/Selective.h"
 #include "streamc/operators/Busy.h"
-#include "streamc/operators/Barrier.h"
+#include "streamc/operators/Union.h"
 #include "streamc/operators/ResultCollector.h"
 #include "streamc/operators/FileSink.h"
 
@@ -38,14 +38,14 @@ ReverseTree::ReverseTree(size_t depth, uint64_t cost, double selectivity, size_t
 		busyOps_.push_back(&busy);
 	}
 
-	// create barriers
+	// create unions
 	for(size_t i=numberOfSources; i<numberOfNodes; i++) {
-		Operator & barrier = flow_.createOperator<Barrier>("barrier"+to_string(i-numberOfSources), n_);
-		barrierOps_.push_back(&barrier);
+		Operator & myUnion = flow_.createOperator<Union>("union"+to_string(i-numberOfSources), n_);
+		unionOps_.push_back(&myUnion);
 	}
 
 	// create result collector
-	Operator & resultCollector = flow_.createOperator<ResultCollector>("resultCollector");
+	Operator & resultCollector = flow_.createOperator<ResultCollector>("resultCollector", "expData/result.dat");
 
 	// create sink
 	Operator & snk = flow_.createOperator<FileSink>("snk")
@@ -63,16 +63,16 @@ ReverseTree::ReverseTree(size_t depth, uint64_t cost, double selectivity, size_t
     }
 
     for(size_t i=numberOfSources; i<numberOfNodes; i++) {
-    	flow_.addConnection((*barrierOps_[i-numberOfSources], 0) >> (0, *selectiveOps_[i]));
+    	flow_.addConnection((*unionOps_[i-numberOfSources], 0) >> (0, *selectiveOps_[i]));
     	flow_.addConnection((*selectiveOps_[i], 0) >> (0, *busyOps_[i]));
-    //	cout<<"barrier "<<i-numberOfSources<<"\t selective "<<i<<endl;
+    //	cout<<"union "<<i-numberOfSources<<"\t selective "<<i<<endl;
     //	cout<<"selective "<<i<<"\t busy "<<i<<endl;
     }
 
 	for(size_t i=0; i<numberOfNodes-1; i++) {
 		for(size_t j=0; j<n_; j++) {
-			flow_.addConnection((*busyOps_[i], 0) >> (j, *barrierOps_[i/n_]));
-	//		cout<<"busy "<<i<<"\t barrier "<<(i/n)<<" port "<<j<<endl;
+			flow_.addConnection((*busyOps_[i], 0) >> (j, *unionOps_[i/n_]));
+	//		cout<<"busy "<<i<<"\t union "<<(i/n)<<" port "<<j<<endl;
 		}
 	}
 

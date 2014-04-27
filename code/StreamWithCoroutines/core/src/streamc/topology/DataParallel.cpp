@@ -43,7 +43,7 @@ DataParallel::DataParallel(uint64_t cost, double selectivity, size_t n)
   Operator & merge = flow_.createOperator<Merge>("merge", n_);
 
   // create result collector
-  Operator & resultCollector = flow_.createOperator<ResultCollector>("ResultCollector");
+  Operator & resultCollector = flow_.createOperator<ResultCollector>("ResultCollector", "expData/result.dat");
 
   // create sink
   Operator & snk = flow_.createOperator<FileSink>("snk")

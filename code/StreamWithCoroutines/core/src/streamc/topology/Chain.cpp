@@ -32,7 +32,7 @@ Chain::Chain(size_t depth, uint64_t cost, double selectivity)
   }
 
   // create result collector
-  Operator & resultCollector = flow_.createOperator<ResultCollector>("resultCollector");
+  Operator & resultCollector = flow_.createOperator<ResultCollector>("resultCollector", "expData/result.dat");
 
   // create FileSink
   Operator & snk = flow_.createOperator<FileSink>("snk")

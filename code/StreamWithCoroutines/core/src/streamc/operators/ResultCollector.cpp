@@ -1,4 +1,7 @@
 #include "streamc/operators/ResultCollector.h"
+
+#include <iostream>
+#include <fstream>
 #include <chrono>
 
 using namespace std;
@@ -6,8 +9,8 @@ using namespace std::chrono;
 using namespace streamc;
 using namespace streamc::operators;
 
-ResultCollector::ResultCollector(std::string const & name)
-  : Operator(name, 1, 1), tupleCounter_(0), minLatency_(-1), maxLatency_(0), mean_(0), deviation_(0)
+ResultCollector::ResultCollector(std::string const & name, std::string const & fileName)
+  : Operator(name, 1, 1), fileName_(fileName), tupleCounter_(0), minLatency_(-1), maxLatency_(0), mean_(0), deviation_(0)
 {}
 
 void ResultCollector::process(OperatorContext & context)
@@ -45,9 +48,18 @@ void ResultCollector::process(OperatorContext & context)
     iport.popTuple();
   }
 
+  ofstream output;
+  output.open(fileName_.c_str());
+
   deviation_ = sqrt(variance);
   cout<<"minLatency:\t"<<minLatency_<<endl;
   cout<<"maxLatency:\t"<<maxLatency_<<endl;
   cout<<"mean:\t\t"<<mean_<<endl;
   cout<<"deviation:\t"<<deviation_<<endl;
+
+  output<<minLatency_<<endl;
+  output<<maxLatency_<<endl;
+  output<<mean_<<endl;
+  output<<deviation_<<endl;
+  output.close();
 }

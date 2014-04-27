@@ -18,7 +18,7 @@ public:
    *
    * @param name name of the operator
    */
-  ResultCollector(std::string const & name);
+  ResultCollector(std::string const & name, std::string const & fileName);
 
 
   /**
@@ -28,6 +28,7 @@ public:
    */
   void process(OperatorContext & context) override;
 private:
+  std::string fileName_;
   size_t tupleCounter_;
   uint64_t minLatency_, maxLatency_;
   double mean_, deviation_;

@@ -18,6 +18,6 @@ private:
 	std::vector<streamc::Operator *> timestamperOps_;
 	std::vector<streamc::Operator *> selectiveOps_;
 	std::vector<streamc::Operator *> busyOps_;
-	std::vector<streamc::Operator *> barrierOps_;
+	std::vector<streamc::Operator *> unionOps_;
 	streamc::Flow flow_;
 };

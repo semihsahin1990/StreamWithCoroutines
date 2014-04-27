@@ -26,12 +26,16 @@ public:
 
     data.open();
 
+    size_t defaultDepth = 10;
+    int defaultCost = 100;
+    double defaultSelectivity = 1.0;
+
     size_t const numThreadsMin = 1;
-    size_t const numThreadsMax = 1;
+    size_t const numThreadsMax = 4;
 
     for (size_t numThreads=numThreadsMin; numThreads<=numThreadsMax; ++numThreads) {
 
-      Chain chain(4, 100, 1.0);
+      Chain chain(defaultDepth, defaultCost, defaultSelectivity);
       Flow & flow = chain.getFlow();
 
       FlowRunner & runner = FlowRunner::createRunner();

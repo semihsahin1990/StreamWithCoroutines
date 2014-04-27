@@ -36,7 +36,7 @@ public:
 
       FlowRunner & runner = FlowRunner::createRunner();
       runner.setInfrastructureLogLevel(Info);
-      runner.setApplicationLogLevel(Trace);
+      runner.setApplicationLogLevel(Error);
       runner.run(flow, numThreads);
       runner.wait(flow);
 
