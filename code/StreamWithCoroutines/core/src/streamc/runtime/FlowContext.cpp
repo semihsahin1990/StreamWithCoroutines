@@ -7,17 +7,18 @@
 #include "streamc/runtime/OutputPortImpl.h"
 #include "streamc/runtime/Scheduler.h"
 #include "streamc/runtime/WorkerThread.h"
+#include "streamc/runtime/SchedulerPlugin.h"
 
 using namespace std;
 using namespace streamc;
 
 size_t FlowContext::maxQueueSize_ = 10000; // TODO: make changable, and perhaps per port?
 
-FlowContext::FlowContext(Flow & flow)
+FlowContext::FlowContext(Flow & flow, SchedulerPlugin & plugin)
   : flow_(flow), numCompleted_(0), isShutdownRequested_(false)
 {
   // create the scheduler
-  scheduler_.reset(new Scheduler(*this));
+  scheduler_.reset(new Scheduler(*this, plugin));
 
   // get operators
   vector<Operator *> const & opers = flow_.getOperators();
@@ -70,6 +71,7 @@ FlowContext::~FlowContext()
 
 void FlowContext::run(int numThreads)
 {
+  cout<<"run started"<<endl;
   // reset the shutdown requested (in case we are being rerun)
   isShutdownRequested_.store(false);
   
@@ -81,7 +83,8 @@ void FlowContext::run(int numThreads)
     threads_.push_back(unique_ptr<WorkerThread>(thread));
     scheduler_->addThread(*threads_[i]);
   }
- 
+  
+  cout<<"start scheduler"<<endl;
   // start the scheduler and all the threads
   scheduler_->start();
   for (int i=0; i<numThreads; ++i) 

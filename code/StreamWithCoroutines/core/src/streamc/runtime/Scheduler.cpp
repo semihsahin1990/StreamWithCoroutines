@@ -15,8 +15,8 @@
 using namespace std;
 using namespace streamc;
 
-Scheduler::Scheduler(FlowContext & flowContext) 
-  : stopped_(false), flowContext_(flowContext), plugin_(new MaxThroughputScheduling()) 
+Scheduler::Scheduler(FlowContext & flowContext, SchedulerPlugin & plugin) 
+  : stopped_(false), flowContext_(flowContext), plugin_(&plugin) 
 {}
 
 Scheduler::~Scheduler() 
