@@ -7,6 +7,7 @@
 #include <memory>
 #include <unordered_map>
 #include <vector>
+#include <functional>
 
 namespace streamc
 {
@@ -36,15 +37,6 @@ public:
   std::string const & getName() const { return name_; }
 
   /**
-   * Add an operator to the flow.
-   *
-   * This operator is owned by the flow and will be destructed. As such, it
-   * should be a dynamically allocated operator.
-   * @param op operator to be added to the flow
-   */
-  void addOperator(Operator & op);
-
-  /**
    * Create an operator and add it to the flow.
    *
 
@@ -69,6 +61,12 @@ public:
   T & createOperator(std::string const & name, Args&&... args)
   {
     T * op = new T(name, std::forward<Args>(args)...);
+    op->setCloneFunction(
+      [&](std::string const & newName) -> Operator *
+      {
+        return new T(newName, std::forward<Args>(args)...);
+      }
+    );
     addOperator(*op);
     return *op;
   }
@@ -176,6 +174,9 @@ public:
    * @param ostream the output stream to print to
    */
   void printTopology(std::ostream & ostream) const; 
+
+private:
+  void addOperator(Operator & op);
 
 private:
   //name of the flow
