@@ -43,6 +43,11 @@ public:
   //returns whether shutdown is requested or not
   bool isShutdownRequested();
 
+  //create operator replicas
+  void addFission(Operator *oper, size_t replicaCount);
+
+  void printTopology();
+
   static size_t getMaxQueueSize() { return maxQueueSize_; }
 
 private:

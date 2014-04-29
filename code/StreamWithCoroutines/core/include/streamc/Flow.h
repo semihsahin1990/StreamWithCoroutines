@@ -106,6 +106,38 @@ public:
   void addConnections(connectors::ConnectionChain const & conns);
 
   /**
+   * Add a connection to the flow.
+   *
+   * @param fromOp from opeator of the connection
+   * @param fromOutPort from output port of the connection
+   * @param toOp to opeator of the connection
+   * @param toInPort to input port of the connection
+   */
+  void removeConnection(Operator & fromOp, uint32_t fromOutPort, Operator & toOp, uint32_t toInPort);
+
+  /**
+   * Add a connection to the flow.
+   *
+   * @param fromConn the from connection
+   * @param toConn the to connection
+   */
+  void removeConnection(connectors::FromConnection const & fromConn, connectors::ToConnection const & toConn);
+
+  /**
+   * Add a connection to the flow.
+   *
+   * @param conn the connect to add
+   */
+  void removeConnection(connectors::Connection const & conn);
+
+  /**
+   * Add a series of connections to the flow.
+   *
+   * @param conns the connection chain to be added to the flow
+   */
+  void removeConnection(connectors::ConnectionChain const & conns);
+
+  /**
    * Get an operator by name.
    *
    * @param opName name of the operator

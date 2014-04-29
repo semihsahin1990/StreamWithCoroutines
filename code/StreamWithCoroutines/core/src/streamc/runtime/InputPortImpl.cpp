@@ -31,6 +31,12 @@ pair<OperatorContextImpl *, size_t> InputPortImpl::getPublisher(size_t index)
   return publishers_[index];
 }
 
+void InputPortImpl::removePublisher(size_t index)
+{
+  //publishers_.push_back(std::make_pair(&oper, outPort));
+  publishers_.erase(publishers_.begin()+index);
+}
+
 // push tuple to the queue
 void InputPortImpl::pushTuple(Tuple const & tuple)
 {

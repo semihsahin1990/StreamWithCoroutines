@@ -57,12 +57,12 @@ void FileSink::process(OperatorContext & context)
   ofstream output;
   output.open(fileName_.c_str(), (filePos_>0) ? (ios::out|ios::app) : ios::out);
   if (!output) {
-    SC_APPLOG(Error, "Error in opening output file: " << fileName_ << ", details: " << strerror(errno));
+//   SC_APPLOG(Error, "Error in opening output file: " << fileName_ << ", details: " << strerror(errno));
     return;
   }
   output.seekp(filePos_);
   if (!output) {
-    SC_APPLOG(Error, "Error in seeking to location: " << filePos_ << ", in output file: " << fileName_ << ", details: "<< strerror(errno));
+  //  SC_APPLOG(Error, "Error in seeking to location: " << filePos_ << ", in output file: " << fileName_ << ", details: "<< strerror(errno));
     return;
   }
   InputPort & iport = context.getInputPort(0);

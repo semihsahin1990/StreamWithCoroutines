@@ -52,3 +52,7 @@ void FlowRunnerImpl::setApplicationLogLevel(LogLevel level)
   RuntimeLogger::getLogger().setApplicationLogLevel(level);
 }
 */
+
+void FlowRunnerImpl::addFission(Flow & flow, Operator * oper, size_t replicaCount) {
+  flowContexts_[&flow]->addFission(oper, replicaCount);
+}

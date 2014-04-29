@@ -32,6 +32,12 @@ public:
   {
     inPortConnections_[inPort].push_back(icon);
   }
+  void removeOutputConnection(size_t outPort, ToConnection const & ocon) 
+  {
+  }
+  void removeInputConnection(size_t inPort, FromConnection const & icon) 
+  {
+  }
   vector<ToConnection> const & getOutputPortConnections(size_t outPort) const 
   { 
     return outPortConnections_[outPort]; 
@@ -95,6 +101,33 @@ void Flow::addConnections(ConnectionChain const & conns)
 {
   for (auto const & conn : conns.getConnections())
     addConnection(conn);
+}
+
+void Flow::removeConnection(Operator & fromOp, uint32_t fromOutPort, 
+                         Operator & toOp, uint32_t toInPort)
+{
+  opConnections_[&fromOp]->removeOutputConnection(fromOutPort, ToConnection(toOp, toInPort)); 
+  opConnections_[&toOp]->removeInputConnection(toInPort, FromConnection(fromOp, fromOutPort)); 
+}
+
+//adds connection to the flow topology
+void Flow::removeConnection(FromConnection const & from, ToConnection const & to)
+{
+  removeConnection(from.getOperator(), from.getOutputPort(),
+                to.getOperator(), to.getInputPort()); 
+}
+
+//adds connection to the flow topology
+void Flow::removeConnection(Connection const & conn)
+{
+  removeConnection(conn.getInConnection(), conn.getOutConnection());
+}
+
+//adds all connections of connection chain to the flow topology
+void Flow::removeConnection(ConnectionChain const & conns)
+{
+  for (auto const & conn : conns.getConnections())
+    removeConnection(conn);
 }
 
 //returns operator with opName

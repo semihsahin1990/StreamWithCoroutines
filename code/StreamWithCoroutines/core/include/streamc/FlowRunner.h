@@ -7,6 +7,7 @@ namespace streamc
 
 class Flow;
 class SchedulerPlugin;
+class Operator;
 
 /**
  * %Flow runner that can be used to run flows.
@@ -36,6 +37,8 @@ public:
    * @param flow the flow to wait for
    */
   virtual void wait(Flow & flow) = 0;
+
+  virtual void addFission(Flow & flow, Operator * oper, size_t replica) = 0;
 
   /**
    * Request the flow to be shut down.

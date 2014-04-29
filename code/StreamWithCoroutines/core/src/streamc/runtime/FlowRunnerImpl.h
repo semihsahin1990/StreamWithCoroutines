@@ -13,6 +13,7 @@ namespace streamc
 class Flow;
 class FlowContext;
 class SchedulerPlugin;
+class Operator;
 
 class FlowRunnerImpl : public FlowRunner
 {
@@ -31,6 +32,8 @@ public:
 
   //pause the main thread of a flow
   void wait(Flow & flow) override;
+
+  void addFission(Flow & flow, Operator * oper, size_t replicaCount) override;
 /*
   // set the log level of the runtime infrastructure
   void setInfrastructureLogLevel(LogLevel level);

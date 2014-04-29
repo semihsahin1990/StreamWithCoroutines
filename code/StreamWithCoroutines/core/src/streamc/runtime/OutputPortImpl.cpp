@@ -21,6 +21,11 @@ void OutputPortImpl::addSubscriber(OperatorContextImpl & oper, size_t inPort)
   subscribers_.push_back(std::make_pair(&oper, inPort));
 }
 
+void OutputPortImpl::removeSubscriber(size_t index)
+{
+  subscribers_.erase(subscribers_.begin()+index);
+}
+
 size_t OutputPortImpl::getNumberOfSubscribers()
 {
   return subscribers_.size();
