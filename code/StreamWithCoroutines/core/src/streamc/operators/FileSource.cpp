@@ -69,6 +69,7 @@ void FileSource::process(OperatorContext & context)
     SC_APPLOG(Error, "Error in seeking to location: " << filePos_ << ", in input file: " << fileName_ << ", details: "<< strerror(errno));
     return;
   }
+  size_t counter = 0;
   OutputPort & oport = context.getOutputPort(0);
   while (!context.isShutdownRequested()) {
     line.clear();
@@ -79,14 +80,14 @@ void FileSource::process(OperatorContext & context)
     }
     if(line.size()==0 && input.eof())
       break;   
-    SC_APPLOG(Trace, "Read line: " << line);
+    SC_APPLOG(Trace, getName() << " Read line: " << counter);
     sregex_token_iterator tokenIt(line.begin(), line.end(), sep, -1);
     bool error = false;
     for (auto it=attributes_.begin(); it!=attributes_.end(); ++it, ++tokenIt) {
       if (tokenIt==sregex_token_iterator()) {
         error = true;
-        SC_APPLOG(Error, "Error in line: " << line);
-        break; // problem with the line        
+        SC_APPLOG(Error, getName() << "Error in line: " << counter);
+        break; // problem with the line
       }
       string const & name = it->first;
       Type type = it->second;

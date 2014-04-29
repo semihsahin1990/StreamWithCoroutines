@@ -19,7 +19,7 @@ class SchedulerPlugin;
 class Scheduler : public SchedulerPluginService
 {
 public:
-  Scheduler(FlowContext & flowContext);
+  Scheduler(FlowContext & flowContext, SchedulerPlugin & plugin);
   ~Scheduler();
   void addThread(WorkerThread & thread);
   void removeThreads();

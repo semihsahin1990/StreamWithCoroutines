@@ -17,12 +17,13 @@ class Operator;
 class OperatorContextImpl;
 class WorkerThread;
 class Scheduler;
+class SchedulerPlugin;
 
 class FlowContext
 {
 public:
   //constructor with flow
-  FlowContext(Flow & flow);
+  FlowContext(Flow & flow, SchedulerPlugin &  plugin);
  
   //destructor
   ~FlowContext();

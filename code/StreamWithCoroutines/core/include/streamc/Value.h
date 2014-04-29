@@ -18,7 +18,8 @@ enum class Type
   String,      //! string value type
   IntList,     //! integer list value type
   DoubleList,  //! double list value type
-  StringList   //! string list value type
+  StringList,  //! string list value type
+  Timestamp    //! timestamp value type
 };
 
 /**
@@ -89,6 +90,17 @@ public:
     : type_(Type::Double)
   {
     data.doubleData = value;
+  }
+
+  /**
+   * Construct a value from a double.
+   *
+   * @param value double value
+   */
+  Value(std::chrono::high_resolution_clock::time_point const & value)
+    : type_(Type::Timestamp)
+  {
+    data.timestampData = value;
   }    
 
   /**
@@ -313,7 +325,28 @@ public:
   double const & getDoubleValue() const
   {
     return data.doubleData;
-  }    
+  }
+
+  /**
+   * Get the timestamp value.
+   *
+   * @return the timestamp value
+   */   
+  std::chrono::high_resolution_clock::time_point & getTimestampValue()
+  {
+    return data.timestampData;
+  }
+
+  /**
+   * Get the timestamp value (const version).
+   *
+   * @return the timestamp value
+   */   
+  std::chrono::high_resolution_clock::time_point const & getTimestampValue() const
+  {
+    return data.timestampData;
+  }
+
 
   /**
    * Get the string value.
@@ -419,7 +452,10 @@ private:
       break;
     case Type::Double:
       data.doubleData = other.data.doubleData;
-      break;        
+      break;
+    case Type::Timestamp:
+      data.timestampData = other.data.timestampData;
+      break;  
     case Type::String:
       *(data.stringPointer) = *(other.data.stringPointer);
       break;	
@@ -442,7 +478,10 @@ private:
       break;        
     case Type::Double:
       data.doubleData = other.data.doubleData;
-      break;        
+      break;
+    case Type::Timestamp:
+      data.timestampData = other.data.timestampData;
+      break;
     case Type::String:
       data.stringPointer = new std::string(*(other.data.stringPointer));
       break;	
@@ -462,6 +501,7 @@ private:
     switch(type_){
     case Type::Integer:
     case Type::Double:
+    case Type::Timestamp:
       break;        
     case Type::String:
       delete data.stringPointer;
@@ -480,8 +520,11 @@ private:
 private:
   Type type_;    
   union Ptr {
+    Ptr() {};
+    ~Ptr() {};
     int64_t intData;
     double doubleData;
+    std::chrono::high_resolution_clock::time_point timestampData;
     std::string * stringPointer;
     std::vector<int64_t> * intListPointer;
     std::vector<double> * doubleListPointer;

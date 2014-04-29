@@ -6,6 +6,7 @@ namespace streamc
 {
 
 class Flow;
+class SchedulerPlugin;
 
 /**
  * %Flow runner that can be used to run flows.
@@ -26,7 +27,7 @@ public:
    * @param flow the flow to run
    * @param numThreads the number of threads to use
    */
-  virtual void run(Flow & flow, int numThreads) = 0;
+  virtual void run(Flow & flow, int numThreads, SchedulerPlugin & plugin) = 0;
   
   /**
    * Wait for the flow to complete.
@@ -51,14 +52,14 @@ public:
    *
    * @param level level of the infrastructure logs.
    */
-  virtual void setInfrastructureLogLevel(LogLevel level) = 0;
+  //virtual void setInfrastructureLogLevel(LogLevel level) = 0;
 
   /**
    * Set the application log level.
    *
    * @param level level of the application logs.
    */
-  virtual void setApplicationLogLevel(LogLevel level) = 0;
+  //virtual void setApplicationLogLevel(LogLevel level) = 0;
 };
 
 } // namespace streamc

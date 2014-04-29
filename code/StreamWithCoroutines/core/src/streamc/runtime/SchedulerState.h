@@ -50,13 +50,28 @@ public:
   };
   struct ProfileAndCounter
   {
+    bool firstTime;
     double profile;
     size_t counter;
-    ProfileAndCounter() {}
+    ProfileAndCounter() { }
     ProfileAndCounter(double profileIn, size_t counterIn)
       : profile(profileIn), counter(counterIn) {}
-    // update metodu da burada olsun
+
+    double getProfile() { return profile; }
+    void updateProfile(double term) {
+      if(firstTime) {
+        profile = term;
+        firstTime = false;
+      }
+      else {
+        profile = FACTOR * profile + (1-FACTOR) * term;
+      }
+    }
+    size_t getCounter() { return counter; }
+    void resetCounter() { counter = 0; }
+    void incrementCounter() { counter++; }
   };
+
   class ReadWaitCondition
   {
   public:
@@ -118,46 +133,37 @@ public:
   void setEndTime(std::chrono::high_resolution_clock::time_point endTime) { endTime_ = endTime; }
   std::chrono::high_resolution_clock::time_point getEndTime() { return endTime_; }
 
-  // TODO: update profile
   void updateIPortProfile(InputPortImpl &iport) {
-    double oldValue = iportProfileList_[&iport].profile;
-    size_t portCounter = iportProfileList_[&iport].counter;
+    size_t portCounter = iportProfileList_[&iport].getCounter();
     double timeElapsed = (double)(std::chrono::duration_cast<std::chrono::microseconds>(endTime_ - beginTime_).count());
-    if(oldValue == 0)
-      iportProfileList_[&iport].profile =  portCounter/timeElapsed;
-    else
-      iportProfileList_[&iport].profile = decayFactor_ * oldValue + (1-decayFactor_) * (portCounter/timeElapsed);
+    double term = portCounter / timeElapsed;
+    iportProfileList_[&iport].updateProfile(term);
   }
-  double getIPortProfile(InputPortImpl &iport) { return iportProfileList_[&iport].profile; }
-  void updateIPortCounter(InputPortImpl &iport) { iportProfileList_[&iport].counter++; }
-  void resetIPortCounter(InputPortImpl &iport) { iportProfileList_[&iport].counter = 0; }
+  double getIPortProfile(InputPortImpl &iport) { return iportProfileList_[&iport].getProfile(); }
+  void updateIPortCounter(InputPortImpl &iport) { iportProfileList_[&iport].incrementCounter(); }
+  void resetIPortCounter(InputPortImpl &iport) { iportProfileList_[&iport].resetCounter(); }
 
   void updateOPortProfile(OutputPortImpl &oport) {
-    double oldValue = oportProfileList_[&oport].profile;
-    size_t portCounter = oportProfileList_[&oport].counter;
+    size_t portCounter = oportProfileList_[&oport].getCounter();
     double timeElapsed = (double)(std::chrono::duration_cast<std::chrono::microseconds>(endTime_ - beginTime_).count());
-    if(oldValue == 0)
-      oportProfileList_[&oport].profile =  portCounter/timeElapsed;
-    else
-      oportProfileList_[&oport].profile = decayFactor_ * oldValue + (1-decayFactor_) * (portCounter/timeElapsed);
+    double term = portCounter / timeElapsed;
+    oportProfileList_[&oport].updateProfile(term);
   }
-  double getOPortProfile(OutputPortImpl &oport) { return oportProfileList_[&oport].profile; }
-  void updateOPortCounter(OutputPortImpl &oport) { oportProfileList_[&oport].counter++; }
-  void resetOPortCounter(OutputPortImpl &oport) { oportProfileList_[&oport].counter = 0; }
+  double getOPortProfile(OutputPortImpl &oport) { return oportProfileList_[&oport].getProfile(); }
+  void updateOPortCounter(OutputPortImpl &oport) { oportProfileList_[&oport].incrementCounter(); }
+  void resetOPortCounter(OutputPortImpl &oport) { oportProfileList_[&oport].resetCounter(); }
 
   void initProfileLists() {
     size_t nIPorts = oper_->getNumberOfInputPorts();
     for(int i=0; i<nIPorts; i++) {
       InputPortImpl &iport = oper_->getInputPortImpl(i);
-      iportProfileList_[&iport].profile = 0; // TODO: initial deger bulunacak
-      iportProfileList_[&iport].counter = 0;
+      iportProfileList_[&iport] = ProfileAndCounter(0, 0);;
     }
 
     size_t nOports = oper_->getNumberOfOutputPorts();
     for(int i=0; i<nOports; i++) {
       OutputPortImpl &oport = oper_->getOutputPortImpl(i);
-      oportProfileList_[&oport].profile = 0; // TODO: initial deger bulunacak
-      oportProfileList_[&oport].counter = 0;
+      oportProfileList_[&oport] = ProfileAndCounter(0, 0);
     }
   }
 

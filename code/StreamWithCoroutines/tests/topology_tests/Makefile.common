@@ -1,2 +1,0 @@
-THISDIR := $(dir $(lastword $(MAKEFILE_LIST)))
-include $(THISDIR)../Makefile.common
