@@ -34,6 +34,14 @@ public:
    * @param context the operator context
    */
   void process(OperatorContext & context) override;
+
+  /**
+   * Clone the operator 
+   * 
+   * @return the clone of the operator
+   */
+  Busy * clone() override;
+
 private:
   uint64_t busyTimeMicrosecs_;
 };

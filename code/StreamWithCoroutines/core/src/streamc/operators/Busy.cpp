@@ -36,3 +36,9 @@ void Busy::process(OperatorContext & context)
     iport.popTuple();
   }
 }
+
+Busy * Busy::clone() 
+{
+  return new Busy(getName(), busyTimeMicrosecs_);
+}
+

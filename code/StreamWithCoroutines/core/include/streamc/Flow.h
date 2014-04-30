@@ -61,12 +61,6 @@ public:
   T & createOperator(std::string const & name, Args&&... args)
   {
     T * op = new T(name, std::forward<Args>(args)...);
-    op->setCloneFunction(
-      [&](std::string const & newName) -> Operator *
-      {
-        return new T(newName, std::forward<Args>(args)...);
-      }
-    );
     addOperator(*op);
     return *op;
   }

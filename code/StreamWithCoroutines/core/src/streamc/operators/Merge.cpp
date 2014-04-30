@@ -53,5 +53,11 @@ void Merge::process(OperatorContext & context)
     selectedPort.popTuple();
     pq.pop();
     previousPortNo = selectedPortNo;
-  }while(!context.isShutdownRequested());
+  } while(!context.isShutdownRequested());
 }
+
+Merge * Merge::clone()
+{
+  return new Merge(getName(), getNumberOfInputPorts());
+}
+

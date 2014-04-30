@@ -34,6 +34,15 @@ public:
    * @param context the operator context
    */
   void process(OperatorContext & context) override;
+
+ /**
+   * Clone the operator 
+   * 
+   * @return the clone of the operator
+   */
+  RoundRobinSplit * clone() override;
+
+
 private:
   std::function<int (Tuple &)> hashFunction_;
 };

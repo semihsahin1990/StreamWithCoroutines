@@ -29,3 +29,8 @@ void RoundRobinSplit::process(OperatorContext & context)
     oPortNo = (oPortNo+1) % nOutputs;
   }
 }
+
+RoundRobinSplit * RoundRobinSplit::clone()
+{
+  return new RoundRobinSplit(getName(), getNumberOfOutputPorts());
+}

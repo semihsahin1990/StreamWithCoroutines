@@ -99,3 +99,9 @@ void FileSource::process(OperatorContext & context)
     filePos_ = input.tellg();
   } 
 }
+
+FileSource * FileSource::clone()
+{
+  return new FileSource(getName(), fileName_, attributes_);
+}
+

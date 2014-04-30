@@ -47,3 +47,9 @@ void Split::process(OperatorContext & context)
     seqNo++;
   }
 }
+
+Split * Split::clone()
+{
+  return new Split(getName(), getNumberOfOutputPorts(), hashFunction_);
+}
+

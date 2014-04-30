@@ -73,6 +73,13 @@ public:
    * @param context the operator context
    */
   void saveState(OperatorContext & context) override;
+
+  /**
+   * Clone the operator 
+   * 
+   * @return the clone of the operator
+   */
+  FileSource * clone() override;
 private:
   // parameters
   std::string fileName_;

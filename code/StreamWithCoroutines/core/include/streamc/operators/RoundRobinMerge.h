@@ -30,6 +30,13 @@ public:
 
   void process(OperatorContext & context) override;
 
+ /**
+   * Clone the operator 
+   * 
+   * @return the clone of the operator
+   */
+  RoundRobinMerge * clone() override;
+
 private:
 };
 

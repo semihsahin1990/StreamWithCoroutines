@@ -33,3 +33,8 @@ void Filter::process(OperatorContext & context)
     iport.popTuple();
   }
 }
+
+Filter * Filter::clone()
+{
+  return new Filter(getName(), filter_);
+}

@@ -39,3 +39,9 @@ void Selective::process(OperatorContext & context)
     iport.popTuple();
   }
 }
+
+Selective * Selective::clone()
+{
+  return new Selective(getName(), selectivity_);
+}
+

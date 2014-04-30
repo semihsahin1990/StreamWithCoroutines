@@ -30,3 +30,8 @@ void RoundRobinMerge::process(OperatorContext & context)
     iPortNo = (iPortNo+1) % nInputs;
   }
 }
+
+RoundRobinMerge * RoundRobinMerge::clone()
+{
+  return new RoundRobinMerge(getName(), getNumberOfInputPorts());
+}

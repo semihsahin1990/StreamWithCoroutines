@@ -25,3 +25,9 @@ void Timestamper::process(OperatorContext & context)
     iport.popTuple();
   }
 }
+
+Timestamper * Timestamper::clone()
+{
+  return new Timestamper(getName());
+}
+

@@ -79,15 +79,12 @@ public:
   }
 
   /**
-   * Clone this operator.
+   * Clone this operator. 
    *
-   * @param name name of the clone operator
-   * @return the cloned operator
+   * This functiuon is overriden to provide object cloning.
+   * @return the clone of the operator
    */
-   Operator * clone(std::string const & name)
-   {
-      return cloner_(name);
-   }
+  virtual Operator * clone() = 0;
 
   /**
    * Perform the main processing of the operator.
@@ -134,15 +131,9 @@ public:
   virtual void saveState(OperatorContext & context) {}
 
 private:
-  friend class Flow;
-  void setCloneFunction(std::function<Operator * (std::string const &)> const & cloner)
-    { cloner_ = cloner; }
-
-private:
   std::string name_;
   size_t numInputPorts_;
   size_t numOutputPorts_;
-  std::function<Operator * (std::string const &)> cloner_;
 };
  
 }

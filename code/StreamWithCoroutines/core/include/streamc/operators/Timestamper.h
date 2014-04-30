@@ -27,6 +27,15 @@ public:
    * @param context the operator context
    */
   void process(OperatorContext & context) override;
+
+ /**
+   * Clone the operator 
+   * 
+   * @return the clone of the operator
+   */
+  Timestamper * clone() override;
+
+
 };
 
 } } // namespace streamc::operators

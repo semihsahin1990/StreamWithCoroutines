@@ -42,6 +42,14 @@ public:
    * @param context the operator context
    */
   void process(OperatorContext & context) override;
+
+/**
+   * Clone the operator 
+   * 
+   * @return the clone of the operator
+   */
+  Filter * clone() override;
+
 private:
   std::function<bool (Tuple &)> filter_;
 };

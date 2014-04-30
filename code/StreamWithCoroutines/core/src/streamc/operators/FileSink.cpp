@@ -84,3 +84,10 @@ void FileSink::process(OperatorContext & context)
     filePos_ = output.tellp();
   } 
 }
+
+FileSink * FileSink::clone() 
+{
+  return new FileSink(getName(), fileName_, attributes_);
+}
+
+

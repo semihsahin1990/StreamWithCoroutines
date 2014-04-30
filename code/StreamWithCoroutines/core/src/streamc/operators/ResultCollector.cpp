@@ -63,3 +63,9 @@ void ResultCollector::process(OperatorContext & context)
   output<<deviation_<<endl;
   output.close();
 }
+
+ResultCollector * ResultCollector::clone()
+{
+  return new ResultCollector(getName(), fileName_);
+}
+

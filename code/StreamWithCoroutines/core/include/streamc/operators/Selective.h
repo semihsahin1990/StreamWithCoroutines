@@ -42,6 +42,15 @@ public:
    * @param context the operator context
    */
   void process(OperatorContext & context) override;
+
+ /**
+   * Clone the operator 
+   * 
+   * @return the clone of the operator
+   */
+  Selective * clone() override;
+
+
 private:
   double selectivity_;
 };

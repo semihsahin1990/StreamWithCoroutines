@@ -34,6 +34,13 @@ public:
    * @param context the operator context
    */  
   void process(OperatorContext & context) override;
+
+  /**
+   * Clone the operator 
+   * 
+   * @return the clone of the operator
+   */
+  Barrier * clone() override;
 };
 
 } } // namespace streamc::operators

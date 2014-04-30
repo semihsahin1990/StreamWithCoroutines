@@ -36,3 +36,9 @@ void Barrier::process(OperatorContext & context)
       context.getInputPort(i).popTuple();
   }
 }
+
+Barrier * Barrier::clone()
+{
+  return new Barrier(getName(), getNumberOfInputPorts());
+}
+

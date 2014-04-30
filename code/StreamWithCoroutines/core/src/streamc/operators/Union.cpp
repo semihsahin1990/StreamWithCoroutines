@@ -35,3 +35,8 @@ void Union::process(OperatorContext & context)
     }
   }
 }
+
+Union * Union::clone()
+{
+  return new Union(getName(), getNumberOfInputPorts());
+}
