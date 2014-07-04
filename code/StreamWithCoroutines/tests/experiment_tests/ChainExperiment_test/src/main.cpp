@@ -21,6 +21,9 @@ class ChainExperiment : public streamc::experiment::Run
 public:
 
   double runExperiment(int depth, int numThreads, int cost, double selectivity, SchedulerPlugin & plugin) {
+    std::chrono::seconds timespan(5);
+    std::this_thread::sleep_for(timespan);
+
     Chain chain(depth, cost, selectivity);
     Flow & flow = chain.getFlow();
 
@@ -42,9 +45,6 @@ public:
 
     cout<<count<<"\t"<<firstTupleTime<<"\t"<<lastTupleTime<<"\t"<<(double)(count)/(double)(lastTupleTime-firstTupleTime)<<endl;
 
-    std::chrono::seconds timespan(5);
-    std::this_thread::sleep_for(timespan);
-
     return (double)count/(double)(lastTupleTime-firstTupleTime);
   }
 
@@ -53,9 +53,9 @@ public:
     using namespace streamc::experiment;
 
     size_t defaultThreads = 8;
-    size_t defaultDepth = 10;
-    int defaultCost = 100;
-    double defaultSelectivity = 1.0;
+    size_t defaultDepth = 16;
+    int defaultCost = 50;
+    double defaultSelectivity = 0.9;
 
     // thread experiment
     cout<<"thread experiment"<<endl;
@@ -125,6 +125,29 @@ public:
       data3.addNewFieldValue("throughput_schedulerB", throughput);
     }
     data3.close();
+
+    // selectivity experiment
+    cout<<"depth experiments"<<endl;
+    double const minSelectivity = 0.1;
+    double const maxSelectivity = 1.0;
+    ExpData data4("ChainExperiment-selectivity");
+    data4.setDescription("This is a chain experiment - throughput as a function of depth for different approaches");
+    data4.addFieldName("selectivity");
+    data4.addFieldName("throughput_random");
+    data4.addFieldName("throughput_schedulerA");
+    data4.addFieldName("throughput_schedulerB");
+    data4.open();
+    for (double selectivity=minSelectivity; selectivity<=maxSelectivity; selectivity+=0.05) {
+      data4.addNewRecord();
+      data4.addNewFieldValue("selectivity", selectivity);
+      double throughput = runExperiment(defaultDepth, defaultThreads, defaultCost, selectivity, *(new RandomScheduling()));  
+      data4.addNewFieldValue("throughput_random", throughput);
+      throughput = runExperiment(defaultDepth, defaultThreads, defaultCost, selectivity, *(new MaxThroughputScheduling()));
+      data4.addNewFieldValue("throughput_schedulerA", throughput);
+      throughput = runExperiment(defaultDepth, defaultThreads, defaultCost, selectivity, *(new MinLatencyScheduling()));
+      data4.addNewFieldValue("throughput_schedulerB", throughput);
+    }
+    data4.close();
   }
 };
 
