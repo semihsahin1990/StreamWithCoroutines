@@ -13,6 +13,7 @@ using namespace streamc;
 using namespace streamc::operators;
 using namespace streamc::connectors;
 
+// | n^depth-1 x (source+timestamper+selective+busy) + | n^depth-2 x (union+selective+busy) + ... + | 1 x (union+selective+busy) + (resultcollector + sink) 
 ReverseTree::ReverseTree(size_t depth, uint64_t cost, double selectivity, size_t n)
 	: depth_(depth), cost_(cost), selectivity_(selectivity), n_(n), flow_("reverseTree")
 {

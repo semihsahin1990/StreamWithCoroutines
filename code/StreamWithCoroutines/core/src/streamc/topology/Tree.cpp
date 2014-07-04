@@ -13,6 +13,7 @@ using namespace streamc;
 using namespace streamc::operators;
 using namespace streamc::connectors;
 
+// src + timestamper + | 1 x (selective + busy + RRsplit) + ... + | n^(depth-1) x (selective + busy + RRSplit) + | n^(depth-1) x (resultCollector+sink)
 Tree::Tree(size_t depth, uint64_t cost, double selectivity, size_t n) 
 	: depth_(depth), cost_(cost), selectivity_(selectivity), n_(n), flow_("tree")
 {

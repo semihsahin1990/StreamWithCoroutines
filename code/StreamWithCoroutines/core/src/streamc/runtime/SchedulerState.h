@@ -64,7 +64,7 @@ public:
         firstTime = false;
       }
       else {
-        profile = FACTOR * profile + (1-FACTOR) * term;
+        profile = decayFactor_ * profile + (1-decayFactor_) * term;
       }
     }
     size_t getCounter() { return counter; }

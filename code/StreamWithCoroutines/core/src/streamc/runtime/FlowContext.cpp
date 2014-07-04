@@ -71,7 +71,6 @@ FlowContext::~FlowContext()
 
 void FlowContext::run(int numThreads)
 {
-  cout<<"run started"<<endl;
   // reset the shutdown requested (in case we are being rerun)
   isShutdownRequested_.store(false);
   
@@ -84,7 +83,6 @@ void FlowContext::run(int numThreads)
     scheduler_->addThread(*threads_[i]);
   }
   
-  cout<<"start scheduler"<<endl;
   // start the scheduler and all the threads
   scheduler_->start();
   for (int i=0; i<numThreads; ++i) 
