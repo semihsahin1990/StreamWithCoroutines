@@ -104,5 +104,5 @@ bool MaxThroughputScheduling::
   high_resolution_clock::time_point currentTime = high_resolution_clock::now();
   high_resolution_clock::duration timeDiff = currentTime - lastTime;
   std::chrono::microseconds timeDiffInMicrosecs = duration_cast<std::chrono::microseconds>(timeDiff); 
-  return (timeDiffInMicrosecs.count() >= epochMicrosecs_);
+  return (timeDiffInMicrosecs.count() >= epochMicrosecs_*100);
 }

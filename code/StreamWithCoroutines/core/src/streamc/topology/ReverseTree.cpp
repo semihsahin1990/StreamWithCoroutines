@@ -58,23 +58,21 @@ ReverseTree::ReverseTree(size_t depth, uint64_t cost, double selectivity, size_t
     	flow_.addConnection((*sourceOps_[i], 0) >> (0, *timestamperOps_[i]));
     	flow_.addConnection((*timestamperOps_[i], 0) >> (0, *selectiveOps_[i]));
     	flow_.addConnection((*selectiveOps_[i], 0) >> (0, *busyOps_[i]));
-    //	cout<<"source "<<i<<"\t timestamper "<<i<<endl;
-    //	cout<<"timestamper "<<i<<"\t selective "<<i<<endl;
-    //	cout<<"selective "<<i<<"\t busy "<<i<<endl;
+    	//cout<<"source "<<i<<"\t timestamper "<<i<<endl;
+    	//cout<<"timestamper "<<i<<"\t selective "<<i<<endl;
+    	//cout<<"selective "<<i<<"\t busy "<<i<<endl;
     }
 
     for(size_t i=numberOfSources; i<numberOfNodes; i++) {
     	flow_.addConnection((*unionOps_[i-numberOfSources], 0) >> (0, *selectiveOps_[i]));
     	flow_.addConnection((*selectiveOps_[i], 0) >> (0, *busyOps_[i]));
-    //	cout<<"union "<<i-numberOfSources<<"\t selective "<<i<<endl;
-    //	cout<<"selective "<<i<<"\t busy "<<i<<endl;
+    	//cout<<"union "<<i-numberOfSources<<"\t selective "<<i<<endl;
+    	//cout<<"selective "<<i<<"\t busy "<<i<<endl;
     }
 
 	for(size_t i=0; i<numberOfNodes-1; i++) {
-		for(size_t j=0; j<n_; j++) {
-			flow_.addConnection((*busyOps_[i], 0) >> (j, *unionOps_[i/n_]));
-	//		cout<<"busy "<<i<<"\t union "<<(i/n)<<" port "<<j<<endl;
-		}
+		flow_.addConnection((*busyOps_[i], 0) >> (i%n_, *unionOps_[i/n_]));
+		//cout<<"busy "<<i<<"\t union"<<(i/n)<<" port "<<i%n_<<endl;
 	}
 
 	flow_.addConnection((*busyOps_[numberOfNodes-1],0) >> (0,resultCollector));

@@ -11,7 +11,7 @@ using namespace streamc::operators;
 
 ResultCollector::ResultCollector(std::string const & name, std::string const & fileName)
   : Operator(name, 1, 1), fileName_(fileName), tupleCounter_(0), minLatency_(-1), maxLatency_(0), mean_(0), deviation_(0)
-{}
+{ }
 
 void ResultCollector::process(OperatorContext & context)
 {
@@ -22,13 +22,12 @@ void ResultCollector::process(OperatorContext & context)
 
   high_resolution_clock::time_point firstTupleTime;
   high_resolution_clock::time_point lastTupletime;
-
+  
   while (!context.isShutdownRequested()) {
     bool closed = iport.waitTuple();
     if (closed)
       break;
     Tuple & tuple = iport.getFrontTuple();
-
     high_resolution_clock::time_point currentTime = high_resolution_clock::now();
     
     if(tupleCounter_ == 0)

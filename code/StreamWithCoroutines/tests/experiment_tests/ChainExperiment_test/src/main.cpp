@@ -52,15 +52,15 @@ public:
   {
     using namespace streamc::experiment;
 
-    size_t defaultThreads = 8;
-    size_t defaultDepth = 16;
+    size_t defaultThreads = 4;
+    size_t defaultDepth = 10;
     int defaultCost = 50;
-    double defaultSelectivity = 0.9;
+    double defaultSelectivity = 1.0;
 
     // thread experiment
     cout<<"thread experiment"<<endl;
     size_t const numThreadsMin = 1;
-    size_t const numThreadsMax = 16;
+    size_t const numThreadsMax = 4;
     ExpData data("ChainExperiment-thread");
     data.setDescription("This is a chain experiment - throughput as a function of number of threads for different approaches");
     data.addFieldName("num_threads");
@@ -102,7 +102,7 @@ public:
       data2.addNewFieldValue("throughput_schedulerB", throughput);
     }
     data2.close();
-
+    
     // depth experiment
     cout<<"depth experiments"<<endl;
     int const minDepth = 1;
@@ -127,8 +127,8 @@ public:
     data3.close();
 
     // selectivity experiment
-    cout<<"depth experiments"<<endl;
-    double const minSelectivity = 0.1;
+    cout<<"selectivity experiments"<<endl;
+    double const minSelectivity = 0.5;
     double const maxSelectivity = 1.0;
     ExpData data4("ChainExperiment-selectivity");
     data4.setDescription("This is a chain experiment - throughput as a function of depth for different approaches");
@@ -137,7 +137,7 @@ public:
     data4.addFieldName("throughput_schedulerA");
     data4.addFieldName("throughput_schedulerB");
     data4.open();
-    for (double selectivity=minSelectivity; selectivity<=maxSelectivity; selectivity+=0.05) {
+    for (double selectivity=minSelectivity; selectivity<=maxSelectivity; selectivity+=0.1) {
       data4.addNewRecord();
       data4.addNewFieldValue("selectivity", selectivity);
       double throughput = runExperiment(defaultDepth, defaultThreads, defaultCost, selectivity, *(new RandomScheduling()));  
