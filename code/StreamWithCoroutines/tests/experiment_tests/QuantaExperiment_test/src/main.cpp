@@ -173,10 +173,8 @@ public:
     data.addFieldName("throughput_MQL");
     
     data.open();
-    while(true){
     for (size_t i = 0; i<size; i++) {
         data.addNewRecord();
-        /*
         data.addNewFieldValue("quantaInMicroSecs", quantaValues[i]);
         double throughput = runChainExperiment(defaultDepth, defaultThreads, defaultCost, defaultSelectivity, *(new RandomScheduling(quantaValues[i])));
         data.addNewFieldValue("throughput_random", throughput);
@@ -186,11 +184,10 @@ public:
         data.addNewFieldValue("throughput_MTW", throughput);
         throughput = runChainExperiment(defaultDepth, defaultThreads, defaultCost, defaultSelectivity, *(new LeastRecentlyScheduling(quantaValues[i])));
         data.addNewFieldValue("throughput_LRS", throughput);
-      */double  throughput = runChainExperiment(defaultDepth, defaultThreads, defaultCost, defaultSelectivity, *(new MaxQueueLengthScheduling(quantaValues[i])));
+        throughput = runChainExperiment(defaultDepth, defaultThreads, defaultCost, defaultSelectivity, *(new MaxQueueLengthScheduling(quantaValues[i])));
         data.addNewFieldValue("throughput_MQL", throughput);
         cout<<endl;
     }
-  }
     data.close();
 
     ExpData data2("QuantaDataParallelExperiment");
