@@ -1,13 +1,15 @@
-#include "streamc/runtime/RandomScheduling.h"
+#include "streamc/runtime/MaxQueueLengthScheduling.h"
 
 #include "streamc/runtime/SchedulerPluginService.h"
+#include "streamc/runtime/InputPortImpl.h"
+#include "streamc/Operator.h"
 
 using namespace std;
 using namespace streamc;
-
+#include <iostream>
 #include <unordered_set>
 
-RandomScheduling::RandomScheduling(uint64_t epochMicrosecs/*=1000*/) 
+MaxQueueLengthScheduling::MaxQueueLengthScheduling(uint64_t epochMicrosecs/*=1000*/) 
   : epochMicrosecs_(epochMicrosecs) 
 {
   constexpr double clockPeriodInMicrosec = 
@@ -17,22 +19,46 @@ RandomScheduling::RandomScheduling(uint64_t epochMicrosecs/*=1000*/)
   randgen_.seed(mt19937_64::default_seed);
 }
 
-OperatorContextImpl * RandomScheduling::
+OperatorContextImpl * MaxQueueLengthScheduling::
     findOperatorToExecute(SchedulerPluginService & service,
                           WorkerThread & thread) 
 { 
+ 
   unordered_set<OperatorContextImpl *> const & opers = service.getReadyOperators();
 
   if (opers.size()==0)
     return nullptr;
 
-  size_t l = randgen_() % opers.size(); 
-  auto it = opers.begin();
-  for (size_t i=0; i<l; ++i, it++);
-  return *it;
+  OperatorContextImpl * selected = nullptr;
+  int maxQueueLength = -1;
+
+  for(auto it = opers.begin(); it!=opers.end(); ++it) {
+    OperatorContextImpl *oper = *it;
+    size_t numberOfInputPorts = oper->getNumberOfInputPorts();
+
+    // check if it is source op
+    if(numberOfInputPorts == 0) {
+      selected = *it;
+      break;
+    }
+
+    // if it is not source op, check front tuple of each input port
+    for(size_t i=0; i<numberOfInputPorts; i++) {
+      InputPortImpl & iportImpl = oper->getInputPortImpl(i);
+      int tupleCount = iportImpl.getTupleCount();
+      if(tupleCount > maxQueueLength) {
+        maxQueueLength = tupleCount;
+        selected = *it;
+      }
+    }
+  }
+
+  if(selected == nullptr)
+    cout<<"wtf!"<<endl;
+  return selected;
 }
 
-bool RandomScheduling::
+bool MaxQueueLengthScheduling::
     checkOperatorForPreemption(SchedulerPluginService & service,
                                OperatorContextImpl & oper) 
 {
@@ -44,3 +70,4 @@ bool RandomScheduling::
   std::chrono::microseconds timeDiffInMicrosecs = duration_cast<std::chrono::microseconds>(timeDiff); 
   return (timeDiffInMicrosecs.count() >= epochMicrosecs_);
 }
+

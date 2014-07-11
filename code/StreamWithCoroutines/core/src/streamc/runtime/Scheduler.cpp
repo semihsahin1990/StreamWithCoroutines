@@ -68,6 +68,7 @@ void Scheduler::stop()
 
 void Scheduler::markOperatorAsCompleted(OperatorContextImpl & oper)
 {
+  cout<<"completed: "<<oper.getOperator().getName()<<endl;
   unique_lock<mutex> lock(mutex_);  
   updateOperatorState(oper, OperatorInfo::Completed); 
   // It is possible that the downstream operators that are currently in blocked

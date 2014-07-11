@@ -66,7 +66,7 @@ public:
     using namespace streamc::experiment;
 
     size_t defaultThreads = 4;
-    size_t defaultdepth = 3;
+    size_t defaultDepth = 3;
     int defaultCost = 50;
     double defaultSelectivity = 1.0;
     
@@ -85,11 +85,11 @@ public:
     for (size_t numThreads=numThreadsMin; numThreads<=numThreadsMax; ++numThreads) {
       data.addNewRecord();
       data.addNewFieldValue("num_threads", numThreads);
-      double throughput = runExperiment(defaultdepth, numThreads, defaultCost, defaultSelectivity, *(new RandomScheduling()));
+      double throughput = runExperiment(defaultDepth, numThreads, defaultCost, defaultSelectivity, *(new RandomScheduling()));
       data.addNewFieldValue("throughput_random", throughput);
-      throughput = runExperiment(defaultdepth, numThreads, defaultCost, defaultSelectivity, *(new MaxThroughputScheduling()));
+      throughput = runExperiment(defaultDepth, numThreads, defaultCost, defaultSelectivity, *(new MaxThroughputScheduling()));
       data.addNewFieldValue("throughput_schedulerA", throughput);
-      throughput = runExperiment(defaultdepth, numThreads, defaultCost, defaultSelectivity, *(new MinLatencyScheduling()));
+      throughput = runExperiment(defaultDepth, numThreads, defaultCost, defaultSelectivity, *(new MinLatencyScheduling()));
       data.addNewFieldValue("throughput_schedulerB", throughput);
     }
     data.close();
@@ -108,11 +108,11 @@ public:
     for (size_t cost=minCost; cost<=maxCost; cost+=20) {
       data2.addNewRecord();
       data2.addNewFieldValue("costInMicrosecs", cost);
-      double throughput = runExperiment(defaultdepth, defaultThreads, cost, defaultSelectivity, *(new RandomScheduling()));  
+      double throughput = runExperiment(defaultDepth, defaultThreads, cost, defaultSelectivity, *(new RandomScheduling()));  
       data2.addNewFieldValue("throughput_random", throughput);
-      throughput = runExperiment(defaultdepth, defaultThreads, cost, defaultSelectivity, *(new MaxThroughputScheduling()));
+      throughput = runExperiment(defaultDepth, defaultThreads, cost, defaultSelectivity, *(new MaxThroughputScheduling()));
       data2.addNewFieldValue("throughput_schedulerA", throughput);
-      throughput = runExperiment(defaultdepth, defaultThreads, cost, defaultSelectivity, *(new MinLatencyScheduling()));
+      throughput = runExperiment(defaultDepth, defaultThreads, cost, defaultSelectivity, *(new MinLatencyScheduling()));
       data2.addNewFieldValue("throughput_schedulerB", throughput);
     }
     data2.close();
@@ -154,11 +154,11 @@ public:
     for (double selectivity=minSelectivity; selectivity<=maxSelectivity; selectivity+=0.1) {
       data4.addNewRecord();
       data4.addNewFieldValue("selectivity", selectivity);
-      double throughput = runExperiment(defaultdepth, defaultThreads, defaultCost, selectivity, *(new RandomScheduling()));  
+      double throughput = runExperiment(defaultDepth, defaultThreads, defaultCost, selectivity, *(new RandomScheduling()));  
       data4.addNewFieldValue("throughput_random", throughput);
-      throughput = runExperiment(defaultdepth, defaultThreads, defaultCost, selectivity, *(new MaxThroughputScheduling()));
+      throughput = runExperiment(defaultDepth, defaultThreads, defaultCost, selectivity, *(new MaxThroughputScheduling()));
       data4.addNewFieldValue("throughput_schedulerA", throughput);
-      throughput = runExperiment(defaultdepth, defaultThreads, defaultCost, selectivity, *(new MinLatencyScheduling()));
+      throughput = runExperiment(defaultDepth, defaultThreads, defaultCost, selectivity, *(new MinLatencyScheduling()));
       data4.addNewFieldValue("throughput_schedulerB", throughput);
     }
     data4.close();

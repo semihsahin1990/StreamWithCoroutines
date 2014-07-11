@@ -19,7 +19,7 @@ Chain::Chain(size_t depth, uint64_t cost, double selectivity)
   // create source
   Operator & src = flow_.createOperator<FileSource>("src")
     .set_fileName("data/in.dat")
-    .set_fileFormat({{"name",Type::String}, {"grade",Type::String}});
+    .set_fileFormat({{"name",Type::String}, {"grade",Type::String}, {"lineNo", Type::Integer}});
 
   Operator & timestamper = flow_.createOperator<Timestamper>("timestamper");
 

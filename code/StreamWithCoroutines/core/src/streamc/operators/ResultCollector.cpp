@@ -44,7 +44,7 @@ void ResultCollector::process(OperatorContext & context)
     if(minLatency_==-1 || latency<minLatency_)
       minLatency_ = latency;
     if(latency>maxLatency_)
-      maxLatency_ = timeDiffInMicrosecs.count();
+      maxLatency_ = latency;
 
     double oldMean = mean_;
     double oldVariance = variance;

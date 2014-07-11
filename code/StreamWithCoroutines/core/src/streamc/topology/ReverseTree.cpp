@@ -21,8 +21,8 @@ ReverseTree::ReverseTree(size_t depth, uint64_t cost, double selectivity, size_t
 	int numberOfSources = pow(n_, depth_-1);
 	for(size_t i=0; i<numberOfSources; i++) {
 		Operator & src = flow_.createOperator<FileSource>("src"+to_string(i))
-	  		.set_fileName("data/in.dat")
-	  		.set_fileFormat({{"name",Type::String}, {"grade",Type::String}});
+		    .set_fileName("data/in.dat")
+		    .set_fileFormat({{"name",Type::String}, {"grade",Type::String}, {"lineNo", Type::Integer}});
 	  	sourceOps_.push_back(&src);
 
 	  	Operator & timestamper = flow_.createOperator<Timestamper>("timestamper"+to_string(i));
