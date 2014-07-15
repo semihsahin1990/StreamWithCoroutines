@@ -9,6 +9,8 @@
 #include "streamc/runtime/RandomScheduling.h"
 #include "streamc/runtime/MaxThroughputScheduling.h"
 #include "streamc/runtime/MinLatencyScheduling.h"
+#include "streamc/runtime/LeastRecentlyScheduling.h"
+#include "streamc/runtime/MaxQueueLengthScheduling.h"
 
 
 #include <streamc/topology/Tree.h>
@@ -20,7 +22,7 @@ class TreeExperiment : public streamc::experiment::Run
 {
 public:
 
-  double runExperiment(int depth, int numThreads, int cost, double selectivity, SchedulerPlugin & plugin) {
+  void runExperiment(int depth, int numThreads, int cost, double selectivity, SchedulerPlugin & plugin, double & throughput, double & avgLatency) {
     std::chrono::seconds timespan(5);
     std::this_thread::sleep_for(timespan);
 
@@ -36,18 +38,26 @@ public:
     long long maxLastTupleTime = -1;
     int count = 0;
     int numberOfSinks = pow(width, depth-1);
+
     for(int i=0; i<numberOfSinks; i++) {
       string fileName_ = "expData/result"+to_string(i)+".dat";
       ifstream input;
       input.open(fileName_.c_str(), ios::in);
+
       int partialCount;
       long long firstTupleTime;
       long long lastTupleTime;
+      double minLatency;
+      double maxLatency;
+      double partialAvgLatency;
       string temp;
 
       input>>temp>>partialCount;
       input>>temp>>firstTupleTime;
       input>>temp>>lastTupleTime;
+      input>>temp>>minLatency;
+      input>>temp>>maxLatency;
+      input>>temp>>partialAvgLatency;
       input.close();
       
       count = count + partialCount;
@@ -55,21 +65,48 @@ public:
         minFirstTupleTime = firstTupleTime;
       if(maxLastTupleTime == -1 || lastTupleTime > maxLastTupleTime)
         maxLastTupleTime = lastTupleTime;
-    }
-    cout<<count<<"\t"<<minFirstTupleTime<<"\t"<<maxLastTupleTime<<"\t"<<(double)(count)/(double)(maxLastTupleTime-minFirstTupleTime)<<endl;
 
-    return (double)count/(double)(maxLastTupleTime-minFirstTupleTime);
+      avgLatency = avgLatency + partialAvgLatency * partialCount;
+    }
+
+    throughput = (double)count/(double)(maxLastTupleTime-minFirstTupleTime);
+    avgLatency = avgLatency / count;
+    cout<<count<<(double)(count)/(double)(maxLastTupleTime-minFirstTupleTime)<<"\t"<<avgLatency<<endl;
+  }
+
+  SchedulerPlugin * getScheduler(int i, size_t quanta) {
+    if(i == 0)
+      return new RandomScheduling(quanta);
+    if(i == 1)
+      return new MaxThroughputScheduling(quanta);
+    if(i == 2)
+      return new MinLatencyScheduling(quanta);
+    if(i == 3)
+      return new LeastRecentlyScheduling(quanta);
+    if(i == 4)
+      return new MaxQueueLengthScheduling(quanta);
+    return nullptr;
   }
 
   void process() 
   {
     using namespace streamc::experiment;
 
+    int numberOfRuns = 3;
+
     size_t defaultThreads = 4;
-    size_t defaultDepth = 3;
+    size_t defaultDepth = 4;
     int defaultCost = 50;
-    double defaultSelectivity = 1.0;
+    double defaultSelectivity = 0.98;
+    int defaultQuanta = 100000;
+
+    vector<int> quantaValues =  {500, 1000, 5000, 10000, 50000, 100000, 500000};
     
+    double avgThroughput, avgLatency;
+    double throughput, latency;
+
+    vector<string> schedulers = {"random", "maxThroughput", "maxTupleWait", "leastRecently", "maxQueue"};
+    /*
     // thread experiment
     cout<<"thread experiment"<<endl;
     size_t const numThreadsMin = 1;
@@ -162,6 +199,37 @@ public:
       data4.addNewFieldValue("throughput_schedulerB", throughput);
     }
     data4.close();
+    */
+    cout<<"quanta experiments"<<endl;
+
+    ExpData data5("TreeExperiment-quanta");
+    data5.setDescription("This is a ree experiment - throughput as a function of quanta for different approaches");
+    data5.addFieldName("quanta");
+    for(int i=0; i<schedulers.size(); i++) {
+      data5.addFieldName("throughput_"+schedulers[i]);
+      data5.addFieldName("latency_"+schedulers[i]);
+    }
+
+    data5.open();
+    for (size_t i=0; i<quantaValues.size(); i++) {
+      data5.addNewRecord();
+      data5.addNewFieldValue("quanta", log(quantaValues[i])/log(10));
+      for(size_t j=0; j<schedulers.size(); j++) {
+        avgThroughput = avgLatency = 0;
+        for(size_t k=0; k<numberOfRuns; k++) {
+          runExperiment(defaultDepth, defaultThreads, defaultCost, defaultSelectivity, *getScheduler(j, quantaValues[i]), throughput, latency);
+          avgThroughput = avgThroughput + throughput;
+          avgLatency = avgLatency + latency;
+        }
+        avgThroughput = avgThroughput / numberOfRuns;
+        avgLatency = avgLatency / numberOfRuns;
+        data5.addNewFieldValue("throughput_"+schedulers[j], avgThroughput);
+        data5.addNewFieldValue("latency_"+schedulers[j], avgLatency);
+        cout<<endl;
+      }
+      cout<<"---------------"<<endl;
+    }
+    data5.close();
   }
 };
 

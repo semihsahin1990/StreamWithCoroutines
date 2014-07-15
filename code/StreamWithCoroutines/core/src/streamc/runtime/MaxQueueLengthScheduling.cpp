@@ -53,8 +53,6 @@ OperatorContextImpl * MaxQueueLengthScheduling::
     }
   }
 
-  if(selected == nullptr)
-    cout<<"wtf!"<<endl;
   return selected;
 }
 
