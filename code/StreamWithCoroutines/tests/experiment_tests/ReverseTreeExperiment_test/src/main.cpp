@@ -22,7 +22,7 @@ class ReverseTreeExperiment : public streamc::experiment::Run
 {
 public:
 
-  void runExperiment(int depth, int numThreads, int cost, double selectivity, SchedulerPlugin & plugin, double & throughput, double & avgLatency) {
+  void runExperiment(int depth, int numThreads, int cost, double selectivity, SchedulerPlugin & plugin, double & throughput, double & avgLatency, double & deviation) {
     std::chrono::seconds timespan(5);
     std::this_thread::sleep_for(timespan);
 
@@ -50,11 +50,14 @@ public:
     input>>temp>>minLatency;
     input>>temp>>maxLatency;
     input>>temp>>avgLatency;
+    input>>temp>>deviation;
 
 
     throughput = (double)count/(double)(lastTupleTime-firstTupleTime);
+    avgLatency = log(avgLatency);
+    deviation = log(deviation);
 
-    cout<<count<<"\t"<<(double)(count)/(double)(lastTupleTime-firstTupleTime)<<"\t"<<avgLatency<<endl;
+    cout<<count<<"\t"<<throughput<<"\t"<<avgLatency<<"\t"<<deviation<<endl;
   }
 
   SchedulerPlugin * getScheduler(int i, size_t quanta) {
@@ -71,26 +74,25 @@ public:
     return nullptr;
   }
 
-  void process() 
+  void process()
   {
     using namespace streamc::experiment;
 
-    int numberOfRuns = 3;
+    int numberOfRuns = 1;
 
     size_t defaultThreads = 4;
-    size_t defaultDepth = 4;
+    size_t defaultDepth = 3;
     int defaultCost = 50;
     double defaultSelectivity = 0.98;
     int defaultQuanta = 100000;
 
     vector<int> quantaValues =  {500, 1000, 5000, 10000, 50000, 100000, 500000};
     
-    double avgThroughput, avgLatency;
-    double throughput, latency;
+    double avgThroughput, avgLatency, avgDeviation;
+    double throughput, latency, deviation;
 
     vector<string> schedulers = {"random", "maxThroughput", "maxTupleWait", "leastRecently", "maxQueue"};
 
-    /*
     // thread experiment
     cout<<"thread experiment"<<endl;
     size_t const numThreadsMin = 1;
@@ -98,20 +100,34 @@ public:
     ExpData data("ReverseTreeExperiment-thread");
     data.setDescription("This is a ReverseTree experiment - throughput as a function of number of threads for different approaches");
     data.addFieldName("num_threads");
-    data.addFieldName("throughput_random");
-    data.addFieldName("throughput_schedulerA");
-    data.addFieldName("throughput_schedulerB");
+    for(int i=0; i<schedulers.size(); i++) {
+      data.addFieldName("t_"+schedulers[i]);
+      data.addFieldName("l_"+schedulers[i]);
+      data.addFieldName("d_"+schedulers[i]);
+    }
+
     data.open();
     
     for (size_t numThreads=numThreadsMin; numThreads<=numThreadsMax; ++numThreads) {
       data.addNewRecord();
       data.addNewFieldValue("num_threads", numThreads);
-      double throughput = runExperiment(defaultDepth, numThreads, defaultCost, defaultSelectivity, *(new RandomScheduling()));  
-      data.addNewFieldValue("throughput_random", throughput);
-      throughput = runExperiment(defaultDepth, numThreads, defaultCost, defaultSelectivity, *(new MaxThroughputScheduling()));
-      data.addNewFieldValue("throughput_schedulerA", throughput);
-      throughput = runExperiment(defaultDepth, numThreads, defaultCost, defaultSelectivity, *(new MinLatencyScheduling()));
-      data.addNewFieldValue("throughput_schedulerB", throughput);
+      for(size_t j=0; j<schedulers.size(); j++) {
+        avgThroughput = avgLatency = avgDeviation = 0;
+        for(size_t k=0; k<numberOfRuns; k++) {
+          runExperiment(defaultDepth, numThreads, defaultCost, defaultSelectivity, *getScheduler(j, defaultQuanta), throughput, latency, deviation);
+          avgThroughput = avgThroughput + throughput;
+          avgLatency = avgLatency + latency;
+          avgDeviation = avgDeviation + deviation;
+        }
+        avgThroughput = avgThroughput / numberOfRuns;
+        avgLatency = avgLatency / numberOfRuns;
+        avgDeviation = avgDeviation / numberOfRuns;
+        data.addNewFieldValue("t_"+schedulers[j], avgThroughput);
+        data.addNewFieldValue("l_"+schedulers[j], avgLatency);
+        data.addNewFieldValue("d_"+schedulers[j], avgDeviation);
+        cout<<endl;
+      }
+      cout<<"---------------"<<endl;
     }
     data.close();
     
@@ -122,93 +138,139 @@ public:
     ExpData data2("ReverseTreeExperiment-cost");
     data2.setDescription("This is a ReverseTree experiment - throughput as a function of cost for different approaches");
     data2.addFieldName("costInMicrosecs");
-    data2.addFieldName("throughput_random");
-    data2.addFieldName("throughput_schedulerA");
-    data2.addFieldName("throughput_schedulerB");
+    for(int i=0; i<schedulers.size(); i++) {
+      data2.addFieldName("t_"+schedulers[i]);
+      data2.addFieldName("l_"+schedulers[i]);
+      data2.addFieldName("d_"+schedulers[i]);
+    }
+
     data2.open();
-    for (size_t cost=minCost; cost<=maxCost; cost+=20) {
+    for (size_t cost=minCost; cost<=maxCost; cost+=40) {
       data2.addNewRecord();
       data2.addNewFieldValue("costInMicrosecs", cost);
-      double throughput = runExperiment(defaultDepth, defaultThreads, cost, defaultSelectivity, *(new RandomScheduling()));  
-      data2.addNewFieldValue("throughput_random", throughput);
-      throughput = runExperiment(defaultDepth, defaultThreads, cost, defaultSelectivity, *(new MaxThroughputScheduling()));
-      data2.addNewFieldValue("throughput_schedulerA", throughput);
-      throughput = runExperiment(defaultDepth, defaultThreads, cost, defaultSelectivity, *(new MinLatencyScheduling()));
-      data2.addNewFieldValue("throughput_schedulerB", throughput);
+      for(size_t j=0; j<schedulers.size(); j++) {
+        avgThroughput = avgLatency = avgDeviation = 0;
+        for(size_t k=0; k<numberOfRuns; k++) {
+          runExperiment(defaultDepth, defaultThreads, cost, defaultSelectivity, *getScheduler(j, defaultQuanta), throughput, latency, deviation);
+          avgThroughput = avgThroughput + throughput;
+          avgLatency = avgLatency + latency;
+          avgDeviation = avgDeviation + deviation;
+        }
+        avgThroughput = avgThroughput / numberOfRuns;
+        avgLatency = avgLatency / numberOfRuns;
+        avgDeviation = avgDeviation / numberOfRuns;
+        data2.addNewFieldValue("t_"+schedulers[j], avgThroughput);
+        data2.addNewFieldValue("l_"+schedulers[j], avgLatency);
+        data2.addNewFieldValue("d_"+schedulers[j], avgDeviation);
+        cout<<endl;
+      }
+      cout<<"---------------"<<endl;
     }
     data2.close();
-    
+
     // depth experiment
     cout<<"depth experiments"<<endl;
-    int const mindepth = 1;
-    int const maxdepth = 20;
+    int const minDepth = 2;
+    int const maxDepth = 5;
     ExpData data3("ReverseTreeExperiment-depth");
     data3.setDescription("This is a ReverseTree experiment - throughput as a function of depth for different approaches");
     data3.addFieldName("depth");
-    data3.addFieldName("throughput_random");
-    data3.addFieldName("throughput_schedulerA");
-    data3.addFieldName("throughput_schedulerB");
+    for(int i=0; i<schedulers.size(); i++) {
+      data3.addFieldName("t_"+schedulers[i]);
+      data3.addFieldName("l_"+schedulers[i]);
+      data3.addFieldName("d_"+schedulers[i]);
+    }
+
     data3.open();
-    for (size_t depth=mindepth; depth<=maxdepth; ++depth) {
+    for (size_t depth=minDepth; depth<=maxDepth; ++depth) {
       data3.addNewRecord();
       data3.addNewFieldValue("depth", depth);
-      double throughput = runExperiment(depth, defaultThreads, defaultCost, defaultSelectivity, *(new RandomScheduling()));  
-      data3.addNewFieldValue("throughput_random", throughput);
-      throughput = runExperiment(depth, defaultThreads, defaultCost, defaultSelectivity, *(new MaxThroughputScheduling()));
-      data3.addNewFieldValue("throughput_schedulerA", throughput);
-      throughput = runExperiment(depth, defaultThreads, defaultCost, defaultSelectivity, *(new MinLatencyScheduling()));
-      data3.addNewFieldValue("throughput_schedulerB", throughput);
+      for(size_t j=0; j<schedulers.size(); j++) {
+        avgThroughput = avgLatency = avgDeviation = 0;
+        for(size_t k=0; k<numberOfRuns; k++) {
+          runExperiment(depth, defaultThreads, defaultCost, defaultSelectivity, *getScheduler(j, defaultQuanta), throughput, latency, deviation);
+          avgThroughput = avgThroughput + throughput;
+          avgLatency = avgLatency + latency;
+          avgDeviation = avgDeviation + deviation;
+        }
+        avgThroughput = avgThroughput / numberOfRuns;
+        avgLatency = avgLatency / numberOfRuns;
+        avgDeviation = avgDeviation / numberOfRuns;
+        data3.addNewFieldValue("t_"+schedulers[j], avgThroughput);
+        data3.addNewFieldValue("l_"+schedulers[j], avgLatency);
+        data3.addNewFieldValue("d_"+schedulers[j], avgDeviation);
+        cout<<endl;
+      }
+      cout<<"---------------"<<endl;
     }
     data3.close();
 
     // selectivity experiment
     cout<<"selectivity experiments"<<endl;
-    double const minSelectivity = 0.5;
+    double const minSelectivity = 0.7;
     double const maxSelectivity = 1.0;
     ExpData data4("ReverseTreeExperiment-selectivity");
     data4.setDescription("This is a ReverseTree experiment - throughput as a function of depth for different approaches");
     data4.addFieldName("selectivity");
-    data4.addFieldName("throughput_random");
-    data4.addFieldName("throughput_schedulerA");
-    data4.addFieldName("throughput_schedulerB");
+    for(int i=0; i<schedulers.size(); i++) {
+      data4.addFieldName("t_"+schedulers[i]);
+      data4.addFieldName("l_"+schedulers[i]);
+      data4.addFieldName("d_"+schedulers[i]);
+    }
+
     data4.open();
-    for (double selectivity=minSelectivity; selectivity<=maxSelectivity; selectivity+=0.1) {
+    for (double selectivity=minSelectivity; selectivity<=maxSelectivity; selectivity+=0.05) {
       data4.addNewRecord();
       data4.addNewFieldValue("selectivity", selectivity);
-      double throughput = runExperiment(defaultDepth, defaultThreads, defaultCost, selectivity, *(new RandomScheduling()));  
-      data4.addNewFieldValue("throughput_random", throughput);
-      throughput = runExperiment(defaultDepth, defaultThreads, defaultCost, selectivity, *(new MaxThroughputScheduling()));
-      data4.addNewFieldValue("throughput_schedulerA", throughput);
-      throughput = runExperiment(defaultDepth, defaultThreads, defaultCost, selectivity, *(new MinLatencyScheduling()));
-      data4.addNewFieldValue("throughput_schedulerB", throughput);
+      for(size_t j=0; j<schedulers.size(); j++) {
+        avgThroughput = avgLatency = avgDeviation = 0;
+        for(size_t k=0; k<numberOfRuns; k++) {
+          runExperiment(defaultDepth, defaultThreads, defaultCost, selectivity, *getScheduler(j, defaultQuanta), throughput, latency, deviation);
+          avgThroughput = avgThroughput + throughput;
+          avgLatency = avgLatency + latency;
+          avgDeviation = avgDeviation + deviation;
+        }
+        avgThroughput = avgThroughput / numberOfRuns;
+        avgLatency = avgLatency / numberOfRuns;
+        avgDeviation = avgDeviation / numberOfRuns;
+        data4.addNewFieldValue("t_"+schedulers[j], avgThroughput);
+        data4.addNewFieldValue("l_"+schedulers[j], avgLatency);
+        data4.addNewFieldValue("d_"+schedulers[j], avgDeviation);
+        cout<<endl;
+      }
+      cout<<"---------------"<<endl;
     }
     data4.close();
-    */
+    
     cout<<"quanta experiments"<<endl;
 
     ExpData data5("ReverseTreeExperiment-quanta");
     data5.setDescription("This is a reverseTree experiment - throughput as a function of quanta for different approaches");
     data5.addFieldName("quanta");
     for(int i=0; i<schedulers.size(); i++) {
-      data5.addFieldName("throughput_"+schedulers[i]);
-      data5.addFieldName("latency_"+schedulers[i]);
+      data5.addFieldName("t_"+schedulers[i]);
+      data5.addFieldName("l_"+schedulers[i]);
+      data5.addFieldName("d_"+schedulers[i]);
     }
 
     data5.open();
     for (size_t i=0; i<quantaValues.size(); i++) {
       data5.addNewRecord();
-      data5.addNewFieldValue("quanta", log(quantaValues[i])/log(10));
+      data5.addNewFieldValue("quanta", log(quantaValues[i]));
       for(size_t j=0; j<schedulers.size(); j++) {
-        avgThroughput = avgLatency = 0;
+        avgThroughput = avgLatency = avgDeviation = 0;
         for(size_t k=0; k<numberOfRuns; k++) {
-          runExperiment(defaultDepth, defaultThreads, defaultCost, defaultSelectivity, *getScheduler(j, quantaValues[i]), throughput, latency);
+          runExperiment(defaultDepth, defaultThreads, defaultCost, defaultSelectivity, *getScheduler(j, quantaValues[i]), throughput, latency, deviation);
           avgThroughput = avgThroughput + throughput;
           avgLatency = avgLatency + latency;
+          avgDeviation = avgDeviation + deviation;
         }
         avgThroughput = avgThroughput / numberOfRuns;
         avgLatency = avgLatency / numberOfRuns;
-        data5.addNewFieldValue("throughput_"+schedulers[j], avgThroughput);
-        data5.addNewFieldValue("latency_"+schedulers[j], avgLatency);
+        avgDeviation = avgDeviation / numberOfRuns;
+        data5.addNewFieldValue("t_"+schedulers[j], avgThroughput);
+        data5.addNewFieldValue("l_"+schedulers[j], avgLatency);
+        data5.addNewFieldValue("d_"+schedulers[j], avgDeviation);
         cout<<endl;
       }
       cout<<"---------------"<<endl;

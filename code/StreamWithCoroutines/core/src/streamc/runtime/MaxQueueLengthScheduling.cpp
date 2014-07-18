@@ -29,10 +29,11 @@ OperatorContextImpl * MaxQueueLengthScheduling::
   if (opers.size()==0)
     return nullptr;
 
-  OperatorContextImpl * selected = nullptr;
+  auto it = opers.begin();
+  OperatorContextImpl * selected = *it;
   int maxQueueLength = -1;
 
-  for(auto it = opers.begin(); it!=opers.end(); ++it) {
+  for(; it!=opers.end(); ++it) {
     OperatorContextImpl *oper = *it;
     size_t numberOfInputPorts = oper->getNumberOfInputPorts();
 
@@ -53,6 +54,8 @@ OperatorContextImpl * MaxQueueLengthScheduling::
     }
   }
 
+  if(opers.size()>0 && selected == nullptr)
+    cout<<"something went wrong"<<endl;
   return selected;
 }
 

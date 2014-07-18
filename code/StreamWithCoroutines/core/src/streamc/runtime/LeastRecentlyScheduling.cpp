@@ -37,9 +37,9 @@ OperatorContextImpl * LeastRecentlyScheduling::
     OperatorInfo & opinfo = *(service.getOperators().find(oper)->second);
     chrono::high_resolution_clock::time_point endTime = opinfo.getEndTime();
     if(chrono::duration_cast<chrono::microseconds>(endTime-leastScheduledTime).count() < 0) {
-        leastScheduledTime = endTime;
-        selected = *it;
-      }
+      leastScheduledTime = endTime;
+      selected = *it;
+    }
   }
   return selected;
 }
