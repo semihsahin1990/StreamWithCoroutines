@@ -22,7 +22,7 @@ class DataParallelExperiment : public streamc::experiment::Run
 {
 public:
 
-  void runExperiment(int width, int numThreads, int cost, double selectivity, SchedulerPlugin & plugin, double & throughput, double & avgLatency, double & deviation) {
+  void runExperiment(int width, int numThreads, int cost, double selectivity, SchedulerPlugin & plugin, double & throughput, double & latency) {
     std::chrono::seconds timespan(5);
     std::this_thread::sleep_for(timespan);
 
@@ -49,14 +49,43 @@ public:
     input>>temp>>lastTupleTime;
     input>>temp>>minLatency;
     input>>temp>>maxLatency;
-    input>>temp>>avgLatency;
-    input>>temp>>deviation;
+    input>>temp>>latency;
 
     throughput = (double)count/(double)(lastTupleTime-firstTupleTime);
-    avgLatency = log(avgLatency);
-    deviation = log(deviation);
+    cout<<count<<"\t"<<throughput<<"\t"<<latency<<endl;
+  }
 
-    cout<<count<<"\t"<<throughput<<"\t"<<avgLatency<<"\t"<<deviation<<endl;
+  void repeatExperiment(int numberOfRuns, int width, int numThreads, int cost, double selectivity, int schedulerId, int quanta, double & avgThroughput, double & throughputDev, double & avgLatency, double & latencyDev) {
+    vector<double> tValues;
+    vector<double> lValues;
+
+    avgThroughput = 0;
+    avgLatency = 0;
+
+    for(int i=0; i<numberOfRuns; i++) {
+      double throughput, latency;
+      runExperiment(width, numThreads, cost, selectivity, *getScheduler(schedulerId, quanta), throughput, latency);
+      tValues.push_back(throughput);
+      lValues.push_back(latency);
+      avgThroughput = avgThroughput + throughput;
+      avgLatency = avgLatency + latency;
+    }
+
+    avgThroughput = avgThroughput / numberOfRuns;
+    avgLatency = avgLatency / numberOfRuns;
+
+    throughputDev = 0;
+    latencyDev = 0;
+
+    for(int i=0; i<numberOfRuns; i++) {
+      throughputDev += pow(avgThroughput - tValues[i], 2);
+      latencyDev += pow(avgLatency - lValues[i], 2);
+    }
+
+    throughputDev = sqrt(throughputDev/numberOfRuns);
+    latencyDev = sqrt(latencyDev/numberOfRuns);
+
+    cout<<avgThroughput<<"\t"<<throughputDev<<"\t"<<avgLatency<<"\t"<<latencyDev<<endl;
   }
 
   SchedulerPlugin * getScheduler(int i, size_t quanta) {
@@ -81,20 +110,20 @@ public:
 
     size_t defaultThreads = 4;
     size_t defaultWidth = 10;
-    int defaultCost = 50;
+    int defaultCost = 30;
     double defaultSelectivity = 0.98;
-    int defaultQuanta = 100000;
+    int defaultQuanta = 50000;
 
     vector<int> quantaValues =  {500, 1000, 5000, 10000, 50000, 100000, 500000};
     
-    double avgThroughput, avgLatency, avgDeviation;
-    double throughput, latency, deviation;
+    double throughput, latency;
+    double throughputDev, latencyDev;
 
     vector<string> schedulers = {"random", "maxThroughput", "maxTupleWait", "leastRecently", "maxQueue"};
 
     // thread experiment
     cout<<"thread experiment"<<endl;
-    size_t const numThreadsMin = 1;
+    size_t const numThreadsMin = 4;
     size_t const numThreadsMax = 4;
     
     ExpData data("DataParallelExperiment-thread");
@@ -102,27 +131,22 @@ public:
     data.addFieldName("num_threads");
     for(int i=0; i<schedulers.size(); i++) {
       data.addFieldName("t_"+schedulers[i]);
+      data.addFieldName("td_"+schedulers[i]);
       data.addFieldName("l_"+schedulers[i]);
-      data.addFieldName("d_"+schedulers[i]);
+      data.addFieldName("ld_"+schedulers[i]);
     }
+
+    data.open();
 
     for (size_t numThreads=numThreadsMin; numThreads<=numThreadsMax; ++numThreads) {
       data.addNewRecord();
       data.addNewFieldValue("num_threads", numThreads);
       for(size_t j=0; j<schedulers.size(); j++) {
-        avgThroughput = avgLatency = avgDeviation = 0;
-        for(size_t k=0; k<numberOfRuns; k++) {
-          runExperiment(defaultWidth, numThreads, defaultCost, defaultSelectivity, *getScheduler(j, defaultQuanta), throughput, latency, deviation);
-          avgThroughput = avgThroughput + throughput;
-          avgLatency = avgLatency + latency;
-          avgDeviation = avgDeviation + deviation;
-        }
-        avgThroughput = avgThroughput / numberOfRuns;
-        avgLatency = avgLatency / numberOfRuns;
-        avgDeviation = avgDeviation / numberOfRuns;
-        data.addNewFieldValue("t_"+schedulers[j], avgThroughput);
-        data.addNewFieldValue("l_"+schedulers[j], avgLatency);
-        data.addNewFieldValue("d_"+schedulers[j], avgDeviation);
+        repeatExperiment(numberOfRuns, defaultWidth, numThreads, defaultCost, defaultSelectivity, j, defaultQuanta, throughput, throughputDev, latency, latencyDev);
+        data.addNewFieldValue("t_"+schedulers[j], throughput);
+        data.addNewFieldValue("td_"+schedulers[j], throughputDev);
+        data.addNewFieldValue("l_"+schedulers[j], latency);
+        data.addNewFieldValue("ld_"+schedulers[j], latencyDev);
         cout<<endl;
       }
       cout<<"---------------"<<endl;
@@ -132,40 +156,34 @@ public:
     // cost experiment
     cout<<"cost experiment"<<endl;
     int const minCost = 0;
-    int const maxCost = 200;
+    int const maxCost = 100;
     ExpData data2("DataParallelExperiment-cost");
     data2.setDescription("This is a DataParallel experiment - throughput as a function of cost for different approaches");
     data2.addFieldName("costInMicrosecs");
     for(int i=0; i<schedulers.size(); i++) {
       data2.addFieldName("t_"+schedulers[i]);
+      data2.addFieldName("td_"+schedulers[i]);
       data2.addFieldName("l_"+schedulers[i]);
-      data2.addFieldName("d_"+schedulers[i]);
+      data2.addFieldName("ld_"+schedulers[i]);
     }
 
-    for (size_t cost=minCost; cost<=maxCost; cost+=40) {
+    data2.open();
+    
+    for (size_t cost=minCost; cost<=maxCost; cost+=20) {
       data2.addNewRecord();
       data2.addNewFieldValue("costInMicrosecs", cost);
       for(size_t j=0; j<schedulers.size(); j++) {
-        avgThroughput = avgLatency = avgDeviation = 0;
-        for(size_t k=0; k<numberOfRuns; k++) {
-          runExperiment(defaultWidth, defaultThreads, cost, defaultSelectivity, *getScheduler(j, defaultQuanta), throughput, latency, deviation);
-          avgThroughput = avgThroughput + throughput;
-          avgLatency = avgLatency + latency;
-          avgDeviation = avgDeviation + deviation;
-        }
-        avgThroughput = avgThroughput / numberOfRuns;
-        avgLatency = avgLatency / numberOfRuns;
-        avgDeviation = avgDeviation / numberOfRuns;
-        data2.addNewFieldValue("t_"+schedulers[j], avgThroughput);
-        data2.addNewFieldValue("l_"+schedulers[j], avgLatency);
-        data2.addNewFieldValue("d_"+schedulers[j], avgDeviation);
+        repeatExperiment(numberOfRuns, defaultWidth, defaultThreads, cost, defaultSelectivity, j, defaultQuanta, throughput, throughputDev, latency, latencyDev);
+        data2.addNewFieldValue("t_"+schedulers[j], throughput);
+        data2.addNewFieldValue("td_"+schedulers[j], throughputDev);
+        data2.addNewFieldValue("l_"+schedulers[j], latency);
+        data2.addNewFieldValue("ld_"+schedulers[j], latencyDev);
         cout<<endl;
       }
       cout<<"---------------"<<endl;
     }
     data2.close();
-    
-
+    /*
     // depth experiment
     cout<<"width experiments"<<endl;
     int const minWidth = 2;
@@ -275,6 +293,7 @@ public:
       cout<<"---------------"<<endl;
     }
     data5.close();
+    */
   }
 };
 
