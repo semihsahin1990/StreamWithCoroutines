@@ -117,8 +117,14 @@ void Scheduler::markOperatorAsReadBlocked(OperatorContextImpl & oper,
       waitCond.makeConjunctive();
     else
       waitCond.makeDisjunctive();
-    for (auto & portSizePair : waitSpec)
+    for (auto & portSizePair : waitSpec) {      
+      // It is possible that the input port is closed (upstream operators of it 
+      // are all complete). In this case, we return back, in which case the 
+      // calling routine will find out about the closed input port.
+      if (portSizePair.first->isClosed()) 
+        return;
       waitCond.setWaitThreshold(*portSizePair.first, portSizePair.second);
+    }
     if (!waitCond.computeReadiness())  
       updateOperatorState(oper, OperatorInfo::ReadBlocked); 
     else 
@@ -134,8 +140,15 @@ void Scheduler::markOperatorAsWriteBlocked(OperatorContextImpl & oper,
     unique_lock<mutex> lock(mutex_);  
     OperatorInfo & oinfo = *(operContexts_[&oper]);
     OperatorInfo::WriteWaitCondition & waitCond = oinfo.getWriteWaitCondition();
-    for (auto & portSizePair : waitSpec)
+    for (auto & portSizePair : waitSpec) {
+      // It is possible that the shutdown is requested and the downstream 
+      // operator owning the input port is complete. In this case, we return
+      // back, in which case the calling routine will find about the shutdown.
+      if (flowContext_.isShutdownRequested() &&
+        portSizePair.first->getOperatorContextImpl().isComplete())
+        return;
       waitCond.setWaitThreshold(*portSizePair.first, portSizePair.second);
+    }
     if (!waitCond.computeReadiness())  
       updateOperatorState(oper, OperatorInfo::WriteBlocked); 
     else 
