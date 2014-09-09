@@ -25,7 +25,6 @@ public:
   {
     using namespace streamc::experiment;
 
-    int numberOfRuns = 100;
     int depth = 3;
     int cost = 30;
     double selectivity = 0.98;
@@ -36,7 +35,7 @@ public:
     Tree Tree(depth, cost, selectivity, width);
     Flow & flow = Tree.getFlow();
     FlowRunner & runner = FlowRunner::createRunner();
-    runner.run(flow, numThreads, RandomScheduling(quanta));
+    runner.run(flow, numThreads, new RandomScheduling(quanta));
     runner.wait(flow);
   }
 };
