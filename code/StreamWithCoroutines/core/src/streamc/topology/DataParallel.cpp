@@ -14,6 +14,7 @@ using namespace streamc;
 using namespace streamc::operators;
 using namespace streamc::connectors;
 
+// source + timestamper + split + | n x (selective+busy) + +merge + result collector + sink
 DataParallel::DataParallel(uint64_t cost, double selectivity, size_t n) 
 	: cost_(cost), selectivity_(selectivity), n_(n), flow_("DataParallel")
 {

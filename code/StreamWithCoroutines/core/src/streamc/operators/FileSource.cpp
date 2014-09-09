@@ -61,12 +61,12 @@ void FileSource::process(OperatorContext & context)
   ifstream input;
   input.open(fileName_.c_str(), ios::in);
   if (!input) {
-  //  SC_APPLOG(Error, "Error in opening input file: " << fileName_ << ", details: "<< strerror(errno));
+    //SC_APPLOG(Error, "Error in opening input file: " << fileName_ << ", details: "<< strerror(errno));
     return;
   }
   input.seekg(filePos_);
   if (!input) {
-  //  SC_APPLOG(Error, "Error in seeking to location: " << filePos_ << ", in input file: " << fileName_ << ", details: "<< strerror(errno));
+    //SC_APPLOG(Error, "Error in seeking to location: " << filePos_ << ", in input file: " << fileName_ << ", details: "<< strerror(errno));
     return;
   }
   size_t counter = 0;
@@ -75,18 +75,18 @@ void FileSource::process(OperatorContext & context)
     line.clear();
     getline(input, line);
     if (!input && !input.eof()) {
-    //  SC_APPLOG(Error, "Error in reading from input file: " << fileName_ << ", details: "<< strerror(errno));
+      //SC_APPLOG(Error, "Error in reading from input file: " << fileName_ << ", details: "<< strerror(errno));
       break;        
     }
     if(line.size()==0 && input.eof())
       break;   
-   // SC_APPLOG(Trace, getName() << " Read line: " << counter);
+    //SC_APPLOG(Trace, getName() << " Read line: " << counter);
     sregex_token_iterator tokenIt(line.begin(), line.end(), sep, -1);
     bool error = false;
     for (auto it=attributes_.begin(); it!=attributes_.end(); ++it, ++tokenIt) {
       if (tokenIt==sregex_token_iterator()) {
         error = true;
-      //  SC_APPLOG(Error, getName() << "Error in line: " << counter);
+        //SC_APPLOG(Error, getName() << "Error in line: " << counter);
         break; // problem with the line
       }
       string const & name = it->first;

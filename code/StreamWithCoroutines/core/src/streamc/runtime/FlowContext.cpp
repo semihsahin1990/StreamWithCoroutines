@@ -17,7 +17,7 @@ using namespace std;
 using namespace streamc;
 using namespace streamc::operators;
 
-size_t FlowContext::maxQueueSize_ = 10000; // TODO: make changable, and perhaps per port?
+size_t FlowContext::maxQueueSize_ = 1000; // TODO: make changable, and perhaps per port?
 
 FlowContext::FlowContext(Flow & flow, SchedulerPlugin & plugin)
   : flow_(flow), numCompleted_(0), isShutdownRequested_(false)

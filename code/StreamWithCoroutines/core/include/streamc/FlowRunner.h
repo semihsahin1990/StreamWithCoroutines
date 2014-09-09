@@ -1,6 +1,6 @@
 #pragma once
 
-#include "streamc/LogLevel.h"
+//#include "streamc/LogLevel.h"
 
 namespace streamc
 {

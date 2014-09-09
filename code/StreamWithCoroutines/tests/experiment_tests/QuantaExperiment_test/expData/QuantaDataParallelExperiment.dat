@@ -1,0 +1,3 @@
+# This is a Quanta experiment - throughput as a function of quanta for different approaches
+# quantaInMicroSecs	throughput_random	throughput_MTS	throughput_MTW	throughput_LRS	throughput_MQL	
+50	13.1455	

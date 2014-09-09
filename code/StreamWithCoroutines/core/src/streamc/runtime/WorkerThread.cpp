@@ -1,6 +1,6 @@
 #include "streamc/runtime/WorkerThread.h"
 
-#include "streamc/runtime/RuntimeLogger.h"
+//#include "streamc/runtime/RuntimeLogger.h"
 #include "streamc/runtime/Scheduler.h"
 #include "streamc/runtime/OperatorContextImpl.h"
 
@@ -16,12 +16,12 @@ WorkerThread::WorkerThread(int index, Scheduler & scheduler)
 void WorkerThread::start()
 {
   thread_.reset(new thread(bind(&WorkerThread::run, this)));
- // SC_LOG(Info, "Launched worker thread # " << index_); 
+  //SC_LOG(Info, "Launched worker thread # " << index_); 
 }
 
 void WorkerThread::run()
 {
- // SC_LOG(Info, "Worker thread #" << index_ << " started running"); 
+  //SC_LOG(Info, "Worker thread #" << index_ << " started running"); 
   while(!stop_.load()) {
     OperatorContextImpl * oper = scheduler_->getThreadWork(*this);
     if (oper==nullptr) 

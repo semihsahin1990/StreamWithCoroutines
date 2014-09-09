@@ -13,6 +13,7 @@ using namespace streamc;
 using namespace streamc::operators;
 using namespace streamc::connectors;
 
+// | n^depth-1 x (source+timestamper+selective+busy) + | n^depth-2 x (union+selective+busy) + ... + | 1 x (union+selective+busy) + (resultcollector + sink) 
 ReverseTree::ReverseTree(size_t depth, uint64_t cost, double selectivity, size_t n)
 	: depth_(depth), cost_(cost), selectivity_(selectivity), n_(n), flow_("reverseTree")
 {
@@ -20,8 +21,8 @@ ReverseTree::ReverseTree(size_t depth, uint64_t cost, double selectivity, size_t
 	int numberOfSources = pow(n_, depth_-1);
 	for(size_t i=0; i<numberOfSources; i++) {
 		Operator & src = flow_.createOperator<FileSource>("src"+to_string(i))
-	  		.set_fileName("data/in.dat")
-	  		.set_fileFormat({{"name",Type::String}, {"grade",Type::String}});
+		    .set_fileName("data/in.dat")
+		    .set_fileFormat({{"name",Type::String}, {"grade",Type::String}, {"lineNo", Type::Integer}});
 	  	sourceOps_.push_back(&src);
 
 	  	Operator & timestamper = flow_.createOperator<Timestamper>("timestamper"+to_string(i));
@@ -57,23 +58,21 @@ ReverseTree::ReverseTree(size_t depth, uint64_t cost, double selectivity, size_t
     	flow_.addConnection((*sourceOps_[i], 0) >> (0, *timestamperOps_[i]));
     	flow_.addConnection((*timestamperOps_[i], 0) >> (0, *selectiveOps_[i]));
     	flow_.addConnection((*selectiveOps_[i], 0) >> (0, *busyOps_[i]));
-    //	cout<<"source "<<i<<"\t timestamper "<<i<<endl;
-    //	cout<<"timestamper "<<i<<"\t selective "<<i<<endl;
-    //	cout<<"selective "<<i<<"\t busy "<<i<<endl;
+    	//cout<<"source "<<i<<"\t timestamper "<<i<<endl;
+    	//cout<<"timestamper "<<i<<"\t selective "<<i<<endl;
+    	//cout<<"selective "<<i<<"\t busy "<<i<<endl;
     }
 
     for(size_t i=numberOfSources; i<numberOfNodes; i++) {
     	flow_.addConnection((*unionOps_[i-numberOfSources], 0) >> (0, *selectiveOps_[i]));
     	flow_.addConnection((*selectiveOps_[i], 0) >> (0, *busyOps_[i]));
-    //	cout<<"union "<<i-numberOfSources<<"\t selective "<<i<<endl;
-    //	cout<<"selective "<<i<<"\t busy "<<i<<endl;
+    	//cout<<"union "<<i-numberOfSources<<"\t selective "<<i<<endl;
+    	//cout<<"selective "<<i<<"\t busy "<<i<<endl;
     }
 
 	for(size_t i=0; i<numberOfNodes-1; i++) {
-		for(size_t j=0; j<n_; j++) {
-			flow_.addConnection((*busyOps_[i], 0) >> (j, *unionOps_[i/n_]));
-	//		cout<<"busy "<<i<<"\t union "<<(i/n)<<" port "<<j<<endl;
-		}
+		flow_.addConnection((*busyOps_[i], 0) >> (i%n_, *unionOps_[i/n_]));
+		//cout<<"busy "<<i<<"\t union"<<(i/n)<<" port "<<i%n_<<endl;
 	}
 
 	flow_.addConnection((*busyOps_[numberOfNodes-1],0) >> (0,resultCollector));

@@ -1,4 +1,4 @@
-#include "streamc/runtime/MinLatencyScheduling.h"
+#include "streamc/runtime/MaxQueueLengthScheduling.h"
 
 #include "streamc/runtime/SchedulerPluginService.h"
 #include "streamc/runtime/InputPortImpl.h"
@@ -9,7 +9,7 @@ using namespace streamc;
 #include <iostream>
 #include <unordered_set>
 
-MinLatencyScheduling::MinLatencyScheduling(uint64_t epochMicrosecs/*=1000*/) 
+MaxQueueLengthScheduling::MaxQueueLengthScheduling(uint64_t epochMicrosecs/*=1000*/) 
   : epochMicrosecs_(epochMicrosecs) 
 {
   constexpr double clockPeriodInMicrosec = 
@@ -19,7 +19,7 @@ MinLatencyScheduling::MinLatencyScheduling(uint64_t epochMicrosecs/*=1000*/)
   randgen_.seed(mt19937_64::default_seed);
 }
 
-OperatorContextImpl * MinLatencyScheduling::
+OperatorContextImpl * MaxQueueLengthScheduling::
     findOperatorToExecute(SchedulerPluginService & service,
                           WorkerThread & thread) 
 { 
@@ -30,42 +30,36 @@ OperatorContextImpl * MinLatencyScheduling::
     return nullptr;
 
   auto it = opers.begin();
-
-  // cunku ilk basta herkes ready, ready olmasalar bile ready
-  // + upstream operator completed olunca  beni ready yapio, bende tuple olmasa bile ben ready olabilirim.
   OperatorContextImpl * selected = *it;
-  chrono::high_resolution_clock::time_point min = chrono::high_resolution_clock::now();
+  int maxQueueLength = -1;
+
   for(; it!=opers.end(); ++it) {
     OperatorContextImpl *oper = *it;
     size_t numberOfInputPorts = oper->getNumberOfInputPorts();
 
     // check if it is source op
     if(numberOfInputPorts == 0) {
-      OperatorInfo & opinfo = *(service.getOperators().find(oper)->second);
-      chrono::high_resolution_clock::time_point endTime = opinfo.getEndTime();
-      if(chrono::duration_cast<chrono::microseconds>(endTime-min).count() < 0) {
-        min = endTime;
-        selected = *it;
-      }
+      selected = *it;
+      break;
     }
 
     // if it is not source op, check front tuple of each input port
     for(size_t i=0; i<numberOfInputPorts; i++) {
       InputPortImpl & iportImpl = oper->getInputPortImpl(i);
-      if(iportImpl.getTupleCount() != 0) {
-        chrono::high_resolution_clock::time_point timestamp = iportImpl.getFrontTimestamp();
-        if(chrono::duration_cast<chrono::microseconds>(timestamp-min).count() < 0) {
-          min = timestamp;
-          selected = *it;
-        }
+      int tupleCount = iportImpl.getTupleCount();
+      if(tupleCount > maxQueueLength) {
+        maxQueueLength = tupleCount;
+        selected = *it;
       }
     }
   }
 
+  if(opers.size()>0 && selected == nullptr)
+    cout<<"something went wrong"<<endl;
   return selected;
 }
 
-bool MinLatencyScheduling::
+bool MaxQueueLengthScheduling::
     checkOperatorForPreemption(SchedulerPluginService & service,
                                OperatorContextImpl & oper) 
 {
