@@ -63,6 +63,7 @@ public:
     avgLatency = 0;
 
     for(int i=0; i<numberOfRuns; i++) {
+      cout<<"run: "<<i<<endl;
       double throughput, latency;
       runExperiment(width, numThreads, cost, selectivity, *getScheduler(schedulerId, quanta), throughput, latency);
       tValues.push_back(throughput);
@@ -80,6 +81,7 @@ public:
     for(int i=0; i<numberOfRuns; i++) {
       throughputDev += pow(avgThroughput - tValues[i], 2);
       latencyDev += pow(avgLatency - lValues[i], 2);
+
     }
 
     throughputDev = sqrt(throughputDev/numberOfRuns);
@@ -106,7 +108,7 @@ public:
   {
     using namespace streamc::experiment;
 
-    int numberOfRuns = 3;
+    int numberOfRuns = 100;
 
     size_t defaultThreads = 4;
     size_t defaultWidth = 10;
@@ -120,7 +122,7 @@ public:
     double throughputDev, latencyDev;
 
     vector<string> schedulers = {"random", "maxThroughput", "maxTupleWait", "leastRecently", "maxQueue"};
-
+/*
     // thread experiment
     cout<<"thread experiment"<<endl;
     size_t const numThreadsMin = 4;
@@ -152,7 +154,7 @@ public:
       cout<<"---------------"<<endl;
     }
     data.close();
-
+*/
     // cost experiment
     cout<<"cost experiment"<<endl;
     int const minCost = 0;

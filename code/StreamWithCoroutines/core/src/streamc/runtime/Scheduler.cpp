@@ -68,6 +68,7 @@ void Scheduler::stop()
 
 void Scheduler::markOperatorAsCompleted(OperatorContextImpl & oper)
 {
+  //cout<<"completed: "<<oper.getOperator().getName()<<endl;
   unique_lock<mutex> lock(mutex_);  
   updateOperatorState(oper, OperatorInfo::Completed); 
   // It is possible that the downstream operators that are currently in blocked
@@ -225,8 +226,15 @@ OperatorContextImpl * Scheduler::getThreadWork(WorkerThread & thread)
   return assignment;
 }
 
+bool flag = false;
 void Scheduler::updateOperatorState(OperatorContextImpl & oper, OperatorInfo::OperatorState state)
 {
+  /*
+  if(state == OperatorInfo::Completed)
+    flag = true;
+  if(flag)
+    cout<<"operator: "<<oper.getOperator().getName()<<"\t"<<state<<endl;
+  */
   OperatorInfo & oinfo = *(operContexts_[&oper]);
   OperatorInfo::OperatorState oldState = oinfo.getState();
   if (oldState==state)
