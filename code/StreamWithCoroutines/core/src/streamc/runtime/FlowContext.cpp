@@ -8,17 +8,21 @@
 #include "streamc/runtime/Scheduler.h"
 #include "streamc/runtime/WorkerThread.h"
 #include "streamc/runtime/SchedulerPlugin.h"
+#include "streamc/runtime/RandomScheduling.h"
 
 using namespace std;
 using namespace streamc;
 
 size_t FlowContext::maxQueueSize_ = 1000; // TODO: make changable, and perhaps per port?
 
-FlowContext::FlowContext(Flow & flow, SchedulerPlugin & plugin)
+FlowContext::FlowContext(Flow & flow, SchedulerPlugin * plugin)
   : flow_(flow), numCompleted_(0), isShutdownRequested_(false)
 {
   // create the scheduler
-  scheduler_.reset(new Scheduler(*this, plugin));
+  if (plugin!=nullptr)
+    scheduler_.reset(new Scheduler(*this, plugin));
+  else
+     scheduler_.reset(new Scheduler(*this, new RandomScheduling()));
 
   // get operators
   vector<Operator *> const & opers = flow_.getOperators();

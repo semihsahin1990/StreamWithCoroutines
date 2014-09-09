@@ -26,8 +26,9 @@ public:
    *
    * @param flow the flow to run
    * @param numThreads the number of threads to use
+   * @param plugin optional scheduler plugin (owned by the runtime)
    */
-  virtual void run(Flow & flow, int numThreads, SchedulerPlugin & plugin) = 0;
+  virtual void run(Flow & flow, int numThreads, SchedulerPlugin * plugin=nullptr) = 0;
   
   /**
    * Wait for the flow to complete.

@@ -17,7 +17,7 @@ FlowRunnerImpl::~FlowRunnerImpl()
 {}
 
 //run the flow with numThreads threads
-void FlowRunnerImpl::run(Flow & flow, int numThreads, SchedulerPlugin & plugin)
+void FlowRunnerImpl::run(Flow & flow, int numThreads, SchedulerPlugin * plugin/*=nullptr*/)
 {
   lock_guard<std::mutex> lock(mutex_);
   flowContexts_[&flow] = unique_ptr<FlowContext>(new FlowContext(flow, plugin));

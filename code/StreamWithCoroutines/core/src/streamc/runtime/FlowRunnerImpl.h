@@ -24,7 +24,7 @@ public:
   ~FlowRunnerImpl();
 
   //run flow with numThreads threads
-  void run(Flow & flow, int numThreads, SchedulerPlugin & plugin) override;
+  void run(Flow & flow, int numThreads, SchedulerPlugin * plugin=nullptr) override;
 
   //shutdown the flow execution
   void requestShutdown(Flow & flow) override;  
