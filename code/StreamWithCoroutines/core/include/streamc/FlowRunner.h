@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdlib>
 //#include "streamc/LogLevel.h"
 
 namespace streamc
