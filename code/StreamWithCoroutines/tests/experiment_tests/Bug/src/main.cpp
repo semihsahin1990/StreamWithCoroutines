@@ -27,7 +27,7 @@ public:
 
     int depth = 3;
     int cost = 30;
-    double selectivity = 0.98;
+    double selectivity = 1.0;
     int width = 2;
     int numThreads = 7;
     int quanta = 50000;
