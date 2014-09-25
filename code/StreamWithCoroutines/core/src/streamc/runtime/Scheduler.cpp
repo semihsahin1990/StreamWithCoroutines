@@ -113,18 +113,27 @@ void Scheduler::markOperatorAsReadBlocked(OperatorContextImpl & oper,
     unique_lock<mutex> lock(mutex_);  
     OperatorInfo & oinfo = *(operContexts_[&oper]);
     OperatorInfo::ReadWaitCondition & waitCond = oinfo.getReadWaitCondition();
-    if (conjunctive)
+    if (conjunctive) {
       waitCond.makeConjunctive();
-    else
-      waitCond.makeDisjunctive();
-    for (auto & portSizePair : waitSpec) {      
       // It is possible that the input port is closed (upstream operators of it 
-      // are all complete). In this case, we return back, in which case the 
+      // are all complete). In this case, we return back, so that the 
       // calling routine will find out about the closed input port.
-      if (portSizePair.first->isClosed()) 
-        return;
-      waitCond.setWaitThreshold(*portSizePair.first, portSizePair.second);
+      for (auto & portSizePair : waitSpec) 
+        if (portSizePair.first->isClosed()) 
+          return;
+    } else {
+      waitCond.makeDisjunctive();
+      // Same as above, but this time we only return if all ports are closed.
+      bool allClosed = true;
+      for (auto & portSizePair : waitSpec) 
+        if (!portSizePair.first->isClosed()) {
+          allClosed = false;
+          break;
+        }
+      if (allClosed) return;
     }
+    for (auto & portSizePair : waitSpec) 
+      waitCond.setWaitThreshold(*portSizePair.first, portSizePair.second);
     if (!waitCond.computeReadiness())  
       updateOperatorState(oper, OperatorInfo::ReadBlocked); 
     else 

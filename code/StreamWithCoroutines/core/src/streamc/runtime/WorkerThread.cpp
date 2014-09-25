@@ -3,6 +3,7 @@
 //#include "streamc/runtime/RuntimeLogger.h"
 #include "streamc/runtime/Scheduler.h"
 #include "streamc/runtime/OperatorContextImpl.h"
+#include "streamc/Operator.h"
 
 #include <functional>
 

@@ -13,7 +13,7 @@
 #include "streamc/runtime/MaxQueueLengthScheduling.h"
 
 
-#include <streamc/topology/Tree.h>
+#include <streamc/topology/ReverseTree.h>
 
 using namespace std;
 using namespace streamc;
@@ -29,11 +29,11 @@ public:
     int cost = 30;
     double selectivity = 1.0;
     int width = 2;
-    int numThreads = 7;
+    int numThreads = 1;
     int quanta = 50000;
 
-    Tree Tree(depth, cost, selectivity, width);
-    Flow & flow = Tree.getFlow();
+    ReverseTree tree(depth, cost, selectivity, width);
+    Flow & flow = tree.getFlow();
     FlowRunner & runner = FlowRunner::createRunner();
     runner.run(flow, numThreads, new RandomScheduling(quanta));
     runner.wait(flow);
