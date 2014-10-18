@@ -1,6 +1,6 @@
 #pragma once
 
-//#include "streamc/LogLevel.h"
+#include "streamc/LogLevel.h"
 
 namespace streamc
 {
@@ -53,14 +53,14 @@ public:
    *
    * @param level level of the infrastructure logs.
    */
-  //virtual void setInfrastructureLogLevel(LogLevel level) = 0;
+  virtual void setInfrastructureLogLevel(LogLevel level) = 0;
 
   /**
    * Set the application log level.
    *
    * @param level level of the application logs.
    */
-  //virtual void setApplicationLogLevel(LogLevel level) = 0;
+  virtual void setApplicationLogLevel(LogLevel level) = 0;
 };
 
 } // namespace streamc

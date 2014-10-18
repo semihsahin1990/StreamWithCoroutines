@@ -1,7 +1,7 @@
 #include "streamc/runtime/FlowRunnerImpl.h"
 #include "streamc/runtime/SchedulerPlugin.h"
 #include "streamc/runtime/FlowContext.h"
-//#include "streamc/runtime/RuntimeLogger.h"
+#include "streamc/runtime/RuntimeLogger.h"
 
 #include <memory>
 
@@ -39,7 +39,7 @@ void FlowRunnerImpl::requestShutdown(Flow & flow)
   FlowContext & flowContext = *flowContexts_[&flow];
   flowContext.requestShutdown();
 }
-/*
+
 void FlowRunnerImpl::setInfrastructureLogLevel(LogLevel level) 
 {
   lock_guard<std::mutex> lock(mutex_);
@@ -51,4 +51,3 @@ void FlowRunnerImpl::setApplicationLogLevel(LogLevel level)
   lock_guard<std::mutex> lock(mutex_);
   RuntimeLogger::getLogger().setApplicationLogLevel(level);
 }
-*/

@@ -29,6 +29,9 @@ public:
     Flow & flow = chain.getFlow();
 
     FlowRunner & runner = FlowRunner::createRunner();
+    runner.setInfrastructureLogLevel(Info);
+    runner.setApplicationLogLevel(Trace);
+
     runner.run(flow, numThreads, plugin);
     runner.wait(flow);
 

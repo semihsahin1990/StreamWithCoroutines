@@ -1,6 +1,0 @@
-# This is a simple experiment - throughput as a function of number of threads for different approaches
-# num_threads	throughput_random	throughput_schedulerA	throughput_schedulerB	
-1	1.80429e+09	8.46931e+08	1.68169e+09	
-2	1.71464e+09	1.95775e+09	4.24238e+08	
-3	7.19885e+08	1.64976e+09	5.96517e+08	
-4	1.18964e+09	1.0252e+09	1.35049e+09	

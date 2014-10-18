@@ -31,13 +31,13 @@ public:
 
   //pause the main thread of a flow
   void wait(Flow & flow) override;
-/*
+
   // set the log level of the runtime infrastructure
   void setInfrastructureLogLevel(LogLevel level);
 
   // set the log level of the application
   void setApplicationLogLevel(LogLevel level);
-*/
+  
 private:
   //maps flows to flowContexts
   std::unordered_map<Flow *, std::unique_ptr<FlowContext>> flowContexts_;

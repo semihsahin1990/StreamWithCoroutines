@@ -34,9 +34,9 @@ void WorkerThread::run()
 
 void WorkerThread::join()
 {
-  //SC_LOG(Info, "Joining worker thread #" << index_); 
+  SC_LOG(Info, "Joining worker thread #" << index_); 
   thread_->join();
-  //SC_LOG(Info, "Joined worker thread #" << index_); 
+  SC_LOG(Info, "Joined worker thread #" << index_); 
 }
 
 
