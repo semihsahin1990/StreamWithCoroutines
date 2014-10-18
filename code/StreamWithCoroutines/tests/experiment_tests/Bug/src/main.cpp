@@ -1,4 +1,3 @@
-
 #include <streamc/experiment/ExpData.h>
 #include <streamc/experiment/Run.h>
 #include <streamc/Flow.h>
@@ -13,7 +12,7 @@
 #include "streamc/runtime/MaxQueueLengthScheduling.h"
 
 
-#include <streamc/topology/Tree.h>
+#include <streamc/topology/ReverseTree.h>
 
 using namespace std;
 using namespace streamc;
@@ -25,15 +24,15 @@ public:
   {
     using namespace streamc::experiment;
 
-    int depth = 3;
+    int depth = 4;
     int cost = 30;
     double selectivity = 1.0;
     int width = 2;
-    int numThreads = 7;
+    int numThreads = 4;
     int quanta = 50000;
 
-    Tree Tree(depth, cost, selectivity, width);
-    Flow & flow = Tree.getFlow();
+    ReverseTree reverseTree(depth, cost, selectivity, width);
+    Flow & flow = reverseTree.getFlow();
     FlowRunner & runner = FlowRunner::createRunner();
     runner.run(flow, numThreads, new RandomScheduling(quanta));
     runner.wait(flow);
