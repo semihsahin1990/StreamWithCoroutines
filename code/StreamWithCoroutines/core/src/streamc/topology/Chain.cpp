@@ -12,13 +12,14 @@ using namespace streamc;
 using namespace streamc::operators;
 using namespace streamc::connectors;
 
+// source + timestamper + depth x (selective+busy) + resultcollector + sink
 Chain::Chain(size_t depth, uint64_t cost, double selectivity) 
 	: depth_(depth), cost_(cost), selectivity_(selectivity), flow_("chain")
 {
   // create source
   Operator & src = flow_.createOperator<FileSource>("src")
     .set_fileName("data/in.dat")
-    .set_fileFormat({{"name",Type::String}, {"grade",Type::String}});
+    .set_fileFormat({{"name",Type::String}, {"grade",Type::String}, {"lineNo", Type::Integer}});
 
   Operator & timestamper = flow_.createOperator<Timestamper>("timestamper");
 

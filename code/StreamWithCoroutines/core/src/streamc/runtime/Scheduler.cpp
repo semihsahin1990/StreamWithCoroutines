@@ -15,8 +15,8 @@
 using namespace std;
 using namespace streamc;
 
-Scheduler::Scheduler(FlowContext & flowContext, SchedulerPlugin & plugin) 
-  : stopped_(false), flowContext_(flowContext), plugin_(&plugin) 
+Scheduler::Scheduler(FlowContext & flowContext, SchedulerPlugin * plugin) 
+  : stopped_(false), flowContext_(flowContext), plugin_(plugin) 
 {}
 
 Scheduler::~Scheduler() 
@@ -68,6 +68,7 @@ void Scheduler::stop()
 
 void Scheduler::markOperatorAsCompleted(OperatorContextImpl & oper)
 {
+  //cout<<"completed: "<<oper.getOperator().getName()<<endl;
   unique_lock<mutex> lock(mutex_);  
   updateOperatorState(oper, OperatorInfo::Completed); 
   // It is possible that the downstream operators that are currently in blocked
@@ -113,11 +114,26 @@ void Scheduler::markOperatorAsReadBlocked(OperatorContextImpl & oper,
     unique_lock<mutex> lock(mutex_);  
     OperatorInfo & oinfo = *(operContexts_[&oper]);
     OperatorInfo::ReadWaitCondition & waitCond = oinfo.getReadWaitCondition();
-    if (conjunctive)
+    if (conjunctive) {
       waitCond.makeConjunctive();
-    else
+      // It is possible that the input port is closed (upstream operators of it 
+      // are all complete). In this case, we return back, so that the 
+      // calling routine will find out about the closed input port.
+      for (auto & portSizePair : waitSpec) 
+        if (portSizePair.first->isClosed()) 
+          return;
+    } else {
       waitCond.makeDisjunctive();
-    for (auto & portSizePair : waitSpec)
+      // Same as above, but this time we only return if all ports are closed.
+      bool allClosed = true;
+      for (auto & portSizePair : waitSpec) 
+        if (!portSizePair.first->isClosed()) {
+          allClosed = false;
+          break;
+        }
+      if (allClosed) return;
+    }
+    for (auto & portSizePair : waitSpec) 
       waitCond.setWaitThreshold(*portSizePair.first, portSizePair.second);
     if (!waitCond.computeReadiness())  
       updateOperatorState(oper, OperatorInfo::ReadBlocked); 
@@ -134,8 +150,15 @@ void Scheduler::markOperatorAsWriteBlocked(OperatorContextImpl & oper,
     unique_lock<mutex> lock(mutex_);  
     OperatorInfo & oinfo = *(operContexts_[&oper]);
     OperatorInfo::WriteWaitCondition & waitCond = oinfo.getWriteWaitCondition();
-    for (auto & portSizePair : waitSpec)
+    for (auto & portSizePair : waitSpec) {
+      // It is possible that the shutdown is requested and the downstream 
+      // operator owning the input port is complete. In this case, we return
+      // back, in which case the calling routine will find about the shutdown.
+      if (flowContext_.isShutdownRequested() &&
+        portSizePair.first->getOperatorContextImpl().isComplete())
+        return;
       waitCond.setWaitThreshold(*portSizePair.first, portSizePair.second);
+    }
     if (!waitCond.computeReadiness())  
       updateOperatorState(oper, OperatorInfo::WriteBlocked); 
     else 
@@ -225,8 +248,15 @@ OperatorContextImpl * Scheduler::getThreadWork(WorkerThread & thread)
   return assignment;
 }
 
+bool flag = false;
 void Scheduler::updateOperatorState(OperatorContextImpl & oper, OperatorInfo::OperatorState state)
 {
+  /*
+  if(state == OperatorInfo::Completed)
+    flag = true;
+  if(flag)
+    cout<<"operator: "<<oper.getOperator().getName()<<"\t"<<state<<endl;
+  */
   OperatorInfo & oinfo = *(operContexts_[&oper]);
   OperatorInfo::OperatorState oldState = oinfo.getState();
   if (oldState==state)

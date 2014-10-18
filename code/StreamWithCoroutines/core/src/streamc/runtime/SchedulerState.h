@@ -8,7 +8,7 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <iostream>
-#define FACTOR 0.85
+
 namespace streamc
 {
 class ThreadInfo
@@ -37,6 +37,8 @@ private:
   
 class OperatorInfo
 {
+private:
+  static constexpr double const decayFactor_ = 0.85; 
 public:
   struct ThresholdAndCount
   {
@@ -62,7 +64,7 @@ public:
         firstTime = false;
       }
       else {
-        profile = FACTOR * profile + (1-FACTOR) * term;
+        profile = decayFactor_ * profile + (1-decayFactor_) * term;
       }
     }
     size_t getCounter() { return counter; }
@@ -118,7 +120,7 @@ public:
   OperatorInfo(OperatorContextImpl & oper) : oper_(&oper), state_(Ready), thread_(nullptr) , 
                                              readCond_(oper), writeCond_(oper) {}
   void init() { state_=Ready; thread_ = nullptr; readCond_.init(); writeCond_.init();
-              initProfileLists(); conjCount=0; disjCount=0; }
+              initProfileLists(); conjCount=0; disjCount=0; setEndTime(std::chrono::high_resolution_clock::now()); }
   OperatorContextImpl & getOperatorContext() { return *oper_; }
   OperatorState getState() { return state_; }
   void setState(OperatorState state) { state_ = state; }

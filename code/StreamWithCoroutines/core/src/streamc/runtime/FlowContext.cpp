@@ -8,6 +8,7 @@
 #include "streamc/runtime/Scheduler.h"
 #include "streamc/runtime/WorkerThread.h"
 #include "streamc/runtime/SchedulerPlugin.h"
+#include "streamc/runtime/RandomScheduling.h"
 
 #include "streamc/operators/RoundRobinSplit.h"
 #include "streamc/operators/RoundRobinMerge.h"
@@ -17,13 +18,16 @@ using namespace std;
 using namespace streamc;
 using namespace streamc::operators;
 
-size_t FlowContext::maxQueueSize_ = 10000; // TODO: make changable, and perhaps per port?
+size_t FlowContext::maxQueueSize_ = 1000; // TODO: make changable, and perhaps per port?
 
-FlowContext::FlowContext(Flow & flow, SchedulerPlugin & plugin)
+FlowContext::FlowContext(Flow & flow, SchedulerPlugin * plugin)
   : flow_(flow), numCompleted_(0), isShutdownRequested_(false)
 {
   // create the scheduler
-  scheduler_.reset(new Scheduler(*this, plugin));
+  if (plugin!=nullptr)
+    scheduler_.reset(new Scheduler(*this, plugin));
+  else
+     scheduler_.reset(new Scheduler(*this, new RandomScheduling()));
 
   // get operators
   vector<Operator *> const & opers = flow_.getOperators();
@@ -87,7 +91,6 @@ void FlowContext::run(int numThreads)
     threads_.push_back(unique_ptr<WorkerThread>(thread));
     scheduler_->addThread(*threads_[i]);
   }
-
   // start the scheduler and all the threads
   scheduler_->start();
   for (int i=0; i<numThreads; ++i) 

@@ -24,7 +24,8 @@ void RoundRobinSplit::process(OperatorContext & context)
       break;
 
     Tuple & tuple = iport.getFrontTuple();
-    context.getOutputPort(oPortNo).pushTuple(tuple);
+    OutputPort & oport = context.getOutputPort(oPortNo);
+    oport.pushTuple(tuple);
     iport.popTuple();
     oPortNo = (oPortNo+1) % nOutputs;
   }

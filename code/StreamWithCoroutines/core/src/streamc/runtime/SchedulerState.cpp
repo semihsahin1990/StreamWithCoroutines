@@ -71,7 +71,7 @@ bool OperatorInfo::ReadWaitCondition::computeReadiness()
       size_t thresh = portCondPair.second.threshold;
       size_t & count = portCondPair.second.currentCount;
       count = iport->getTupleCount();
-     if (count >= thresh) 
+      if (count >= thresh) 
         ready = true;    
       // do not early out, as we need to update current counts
     }
@@ -83,7 +83,7 @@ bool OperatorInfo::ReadWaitCondition::computeReadiness()
       size_t thresh = portCondPair.second.threshold;
       size_t & count = portCondPair.second.currentCount;
       count = iport->getTupleCount();
-     if (count < thresh) 
+      if (count < thresh) 
         ready = false;    
       // do not early out, as we need to update current counts
     }
@@ -122,3 +122,4 @@ void OperatorInfo::ReadWaitCondition::reset()
   for (auto & portCondPair : portWaits_)
     portCondPair.second.threshold = 0;
 }
+

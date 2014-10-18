@@ -9,10 +9,10 @@
 namespace streamc
 {
 
-class MinLatencyScheduling : public SchedulerPlugin
+class MaxQueueLengthScheduling : public SchedulerPlugin
 {
 public:
-  MinLatencyScheduling(uint64_t epochMicrosecs=1000);
+  MaxQueueLengthScheduling(uint64_t epochMicrosecs=1000);
 
   // return the operator to execute or nullptr if there is no operator to execute
   OperatorContextImpl * findOperatorToExecute(SchedulerPluginService & service,

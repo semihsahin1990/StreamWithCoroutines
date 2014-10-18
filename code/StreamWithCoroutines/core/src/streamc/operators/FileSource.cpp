@@ -79,8 +79,7 @@ void FileSource::process(OperatorContext & context)
       break;        
     }
     if(line.size()==0 && input.eof())
-      break;   
-   // SC_APPLOG(Trace, getName() << " Read line: " << counter);
+      break;
     sregex_token_iterator tokenIt(line.begin(), line.end(), sep, -1);
     bool error = false;
     for (auto it=attributes_.begin(); it!=attributes_.end(); ++it, ++tokenIt) {
