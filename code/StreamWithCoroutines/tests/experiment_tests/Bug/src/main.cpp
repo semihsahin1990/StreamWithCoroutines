@@ -28,11 +28,19 @@ public:
     int cost = 30;
     double selectivity = 1.0;
     int width = 2;
+<<<<<<< HEAD
     int numThreads = 4;
     int quanta = 50000;
 
     ReverseTree reverseTree(depth, cost, selectivity, width);
     Flow & flow = reverseTree.getFlow();
+=======
+    int numThreads = 1;
+    int quanta = 50000;
+
+    ReverseTree tree(depth, cost, selectivity, width);
+    Flow & flow = tree.getFlow();
+>>>>>>> dadbaa8ce083946baf37cc62b364b8b875644586
     FlowRunner & runner = FlowRunner::createRunner();
     runner.run(flow, numThreads, new RandomScheduling(quanta));
     runner.wait(flow);
