@@ -196,9 +196,9 @@ void FlowContext::printTopology() {
 }
 
 void FlowContext::addFission(Operator *oper, size_t replicaCount) {
-  Flow fflow("fission_flow");
+  //Flow fflow("fission_flow");
   // create RRSplit
-  Operator & split = fflow.createOperator<RoundRobinSplit>(oper->getName()+"_fissionSplit", replicaCount);
+  Operator & split = flow_.createOperator<RoundRobinSplit>(oper->getName()+"_fissionSplit", replicaCount);
   OperatorContextImpl * splitContext = new OperatorContextImpl(this, &split, *scheduler_);
   {
     operatorContexts_[&split] = unique_ptr<OperatorContextImpl>(splitContext);
@@ -211,7 +211,7 @@ void FlowContext::addFission(Operator *oper, size_t replicaCount) {
     }
   }
   // create RRMerge
-  Operator & merge = fflow.createOperator<RoundRobinMerge>(oper->getName()+"_fissionMerge", replicaCount);
+  Operator & merge = flow_.createOperator<RoundRobinMerge>(oper->getName()+"_fissionMerge", replicaCount);
   OperatorContextImpl * mergeContext = new OperatorContextImpl(this, &merge, *scheduler_);
   {
     operatorContexts_[&merge] = unique_ptr<OperatorContextImpl>(mergeContext);
@@ -339,10 +339,12 @@ void FlowContext::addFission(Operator *oper, size_t replicaCount) {
   }
 
   // add new opers to operatorContexts_  
+  /*
   operatorContexts_[&merge] = unique_ptr<OperatorContextImpl>(mergeContext);
   operatorContexts_[&split] = unique_ptr<OperatorContextImpl>(splitContext);
   for(int i=1; i<replicaCount; i++)
     operatorContexts_[&(replicas[i]->getOperator())] = unique_ptr<OperatorContextImpl>(replicas[i]);
+  */
 
   // add new opers to scheduler
   scheduler_->addOperatorContext(*operatorContexts_[&merge]);
