@@ -52,34 +52,35 @@ void FissionController::run() {
 		// block bottleneck publishers
 		InputPortImpl & iport = bottleneck->getInputPortImpl(0);
 		size_t numberOfPublishers = iport.getNumberOfPublishers();
-		for(size_t i=0; i<numberOfPublishers; i++) {
+		for (size_t i=0; i<numberOfPublishers; i++) {
 			OperatorContextImpl * publisher = iport.getPublisher(i).first;
 			{
 				unique_lock<mutex> lock(mutex_);
-				if(scheduler_.blockPublisherOper(*publisher) == false)
+				if (scheduler_.blockPublisherOper(*publisher) == false)
 					requests_.insert(publisher);
 			}
 		}
 
 		{
-		unique_lock<mutex> lock(mutex_);
-		if(requests_.size()>0)
-			cv_.wait(lock);
-		// block bottleneck operator
-		if(scheduler_.blockBottleneckOper(*bottleneck) == false)
-			requests_.insert(bottleneck);
-		if(requests_.size()>0)
-			cv_.wait(lock);
+		  unique_lock<mutex> lock(mutex_);
+		  while (requests_.size()>0)
+			  cv_.wait(lock);
+   	 	// block bottleneck operator
+		  if (scheduler_.blockBottleneckOper(*bottleneck) == false)
+			  requests_.insert(bottleneck);
+		  while (requests_.size()>0)
+			  cv_.wait(lock);
 		}
 
 		flowContext_.addFission(&(bottleneck->getOperator()), 3);
 		scheduler_.unblockOperators();
-		cerr<<"operators unblocked"<<endl;
+		cerr << "operators unblocked" << endl;
 		break;
 	}
 }
 
-void FissionController::blockGranted(OperatorContextImpl * oper) {
+void FissionController::blockGranted(OperatorContextImpl * oper) 
+{
 	unique_lock<mutex> lock(mutex_);
 	requests_.erase(oper);
 	if(requests_.size()==0)
@@ -95,3 +96,4 @@ void FissionController::setCompleted() {
 		isCompleted_.store(true);
 	cv_.notify_all();
 }
+
