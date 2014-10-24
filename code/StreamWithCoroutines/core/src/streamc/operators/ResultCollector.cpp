@@ -72,8 +72,8 @@ void ResultCollector::process(OperatorContext & context)
   output.close();
 }
 
-ResultCollector * ResultCollector::clone()
+ResultCollector * ResultCollector::clone(std::string const & name)
 {
-  return new ResultCollector(getName(), fileName_);
+  return new ResultCollector(name, fileName_);
 }
 

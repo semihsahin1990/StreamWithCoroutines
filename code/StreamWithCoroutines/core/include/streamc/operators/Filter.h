@@ -48,7 +48,7 @@ public:
    * 
    * @return the clone of the operator
    */
-  Filter * clone() override;
+  Filter * clone(std::string const & name) override;
 
 private:
   std::function<bool (Tuple &)> filter_;

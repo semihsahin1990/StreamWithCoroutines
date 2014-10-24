@@ -31,7 +31,7 @@ void RoundRobinSplit::process(OperatorContext & context)
   }
 }
 
-RoundRobinSplit * RoundRobinSplit::clone()
+RoundRobinSplit * RoundRobinSplit::clone(std::string const & name)
 {
-  return new RoundRobinSplit(getName(), getNumberOfOutputPorts());
+  return new RoundRobinSplit(name, getNumberOfOutputPorts());
 }

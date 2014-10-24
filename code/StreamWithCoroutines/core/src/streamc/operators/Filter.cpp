@@ -34,7 +34,7 @@ void Filter::process(OperatorContext & context)
   }
 }
 
-Filter * Filter::clone()
+Filter * Filter::clone(std::string const & name)
 {
-  return new Filter(getName(), filter_);
+  return new Filter(name, filter_);
 }

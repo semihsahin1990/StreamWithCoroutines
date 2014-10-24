@@ -40,7 +40,7 @@ public:
    * 
    * @return the clone of the operator
    */
-  Union * clone() override;
+  Union * clone(std::string const & name) override;
 
 };
 

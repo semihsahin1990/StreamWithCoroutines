@@ -33,7 +33,7 @@ public:
    * 
    * @return the clone of the operator
    */
-  ResultCollector * clone() override;
+  ResultCollector * clone(std::string const & name) override;
 
 private:
   std::string fileName_;

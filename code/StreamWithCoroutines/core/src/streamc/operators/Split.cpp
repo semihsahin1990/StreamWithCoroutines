@@ -48,8 +48,8 @@ void Split::process(OperatorContext & context)
   }
 }
 
-Split * Split::clone()
+Split * Split::clone(std::string const & name)
 {
-  return new Split(getName(), getNumberOfOutputPorts(), hashFunction_);
+  return new Split(name, getNumberOfOutputPorts(), hashFunction_);
 }
 

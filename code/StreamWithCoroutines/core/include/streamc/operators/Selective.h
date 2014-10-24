@@ -48,7 +48,7 @@ public:
    * 
    * @return the clone of the operator
    */
-  Selective * clone() override;
+  Selective * clone(std::string const & name) override;
 
 
 private:

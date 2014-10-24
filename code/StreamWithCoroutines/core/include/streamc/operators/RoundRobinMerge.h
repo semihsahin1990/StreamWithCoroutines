@@ -35,7 +35,7 @@ public:
    * 
    * @return the clone of the operator
    */
-  RoundRobinMerge * clone() override;
+  RoundRobinMerge * clone(std::string const & name) override;
 
 private:
 };

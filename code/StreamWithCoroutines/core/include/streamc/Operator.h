@@ -84,7 +84,7 @@ public:
    * This functiuon is overriden to provide object cloning.
    * @return the clone of the operator
    */
-  virtual Operator * clone() = 0;
+  virtual Operator * clone(std::string const & name) = 0;
 
   /**
    * Perform the main processing of the operator.

@@ -31,7 +31,7 @@ void RoundRobinMerge::process(OperatorContext & context)
   }
 }
 
-RoundRobinMerge * RoundRobinMerge::clone()
+RoundRobinMerge * RoundRobinMerge::clone(std::string const & name)
 {
-  return new RoundRobinMerge(getName(), getNumberOfInputPorts());
+  return new RoundRobinMerge(name, getNumberOfInputPorts());
 }

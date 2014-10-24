@@ -40,8 +40,8 @@ void Selective::process(OperatorContext & context)
   }
 }
 
-Selective * Selective::clone()
+Selective * Selective::clone(std::string const & name)
 {
-  return new Selective(getName(), selectivity_);
+  return new Selective(name, selectivity_);
 }
 

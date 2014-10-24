@@ -85,9 +85,9 @@ void FileSink::process(OperatorContext & context)
   } 
 }
 
-FileSink * FileSink::clone() 
+FileSink * FileSink::clone(std::string const & name) 
 {
-  return new FileSink(getName(), fileName_, attributes_);
+  return new FileSink(name, fileName_, attributes_);
 }
 
 

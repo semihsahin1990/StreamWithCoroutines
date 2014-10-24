@@ -37,8 +37,8 @@ void Busy::process(OperatorContext & context)
   }
 }
 
-Busy * Busy::clone() 
+Busy * Busy::clone(std::string const & name) 
 {
-  return new Busy(getName(), busyTimeMicrosecs_);
+  return new Busy(name, busyTimeMicrosecs_);
 }
 

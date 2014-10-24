@@ -37,8 +37,8 @@ void Barrier::process(OperatorContext & context)
   }
 }
 
-Barrier * Barrier::clone()
+Barrier * Barrier::clone(std::string const & name)
 {
-  return new Barrier(getName(), getNumberOfInputPorts());
+  return new Barrier(name, getNumberOfInputPorts());
 }
 

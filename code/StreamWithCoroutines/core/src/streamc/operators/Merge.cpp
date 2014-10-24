@@ -56,8 +56,8 @@ void Merge::process(OperatorContext & context)
   } while(!context.isShutdownRequested());
 }
 
-Merge * Merge::clone()
+Merge * Merge::clone(std::string const & name)
 {
-  return new Merge(getName(), getNumberOfInputPorts());
+  return new Merge(name, getNumberOfInputPorts());
 }
 

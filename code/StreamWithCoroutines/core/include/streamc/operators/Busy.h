@@ -40,7 +40,7 @@ public:
    * 
    * @return the clone of the operator
    */
-  Busy * clone() override;
+  Busy * clone(std::string const & name) override;
 
 private:
   uint64_t busyTimeMicrosecs_;

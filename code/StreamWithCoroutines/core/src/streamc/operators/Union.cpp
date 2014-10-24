@@ -36,7 +36,7 @@ void Union::process(OperatorContext & context)
   }
 }
 
-Union * Union::clone()
+Union * Union::clone(std::string const & name)
 {
-  return new Union(getName(), getNumberOfInputPorts());
+  return new Union(name, getNumberOfInputPorts());
 }

@@ -33,7 +33,7 @@ public:
    * 
    * @return the clone of the operator
    */
-  Timestamper * clone() override;
+  Timestamper * clone(std::string const & name) override;
 
 
 };

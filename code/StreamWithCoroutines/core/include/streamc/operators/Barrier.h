@@ -40,7 +40,7 @@ public:
    * 
    * @return the clone of the operator
    */
-  Barrier * clone() override;
+  Barrier * clone(std::string const & name) override;
 };
 
 } } // namespace streamc::operators

@@ -79,7 +79,7 @@ public:
    * 
    * @return the clone of the operator
    */
-  FileSource * clone() override;
+  FileSource * clone(std::string const & name) override;
 private:
   // parameters
   std::string fileName_;

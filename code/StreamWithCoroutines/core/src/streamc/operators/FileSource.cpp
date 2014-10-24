@@ -100,8 +100,8 @@ void FileSource::process(OperatorContext & context)
   } 
 }
 
-FileSource * FileSource::clone()
+FileSource * FileSource::clone(std::string const & name)
 {
-  return new FileSource(getName(), fileName_, attributes_);
+  return new FileSource(name, fileName_, attributes_);
 }
 

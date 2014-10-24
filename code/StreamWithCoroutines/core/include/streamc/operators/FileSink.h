@@ -79,7 +79,7 @@ public:
    * 
    * @return the clone of the operator
    */
-  FileSink * clone() override;
+  FileSink * clone(std::string const & name) override;
 
 private:
   // parameters

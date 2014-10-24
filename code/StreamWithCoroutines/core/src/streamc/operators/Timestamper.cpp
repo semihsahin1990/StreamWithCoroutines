@@ -26,8 +26,8 @@ void Timestamper::process(OperatorContext & context)
   }
 }
 
-Timestamper * Timestamper::clone()
+Timestamper * Timestamper::clone(std::string const & name)
 {
-  return new Timestamper(getName());
+  return new Timestamper(name);
 }
 

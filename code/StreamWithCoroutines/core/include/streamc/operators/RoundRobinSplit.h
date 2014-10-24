@@ -40,7 +40,7 @@ public:
    * 
    * @return the clone of the operator
    */
-  RoundRobinSplit * clone() override;
+  RoundRobinSplit * clone(std::string const & name) override;
 
 
 private:

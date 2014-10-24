@@ -65,7 +65,7 @@ public:
    * 
    * @return the clone of the operator
    */
-  Split * clone() override;
+  Split * clone(std::string const & name) override;
 
 
 private:

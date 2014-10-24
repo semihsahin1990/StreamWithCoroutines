@@ -35,7 +35,7 @@ public:
    * 
    * @return the clone of the operator
    */
-  Merge * clone() override;
+  Merge * clone(std::string const & name) override;
 
 private:
 };
