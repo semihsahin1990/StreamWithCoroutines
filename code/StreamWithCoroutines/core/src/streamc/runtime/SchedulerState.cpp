@@ -4,6 +4,7 @@
 #include "streamc/runtime/InputPortImpl.h"
 #include "streamc/runtime/OperatorContextImpl.h"
 #include "streamc/runtime/OutputPortImpl.h"
+#include "streamc/Operator.h"
 
 using namespace std;
 using namespace streamc;
