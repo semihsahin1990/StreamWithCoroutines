@@ -114,7 +114,8 @@ public:
                        Ready,        // can run on a thread (given scheduler assigns one)
                        ReadBlocked,  // waiting for data to be available at its input ports
                        WriteBlocked, // waiting for data to be available at its output ports
-                       Completed     // no work to do
+                       Completed,     // no work to do
+                       OutOfService
   };
   OperatorInfo() {}
   OperatorInfo(OperatorContextImpl & oper) : oper_(&oper), state_(Ready), thread_(nullptr) , 

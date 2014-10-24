@@ -8,6 +8,8 @@
 #include "streamc/runtime/Scheduler.h"
 #include "streamc/runtime/WorkerThread.h"
 #include "streamc/runtime/SchedulerPlugin.h"
+#include "streamc/runtime/RandomScheduling.h"
+#include "streamc/runtime/FissionController.h"
 
 #include "streamc/operators/RoundRobinSplit.h"
 #include "streamc/operators/RoundRobinMerge.h"
@@ -19,11 +21,18 @@ using namespace streamc::operators;
 
 size_t FlowContext::maxQueueSize_ = 1000; // TODO: make changable, and perhaps per port?
 
-FlowContext::FlowContext(Flow & flow, SchedulerPlugin & plugin)
+FlowContext::FlowContext(Flow & flow, SchedulerPlugin * plugin)
   : flow_(flow), numCompleted_(0), isShutdownRequested_(false)
 {
   // create the scheduler
-  scheduler_.reset(new Scheduler(*this, plugin));
+  if (plugin!=nullptr)
+    scheduler_.reset(new Scheduler(*this, plugin));
+  else
+     scheduler_.reset(new Scheduler(*this, new RandomScheduling()));
+
+  // create the fissionController
+  fissionController_ = new FissionController(*this, *scheduler_);
+  scheduler_->setFissionController(fissionController_);
 
   // get operators
   vector<Operator *> const & opers = flow_.getOperators();
@@ -88,6 +97,8 @@ void FlowContext::run(int numThreads)
     scheduler_->addThread(*threads_[i]);
   }
 
+  fissionController_->start();
+
   // start the scheduler and all the threads
   scheduler_->start();
   for (int i=0; i<numThreads; ++i) 
@@ -103,6 +114,8 @@ void FlowContext::wait()
   // join all threads 
   for (auto & threadPtr : threads_) 
     threadPtr->join();
+  fissionController_->setCompleted();
+  fissionController_->join();
 }
 
 // called by a worker thread
@@ -115,9 +128,13 @@ void FlowContext::markOperatorCompleted(Operator * oper)
     OperatorContextImpl * opc = operatorContexts_[oper].get();  
     scheduler_->markOperatorAsCompleted(*opc); 
   }
+  /*if(oper->getName() == "busy") {
+    addFission(oper, 2);
+  }*/
+
   if (numCompleted_==flow_.getOperators().size()) {
     // tell the scheduler that there is no more work
-    scheduler_->stop(); 
+    scheduler_->stop();
     // wake up clients waiting for completion
     cv_.notify_all();
   }
@@ -134,6 +151,15 @@ void FlowContext::requestShutdown()
 bool FlowContext::isShutdownRequested()
 {
   return isShutdownRequested_.load();
+}
+
+vector<OperatorContextImpl *> FlowContext::getOperators() {
+  vector<OperatorContextImpl *> operators;
+
+  for(auto it=operatorContexts_.begin(); it!=operatorContexts_.end(); it++) {
+    operators.push_back(it->second.get());
+  }
+  return operators;
 }
 
 void FlowContext::printTopology() {
@@ -170,171 +196,157 @@ void FlowContext::printTopology() {
 }
 
 void FlowContext::addFission(Operator *oper, size_t replicaCount) {
-  printTopology();
-  // create splits
   Flow fflow("fission_flow");
-  vector<OperatorContextImpl *> splits;
-  for(size_t i=0; i<oper->getNumberOfInputPorts(); i++) {
-    Operator & split = fflow.createOperator<RoundRobinSplit>(oper->getName()+"_fissionSplit_"+to_string(i), replicaCount);
-    
-    // create operator context
-    OperatorContextImpl * operatorContext = new OperatorContextImpl(this, &split, *scheduler_);
-    operatorContexts_[&split] = unique_ptr<OperatorContextImpl>(operatorContext);
-    splits.push_back(operatorContext);
+  // create RRSplit
+  Operator & split = fflow.createOperator<RoundRobinSplit>(oper->getName()+"_fissionSplit", replicaCount);
+  OperatorContextImpl * splitContext = new OperatorContextImpl(this, &split, *scheduler_);
+  {
+    operatorContexts_[&split] = unique_ptr<OperatorContextImpl>(splitContext);
+    InputPortImpl * iport = new InputPortImpl(*splitContext, *scheduler_);
+    splitContext->addInputPort(iport);
+
+    for(size_t j=0; j<replicaCount; j++) {
+      OutputPortImpl * oport = new OutputPortImpl(*splitContext, *this, *scheduler_);
+      splitContext->addOutputPort(oport);
+    }
+  }
+  // create RRMerge
+  Operator & merge = fflow.createOperator<RoundRobinMerge>(oper->getName()+"_fissionMerge", replicaCount);
+  OperatorContextImpl * mergeContext = new OperatorContextImpl(this, &merge, *scheduler_);
+  {
+    operatorContexts_[&merge] = unique_ptr<OperatorContextImpl>(mergeContext);
+
+    for(size_t j=0; j<replicaCount; j++) {
+      InputPortImpl * iport = new InputPortImpl(*mergeContext, *scheduler_);
+      mergeContext->addInputPort(iport);  
+    }
+
+    OutputPortImpl * oport = new OutputPortImpl(*mergeContext, *this, *scheduler_);
+    mergeContext->addOutputPort(oport);
+  }
+  
+  // create Replicas
+  vector<OperatorContextImpl *> replicas;
+
+  OperatorContextImpl * operatorContext = operatorContexts_[oper].get();
+  replicas.push_back(operatorContext);
+  for(size_t i=1; i<replicaCount; i++) {
+    Operator & replica = *(oper->clone(oper->getName()+"_replica_"+to_string(i)));
+
+    // create replica context
+    OperatorContextImpl * replicaContext = new OperatorContextImpl(this, &replica, *scheduler_);
+    operatorContexts_[&replica] = unique_ptr<OperatorContextImpl>(replicaContext);
     
     // create input port
-    InputPortImpl * port = new InputPortImpl(*operatorContext, *scheduler_);
-    operatorContext->addInputPort(port);
-
-    // create output ports
-    for(size_t j=0; j<replicaCount; j++) {
-      OutputPortImpl * port = new OutputPortImpl(*operatorContext, *this, *scheduler_);
-      operatorContext->addOutputPort(port);
-    }
-  }
-
-  // create merges
-  vector<OperatorContextImpl *> merges;
-  for(size_t i=0; i<oper->getNumberOfOutputPorts(); i++) {
-    Operator & merge = fflow.createOperator<RoundRobinMerge>(oper->getName()+"_fissionMerge_"+to_string(i), replicaCount);
-
-    // create operator context
-    OperatorContextImpl * operatorContext = new OperatorContextImpl(this, &merge, *scheduler_);
-    operatorContexts_[&merge] = unique_ptr<OperatorContextImpl>(operatorContext);
-    merges.push_back(operatorContext);
-    
-    // create input ports
-    for(size_t j=0; j<replicaCount; j++) {
-      InputPortImpl * port = new InputPortImpl(*operatorContext, *scheduler_);
-      operatorContext->addInputPort(port);  
-    }
+    InputPortImpl * iport = new InputPortImpl(*replicaContext, *scheduler_);
+    replicaContext->addInputPort(iport);  
 
     // create output port
-    OutputPortImpl * port = new OutputPortImpl(*operatorContext, *this, *scheduler_);
-    operatorContext->addOutputPort(port);
+    OutputPortImpl * oport = new OutputPortImpl(*replicaContext, *this, *scheduler_);
+    replicaContext->addOutputPort(oport);
+
+    replicas.push_back(replicaContext);
   }
 
-  // create replicas
-  vector<OperatorContextImpl *> replicas;
-  replicas.push_back(operatorContexts_[oper].get());
-  for(size_t i=1; i<replicaCount; i++) {
-    // TODO: make generic
-    Operator & replica = fflow.createOperator<Busy>(oper->getName()+"_replica_"+to_string(i));
-    
-
-    // create operator context
-    OperatorContextImpl * operatorContext = new OperatorContextImpl(this, &replica, *scheduler_);
-    operatorContexts_[&replica] = unique_ptr<OperatorContextImpl>(operatorContext);
-    replicas.push_back(operatorContext);
-    
-    // create input ports
-    for(size_t j=0; j<oper->getNumberOfInputPorts(); j++) {
-      InputPortImpl * port = new InputPortImpl(*operatorContext, *scheduler_);
-      operatorContext->addInputPort(port);  
-    }
-
-    // create output port
-    for(size_t j=0; j<oper->getNumberOfOutputPorts(); j++) {
-      OutputPortImpl * port = new OutputPortImpl(*operatorContext, *this, *scheduler_);
-      operatorContext->addOutputPort(port);
-    }
-  }
+  // get publishers
+  InputPortImpl & iport = operatorContext->getInputPortImpl(0);
+  size_t numberOfPublishers = iport.getNumberOfPublishers();
   
-  OperatorContextImpl * operatorContext = operatorContexts_[oper].get();
+  vector<pair<OperatorContextImpl *, size_t>> publishers;
+  for(size_t i=0; i<numberOfPublishers; i++)
+    publishers.push_back(iport.getPublisher(i));
 
-  // get all publishers
-  vector<vector<pair<OperatorContextImpl *, size_t>>> publishers(oper->getNumberOfInputPorts(), vector<pair<OperatorContextImpl *, size_t>>());
-  for(size_t i=0; i<oper->getNumberOfInputPorts(); ++i) {
-    InputPortImpl & iport = operatorContext->getInputPortImpl(i);
-    size_t numberOfPublishers = iport.getNumberOfPublishers();
-    for(size_t j=0; j<numberOfPublishers; j++) {
-      publishers[i].push_back(iport.getPublisher(0));
+  // disconnect publisher-oper, connect publisher-rrsplit
+  {
+    // remove all publishers from oper's iport
+    for(size_t i=0; i<numberOfPublishers; i++)
       iport.removePublisher(0);
+
+    // for each publisher
+    for(size_t i=0; i<numberOfPublishers; i++) {
+      OperatorContextImpl * publisherOper = publishers[i].first;
+      size_t publisherPortNo = publishers[i].second;
+      OutputPortImpl & publisherOPort = publisherOper->getOutputPortImpl(publisherPortNo);
+
+      // remove oper from publisher oport's subscriber list
+      size_t numberOfPublisherSubscribers = publisherOPort.getNumberOfSubscribers();
+      for(size_t j=0; j<numberOfPublisherSubscribers; j++) {
+        OperatorContextImpl * publisherSubscriber = publisherOPort.getSubscriber(j).first;
+        if(publisherSubscriber == operatorContext) {
+          publisherOPort.removeSubscriber(j);
+          break;
+        }
+      }
+
+      // insert publisher to rrSplit iport's publisher list
+      InputPortImpl & splitIPort = splitContext->getInputPortImpl(0);
+      splitIPort.addPublisher(*publisherOper, publisherPortNo);
+
+      // insert rrSplit to publisher oport's subscriber list
+      publisherOPort.addSubscriber(*splitContext, 0);
     }
   }
-  
-  // get all subscribers
-  vector<vector<pair<OperatorContextImpl *, size_t>>> subscribers(oper->getNumberOfOutputPorts(), vector<pair<OperatorContextImpl *, size_t>>());
-  for(size_t i=0; i<oper->getNumberOfOutputPorts(); i++) {
-    OutputPortImpl & oport = operatorContext->getOutputPortImpl(i);
-    size_t numberOfSubscribers = oport.getNumberOfSubscribers();
-    for(size_t j=0; j<numberOfSubscribers; j++) {
-      subscribers[i].push_back(oport.getSubscriber(0));
+
+  // get subscribers
+  OutputPortImpl & oport = operatorContext->getOutputPortImpl(0);
+  size_t numberOfSubscribers = oport.getNumberOfSubscribers();
+
+  vector<pair<OperatorContextImpl *, size_t>> subscribers;
+  for(size_t i=0; i<numberOfSubscribers; i++)
+    subscribers.push_back(oport.getSubscriber(i));
+
+  // disconnect oper-subscriber, connect rrmerge-subscriber
+  {
+    // remove all subscribers from oper's oport
+    for(size_t i=0; i<numberOfSubscribers; i++)
       oport.removeSubscriber(0);
-    }
-  }
 
-  // remove oper from publishers' subscribers
-  for(size_t i=0; i<oper->getNumberOfInputPorts(); i++) {
-    size_t numberOfPublishers = publishers[i].size();
-    for(size_t j=0; j<numberOfPublishers; j++) {
-      OperatorContextImpl * publisherOper = publishers[i][j].first;
-      OutputPortImpl & publisherOPort = publisherOper->getOutputPortImpl(publishers[i][j].second);
-      size_t numberOfSubscribers = publisherOPort.getNumberOfSubscribers();
-      for(size_t k=0; k<numberOfSubscribers; k++) {
-        auto subscriber = publisherOPort.getSubscriber(k);
-        if(subscriber.first == operatorContext && subscriber.second == i) {
-          publisherOPort.removeSubscriber(k);
+    // for each subscriber
+    for(size_t i=0; i<numberOfSubscribers; i++) {
+      OperatorContextImpl * subscriberOper = subscribers[i].first;
+      size_t subscriberPortNo = subscribers[i].second;
+      InputPortImpl & subscriberIPort = subscriberOper->getInputPortImpl(subscriberPortNo);
+
+      // remove oper from subscriber iport;s publisher list
+      size_t numberOfSubscriberPublishers = subscriberIPort.getNumberOfPublishers();
+      for(size_t j=0; j<numberOfSubscriberPublishers; j++) {
+        OperatorContextImpl * subscriberPublisher = subscriberIPort.getPublisher(j).first;
+        if(subscriberPublisher == operatorContext) {
+          subscriberIPort.removePublisher(j);
           break;
         }
       }
+
+      // insert subscriber to rrMerge oport's subscriber list
+      OutputPortImpl & mergeOPort = mergeContext->getOutputPortImpl(0);
+      mergeOPort.addSubscriber(*subscriberOper, subscriberPortNo);
+
+      // insert rrMerge to subscriber iport's publishere list
+      subscriberIPort.addPublisher(*mergeContext, 0);
     }
   }
 
-  // remove oper from subscribers' publishers
-  for(size_t i=0; i<oper->getNumberOfOutputPorts(); i++) {
-    size_t numberOfSubscribers = subscribers.size();
-    for(size_t j=0; j<numberOfSubscribers; j++) {
-      OperatorContextImpl * subscriberOper = subscribers[i][j].first;
-      InputPortImpl & subscriberIPort = subscriberOper->getInputPortImpl(subscribers[i][j].second);
-      size_t numberOfPublishers = subscriberIPort.getNumberOfPublishers();
-      for(size_t k=0; k<numberOfPublishers; k++) {
-        auto publisher = subscriberIPort.getPublisher(k);
-        if(publisher.first == operatorContext && publisher.second == i) {
-          subscriberIPort.removePublisher(k);
-          break;
-        }
-      }
-    }
-  }
-
-  // connect publishers to splits
-  for(size_t i=0; i<oper->getNumberOfInputPorts(); i++) {
-    size_t numberOfPublishers = publishers[i].size();
-    for(size_t j=0; j<numberOfPublishers; j++) {
-      OperatorContextImpl * publisherOper = publishers[i][j].first;
-      OutputPortImpl & publisherOPort = publisherOper->getOutputPortImpl(publishers[i][j].second);
-      publisherOPort.addSubscriber(*splits[i], 0);
-      splits[i]->getInputPortImpl(0).addPublisher(*publisherOper, publishers[i][j].second);
-    }
-  }
-
-  // connect splits to replicas
-  for(size_t i=0; i<oper->getNumberOfInputPorts(); i++) {
-    for(size_t j=0; j<replicaCount; j++) {
-      splits[i]->getOutputPortImpl(j).addSubscriber(*replicas[j], i);
-      replicas[j]->getInputPortImpl(i).addPublisher(*splits[i], j);
-    }
-  }
-
-  // connect replicas to merges
+  // connect rrSplit to replicas
   for(size_t i=0; i<replicaCount; i++) {
-    for(size_t j=0; j<oper->getNumberOfOutputPorts(); j++) {
-      replicas[i]->getOutputPortImpl(j).addSubscriber(*merges[j], i);
-      merges[j]->getInputPortImpl(i).addPublisher(*replicas[i], j);
-    }
+    splitContext->getOutputPortImpl(i).addSubscriber(*replicas[i], 0);
+    replicas[i]->getInputPortImpl(0).addPublisher(*splitContext, i);
   }
 
-  // connect merges to subscribers
-  for(size_t i=0; i<oper->getNumberOfOutputPorts(); i++) {
-    size_t numberOfSubscribers = subscribers[i].size();
-    for(size_t j=0; j<numberOfSubscribers; j++) {
-      OperatorContextImpl * subscriberOper = subscribers[i][j].first;
-      InputPortImpl & subscriberIPort = subscriberOper->getInputPortImpl(subscribers[i][j].second);
-      merges[i]->getOutputPortImpl(0).addSubscriber(*subscriberOper, subscribers[i][j].second);
-      subscriberIPort.addPublisher(*merges[i], 0);
-    }
+  // connect replicas to rrMerge
+  for(size_t i=0; i<replicaCount; i++) {
+    replicas[i]->getOutputPortImpl(0).addSubscriber(*mergeContext, i);
+    mergeContext->getInputPortImpl(i).addPublisher(*replicas[i], 0);
   }
 
-  printTopology();
+  // add new opers to operatorContexts_  
+  operatorContexts_[&merge] = unique_ptr<OperatorContextImpl>(mergeContext);
+  operatorContexts_[&split] = unique_ptr<OperatorContextImpl>(splitContext);
+  for(int i=1; i<replicaCount; i++)
+    operatorContexts_[&(replicas[i]->getOperator())] = unique_ptr<OperatorContextImpl>(replicas[i]);
+
+  // add new opers to scheduler
+  scheduler_->addOperatorContext(*operatorContexts_[&merge]);
+  scheduler_->addOperatorContext(*operatorContexts_[&split]);
+  for(int i=1; i<replicaCount; i++)
+    scheduler_->addOperatorContext(*operatorContexts_[&(replicas[i]->getOperator())]);
 }

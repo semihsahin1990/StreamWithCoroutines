@@ -22,6 +22,7 @@ public:
   void pushTuple(Tuple const & tuple);
   std::chrono::high_resolution_clock::time_point & getFrontTimestamp();
   void drain();
+  OperatorContextImpl & getOperatorContextImpl() { return *oper_; }
 
   // implemented interface
   bool isClosed() override;

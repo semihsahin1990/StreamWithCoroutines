@@ -22,8 +22,8 @@ Tree::Tree(size_t depth, uint64_t cost, double selectivity, size_t n)
 	    .set_fileName("data/in.dat")
 	    .set_fileFormat({{"name",Type::String}, {"grade",Type::String}, {"lineNo", Type::Integer}});
 
-  	// create timestamper
-  	Operator & timestamper = flow_.createOperator<Timestamper>("timestamper");
+  // create timestamper
+  Operator & timestamper = flow_.createOperator<Timestamper>("timestamper");
 
 	// create Nodes (selective-cost)
 	size_t numberOfNodes = (pow(n_, depth_)-1) / (n_-1);
@@ -56,17 +56,17 @@ Tree::Tree(size_t depth, uint64_t cost, double selectivity, size_t n)
 	
 	// connect operators
 	flow_.addConnection((src, 0) >> (0, timestamper));
-  	flow_.addConnection((timestamper, 0) >> (0, *selectiveOps_[0]));
+  flow_.addConnection((timestamper, 0) >> (0, *selectiveOps_[0]));
 
-  	for(size_t i=0; i<numberOfNodes; i++) {
-	    flow_.addConnection((*selectiveOps_[i], 0) >> (0, *busyOps_[i]));
-	//    cout<<"selective "<<i<<" port 0\t busy "<<i<<"port 0"<<endl;
+  for(size_t i=0; i<numberOfNodes; i++) {
+	  flow_.addConnection((*selectiveOps_[i], 0) >> (0, *busyOps_[i]));
+	  // cout<<"selective "<<i<<" port 0\t busy "<<i<<"port 0"<<endl;
 	}
 
-  	for(size_t i=0; i<numberOfSplits; i++) {
-    	flow_.addConnection((*busyOps_[i], 0) >> (0, *splitOps_[i]));
+  for(size_t i=0; i<numberOfSplits; i++) {
+    flow_.addConnection((*busyOps_[i], 0) >> (0, *splitOps_[i]));
     //	cout<<"busy "<<i<<" port 0\t split "<<i<<"port 0"<<endl;
-    }
+  }
 
 	size_t nNodeToNode = numberOfNodes - numberOfLeaves;
 	for(size_t i=0; i<nNodeToNode; i++) {
@@ -82,3 +82,5 @@ Tree::Tree(size_t depth, uint64_t cost, double selectivity, size_t n)
 		//cout<<"busy "<<i+nNodeToNode<<" port "<<0<<"\t"<<" resultCollector "<<i<<endl;
 	}
 }
+
+

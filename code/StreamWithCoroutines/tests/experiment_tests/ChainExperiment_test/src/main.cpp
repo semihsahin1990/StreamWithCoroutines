@@ -21,7 +21,7 @@ class ChainExperiment : public streamc::experiment::Run
 {
 public:
 
-  void runExperiment(int depth, int numThreads, int cost, double selectivity, SchedulerPlugin & plugin, double & throughput, double & latency) {
+  void runExperiment(int depth, int numThreads, int cost, double selectivity, SchedulerPlugin * plugin, double & throughput, double & latency) {
     std::chrono::seconds timespan(5);
     std::this_thread::sleep_for(timespan);
 
@@ -29,6 +29,9 @@ public:
     Flow & flow = chain.getFlow();
 
     FlowRunner & runner = FlowRunner::createRunner();
+    runner.setInfrastructureLogLevel(Info);
+    runner.setApplicationLogLevel(Trace);
+
     runner.run(flow, numThreads, plugin);
     runner.wait(flow);
 
@@ -78,7 +81,7 @@ public:
 
     for(int i=0; i<numberOfRuns; i++) {
       double throughput, latency;
-      runExperiment(depth, numThreads, cost, selectivity, *getScheduler(schedulerId, quanta), throughput, latency);
+      runExperiment(depth, numThreads, cost, selectivity, getScheduler(schedulerId, quanta), throughput, latency);
       tValues.push_back(throughput);
       lValues.push_back(latency);
       avgThroughput = avgThroughput + throughput;

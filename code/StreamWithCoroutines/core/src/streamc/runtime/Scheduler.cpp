@@ -10,13 +10,14 @@
 #include "streamc/runtime/InputPortImpl.h"
 #include "streamc/runtime/OutputPortImpl.h"
 #include "streamc/Operator.h"
+#include "streamc/runtime/FissionController.h"
 #include <iostream>
 
 using namespace std;
 using namespace streamc;
 
-Scheduler::Scheduler(FlowContext & flowContext, SchedulerPlugin & plugin) 
-  : stopped_(false), flowContext_(flowContext), plugin_(&plugin) 
+Scheduler::Scheduler(FlowContext & flowContext, SchedulerPlugin * plugin) 
+  : stopped_(false), flowContext_(flowContext), plugin_(plugin) 
 {}
 
 Scheduler::~Scheduler() 
@@ -40,8 +41,13 @@ void Scheduler::removeThreads()
 void Scheduler::addOperatorContext(OperatorContextImpl & context)
 {
   unique_lock<mutex> lock(mutex_);
+  cerr<<"ADD:\t"<<context.getOperator().getName()<<endl;
   operatorInfos_.push_back(unique_ptr<OperatorInfo>(new OperatorInfo(context)));
   operContexts_[&context] = operatorInfos_.back().get();
+
+  context.init();
+  operatorInfos_.back().get()->init();
+  readyOperators_.insert(&context);
 }
 
 void Scheduler::start()
@@ -49,11 +55,13 @@ void Scheduler::start()
   unique_lock<mutex> lock(mutex_);
   for (auto & threadInfoPair : threads_) 
     readyThreads_.insert(threadInfoPair.first);
+  /*
   for (auto & operInfoPair : operContexts_) {
     operInfoPair.first->init();
     operInfoPair.second->init();
     readyOperators_.insert(operInfoPair.first);
   }
+  */
 }
 
 void Scheduler::stop()
@@ -68,6 +76,7 @@ void Scheduler::stop()
 
 void Scheduler::markOperatorAsCompleted(OperatorContextImpl & oper)
 {
+  //cout<<"completed: "<<oper.getOperator().getName()<<endl;
   unique_lock<mutex> lock(mutex_);  
   updateOperatorState(oper, OperatorInfo::Completed); 
   // It is possible that the downstream operators that are currently in blocked
@@ -113,11 +122,26 @@ void Scheduler::markOperatorAsReadBlocked(OperatorContextImpl & oper,
     unique_lock<mutex> lock(mutex_);  
     OperatorInfo & oinfo = *(operContexts_[&oper]);
     OperatorInfo::ReadWaitCondition & waitCond = oinfo.getReadWaitCondition();
-    if (conjunctive)
+    if (conjunctive) {
       waitCond.makeConjunctive();
-    else
+      // It is possible that the input port is closed (upstream operators of it 
+      // are all complete). In this case, we return back, so that the 
+      // calling routine will find out about the closed input port.
+      for (auto & portSizePair : waitSpec) 
+        if (portSizePair.first->isClosed()) 
+          return;
+    } else {
       waitCond.makeDisjunctive();
-    for (auto & portSizePair : waitSpec)
+      // Same as above, but this time we only return if all ports are closed.
+      bool allClosed = true;
+      for (auto & portSizePair : waitSpec) 
+        if (!portSizePair.first->isClosed()) {
+          allClosed = false;
+          break;
+        }
+      if (allClosed) return;
+    }
+    for (auto & portSizePair : waitSpec) 
       waitCond.setWaitThreshold(*portSizePair.first, portSizePair.second);
     if (!waitCond.computeReadiness())  
       updateOperatorState(oper, OperatorInfo::ReadBlocked); 
@@ -134,8 +158,15 @@ void Scheduler::markOperatorAsWriteBlocked(OperatorContextImpl & oper,
     unique_lock<mutex> lock(mutex_);  
     OperatorInfo & oinfo = *(operContexts_[&oper]);
     OperatorInfo::WriteWaitCondition & waitCond = oinfo.getWriteWaitCondition();
-    for (auto & portSizePair : waitSpec)
+    for (auto & portSizePair : waitSpec) {
+      // It is possible that the shutdown is requested and the downstream 
+      // operator owning the input port is complete. In this case, we return
+      // back, in which case the calling routine will find about the shutdown.
+      if (flowContext_.isShutdownRequested() &&
+        portSizePair.first->getOperatorContextImpl().isComplete())
+        return;
       waitCond.setWaitThreshold(*portSizePair.first, portSizePair.second);
+    }
     if (!waitCond.computeReadiness())  
       updateOperatorState(oper, OperatorInfo::WriteBlocked); 
     else 
@@ -211,7 +242,7 @@ OperatorContextImpl * Scheduler::getThreadWork(WorkerThread & thread)
       info.getCV().wait(lock);
       if (stopped_) 
         break;
-      assignment = plugin_->findOperatorToExecute(*this, thread); 
+      assignment = plugin_->findOperatorToExecute(*this, thread);
     }
   }
   if (assignment==nullptr) {
@@ -225,12 +256,14 @@ OperatorContextImpl * Scheduler::getThreadWork(WorkerThread & thread)
   return assignment;
 }
 
+bool flag = false;
 void Scheduler::updateOperatorState(OperatorContextImpl & oper, OperatorInfo::OperatorState state)
 {
   OperatorInfo & oinfo = *(operContexts_[&oper]);
   OperatorInfo::OperatorState oldState = oinfo.getState();
   if (oldState==state)
     return; // no change
+  //cerr<<"State:\t"<<oper.getOperator().getName()<<"\t"<<state<<endl;;
   oinfo.setState(state);
   if (oldState==OperatorInfo::ReadBlocked) { // must be moving into ready state
     // remove the operator from the read waiting list of its input ports
@@ -285,6 +318,8 @@ void Scheduler::updateOperatorState(OperatorContextImpl & oper, OperatorInfo::Op
     for(int i=0; i<numberOfOutputPorts; i++) 
       oinfo.resetOPortCounter(oper.getOutputPortImpl(i));
     oinfo.setBeginTime(chrono::high_resolution_clock::now());
+  } else if(state==OperatorInfo::OperatorInfo::OutOfService) {
+    outOfServiceOperators_.insert(&oper);
   }
 }
 
@@ -303,4 +338,75 @@ void Scheduler::updateThreadState(WorkerThread & thread, ThreadInfo::ThreadState
     waitingThreads_.insert(&thread);    
   else if (state==ThreadInfo::Ready)
     readyThreads_.insert(&thread);
+}
+
+bool Scheduler::blockPublisherOper(OperatorContextImpl & oper) {
+  unique_lock<mutex> lock(mutex_);
+  /**/
+  cerr<<"block publisher oper\t"<<oper.getOperator().getName()<<endl;
+  for(auto operContext : operContexts_) {
+    cerr<<"states: "<<operContext.first->getOperator().getName()<<"\t"<<operContext.second->getState()<<endl;
+  }
+  /**/
+  if(operContexts_[&oper]->getState() != OperatorInfo::Running) {
+    cerr<<"request granted:\t"<<oper.getOperator().getName()<<endl;
+    updateOperatorState(oper, OperatorInfo::OutOfService);
+    return true;
+  }
+  else {
+    cerr<<"waiting request:\t"<<oper.getOperator().getName()<<endl;
+    blockRequestedOperators_.insert(&oper);
+    return false;
+  }
+}
+
+bool Scheduler::blockBottleneckOper(OperatorContextImpl & oper) {
+  unique_lock<mutex> lock(mutex_);
+  /**/
+  cerr<<"block bottleneck oper:\t"<<oper.getOperator().getName()<<endl;
+  for(auto operContext : operContexts_) {
+    cerr<<"states: "<<operContext.first->getOperator().getName()<<"\t"<<operContext.second->getState()<<endl;
+  }
+  /**/
+  if(operContexts_[&oper]->getState() != OperatorInfo::Running && oper.getInputPortImpl(0).getTupleCount() == 0) {
+    cerr<<"request granted:\t"<<oper.getOperator().getName()<<endl;
+    updateOperatorState(oper, OperatorInfo::OutOfService);
+    return true; 
+  }
+  else {
+    cerr<<"waiting request:\t"<<oper.getOperator().getName()<<endl;
+    blockRequestedOperators_.insert(&oper);
+    return false;
+  }
+}
+
+void Scheduler::checkOperatorForBlocking(OperatorContextImpl & oper) {
+  bool requested = false;
+  {
+    unique_lock<mutex> lock(mutex_);
+    if(blockRequestedOperators_.find(&oper)!=blockRequestedOperators_.end()) {
+      requested = true;
+      blockRequestedOperators_.erase(&oper);
+      updateOperatorState(oper, OperatorInfo::OutOfService);
+      fissionController_->blockGranted(&oper);
+    }
+  }
+  if(requested)
+    oper.yieldOper();
+}
+
+void Scheduler::unblockOperators() {
+  unique_lock<mutex> lock(mutex_);
+  for(OperatorContextImpl * oper : outOfServiceOperators_) {
+    updateOperatorState(*oper, OperatorInfo::Ready);
+  }
+  outOfServiceOperators_.clear();
+  
+  cerr<<"***********************"<<endl;
+  cerr<<"last states"<<endl;
+  for(auto pair : operContexts_) {
+    cerr<<pair.first->getOperator().getName()<<"\t"<<pair.second->getState()<<endl;
+  }
+  cerr<<"***********************"<<endl;
+  flowContext_.printTopology();
 }

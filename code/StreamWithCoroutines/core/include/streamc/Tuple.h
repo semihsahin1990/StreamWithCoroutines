@@ -17,7 +17,9 @@ public:
    * Construct a tuple (aka default constructor).
    *
    */
-  Tuple() {}
+  Tuple() {
+    sequenceNumber_ = -1;
+  }
 
   /** 
    * Construct from another tuple (aka copy constructor).
@@ -28,6 +30,7 @@ public:
   {
     for(auto it=other.values_.begin(); it!=other.values_.end(); ++it) 
       values_[it->first] = new Value(*(it->second));
+    sequenceNumber_ = other.getSequenceNumber();
   }
 
   ~Tuple() {
@@ -81,6 +84,10 @@ public:
     auto tupleValues = tuple.getAttributes();
     for(auto it = tupleValues.begin(); it!= tupleValues.end(); it++)
       setAttribute(it->first, *(it->second));
+
+    uint64_t other = tuple.getSequenceNumber();
+    if(other > sequenceNumber_)
+      sequenceNumber_ = other;
   }
 
   /**
@@ -362,6 +369,18 @@ public:
     return values_.find(name)->second->getStringList();
   }
 
+  void setSequenceNumber(uint64_t sequenceNumber) {
+    sequenceNumber_ = sequenceNumber;
+  }
+
+  uint64_t getSequenceNumber() {
+    return sequenceNumber_;
+  }
+
+  uint64_t const & getSequenceNumber() const {
+    return sequenceNumber_;
+  }
+
 private:
   template <typename T>
   void setAttributeImpl(std::string const & name, T const & value)
@@ -374,6 +393,7 @@ private:
   }
 private:
   std::unordered_map<std::string, Value *> values_;
+  uint64_t sequenceNumber_;
 };
 
 /// @cond hidden

@@ -81,6 +81,7 @@ void OutputPortImpl::pushTuple(Tuple const & tuple)
       // exists as well.
     } else {
       // we need to check with the scheduler to see if we need to preempt
+      scheduler_->checkOperatorForBlocking(*oper_);
       scheduler_->checkOperatorForPreemption(*oper_);
     }
   }

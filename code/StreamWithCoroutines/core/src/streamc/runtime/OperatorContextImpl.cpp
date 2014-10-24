@@ -42,6 +42,7 @@ void OperatorContextImpl::coroBody(coro_t::caller_type & caller)
   oper_->process(*this);
   oper_->saveState(*this);
   isComplete_.store(true);
+  cerr << oper_->getName() << " completed" << endl;
   flowContext_->markOperatorCompleted(oper_);  
 }
 
@@ -124,6 +125,7 @@ bool OperatorContextImpl::waitOnAllPorts(unordered_map<InputPort *, size_t> cons
     if (needToWait){
       scheduler_->markOperatorAsReadBlocked(*this, waitSpec, true);
     } else {
+      scheduler_->checkOperatorForBlocking(*this);
       scheduler_->checkOperatorForPreemption(*this);
     }
   }

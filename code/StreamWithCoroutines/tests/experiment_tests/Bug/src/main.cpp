@@ -1,4 +1,3 @@
-
 #include <streamc/experiment/ExpData.h>
 #include <streamc/experiment/Run.h>
 #include <streamc/Flow.h>
@@ -13,7 +12,7 @@
 #include "streamc/runtime/MaxQueueLengthScheduling.h"
 
 
-#include <streamc/topology/Tree.h>
+#include <streamc/topology/ReverseTree.h>
 
 using namespace std;
 using namespace streamc;
@@ -21,50 +20,22 @@ using namespace streamc;
 class Experiment : public streamc::experiment::Run 
 {
 public:
-  SchedulerPlugin * getScheduler(int i, size_t quanta) {
-    if(i == 0)
-      return new RandomScheduling(quanta);
-    if(i == 1)
-      return new MaxThroughputScheduling(quanta);
-    if(i == 2)
-      return new MinLatencyScheduling(quanta);
-    if(i == 3)
-      return new LeastRecentlyScheduling(quanta);
-    if(i == 4)
-      return new MaxQueueLengthScheduling(quanta);
-    return nullptr;
-  }
-
   void process() 
   {
     using namespace streamc::experiment;
 
-    int numberOfRuns = 100;
-    int depth = 3;
+    int depth = 4;
     int cost = 30;
-    double selectivity = 0.98;
+    double selectivity = 1.0;
     int width = 2;
-    int numThreads = 7;
+    int numThreads = 1;
     int quanta = 50000;
 
-    for(int i=0; i<numberOfRuns; i++) {
-      cout<<"run: "<<i<<endl;
-      for(int j=0; j<5; j++) {
-        switch(j) {
-          case 0: cout<<"\tRandomScheduling"<<endl; break;
-          case 1: cout<<"\tMaxThroughputScheduling"<<endl; break;
-          case 2: cout<<"\tMinLatencyScheduling"<<endl; break;
-          case 3: cout<<"\tLeastRecentlyScheduling"<<endl; break;
-          case 4: cout<<"\tMaxQueueLengthScheduling"<<endl; break;
-        }
-        Tree Tree(depth, cost, selectivity, width);
-        Flow & flow = Tree.getFlow();
-
-        FlowRunner & runner = FlowRunner::createRunner();
-        runner.run(flow, numThreads, *getScheduler(j, quanta));
-        runner.wait(flow);
-      }
-    }
+    ReverseTree tree(depth, cost, selectivity, width);
+    Flow & flow = tree.getFlow();
+    FlowRunner & runner = FlowRunner::createRunner();
+    runner.run(flow, numThreads, new RandomScheduling(quanta));
+    runner.wait(flow);
   }
 };
 

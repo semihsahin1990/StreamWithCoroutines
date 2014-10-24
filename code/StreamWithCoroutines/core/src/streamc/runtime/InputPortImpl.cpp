@@ -33,7 +33,6 @@ pair<OperatorContextImpl *, size_t> InputPortImpl::getPublisher(size_t index)
 
 void InputPortImpl::removePublisher(size_t index)
 {
-  //publishers_.push_back(std::make_pair(&oper, outPort));
   publishers_.erase(publishers_.begin()+index);
 }
 
@@ -105,6 +104,7 @@ bool InputPortImpl::waitTuple(size_t n)
       // the port has closed! That is why we have the while loop above.
     } else {
       // we need to check with the scheduler to see if we need to preempt
+      scheduler_->checkOperatorForBlocking(*oper_);
       scheduler_->checkOperatorForPreemption(*oper_);
     }
   }
