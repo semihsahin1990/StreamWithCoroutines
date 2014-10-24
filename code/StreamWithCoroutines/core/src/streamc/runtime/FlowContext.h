@@ -18,6 +18,7 @@ class OperatorContextImpl;
 class WorkerThread;
 class Scheduler;
 class SchedulerPlugin;
+class FissionController;
 
 class FlowContext
 {
@@ -43,10 +44,9 @@ public:
   //returns whether shutdown is requested or not
   bool isShutdownRequested();
 
-  //create operator replicas
-  void addFission(Operator *oper, size_t replicaCount);
-
+  std::vector<OperatorContextImpl *> getOperators();
   void printTopology();
+  void addFission(Operator *oper, size_t replicaCount);
 
   static size_t getMaxQueueSize() { return maxQueueSize_; }
 
@@ -56,6 +56,7 @@ private:
   // scheduler and threads
   std::unique_ptr<Scheduler> scheduler_;
   std::vector<std::unique_ptr<WorkerThread>> threads_;
+  FissionController * fissionController_;
   static size_t maxQueueSize_;
   
   //number of operators completed

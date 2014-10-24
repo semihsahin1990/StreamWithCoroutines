@@ -10,6 +10,7 @@
 #include "streamc/runtime/InputPortImpl.h"
 #include "streamc/runtime/OutputPortImpl.h"
 #include "streamc/Operator.h"
+#include "streamc/runtime/FissionController.h"
 #include <iostream>
 
 using namespace std;
@@ -40,8 +41,13 @@ void Scheduler::removeThreads()
 void Scheduler::addOperatorContext(OperatorContextImpl & context)
 {
   unique_lock<mutex> lock(mutex_);
+  cerr<<"ADD:\t"<<context.getOperator().getName()<<endl;
   operatorInfos_.push_back(unique_ptr<OperatorInfo>(new OperatorInfo(context)));
   operContexts_[&context] = operatorInfos_.back().get();
+
+  context.init();
+  operatorInfos_.back().get()->init();
+  readyOperators_.insert(&context);
 }
 
 void Scheduler::start()
@@ -49,11 +55,13 @@ void Scheduler::start()
   unique_lock<mutex> lock(mutex_);
   for (auto & threadInfoPair : threads_) 
     readyThreads_.insert(threadInfoPair.first);
+  /*
   for (auto & operInfoPair : operContexts_) {
     operInfoPair.first->init();
     operInfoPair.second->init();
     readyOperators_.insert(operInfoPair.first);
   }
+  */
 }
 
 void Scheduler::stop()
@@ -234,7 +242,7 @@ OperatorContextImpl * Scheduler::getThreadWork(WorkerThread & thread)
       info.getCV().wait(lock);
       if (stopped_) 
         break;
-      assignment = plugin_->findOperatorToExecute(*this, thread); 
+      assignment = plugin_->findOperatorToExecute(*this, thread);
     }
   }
   if (assignment==nullptr) {
@@ -251,16 +259,11 @@ OperatorContextImpl * Scheduler::getThreadWork(WorkerThread & thread)
 bool flag = false;
 void Scheduler::updateOperatorState(OperatorContextImpl & oper, OperatorInfo::OperatorState state)
 {
-  /*
-  if(state == OperatorInfo::Completed)
-    flag = true;
-  if(flag)
-    cout<<"operator: "<<oper.getOperator().getName()<<"\t"<<state<<endl;
-  */
   OperatorInfo & oinfo = *(operContexts_[&oper]);
   OperatorInfo::OperatorState oldState = oinfo.getState();
   if (oldState==state)
     return; // no change
+  //cerr<<"State:\t"<<oper.getOperator().getName()<<"\t"<<state<<endl;;
   oinfo.setState(state);
   if (oldState==OperatorInfo::ReadBlocked) { // must be moving into ready state
     // remove the operator from the read waiting list of its input ports
@@ -315,6 +318,8 @@ void Scheduler::updateOperatorState(OperatorContextImpl & oper, OperatorInfo::Op
     for(int i=0; i<numberOfOutputPorts; i++) 
       oinfo.resetOPortCounter(oper.getOutputPortImpl(i));
     oinfo.setBeginTime(chrono::high_resolution_clock::now());
+  } else if(state==OperatorInfo::OperatorInfo::OutOfService) {
+    outOfServiceOperators_.insert(&oper);
   }
 }
 
@@ -333,4 +338,75 @@ void Scheduler::updateThreadState(WorkerThread & thread, ThreadInfo::ThreadState
     waitingThreads_.insert(&thread);    
   else if (state==ThreadInfo::Ready)
     readyThreads_.insert(&thread);
+}
+
+bool Scheduler::blockPublisherOper(OperatorContextImpl & oper) {
+  unique_lock<mutex> lock(mutex_);
+  /**/
+  cerr<<"block publisher oper\t"<<oper.getOperator().getName()<<endl;
+  for(auto operContext : operContexts_) {
+    cerr<<"states: "<<operContext.first->getOperator().getName()<<"\t"<<operContext.second->getState()<<endl;
+  }
+  /**/
+  if(operContexts_[&oper]->getState() != OperatorInfo::Running) {
+    cerr<<"request granted:\t"<<oper.getOperator().getName()<<endl;
+    updateOperatorState(oper, OperatorInfo::OutOfService);
+    return true;
+  }
+  else {
+    cerr<<"waiting request:\t"<<oper.getOperator().getName()<<endl;
+    blockRequestedOperators_.insert(&oper);
+    return false;
+  }
+}
+
+bool Scheduler::blockBottleneckOper(OperatorContextImpl & oper) {
+  unique_lock<mutex> lock(mutex_);
+  /**/
+  cerr<<"block bottleneck oper:\t"<<oper.getOperator().getName()<<endl;
+  for(auto operContext : operContexts_) {
+    cerr<<"states: "<<operContext.first->getOperator().getName()<<"\t"<<operContext.second->getState()<<endl;
+  }
+  /**/
+  if(operContexts_[&oper]->getState() != OperatorInfo::Running && oper.getInputPortImpl(0).getTupleCount() == 0) {
+    cerr<<"request granted:\t"<<oper.getOperator().getName()<<endl;
+    updateOperatorState(oper, OperatorInfo::OutOfService);
+    return true; 
+  }
+  else {
+    cerr<<"waiting request:\t"<<oper.getOperator().getName()<<endl;
+    blockRequestedOperators_.insert(&oper);
+    return false;
+  }
+}
+
+void Scheduler::checkOperatorForBlocking(OperatorContextImpl & oper) {
+  bool requested = false;
+  {
+    unique_lock<mutex> lock(mutex_);
+    if(blockRequestedOperators_.find(&oper)!=blockRequestedOperators_.end()) {
+      requested = true;
+      blockRequestedOperators_.erase(&oper);
+      updateOperatorState(oper, OperatorInfo::OutOfService);
+      fissionController_->blockGranted(&oper);
+    }
+  }
+  if(requested)
+    oper.yieldOper();
+}
+
+void Scheduler::unblockOperators() {
+  unique_lock<mutex> lock(mutex_);
+  for(OperatorContextImpl * oper : outOfServiceOperators_) {
+    updateOperatorState(*oper, OperatorInfo::Ready);
+  }
+  outOfServiceOperators_.clear();
+  
+  cerr<<"***********************"<<endl;
+  cerr<<"last states"<<endl;
+  for(auto pair : operContexts_) {
+    cerr<<pair.first->getOperator().getName()<<"\t"<<pair.second->getState()<<endl;
+  }
+  cerr<<"***********************"<<endl;
+  flowContext_.printTopology();
 }

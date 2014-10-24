@@ -15,6 +15,7 @@ class OperatorContextImpl;
 class FlowContext;
 class InputPortImpl;
 class SchedulerPlugin;
+class FissionController;
 
 class Scheduler : public SchedulerPluginService
 {
@@ -37,6 +38,11 @@ public:
   void markInputPortAsRead(InputPortImpl & iport);
   void checkOperatorForPreemption(OperatorContextImpl & oper);
   OperatorInfo & getOperatorInfo(OperatorContextImpl *oper);
+  void setFissionController(FissionController * fissionController) { fissionController_ = fissionController; };
+  bool blockPublisherOper(OperatorContextImpl & oper);
+  bool blockBottleneckOper(OperatorContextImpl & oper);
+  void checkOperatorForBlocking(OperatorContextImpl & oper);
+  void unblockOperators();
 private:
   void updateThreadState(WorkerThread & thread, ThreadInfo::ThreadState state);
   void updateOperatorState(OperatorContextImpl & oper, OperatorInfo::OperatorState state);
@@ -48,6 +54,7 @@ public: // interfaces for SchdulerPluginService
 private:
   bool stopped_;
   FlowContext & flowContext_;
+  FissionController * fissionController_;
   std::vector<std::unique_ptr<ThreadInfo>> threadInfos_;
   std::vector<std::unique_ptr<OperatorInfo>> operatorInfos_;
   std::unique_ptr<SchedulerPlugin> plugin_;
@@ -59,6 +66,8 @@ private:
   std::unordered_map<InputPortImpl *, OperatorContextImpl *> readBlockedOperators_;
   std::unordered_map<InputPortImpl *, std::unordered_set<OperatorContextImpl *>> writeBlockedOperators_;
   std::unordered_set<OperatorContextImpl *> readyOperators_;
+  std::unordered_set<OperatorContextImpl *> blockRequestedOperators_;
+  std::unordered_set<OperatorContextImpl *> outOfServiceOperators_;
   std::mutex mutex_; 
 };
 

@@ -125,6 +125,7 @@ bool OperatorContextImpl::waitOnAllPorts(unordered_map<InputPort *, size_t> cons
     if (needToWait){
       scheduler_->markOperatorAsReadBlocked(*this, waitSpec, true);
     } else {
+      scheduler_->checkOperatorForBlocking(*this);
       scheduler_->checkOperatorForPreemption(*this);
     }
   }

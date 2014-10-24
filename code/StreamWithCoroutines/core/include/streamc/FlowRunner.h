@@ -39,8 +39,6 @@ public:
    */
   virtual void wait(Flow & flow) = 0;
 
-  virtual void addFission(Flow & flow, Operator * oper, size_t replica) = 0;
-
   /**
    * Request the flow to be shut down.
    *
