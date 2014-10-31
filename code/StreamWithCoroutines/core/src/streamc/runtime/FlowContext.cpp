@@ -343,3 +343,8 @@ void FlowContext::addFission(Operator *oper, size_t replicaCount) {
   for(int i=1; i<replicaCount; i++)
     scheduler_->addOperatorContext(*operatorContexts_[&(replicas[i]->getOperator())]);
 }
+
+void FlowContext::changeFissionLevel(Operator *oper, size_t replicaCount) {
+  // find old replica count = number of output ports of split
+  OperatorContextImpl * operatorContext = operatorContexts_[oper].get();
+}

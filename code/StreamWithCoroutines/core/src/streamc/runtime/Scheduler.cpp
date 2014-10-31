@@ -342,19 +342,14 @@ void Scheduler::updateThreadState(WorkerThread & thread, ThreadInfo::ThreadState
 
 bool Scheduler::blockPublisherOper(OperatorContextImpl & oper) {
   unique_lock<mutex> lock(mutex_);
-  /**/
-  cerr<<"block publisher oper\t"<<oper.getOperator().getName()<<endl;
-  for(auto operContext : operContexts_) {
-    cerr<<"states: "<<operContext.first->getOperator().getName()<<"\t"<<operContext.second->getState()<<endl;
-  }
-  /**/
+
   if(operContexts_[&oper]->getState() != OperatorInfo::Running) {
-    cerr<<"request granted:\t"<<oper.getOperator().getName()<<endl;
+    cerr<<"block publisher\t"<<oper.getOperator().getName()<<"\t granted"<<endl;
     updateOperatorState(oper, OperatorInfo::OutOfService);
     return true;
   }
   else {
-    cerr<<"waiting request:\t"<<oper.getOperator().getName()<<endl;
+    cerr<<"block publisher\t"<<oper.getOperator().getName()<<"\t waiting"<<endl;
     blockRequestedOperators_.insert(&oper);
     return false;
   }
@@ -362,19 +357,13 @@ bool Scheduler::blockPublisherOper(OperatorContextImpl & oper) {
 
 bool Scheduler::blockBottleneckOper(OperatorContextImpl & oper) {
   unique_lock<mutex> lock(mutex_);
-  /**/
-  cerr<<"block bottleneck oper:\t"<<oper.getOperator().getName()<<endl;
-  for(auto operContext : operContexts_) {
-    cerr<<"states: "<<operContext.first->getOperator().getName()<<"\t"<<operContext.second->getState()<<endl;
-  }
-  /**/
   if(operContexts_[&oper]->getState() != OperatorInfo::Running && oper.getInputPortImpl(0).getTupleCount() == 0) {
-    cerr<<"request granted:\t"<<oper.getOperator().getName()<<endl;
+    cerr<<"block bottleneck\t"<<oper.getOperator().getName()<<"\t granted"<<endl;
     updateOperatorState(oper, OperatorInfo::OutOfService);
     return true; 
   }
   else {
-    cerr<<"waiting request:\t"<<oper.getOperator().getName()<<endl;
+    cerr<<"block bottleneck\t"<<oper.getOperator().getName()<<"\t waiting"<<endl;
     blockRequestedOperators_.insert(&oper);
     return false;
   }
@@ -401,12 +390,4 @@ void Scheduler::unblockOperators() {
     updateOperatorState(*oper, OperatorInfo::Ready);
   }
   outOfServiceOperators_.clear();
-  
-  cerr<<"***********************"<<endl;
-  cerr<<"last states"<<endl;
-  for(auto pair : operContexts_) {
-    cerr<<pair.first->getOperator().getName()<<"\t"<<pair.second->getState()<<endl;
-  }
-  cerr<<"***********************"<<endl;
-  flowContext_.printTopology();
 }

@@ -2,6 +2,7 @@
 
 #include "streamc/operators/FileSource.h"
 #include "streamc/operators/Busy.h"
+#include "streamc/operators/ResultCollector.h"
 #include "streamc/operators/FileSink.h"
 
 #include "streamc/topology/Chain.h"
@@ -22,31 +23,26 @@ int main(int argc, char *argv[]) {
 
   Operator & busy = flow.createOperator<Busy>("busy", 10);
   
+  Operator & resultCollector = flow.createOperator<ResultCollector>("resultCollector", "expData/result.dat");
+
   Operator & snk = flow.createOperator<FileSink>("snk")
     .set_fileName("data/out.dat")
     .set_fileFormat({{"name",Type::String}, {"grade",Type::String}, {"lineNo", Type::Integer}});
-
+  
+  flow.addConnection((src, 0) >> (0,busy));
+  flow.addConnection((busy, 0) >> (0,resultCollector));
+  flow.addConnection((resultCollector, 0) >> (0,snk));
+  /*
   flow.addConnection((src, 0) >> (0,busy));
   flow.addConnection((busy, 0) >> (0,snk));
-
+  */
   FlowRunner & runner = FlowRunner::createRunner();
   runner.setInfrastructureLogLevel(Info);
-  runner.setApplicationLogLevel(Trace);
+  runner.setApplicationLogLevel(Info);
 
   runner.run(flow, 1, new RandomScheduling());
   runner.wait(flow);
 
-  /*
-  Chain chain(5, 30, 1);
-  Flow & flow = chain.getFlow();
-
-  FlowRunner & runner = FlowRunner::createRunner();
-  runner.setInfrastructureLogLevel(Info);
-  runner.setApplicationLogLevel(Trace);
-
-  runner.run(flow, 4, new RandomScheduling());
-  runner.wait(flow);
-  */
   return 0;
 }
 

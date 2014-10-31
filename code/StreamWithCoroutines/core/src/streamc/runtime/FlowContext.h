@@ -47,6 +47,7 @@ public:
   std::vector<OperatorContextImpl *> getOperators();
   void printTopology();
   void addFission(Operator *oper, size_t replicaCount);
+  void changeFissionLevel(Operator *oper, size_t replicaCount);
 
   static size_t getMaxQueueSize() { return maxQueueSize_; }
 

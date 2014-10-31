@@ -41,4 +41,3 @@ Busy * Busy::clone(std::string const & name)
 {
   return new Busy(name, busyTimeMicrosecs_);
 }
-

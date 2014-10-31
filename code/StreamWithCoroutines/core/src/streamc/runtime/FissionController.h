@@ -21,6 +21,8 @@ public:
 	void run();
 	void setCompleted();
 	OperatorContextImpl * detectBottleneck();
+	void addFission(OperatorContextImpl * bottleneck, size_t replicaCount);
+	void changeFissionLevel(OperatorContextImpl * bottleneck, size_t replicaCount);
 	void blockGranted(OperatorContextImpl * oper);
 private:
 	FlowContext & flowContext_;
