@@ -1,6 +1,7 @@
 #include <string>
 #include "streamc/topology/DataParallel.h"
 #include "streamc/operators/FileSource.h"
+#include "streamc/operators/TupleGenerator.h"
 #include "streamc/operators/Timestamper.h"
 #include "streamc/operators/Split.h"
 #include "streamc/operators/Selective.h"
@@ -19,9 +20,12 @@ DataParallel::DataParallel(uint64_t cost, double selectivity, size_t n)
 	: cost_(cost), selectivity_(selectivity), n_(n), flow_("DataParallel")
 {
   // create source
+  /*
   Operator & src = flow_.createOperator<FileSource>("src")
     .set_fileName("data/in.dat")
     .set_fileFormat({{"name",Type::String}, {"grade",Type::String}, {"lineNo", Type::Integer}});
+  */
+  Operator & src = flow_.createOperator<TupleGenerator>("src", 100800);
 
   // create timestamper
   Operator & timestamper = flow_.createOperator<Timestamper>("timestamper");

@@ -1,6 +1,7 @@
 #include <string>
 #include "streamc/topology/ReverseTree.h"
 #include "streamc/operators/FileSource.h"
+#include "streamc/operators/TupleGenerator.h"
 #include "streamc/operators/Timestamper.h"
 #include "streamc/operators/Selective.h"
 #include "streamc/operators/Busy.h"
@@ -20,9 +21,13 @@ ReverseTree::ReverseTree(size_t depth, uint64_t cost, double selectivity, size_t
 	// create sources
 	int numberOfSources = pow(n_, depth_-1);
 	for(size_t i=0; i<numberOfSources; i++) {
+		/*
 		Operator & src = flow_.createOperator<FileSource>("src"+to_string(i))
 		    .set_fileName("data/in.dat")
 		    .set_fileFormat({{"name",Type::String}, {"grade",Type::String}, {"lineNo", Type::Integer}});
+		*/
+		Operator & src = flow_.createOperator<TupleGenerator>("src"+to_string(i), 100800);
+		
 	  	sourceOps_.push_back(&src);
 
 	  	Operator & timestamper = flow_.createOperator<Timestamper>("timestamper"+to_string(i));

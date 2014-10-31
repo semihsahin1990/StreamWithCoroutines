@@ -1,6 +1,7 @@
 #include <string>
 #include "streamc/topology/Tree.h"
 #include "streamc/operators/FileSource.h"
+#include "streamc/operators/TupleGenerator.h"
 #include "streamc/operators/Timestamper.h"
 #include "streamc/operators/Selective.h"
 #include "streamc/operators/Busy.h"
@@ -18,12 +19,15 @@ Tree::Tree(size_t depth, uint64_t cost, double selectivity, size_t n)
 	: depth_(depth), cost_(cost), selectivity_(selectivity), n_(n), flow_("tree")
 {
 	// create source
+	/*
 	Operator & src = flow_.createOperator<FileSource>("src")
 	    .set_fileName("data/in.dat")
 	    .set_fileFormat({{"name",Type::String}, {"grade",Type::String}, {"lineNo", Type::Integer}});
+	*/
 
-  // create timestamper
-  Operator & timestamper = flow_.createOperator<Timestamper>("timestamper");
+	Operator & src = flow_.createOperator<TupleGenerator>("src", 100800);
+	// create timestamper
+	Operator & timestamper = flow_.createOperator<Timestamper>("timestamper");
 
 	// create Nodes (selective-cost)
 	size_t numberOfNodes = (pow(n_, depth_)-1) / (n_-1);
