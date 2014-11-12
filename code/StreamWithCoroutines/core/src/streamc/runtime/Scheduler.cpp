@@ -297,8 +297,8 @@ void Scheduler::updateOperatorState(OperatorContextImpl & oper, OperatorInfo::Op
     if (oldState==OperatorInfo::OperatorInfo::ReadBlocked) 
       oinfo.getReadWaitCondition().reset(); 
     if (waitingThreadIters_.size()>0) {
-      // wake one of the threads, as there is more work now
-      WorkerThread * thread = *(waitingThreads_.begin());
+      // wake the oldest thread that moved into waiting state
+      WorkerThread * thread = *(waitingThreads_.rbegin());
       threads_[thread]->getCV().notify_one();
     }
   } else if (state==OperatorInfo::OperatorInfo::Running) {

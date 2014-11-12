@@ -24,7 +24,7 @@ public:
     using namespace streamc::experiment;
 
     int depth = 4;
-    int cost = 1000;
+    int cost = 125;
     double selectivity = 1.0;
     int width = 2;
     int numThreads = 1;
