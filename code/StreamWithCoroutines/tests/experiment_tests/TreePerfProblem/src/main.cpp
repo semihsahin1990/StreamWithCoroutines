@@ -24,10 +24,10 @@ public:
     using namespace streamc::experiment;
 
     int depth = 4;
-    int cost = 100;
+    int cost = 1000;
     double selectivity = 1.0;
     int width = 2;
-    int numThreads = 4;
+    int numThreads = 1;
     int quanta = 50000;
 
     Tree tree(depth, cost, selectivity, width);

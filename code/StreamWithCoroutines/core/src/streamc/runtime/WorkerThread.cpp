@@ -6,7 +6,6 @@
 #include "streamc/Operator.h"
 #include <functional>
 
-#define _GNU_SOURCE 
 #include <sched.h>
 
 using namespace std;

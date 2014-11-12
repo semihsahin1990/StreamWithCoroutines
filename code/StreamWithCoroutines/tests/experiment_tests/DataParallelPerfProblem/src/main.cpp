@@ -23,10 +23,10 @@ public:
   {
     using namespace streamc::experiment;
 
-    int cost = 1000;
+    int cost = 125;
     double selectivity = 1.0;
-    int width = 10;
-    int numThreads = 20;
+    int width = 12;
+    int numThreads = 10;
     int quanta = 50000;
 
     DataParallel dataParallel(cost, selectivity, width);
