@@ -11,7 +11,7 @@
 #include "streamc/runtime/LeastRecentlyScheduling.h"
 #include "streamc/runtime/MaxQueueLengthScheduling.h"
 
-#include <streamc/topology/DataParallel.h>
+#include <streamc/topology/ReverseTree.h>
 
 using namespace std;
 using namespace streamc;
@@ -23,14 +23,16 @@ public:
   {
     using namespace streamc::experiment;
 
-    int cost = 1000;
+    int depth = 4;
+    int cost = 100;
     double selectivity = 1.0;
-    int width = 10;
-    int numThreads = 20;
+    int width = 2;
+    
+    int numThreads = 4;
     int quanta = 50000;
 
-    DataParallel dp(cost, selectivity, width);
-    Flow & flow = dp.getFlow();
+    ReverseTree reverseTree(depth, cost, selectivity, width);
+    Flow & flow = reverseTree.getFlow();
     FlowRunner & runner = FlowRunner::createRunner();
     runner.run(flow, numThreads, new RandomScheduling(quanta));
     runner.wait(flow);
