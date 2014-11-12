@@ -3,6 +3,7 @@
 #include "streamc/runtime/SchedulerPluginService.h"
 
 #include <mutex>
+#include <list>
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
@@ -53,7 +54,8 @@ private:
   std::unique_ptr<SchedulerPlugin> plugin_;
   // scheduler state, including indices
   std::unordered_map<WorkerThread *, ThreadInfo *> threads_;
-  std::unordered_set<WorkerThread *> waitingThreads_;
+  std::unordered_map<WorkerThread *, std::list<WorkerThread *>::iterator> waitingThreadIters_;
+  std::list<WorkerThread *> waitingThreads_;
   std::unordered_set<WorkerThread *> readyThreads_;
   std::unordered_map<OperatorContextImpl *, OperatorInfo *> operContexts_;
   std::unordered_map<InputPortImpl *, OperatorContextImpl *> readBlockedOperators_;

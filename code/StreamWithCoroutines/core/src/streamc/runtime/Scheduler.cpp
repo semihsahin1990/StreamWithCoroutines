@@ -32,7 +32,7 @@ void Scheduler::addThread(WorkerThread & thread)
 void Scheduler::removeThreads()
 {
   unique_lock<mutex> lock(mutex_);
-  assert(waitingThreads_.empty());
+  assert(waitingThreadIters_.empty());
   assert(readyThreads_.empty());
   threads_.clear();
   threadInfos_.clear();
@@ -251,12 +251,6 @@ OperatorContextImpl * Scheduler::getThreadWork(WorkerThread & thread)
 bool flag = false;
 void Scheduler::updateOperatorState(OperatorContextImpl & oper, OperatorInfo::OperatorState state)
 {
-  /*
-  if(state == OperatorInfo::Completed)
-    flag = true;
-  if(flag)
-    cout<<"operator: "<<oper.getOperator().getName()<<"\t"<<state<<endl;
-  */
   OperatorInfo & oinfo = *(operContexts_[&oper]);
   OperatorInfo::OperatorState oldState = oinfo.getState();
   if (oldState==state)
@@ -302,10 +296,10 @@ void Scheduler::updateOperatorState(OperatorContextImpl & oper, OperatorInfo::Op
     readyOperators_.insert(&oper);
     if (oldState==OperatorInfo::OperatorInfo::ReadBlocked) 
       oinfo.getReadWaitCondition().reset(); 
-    if (waitingThreads_.size()>0) {
+    if (waitingThreadIters_.size()>0) {
       // wake one of the threads, as there is more work now
       WorkerThread * thread = *(waitingThreads_.begin());
-        threads_[thread]->getCV().notify_one();
+      threads_[thread]->getCV().notify_one();
     }
   } else if (state==OperatorInfo::OperatorInfo::Running) {
     size_t numberOfInputPorts = oper.getNumberOfInputPorts();
@@ -325,12 +319,19 @@ void Scheduler::updateThreadState(WorkerThread & thread, ThreadInfo::ThreadState
   if (oldState==state)
     return; // no change
   tinfo.setState(state);
-  if (oldState==ThreadInfo::Waiting) 
-    waitingThreads_.erase(&thread);    
-  else if (oldState==ThreadInfo::Ready)
+  if (oldState==ThreadInfo::Waiting) {
+    auto iter = waitingThreadIters_[&thread];
+    waitingThreads_.erase(iter);    
+    waitingThreadIters_.erase(&thread);
+  } else if (oldState==ThreadInfo::Ready) {
     readyThreads_.erase(&thread);
-  if (state==ThreadInfo::Waiting) 
-    waitingThreads_.insert(&thread);    
-  else if (state==ThreadInfo::Ready)
+  }
+  if (state==ThreadInfo::Waiting) {
+    waitingThreads_.push_front(&thread);  
+    waitingThreadIters_.emplace(&thread, waitingThreads_.begin());
+  } else if (state==ThreadInfo::Ready) {
     readyThreads_.insert(&thread);
+  }
 }
+
+

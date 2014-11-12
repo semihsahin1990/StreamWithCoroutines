@@ -23,7 +23,7 @@ OperatorContextImpl * RandomScheduling::
 { 
   unordered_set<OperatorContextImpl *> const & opers = service.getReadyOperators();
 
-  if (opers.size()==0)
+  if (opers.size()==0) 
     return nullptr;
 
   size_t l = randgen_() % opers.size(); 

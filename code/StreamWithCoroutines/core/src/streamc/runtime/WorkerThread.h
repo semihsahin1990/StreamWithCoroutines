@@ -14,6 +14,7 @@ public:
   WorkerThread(int index, Scheduler & scheduler);
   void start();
   void join();
+  int index() const { return index_; }
 private:
   void run(); 
 private:
