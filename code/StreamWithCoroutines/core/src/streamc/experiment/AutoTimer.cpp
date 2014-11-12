@@ -45,7 +45,7 @@ double AutoTimer::getCPUUtilization()
 	process_system_cpu_clock::duration systemTimeTaken(timeTaken.system);
 	process_real_cpu_clock::duration realTimeTaken(timeTaken.real);
 	return (duration<double>(userTimeTaken).count() + 
-			duration<double>(systemTimeTaken).count()) / 
+			    duration<double>(systemTimeTaken).count()) / 
 	       duration<double>(realTimeTaken).count();
 }
 
