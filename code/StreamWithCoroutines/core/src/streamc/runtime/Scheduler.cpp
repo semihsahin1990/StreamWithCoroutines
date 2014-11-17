@@ -12,7 +12,6 @@
 #include "streamc/Operator.h"
 
 #include <iostream>
-#include <mutex>
 
 using namespace std;
 using namespace streamc;
