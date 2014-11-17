@@ -4,6 +4,7 @@
 #include "streamc/runtime/InputPortImpl.h"
 #include "streamc/runtime/OutputPortImpl.h"
 #include "streamc/Operator.h"
+#include <time.h>
 
 #include <chrono>
 
@@ -47,18 +48,17 @@ void FissionController::addFission(OperatorContextImpl * bottleneck, size_t repl
 		OperatorContextImpl * publisher = iport.getPublisher(i).first;
 		{
 			unique_lock<mutex> lock(mutex_);
-			if (scheduler_.blockPublisherOper(*publisher) == false)
+			if (scheduler_.requestPartialBlock(*publisher) == false)
 				requests_.insert(publisher);
 		}
 	}
 
+	// block bottleneck operator
 	{
 	  unique_lock<mutex> lock(mutex_);
 	  while (requests_.size()>0)
 	  	cv_.wait(lock);
-	  // block bottleneck operator
-	  // TODO: grant block request if input port is empty
-	  if (scheduler_.blockBottleneckOper(*bottleneck) == false)
+	  if (scheduler_.requestCompleteBlock(*bottleneck) == false)
 	  	requests_.insert(bottleneck);
 	  while (requests_.size()>0)
 	  	cv_.wait(lock);
@@ -71,47 +71,77 @@ void FissionController::addFission(OperatorContextImpl * bottleneck, size_t repl
 }
 
 void FissionController::changeFissionLevel(OperatorContextImpl * bottleneck, size_t replicaCount) {
-	cerr<<"change fission\t"<<bottleneck->getOperator().getName()<<"\t"<<replicaCount<<endl;
+	cerr<<endl<<endl<<"CHAGE FISSION\t"<<bottleneck->getOperator().getName()<<"\t"<<replicaCount<<endl;
+	
 	InputPortImpl & iport = bottleneck->getInputPortImpl(0);
-	// block publishers (split in this case)
-	OperatorContextImpl * publisher = iport.getPublisher(0).first;
+	OutputPortImpl & oport = bottleneck->getOutputPortImpl(0);
+	
+	OperatorContextImpl * split = iport.getPublisher(0).first;
+	OperatorContextImpl * merge = oport.getSubscriber(0).first;
+
+	// request block for split's publishers
+	InputPortImpl & splitIPort = split->getInputPortImpl(0);
+	size_t numberOfSplitPublishers = splitIPort.getNumberOfPublishers();
+	for (size_t i=0; i<numberOfSplitPublishers; i++) {
+		OperatorContextImpl * splitPublisher = splitIPort.getPublisher(i).first;
+		{
+			unique_lock<mutex> lock(mutex_);
+			if (scheduler_.requestPartialBlock(*splitPublisher) == false)
+				requests_.insert(splitPublisher);
+		}
+	}
+	// wait until split publishers blocked
+	{
+	  unique_lock<mutex> lock(mutex_);
+	  while (requests_.size()>0)
+	  	cv_.wait(lock);
+	}
+	
+	// request block for split & wait
 	{
 		unique_lock<mutex> lock(mutex_);
-		if (scheduler_.blockPublisherOper(*publisher) == false)
-			requests_.insert(publisher);
+		if (scheduler_.requestCompleteBlock(*split) == false)
+			requests_.insert(split);
 		while (requests_.size()>0)
-			cv_.wait(lock);
+	  		cv_.wait(lock);
 	}
-
-	// block replicas
-	// TODO: grant block request if input port is empty
-	size_t fissionLevel = publisher->getNumberOfOutputPorts();
-	for(int i=0; i<fissionLevel; i++) {
+	
+	// request block for replicas
+	size_t numberOfReplicas = split->getNumberOfOutputPorts();
+	for (size_t i=0; i<numberOfReplicas; i++) {
+		OutputPortImpl & splitOPort = split->getOutputPortImpl(i);
+		OperatorContextImpl * replica = splitOPort.getSubscriber(0).first;
 		{
-			OutputPortImpl & oport = publisher->getOutputPortImpl(i);
-			OperatorContextImpl * replica = oport.getSubscriber(0).first;
-
 			unique_lock<mutex> lock(mutex_);
-			if (scheduler_.blockBottleneckOper(*replica) == false)
+			if (scheduler_.requestCompleteBlock(*replica) == false)
 				requests_.insert(replica);
 		}
 	}
-
+	// wait until replicas blocked
 	{
 		unique_lock<mutex> lock(mutex_);
 		while (requests_.size()>0)
 			cv_.wait(lock);
 	}
 	
+	// request block for merge & wait
+	{
+		unique_lock<mutex> lock(mutex_);
+		if (scheduler_.requestCompleteBlock(*merge) == false)
+			requests_.insert(merge);
+		while (requests_.size()>0)
+	  		cv_.wait(lock);
+	}
+	
 	flowContext_.changeFissionLevel(&(bottleneck->getOperator()), replicaCount);
 	replicatedOperators_[bottleneck] = replicaCount;
-
 	scheduler_.unblockOperators();
 }
 
 void FissionController::run() {
+	srand(time(NULL));
 	while(!isCompleted_.load()) {
-		std::chrono::milliseconds duration(100);
+		std::chrono::milliseconds duration(500);
 		this_thread::sleep_for(duration);
 
 		OperatorContextImpl * bottleneck = detectBottleneck();
@@ -119,13 +149,13 @@ void FissionController::run() {
 			this_thread::sleep_for(duration);
 			continue;
 		}
-
+		
 		if(replicatedOperators_.find(bottleneck) == replicatedOperators_.end()) {
-			addFission(bottleneck, 2);
+			addFission(bottleneck, rand()%10 + 1);
+
 		}
 		else {
-			changeFissionLevel(bottleneck, 3);
-			break;
+			changeFissionLevel(bottleneck, rand()%10+1);
 		}
 	}
 }
@@ -133,13 +163,11 @@ void FissionController::run() {
 void FissionController::blockGranted(OperatorContextImpl * oper) 
 {
 	unique_lock<mutex> lock(mutex_);
-	cerr<<"block request in fission controller granted \t"<<oper->getOperator().getName()<<endl;
+	cerr<<"block granted in fission controller:  \t"<<oper->getOperator().getName()<<"\t"<<oper->getInputPortImpl(0).getTupleCount()<<endl;
 	requests_.erase(oper);
 	if(requests_.size()==0) {
-		cerr<<"wake up baby"<<endl;
 		cv_.notify_all();
 	}
-	cerr<<"requests size:\t"<<requests_.size()<<endl;
 }
 
 void FissionController::join() {

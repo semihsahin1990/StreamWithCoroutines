@@ -36,6 +36,16 @@ void InputPortImpl::removePublisher(size_t index)
   publishers_.erase(publishers_.begin()+index);
 }
 
+void InputPortImpl::removePublisher(OperatorContextImpl & oper) {
+  size_t numberOfPublishers = publishers_.size();
+  for (size_t i=0; i<numberOfPublishers; i++) {
+    if (publishers_[i].first == &oper) {
+      removePublisher(i);
+      break;
+    }
+  }
+}
+
 // push tuple to the queue
 void InputPortImpl::pushTuple(Tuple const & tuple)
 {
@@ -98,7 +108,7 @@ bool InputPortImpl::waitTuple(size_t n)
     }
     if (needToWait) {
       // we need to ask the scheduler to move us into blocked state
-      scheduler_->markOperatorAsReadBlocked(*oper_, { {this, n} }, true);  
+      scheduler_->markOperatorAsReadBlocked(*oper_, { {this, n} }, true);
       // Reaching here does not mean that we do not need to wait anymore,
       // as it might be the case that the scheduler has woken us because
       // the port has closed! That is why we have the while loop above.

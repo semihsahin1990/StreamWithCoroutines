@@ -109,7 +109,7 @@ void FlowContext::run(int numThreads)
 void FlowContext::wait()
 {
   unique_lock<mutex> lock(mutex_);
-  while(numCompleted_ < flow_.getOperators().size())
+  while(numCompleted_ < operatorContexts_.size())
     cv_.wait(lock);
   // join all threads 
   for (auto & threadPtr : threads_) 
@@ -132,7 +132,7 @@ void FlowContext::markOperatorCompleted(Operator * oper)
     addFission(oper, 2);
   }*/
 
-  if (numCompleted_==flow_.getOperators().size()) {
+  if (numCompleted_==operatorContexts_.size()) {
     // tell the scheduler that there is no more work
     scheduler_->stop();
     // wake up clients waiting for completion
@@ -197,7 +197,7 @@ void FlowContext::printTopology() {
 
 void FlowContext::addFission(Operator *oper, size_t replicaCount) {
   // create RRSplit
-  Operator & split = flow_.createOperator<RoundRobinSplit>(oper->getName()+"_fissionSplit", replicaCount);
+  Operator & split = *(new RoundRobinSplit(oper->getName()+"_fissionSplit", replicaCount));
   OperatorContextImpl * splitContext = new OperatorContextImpl(this, &split, *scheduler_);
   {
     operatorContexts_[&split] = unique_ptr<OperatorContextImpl>(splitContext);
@@ -210,7 +210,7 @@ void FlowContext::addFission(Operator *oper, size_t replicaCount) {
     }
   }
   // create RRMerge
-  Operator & merge = flow_.createOperator<RoundRobinMerge>(oper->getName()+"_fissionMerge", replicaCount);
+  Operator & merge = *(new RoundRobinMerge(oper->getName()+"_fissionMerge", replicaCount));
   OperatorContextImpl * mergeContext = new OperatorContextImpl(this, &merge, *scheduler_);
   {
     operatorContexts_[&merge] = unique_ptr<OperatorContextImpl>(mergeContext);
@@ -340,11 +340,175 @@ void FlowContext::addFission(Operator *oper, size_t replicaCount) {
   // add new opers to scheduler
   scheduler_->addOperatorContext(*operatorContexts_[&merge]);
   scheduler_->addOperatorContext(*operatorContexts_[&split]);
-  for(int i=1; i<replicaCount; i++)
+  for(int i=1; i<replicaCount; i++) {
     scheduler_->addOperatorContext(*operatorContexts_[&(replicas[i]->getOperator())]);
+  }
 }
 
-void FlowContext::changeFissionLevel(Operator *oper, size_t replicaCount) {
-  // find old replica count = number of output ports of split
+void FlowContext::changeFissionLevel(Operator *oper, size_t newReplicaCount) {
   OperatorContextImpl * operatorContext = operatorContexts_[oper].get();
+  InputPortImpl & iport = operatorContext->getInputPortImpl(0);
+  OutputPortImpl & oport = operatorContext->getOutputPortImpl(0);
+
+  OperatorContextImpl * oldSplit = iport.getPublisher(0).first;
+  OperatorContextImpl * oldMerge = oport.getSubscriber(0).first;
+
+  vector<OperatorContextImpl *> oldReplicas;
+  size_t oldReplicaCount = oldSplit->getNumberOfOutputPorts();
+  for (size_t i=0; i<oldReplicaCount; i++) {
+    OutputPortImpl & splitOPort = oldSplit->getOutputPortImpl(i);
+    oldReplicas.push_back(splitOPort.getSubscriber(0).first);
+  }
+
+  // create newSplit
+  Operator * newSplitOper = new RoundRobinSplit(oper->getName()+"_fissionSplitCFL", newReplicaCount);
+  OperatorContextImpl * newSplit = new OperatorContextImpl(this, newSplitOper, *scheduler_);
+  {
+    operatorContexts_[newSplitOper] = unique_ptr<OperatorContextImpl>(newSplit);
+    InputPortImpl * iport = new InputPortImpl(*newSplit, *scheduler_);
+    newSplit->addInputPort(iport);
+
+    for(size_t j=0; j<newReplicaCount; j++) {
+      OutputPortImpl * oport = new OutputPortImpl(*newSplit, *this, *scheduler_);
+      newSplit->addOutputPort(oport);
+    }
+  }
+  // create newMerge
+  Operator * newMergeOper = new RoundRobinMerge(oper->getName()+"_fissionMergeCFL", newReplicaCount);
+  OperatorContextImpl * newMerge = new OperatorContextImpl(this, newMergeOper, *scheduler_);
+  {
+    operatorContexts_[newMergeOper] = unique_ptr<OperatorContextImpl>(newMerge);
+
+    for(size_t j=0; j<newReplicaCount; j++) {
+      InputPortImpl * iport = new InputPortImpl(*newMerge, *scheduler_);
+      newMerge->addInputPort(iport);
+    }
+
+    OutputPortImpl * oport = new OutputPortImpl(*newMerge, *this, *scheduler_);
+    newMerge->addOutputPort(oport);
+  }
+
+
+  // disconnect publishers-oldSplit & connect publishers-newSplit
+  InputPortImpl & oldSplitIPort = oldSplit->getInputPortImpl(0);
+  size_t numberOfSplitPublishers = oldSplitIPort.getNumberOfPublishers();
+  for (size_t i=0; i<numberOfSplitPublishers; i++) {
+    OperatorContextImpl * publisherOper = oldSplitIPort.getPublisher(i).first;
+    size_t publisherOPortNo = oldSplitIPort.getPublisher(i).second;
+    OutputPortImpl & publisherOPort = publisherOper->getOutputPortImpl(publisherOPortNo);
+
+    publisherOPort.removeSubscriber(*oldSplit);
+    publisherOPort.addSubscriber(*newSplit, 0);
+
+    InputPortImpl & newSplitIPort = newSplit->getInputPortImpl(0);
+    newSplitIPort.addPublisher(*publisherOper, publisherOPortNo);
+  }
+  for (size_t i=0; i<numberOfSplitPublishers; i++) {
+    oldSplitIPort.removePublisher(0);
+  }
+
+  // disconnect oldSplit-replicas-oldMerge
+  for (size_t i=0; i<oldReplicaCount; i++) {
+    OutputPortImpl & splitOPort = oldSplit->getOutputPortImpl(i);
+    splitOPort.removeSubscriber(0);
+
+    InputPortImpl & replicaIPort = oldReplicas[i]->getInputPortImpl(0);
+    replicaIPort.removePublisher(0);
+
+    OutputPortImpl & replicaOPort = oldReplicas[i]->getOutputPortImpl(0);
+    replicaOPort.removeSubscriber(0);
+
+    InputPortImpl & oldMergeIPort = oldMerge->getInputPortImpl(i);
+    oldMergeIPort.removePublisher(0);
+  }
+
+  // disconnect oldMerge-subscribers & connect newMerge-subscribers
+  OutputPortImpl & oldMergeOPort = oldMerge->getOutputPortImpl(0);
+  size_t numberOfMergeSubscribers = oldMergeOPort.getNumberOfSubscribers();
+  for (size_t i=0; i<numberOfMergeSubscribers; i++) {
+    OperatorContextImpl * subscriberOper = oldMergeOPort.getSubscriber(i).first;
+    size_t subscriberIPortNo = oldMergeOPort.getSubscriber(i).second;
+    InputPortImpl & subscriberIPort = subscriberOper->getInputPortImpl(subscriberIPortNo);
+
+    subscriberIPort.removePublisher(*oldMerge);
+    subscriberIPort.addPublisher(*newMerge, 0);
+
+    OutputPortImpl & newMergeOPort = newMerge->getOutputPortImpl(0);
+    newMergeOPort.addSubscriber(*subscriberOper, subscriberIPortNo);
+  }
+  for (size_t i=0; i<numberOfMergeSubscribers; i++) {
+    oldMergeOPort.removeSubscriber(0);
+  }
+
+  // get replicas
+  vector<OperatorContextImpl *> replicas;
+  if(newReplicaCount<oldReplicaCount) {
+    for(size_t i=0; i<newReplicaCount; i++)
+      replicas.push_back(oldReplicas[i]);
+  }
+  else {
+    for(size_t i=0; i<oldReplicaCount; i++)
+      replicas.push_back(oldReplicas[i]);
+
+
+    for(size_t i=oldReplicaCount; i<newReplicaCount; i++) {
+      Operator & replicaOper = *(oper->clone(oper->getName()+"_replica_"+to_string(i)));
+
+      // create replica context
+      OperatorContextImpl * replica = new OperatorContextImpl(this, &replicaOper, *scheduler_);
+      operatorContexts_[&replicaOper] = unique_ptr<OperatorContextImpl>(replica);
+      
+      // create input port
+      InputPortImpl * iport = new InputPortImpl(*replica, *scheduler_);
+      replica->addInputPort(iport);
+
+      // create output port
+      OutputPortImpl * oport = new OutputPortImpl(*replica, *this, *scheduler_);
+      replica->addOutputPort(oport);
+
+      replicas.push_back(replica);
+    }
+  }
+
+  // connect newSplit-replicas-newMerge
+  for(size_t i=0; i<newReplicaCount; i++) {
+    OutputPortImpl & newSplitOPort = newSplit->getOutputPortImpl(i);
+    newSplitOPort.addSubscriber(*replicas[i], 0);
+
+    InputPortImpl & replicaIPort = replicas[i]->getInputPortImpl(0);
+    replicaIPort.addPublisher(*newSplit, i);
+
+    OutputPortImpl & replicaOPort = replicas[i]->getOutputPortImpl(0);
+    replicaOPort.addSubscriber(*newMerge, i);
+
+    InputPortImpl & newMergeIPort = newMerge->getInputPortImpl(i);
+    newMergeIPort.addPublisher(*replicas[i],0);
+  }
+
+  // add newSplit and newMerge to scheduler
+  scheduler_->addOperatorContext(*operatorContexts_[newMergeOper]);
+  scheduler_->addOperatorContext(*operatorContexts_[newSplitOper]);
+
+  // add new replicas to scheduler
+  for(size_t i=oldReplicaCount; i<newReplicaCount; i++) {
+    scheduler_->addOperatorContext(*operatorContexts_[&(replicas[i]->getOperator())]);
+  }
+
+  // remove oldSplit and oldMerge from scheduler
+  scheduler_->removeOperatorContext(*operatorContexts_[&(oldSplit->getOperator())]);
+  scheduler_->removeOperatorContext(*operatorContexts_[&(oldMerge->getOperator())]);
+
+  // remove replicas from scheduler
+  for(size_t i=newReplicaCount; i<oldReplicaCount; i++) {
+    scheduler_->removeOperatorContext(*operatorContexts_[&(oldReplicas[i]->getOperator())]);
+  }
+  /*
+  // remove oldSplit and oldMerge from FlowContext
+  operatorContexts_.erase(&(oldSplit->getOperator()));
+  operatorContexts_.erase(&(oldMerge->getOperator()));
+
+  // remove replicas from FlowContext
+  for (size_t i=newReplicaCount; i<oldReplicaCount; i++)
+    operatorContexts_.erase(&(oldReplicas[i]->getOperator()));
+  */
 }

@@ -25,6 +25,7 @@ public:
   void addThread(WorkerThread & thread);
   void removeThreads();
   void addOperatorContext(OperatorContextImpl & oper);
+  void removeOperatorContext(OperatorContextImpl & oper);
   void start();
   void stop();
   // return the operator to execute, nullptr if the thread should exit
@@ -39,8 +40,8 @@ public:
   void checkOperatorForPreemption(OperatorContextImpl & oper);
   OperatorInfo & getOperatorInfo(OperatorContextImpl *oper);
   void setFissionController(FissionController * fissionController) { fissionController_ = fissionController; };
-  bool blockPublisherOper(OperatorContextImpl & oper);
-  bool blockBottleneckOper(OperatorContextImpl & oper);
+  bool requestPartialBlock(OperatorContextImpl & oper);
+  bool requestCompleteBlock(OperatorContextImpl & oper);
   void checkOperatorForBlocking(OperatorContextImpl & oper);
   void unblockOperators();
 private:
@@ -66,7 +67,8 @@ private:
   std::unordered_map<InputPortImpl *, OperatorContextImpl *> readBlockedOperators_;
   std::unordered_map<InputPortImpl *, std::unordered_set<OperatorContextImpl *>> writeBlockedOperators_;
   std::unordered_set<OperatorContextImpl *> readyOperators_;
-  std::unordered_set<OperatorContextImpl *> blockRequestedOperators_;
+  std::unordered_set<OperatorContextImpl *> partialBlockRequestedOperators_;
+  std::unordered_set<OperatorContextImpl *> completeBlockRequestedOperators_;
   std::unordered_set<OperatorContextImpl *> outOfServiceOperators_;
   std::mutex mutex_; 
 };

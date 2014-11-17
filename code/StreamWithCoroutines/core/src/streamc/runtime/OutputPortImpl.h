@@ -20,6 +20,7 @@ public:
   size_t getNumberOfSubscribers();
   void addSubscriber(OperatorContextImpl & oper, size_t inPort); 
   void removeSubscriber(size_t index);
+  void removeSubscriber(OperatorContextImpl & oper);
   std::pair<OperatorContextImpl *, size_t> getSubscriber(size_t index);
 
   // implemented interface

@@ -18,6 +18,7 @@ public:
   size_t getNumberOfPublishers();
   void addPublisher(OperatorContextImpl & oper, size_t outPort);
   void removePublisher(size_t index);
+  void removePublisher(OperatorContextImpl & oper);
   std::pair<OperatorContextImpl *, size_t> getPublisher(size_t index);
   void pushTuple(Tuple const & tuple);
   std::chrono::high_resolution_clock::time_point & getFrontTimestamp();

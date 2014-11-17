@@ -50,6 +50,22 @@ void Scheduler::addOperatorContext(OperatorContextImpl & context)
   readyOperators_.insert(&context);
 }
 
+void Scheduler::removeOperatorContext(OperatorContextImpl & context)
+{
+  unique_lock<mutex> lock(mutex_);
+  cerr<<"REMOVE:\t"<<context.getOperator().getName()<<endl;
+
+  size_t numberOfOperators = operatorInfos_.size();
+  for(size_t i=0; i<numberOfOperators; i++) {
+    if(&operatorInfos_[i]->getOperatorContext() == &context) {
+      operatorInfos_.erase(operatorInfos_.begin() + i);
+      break;
+    }
+  }
+  operContexts_.erase(&context);
+  outOfServiceOperators_.erase(&context);
+}
+
 void Scheduler::start()
 {
   unique_lock<mutex> lock(mutex_);
@@ -76,7 +92,6 @@ void Scheduler::stop()
 
 void Scheduler::markOperatorAsCompleted(OperatorContextImpl & oper)
 {
-  //cout<<"completed: "<<oper.getOperator().getName()<<endl;
   unique_lock<mutex> lock(mutex_);  
   updateOperatorState(oper, OperatorInfo::Completed); 
   // It is possible that the downstream operators that are currently in blocked
@@ -118,6 +133,7 @@ void Scheduler::markOperatorAsCompleted(OperatorContextImpl & oper)
 void Scheduler::markOperatorAsReadBlocked(OperatorContextImpl & oper, 
       std::unordered_map<InputPortImpl *, size_t> const & waitSpec, bool conjunctive)
 {
+  checkOperatorForBlocking(oper);
   {
     unique_lock<mutex> lock(mutex_);  
     OperatorInfo & oinfo = *(operContexts_[&oper]);
@@ -256,14 +272,16 @@ OperatorContextImpl * Scheduler::getThreadWork(WorkerThread & thread)
   return assignment;
 }
 
-bool flag = false;
+int counter = 0;
 void Scheduler::updateOperatorState(OperatorContextImpl & oper, OperatorInfo::OperatorState state)
 {
-  OperatorInfo & oinfo = *(operContexts_[&oper]);
+/*  if(counter == 2)
+    cerr<<"State:\t"<<oper.getOperator().getName()<<"\t"<<state<<endl;;  
+ */ OperatorInfo & oinfo = *(operContexts_[&oper]);
   OperatorInfo::OperatorState oldState = oinfo.getState();
   if (oldState==state)
     return; // no change
-  //cerr<<"State:\t"<<oper.getOperator().getName()<<"\t"<<state<<endl;;
+  
   oinfo.setState(state);
   if (oldState==OperatorInfo::ReadBlocked) { // must be moving into ready state
     // remove the operator from the read waiting list of its input ports
@@ -340,7 +358,7 @@ void Scheduler::updateThreadState(WorkerThread & thread, ThreadInfo::ThreadState
     readyThreads_.insert(&thread);
 }
 
-bool Scheduler::blockPublisherOper(OperatorContextImpl & oper) {
+bool Scheduler::requestPartialBlock(OperatorContextImpl & oper) {
   unique_lock<mutex> lock(mutex_);
 
   if(operContexts_[&oper]->getState() != OperatorInfo::Running) {
@@ -350,21 +368,30 @@ bool Scheduler::blockPublisherOper(OperatorContextImpl & oper) {
   }
   else {
     cerr<<"block publisher\t"<<oper.getOperator().getName()<<"\t waiting"<<endl;
-    blockRequestedOperators_.insert(&oper);
+    partialBlockRequestedOperators_.insert(&oper);
     return false;
   }
 }
 
-bool Scheduler::blockBottleneckOper(OperatorContextImpl & oper) {
+bool Scheduler::requestCompleteBlock(OperatorContextImpl & oper) {
   unique_lock<mutex> lock(mutex_);
-  if(operContexts_[&oper]->getState() != OperatorInfo::Running && oper.getInputPortImpl(0).getTupleCount() == 0) {
+  
+  bool allEmpty = true;
+  size_t numberOfInputPorts = oper.getNumberOfInputPorts();
+
+  for(size_t i=0; i<numberOfInputPorts; i++) {
+    if(oper.getInputPortImpl(i).getTupleCount() != 0)
+      allEmpty = false;
+  }
+
+  if(operContexts_[&oper]->getState() != OperatorInfo::Running && allEmpty) {
     cerr<<"block bottleneck\t"<<oper.getOperator().getName()<<"\t granted"<<endl;
     updateOperatorState(oper, OperatorInfo::OutOfService);
     return true; 
   }
   else {
     cerr<<"block bottleneck\t"<<oper.getOperator().getName()<<"\t waiting"<<endl;
-    blockRequestedOperators_.insert(&oper);
+    completeBlockRequestedOperators_.insert(&oper);
     return false;
   }
 }
@@ -373,20 +400,39 @@ void Scheduler::checkOperatorForBlocking(OperatorContextImpl & oper) {
   bool requested = false;
   {
     unique_lock<mutex> lock(mutex_);
-    if(blockRequestedOperators_.find(&oper)!=blockRequestedOperators_.end()) {
+    if(partialBlockRequestedOperators_.find(&oper)!=partialBlockRequestedOperators_.end()) {
       requested = true;
-      blockRequestedOperators_.erase(&oper);
+      partialBlockRequestedOperators_.erase(&oper);
       updateOperatorState(oper, OperatorInfo::OutOfService);
       fissionController_->blockGranted(&oper);
     }
+
+    if(completeBlockRequestedOperators_.find(&oper)!=completeBlockRequestedOperators_.end()) {
+      bool allEmpty = true;
+      size_t numberOfInputPorts = oper.getNumberOfInputPorts();
+      for (size_t i=0; i<numberOfInputPorts; i++) {
+        if(oper.getInputPortImpl(i).getTupleCount() != 0)
+          allEmpty = false;
+      }
+
+      if(allEmpty) {
+        requested = true;
+        completeBlockRequestedOperators_.erase(&oper);
+        updateOperatorState(oper, OperatorInfo::OutOfService);
+        fissionController_->blockGranted(&oper);  
+      }
+    }
   }
+
   if(requested)
     oper.yieldOper();
 }
 
 void Scheduler::unblockOperators() {
+  counter++;
   unique_lock<mutex> lock(mutex_);
   for(OperatorContextImpl * oper : outOfServiceOperators_) {
+    cerr<<"unblockOperator: "<<oper->getOperator().getName()<<endl;
     updateOperatorState(*oper, OperatorInfo::Ready);
   }
   outOfServiceOperators_.clear();

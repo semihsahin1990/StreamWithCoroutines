@@ -26,6 +26,16 @@ void OutputPortImpl::removeSubscriber(size_t index)
   subscribers_.erase(subscribers_.begin()+index);
 }
 
+void OutputPortImpl::removeSubscriber(OperatorContextImpl & oper) {
+  size_t numberOfSubscribers = subscribers_.size();
+  for (size_t i=0; i<numberOfSubscribers; i++) {
+    if(subscribers_[i].first == &oper) {
+      removeSubscriber(i);
+      break;
+    }
+  }
+}
+
 size_t OutputPortImpl::getNumberOfSubscribers()
 {
   return subscribers_.size();
