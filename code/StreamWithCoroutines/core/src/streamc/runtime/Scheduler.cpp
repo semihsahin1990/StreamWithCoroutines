@@ -10,7 +10,9 @@
 #include "streamc/runtime/InputPortImpl.h"
 #include "streamc/runtime/OutputPortImpl.h"
 #include "streamc/Operator.h"
+
 #include <iostream>
+#include <mutex>
 
 using namespace std;
 using namespace streamc;
@@ -24,14 +26,14 @@ Scheduler::~Scheduler()
 
 void Scheduler::addThread(WorkerThread & thread)
 {
-  unique_lock<mutex> lock(mutex_);
+  lock_guard<mutex> lock(mutex_);
   threadInfos_.push_back(unique_ptr<ThreadInfo>(new ThreadInfo(&thread)));
   threads_[&thread] = threadInfos_.back().get();
 }
 
 void Scheduler::removeThreads()
 {
-  unique_lock<mutex> lock(mutex_);
+  lock_guard<mutex> lock(mutex_);
   assert(waitingThreadIters_.empty());
   assert(readyThreads_.empty());
   threads_.clear();
@@ -39,14 +41,14 @@ void Scheduler::removeThreads()
 }
 void Scheduler::addOperatorContext(OperatorContextImpl & context)
 {
-  unique_lock<mutex> lock(mutex_);
+  lock_guard<mutex> lock(mutex_);
   operatorInfos_.push_back(unique_ptr<OperatorInfo>(new OperatorInfo(context)));
   operContexts_[&context] = operatorInfos_.back().get();
 }
 
 void Scheduler::start()
 {
-  unique_lock<mutex> lock(mutex_);
+  lock_guard<mutex> lock(mutex_);
   for (auto & threadInfoPair : threads_) 
     readyThreads_.insert(threadInfoPair.first);
   for (auto & operInfoPair : operContexts_) {
@@ -58,7 +60,7 @@ void Scheduler::start()
 
 void Scheduler::stop()
 {
-  unique_lock<mutex> lock(mutex_);   
+  lock_guard<mutex> lock(mutex_);   
   stopped_ = true;
   // wake up all threads, they will ask scheduler for work,
   // and find out that there is no more work for them
@@ -69,7 +71,7 @@ void Scheduler::stop()
 void Scheduler::markOperatorAsCompleted(OperatorContextImpl & oper)
 {
   //cout<<"completed: "<<oper.getOperator().getName()<<endl;
-  unique_lock<mutex> lock(mutex_);  
+  lock_guard<mutex> lock(mutex_);  
   updateOperatorState(oper, OperatorInfo::Completed); 
   // It is possible that the downstream operators that are currently in blocked
   // state may need to be put into Ready state, as their input ports may close
@@ -111,7 +113,7 @@ void Scheduler::markOperatorAsReadBlocked(OperatorContextImpl & oper,
       std::unordered_map<InputPortImpl *, size_t> const & waitSpec, bool conjunctive)
 {
   {
-    unique_lock<mutex> lock(mutex_);  
+    lock_guard<mutex> lock(mutex_);  
     OperatorInfo & oinfo = *(operContexts_[&oper]);
     OperatorInfo::ReadWaitCondition & waitCond = oinfo.getReadWaitCondition();
     if (conjunctive) {
@@ -147,7 +149,7 @@ void Scheduler::markOperatorAsWriteBlocked(OperatorContextImpl & oper,
       std::unordered_map<InputPortImpl *, size_t> const & waitSpec)
 {
   {
-    unique_lock<mutex> lock(mutex_);  
+    lock_guard<mutex> lock(mutex_);  
     OperatorInfo & oinfo = *(operContexts_[&oper]);
     OperatorInfo::WriteWaitCondition & waitCond = oinfo.getWriteWaitCondition();
     for (auto & portSizePair : waitSpec) {
@@ -170,7 +172,7 @@ void Scheduler::markOperatorAsWriteBlocked(OperatorContextImpl & oper,
 // the port has more tuples, which may impact operators in ReadBlocked state
 void Scheduler::markInputPortAsWritten(InputPortImpl & iport)
 {
-  unique_lock<mutex> lock(mutex_);
+  lock_guard<mutex> lock(mutex_);
   auto it = readBlockedOperators_.find(&iport); 
   // no operators to switch into ready state
   if (it==readBlockedOperators_.end()) 
@@ -187,7 +189,7 @@ void Scheduler::markInputPortAsWritten(InputPortImpl & iport)
 // the port has less tuples, which may impact operators in WriteBlocked state
 void Scheduler::markInputPortAsRead(InputPortImpl & iport)
 {
-  unique_lock<mutex> lock(mutex_);
+  lock_guard<mutex> lock(mutex_);
   auto it = writeBlockedOperators_.find(&iport); 
   // no operators to switch into ready state
   if (it==writeBlockedOperators_.end()) 
@@ -209,7 +211,7 @@ void Scheduler::checkOperatorForPreemption(OperatorContextImpl & oper)
 {
   bool preempt = false;
   {
-    unique_lock<mutex> lock(mutex_);  
+    lock_guard<mutex> lock(mutex_);  
     preempt = plugin_->checkOperatorForPreemption(*this, oper); 
     if (preempt)
       updateOperatorState(oper, OperatorInfo::Ready); 

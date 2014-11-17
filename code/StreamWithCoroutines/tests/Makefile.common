@@ -20,7 +20,7 @@ LDFLAGS   = -L $(THISDIR)../core/bin -L /opt/local/libcpp-software/lib \
         -Wl,-rpath,$(THISDIR)../core/bin -Wl,-rpath,/opt/local/libcpp-software/lib \
         -lstreamc -lboost_log-mt -lboost_log_setup-mt -lboost_coroutine-mt \
         -lboost_context-mt -lboost_chrono-mt -lboost_filesystem-mt -lboost_system-mt \
-        -lboost_thread-mt -lgtest -lpthread
+        -lboost_thread-mt -lgtest -lpthread -lprofiler
 
 ## Implicit Section: change the following only when necessary.
 
