@@ -49,11 +49,10 @@ public:
   bool isShutdownRequested() override;
 
 private:
-  typedef boost::coroutines::coroutine<void()> coro_t;
-  void coroBody(coro_t::caller_type & caller);
-  bool coroStarted_;
-  coro_t coroCallee_;
-  coro_t::caller_type * coroCaller_;
+  typedef boost::coroutines::symmetric_coroutine<void> coro_t;
+  void coroBody(coro_t::yield_type & yielder);
+  coro_t::call_type coro_;
+  coro_t::yield_type * coroYielder_;
 
 private:
   FlowContext * flowContext_;

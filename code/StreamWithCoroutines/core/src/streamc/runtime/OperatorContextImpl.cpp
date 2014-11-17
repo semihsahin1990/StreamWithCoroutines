@@ -14,7 +14,9 @@ using namespace streamc;
 
 //constructor with flowContext and operator
 OperatorContextImpl::OperatorContextImpl(FlowContext * flowContext, Operator * oper, Scheduler & scheduler)
-  : flowContext_(flowContext), oper_(oper), scheduler_(&scheduler), isComplete_(false), stateStore_(new Tuple())
+  : coro_(bind(&OperatorContextImpl::coroBody, this, placeholders::_1)), 
+    flowContext_(flowContext), oper_(oper), scheduler_(&scheduler), isComplete_(false), 
+    stateStore_(new Tuple())
 {}
 
 //destructor
@@ -24,7 +26,6 @@ OperatorContextImpl::~OperatorContextImpl()
 void OperatorContextImpl::init()
 {
   isComplete_.store(false);
-  coroStarted_ = false;
 }
 
 //returns whether shutdown is requested or not
@@ -35,9 +36,9 @@ bool OperatorContextImpl::isShutdownRequested()
 
 // run the operator. when it returns, set isComplete_ as true and mark operator
 // as completed.
-void OperatorContextImpl::coroBody(coro_t::caller_type & caller)
+void OperatorContextImpl::coroBody(coro_t::yield_type & yielder)
 {
-  coroCaller_ = & caller;
+  coroYielder_ = & yielder;
   oper_->initState(*this);
   oper_->process(*this);
   oper_->saveState(*this);
@@ -53,18 +54,12 @@ Tuple & OperatorContextImpl::getStateStore()
 void OperatorContextImpl::runOper() 
 {
   unique_lock<mutex> lock(mutex_);  
-  using placeholders::_1;
-  if (!coroStarted_) {
-    coroStarted_ = true;
-    coroCallee_ = coro_t(bind(&OperatorContextImpl::coroBody, this, _1));    
-  } else {
-    coroCallee_();
-  }
+  coro_();
 }
 
 void OperatorContextImpl::yieldOper()
 {
-  (*coroCaller_)();
+  (*coroYielder_)();
 }
 
 // add inputPort to the context
