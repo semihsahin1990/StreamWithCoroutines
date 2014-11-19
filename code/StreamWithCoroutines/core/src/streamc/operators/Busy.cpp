@@ -32,7 +32,7 @@ void Busy::process(OperatorContext & context)
     Tuple & tuple = iport.getFrontTuple();
     double currentBusyTime = dist(randgen) * busyTimeMicrosecs_;
     high_resolution_clock::time_point beginTime = high_resolution_clock::now();
-    while(true){
+    while(true){ 
       high_resolution_clock::time_point currentTime = high_resolution_clock::now();
       high_resolution_clock::duration timeDiff = currentTime - beginTime;
       std::chrono::microseconds timeDiffInMicrosecs = duration_cast<std::chrono::microseconds>(timeDiff); 

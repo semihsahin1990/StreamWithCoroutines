@@ -36,6 +36,9 @@ bool RandomScheduling::
     checkOperatorForPreemption(SchedulerPluginService & service,
                                OperatorContextImpl & oper) 
 {
+  // TODO: remove
+  return false;
+
   using namespace std::chrono;
   OperatorInfo & opinfo = *(service.getOperators().find(&oper)->second);
   high_resolution_clock::time_point lastTime = opinfo.getBeginTime();

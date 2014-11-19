@@ -2,8 +2,7 @@
 
 #include "streamc/Tuple.h"
 #include "streamc/OutputPort.h"
-
-#include <mutex>
+#include "streamc/runtime/SpinLock.h"
 
 namespace streamc
 {
@@ -29,7 +28,7 @@ private:
   FlowContext * flowContext_;
   Scheduler * scheduler_;
   std::vector<std::pair<OperatorContextImpl *, size_t>> subscribers_;
-  std::mutex mutex_; 
+  SpinLock spinlock_; 
 };
 
 } // namespace streamc

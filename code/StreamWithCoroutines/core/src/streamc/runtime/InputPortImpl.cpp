@@ -5,7 +5,6 @@
 #include "streamc/Operator.h"
 
 #include <thread>
-#include <mutex>
 
 using namespace std;
 using namespace streamc;
@@ -35,7 +34,7 @@ pair<OperatorContextImpl *, size_t> InputPortImpl::getPublisher(size_t index)
 void InputPortImpl::pushTuple(Tuple const & tuple)
 {
   {
-    lock_guard<mutex> lock(mutex_);
+    lock_guard<SpinLock> lock(spinlock_);
     portQueue_.push_back(make_pair(tuple, chrono::high_resolution_clock::now()));
   }
 
@@ -45,7 +44,7 @@ void InputPortImpl::pushTuple(Tuple const & tuple)
 
 bool InputPortImpl::isClosed() 
 {
-  lock_guard<mutex> lock(mutex_);
+  lock_guard<SpinLock> lock(spinlock_);
   return isClosedNoLock();
 }
 
@@ -63,13 +62,13 @@ bool InputPortImpl::isClosedNoLock()
 
 bool InputPortImpl::hasTuple() 
 {
-  lock_guard<mutex> lock(mutex_);
+  lock_guard<SpinLock> lock(spinlock_);
   return !portQueue_.empty();
 }
 
 size_t InputPortImpl::getTupleCount() 
 {
-  lock_guard<mutex> lock(mutex_);
+  lock_guard<SpinLock> lock(spinlock_);
   return portQueue_.size();
 }
 
@@ -85,7 +84,7 @@ bool InputPortImpl::waitTuple(size_t n)
   bool needToWait = true;
   while (needToWait) {
     {
-      lock_guard<mutex> lock(mutex_);
+      lock_guard<SpinLock> lock(spinlock_);
       if (portQueue_.size()>=n)
         needToWait = false;
       else if (isClosedNoLock())
@@ -108,7 +107,7 @@ bool InputPortImpl::waitTuple(size_t n)
 // return the next tuple
 Tuple & InputPortImpl::getFrontTuple() 
 {
-  lock_guard<mutex> lock(mutex_);
+  lock_guard<SpinLock> lock(spinlock_);
   if (portQueue_.size()==0)
     throw runtime_error("getFrontTuple() called on empty queue, oper="+oper_->getOperator().getName());
 
@@ -117,7 +116,7 @@ Tuple & InputPortImpl::getFrontTuple()
 
 std::chrono::high_resolution_clock::time_point & InputPortImpl::getFrontTimestamp() 
 {
-  lock_guard<mutex> lock(mutex_);
+  lock_guard<SpinLock> lock(spinlock_);
   if (portQueue_.size()==0)
     throw runtime_error("getFrontTimestamp() called on empty queue, oper="+oper_->getOperator().getName());
 
@@ -127,7 +126,7 @@ std::chrono::high_resolution_clock::time_point & InputPortImpl::getFrontTimestam
 // return the index-th tuple
 Tuple & InputPortImpl::getTupleAt(size_t index) 
 {
-  lock_guard<mutex> lock(mutex_);
+  lock_guard<SpinLock> lock(spinlock_);
   size_t size = portQueue_.size();
   if (size<=index)
     throw runtime_error("getTupleAt("+to_string(index)+") called on queue of size "+to_string(size)+", oper="+oper_->getOperator().getName());
@@ -138,7 +137,7 @@ Tuple & InputPortImpl::getTupleAt(size_t index)
 void InputPortImpl::popTuple() 
 {
   {
-    lock_guard<mutex> lock(mutex_);
+    lock_guard<SpinLock> lock(spinlock_);
     portQueue_.pop_front();
   }
   
@@ -154,7 +153,7 @@ void InputPortImpl::popTuple()
 void InputPortImpl::drain() 
 {
   {
-    lock_guard<mutex> lock(mutex_);
+    lock_guard<SpinLock> lock(spinlock_);
     portQueue_.clear();
   }
   // scheduler has to check if this causes other operators to go into ready state 

@@ -6,7 +6,6 @@
 #include "streamc/runtime/Scheduler.h"
 
 #include <thread>
-#include <mutex>
 
 using namespace std;
 using namespace streamc;
@@ -38,7 +37,7 @@ void OutputPortImpl::pushTuple(Tuple const & tuple)
   while (needToWait) {
     unordered_map<InputPortImpl *, size_t> waitSpec;
     {
-      lock_guard<mutex> lock(mutex_);
+      lock_guard<SpinLock> lock(spinlock_);
       // If there is a global shutdown request, we don't care about queue
       // sizes, we push and return, so that our own operator can exit its
       // main loop as well

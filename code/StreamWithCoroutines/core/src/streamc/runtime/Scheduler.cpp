@@ -249,7 +249,6 @@ OperatorContextImpl * Scheduler::getThreadWork(WorkerThread & thread)
   return assignment;
 }
 
-bool flag = false;
 void Scheduler::updateOperatorState(OperatorContextImpl & oper, OperatorInfo::OperatorState state)
 {
   OperatorInfo & oinfo = *(operContexts_[&oper]);

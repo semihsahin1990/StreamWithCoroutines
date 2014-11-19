@@ -2,6 +2,7 @@
 
 #include "streamc/Tuple.h"
 #include "streamc/InputPort.h"
+#include "streamc/runtime/SpinLock.h"
 
 #include <deque>
 
@@ -43,7 +44,7 @@ private:
   typedef std::chrono::high_resolution_clock::time_point Timestamp;
   std::deque<std::pair<Tuple, Timestamp>> portQueue_;
   std::vector<std::pair<OperatorContextImpl *, size_t>> publishers_;
-  std::mutex mutex_; 
+  SpinLock spinlock_; 
 };
 
 } // namespace streamc
