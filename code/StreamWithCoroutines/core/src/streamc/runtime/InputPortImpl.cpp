@@ -8,12 +8,18 @@
 #include <mutex>
 
 using namespace std;
+using namespace std::chrono;
 using namespace streamc;
 
 //constructor
 InputPortImpl::InputPortImpl(OperatorContextImpl & oper, Scheduler & scheduler)
-  : oper_(&oper), scheduler_(&scheduler), isClosed_(false) 
-{}
+  : oper_(&oper), scheduler_(&scheduler), isClosed_(false)
+{
+  inWriteBlockedState_ = false;
+  createdAt_ = chrono::high_resolution_clock::now();
+  totalWriteBlockedDuration_ = std::chrono::microseconds(0);
+
+}
 
 //add publisher operator(operator context) to this port
 void InputPortImpl::addPublisher(OperatorContextImpl & oper, size_t outPort)
@@ -175,4 +181,40 @@ void InputPortImpl::drain()
   }
   // scheduler has to check if this causes other operators to go into ready state 
   scheduler_->markInputPortAsRead(*this);
+}
+
+void InputPortImpl::markAsWriteBlocked() {
+  lock_guard<mutex> lock(mutex_);
+
+  if(inWriteBlockedState_ == true)
+    return;
+
+//  cerr<<"mark:\t"<<getOperatorContextImpl().getOperator().getName()<<endl;
+  inWriteBlockedState_ = true;
+  writeBlockedBeginTime_ = chrono::high_resolution_clock::now();
+}
+
+void InputPortImpl::unmarkAsWriteBlocked() {
+  lock_guard<mutex> lock(mutex_);
+
+  if(inWriteBlockedState_ == false)
+    return;
+
+//  cerr<<"unmark:\t"<<getOperatorContextImpl().getOperator().getName()<<endl; 
+  inWriteBlockedState_ = false;
+  high_resolution_clock::time_point currentTime = high_resolution_clock::now();
+
+  high_resolution_clock::duration writeBlockedDuration = currentTime - writeBlockedBeginTime_;
+  totalWriteBlockedDuration_ =  totalWriteBlockedDuration_ + duration_cast<microseconds>(writeBlockedDuration);
+}
+
+bool InputPortImpl::isWriteBlocked(double threshold) {
+  lock_guard<mutex> lock(mutex_);
+
+  high_resolution_clock::time_point currentTime = high_resolution_clock::now();
+  high_resolution_clock::duration timeDiff = currentTime - createdAt_;
+  microseconds timeDiffInMicrosecs = duration_cast<std::chrono::microseconds>(timeDiff);
+
+  double writeBlockedRatio = ((double)totalWriteBlockedDuration_.count()) / timeDiffInMicrosecs.count();
+  return writeBlockedRatio >= threshold;
 }

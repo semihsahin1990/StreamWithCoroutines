@@ -100,8 +100,13 @@ bool OperatorInfo::WriteWaitCondition::computeReadiness()
     size_t thresh = portCondPair.second.threshold;
     size_t & count = portCondPair.second.currentCount;
     count = iport->getTupleCount();
-    if (count >= thresh) 
-      ready = false;    
+    if (count >= thresh) {
+      ready = false;
+      iport->markAsWriteBlocked();
+    }
+    else {
+      iport->unmarkAsWriteBlocked();
+    }
   }
   return ready;
 }

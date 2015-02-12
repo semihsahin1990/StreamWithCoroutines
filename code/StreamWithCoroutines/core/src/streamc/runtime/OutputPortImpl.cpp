@@ -96,3 +96,17 @@ void OutputPortImpl::pushTuple(Tuple const & tuple)
     }
   }
 }
+
+bool OutputPortImpl::isWriteBlocked(double threshold) {
+  lock_guard<mutex> lock(mutex_);
+
+  for(auto const & opPortPair : subscribers_) {
+    OperatorContextImpl * op = opPortPair.first;
+    size_t inPort = opPortPair.second;
+    InputPortImpl & iport = op->getInputPortImpl(inPort);
+    if (iport.isWriteBlocked(threshold))
+      return true;
+  }
+  
+  return false;
+}

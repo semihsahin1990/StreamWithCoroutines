@@ -19,6 +19,7 @@ class WorkerThread;
 class Scheduler;
 class SchedulerPlugin;
 class FissionController;
+class UtilityController;
 
 class FlowContext
 {
@@ -46,6 +47,8 @@ public:
 
   std::vector<OperatorContextImpl *> getOperators();
   void printTopology();
+  void disconnect(OperatorContextImpl *upStreamOper, OperatorContextImpl *downStreamOper);
+  void connect(OperatorContextImpl *upStreamOper, size_t oportNo, OperatorContextImpl *downStreamOper, size_t iportNo);
   void addFission(Operator *oper, size_t replicaCount);
   void changeFissionLevel(Operator *oper, size_t replicaCount);
 
@@ -58,6 +61,7 @@ private:
   std::unique_ptr<Scheduler> scheduler_;
   std::vector<std::unique_ptr<WorkerThread>> threads_;
   FissionController * fissionController_;
+  UtilityController * utilityController_;
   static size_t maxQueueSize_;
   
   //number of operators completed

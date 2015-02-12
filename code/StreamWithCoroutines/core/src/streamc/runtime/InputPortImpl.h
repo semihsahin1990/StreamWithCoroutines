@@ -24,6 +24,9 @@ public:
   std::chrono::high_resolution_clock::time_point & getFrontTimestamp();
   void drain();
   OperatorContextImpl & getOperatorContextImpl() { return *oper_; }
+  void markAsWriteBlocked();
+  void unmarkAsWriteBlocked();
+  bool isWriteBlocked(double threshold);
 
   // implemented interface
   bool isClosed() override;
@@ -46,6 +49,11 @@ private:
   std::deque<std::pair<Tuple, Timestamp>> portQueue_;
   std::vector<std::pair<OperatorContextImpl *, size_t>> publishers_;
   std::mutex mutex_; 
+
+  bool inWriteBlockedState_;
+  std::chrono::high_resolution_clock::time_point createdAt_;
+  std::chrono::high_resolution_clock::time_point writeBlockedBeginTime_;
+  std::chrono::microseconds totalWriteBlockedDuration_;
 };
 
 } // namespace streamc

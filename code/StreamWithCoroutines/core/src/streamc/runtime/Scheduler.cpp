@@ -11,6 +11,7 @@
 #include "streamc/runtime/OutputPortImpl.h"
 #include "streamc/Operator.h"
 #include "streamc/runtime/FissionController.h"
+#include "streamc/runtime/RuntimeLogger.h"
 #include <iostream>
 
 using namespace std;
@@ -41,29 +42,26 @@ void Scheduler::removeThreads()
 void Scheduler::addOperatorContext(OperatorContextImpl & context)
 {
   unique_lock<mutex> lock(mutex_);
-  cerr<<"ADD:\t"<<context.getOperator().getName()<<endl;
-  operatorInfos_.push_back(unique_ptr<OperatorInfo>(new OperatorInfo(context)));
-  operContexts_[&context] = operatorInfos_.back().get();
 
+  operContexts_[&context] = unique_ptr<OperatorInfo>(new OperatorInfo(context));
   context.init();
-  operatorInfos_.back().get()->init();
+  operContexts_[&context]->init();
   readyOperators_.insert(&context);
 }
 
 void Scheduler::removeOperatorContext(OperatorContextImpl & context)
 {
   unique_lock<mutex> lock(mutex_);
-  cerr<<"REMOVE:\t"<<context.getOperator().getName()<<endl;
-
-  size_t numberOfOperators = operatorInfos_.size();
-  for(size_t i=0; i<numberOfOperators; i++) {
-    if(&operatorInfos_[i]->getOperatorContext() == &context) {
-      operatorInfos_.erase(operatorInfos_.begin() + i);
-      break;
-    }
+  /*
+  for(auto it=operContexts_.begin(); it!=operContexts_.end(); it++) {
+    SC_LOG(Info, it->first->getOperator().getName());
   }
+  SC_LOG(Info, "Done!");
+  */
+  SC_LOG(Info, "Removing Operator Context\t"+context.getOperator().getName());
   operContexts_.erase(&context);
   outOfServiceOperators_.erase(&context);
+  SC_LOG(Info, "Removed Operator Context\t"+context.getOperator().getName());
 }
 
 void Scheduler::start()
@@ -71,13 +69,6 @@ void Scheduler::start()
   unique_lock<mutex> lock(mutex_);
   for (auto & threadInfoPair : threads_) 
     readyThreads_.insert(threadInfoPair.first);
-  /*
-  for (auto & operInfoPair : operContexts_) {
-    operInfoPair.first->init();
-    operInfoPair.second->init();
-    readyOperators_.insert(operInfoPair.first);
-  }
-  */
 }
 
 void Scheduler::stop()
@@ -92,7 +83,7 @@ void Scheduler::stop()
 
 void Scheduler::markOperatorAsCompleted(OperatorContextImpl & oper)
 {
-  unique_lock<mutex> lock(mutex_);  
+  unique_lock<mutex> lock(mutex_);
   updateOperatorState(oper, OperatorInfo::Completed); 
   // It is possible that the downstream operators that are currently in blocked
   // state may need to be put into Ready state, as their input ports may close
@@ -183,8 +174,9 @@ void Scheduler::markOperatorAsWriteBlocked(OperatorContextImpl & oper,
         return;
       waitCond.setWaitThreshold(*portSizePair.first, portSizePair.second);
     }
-    if (!waitCond.computeReadiness())  
-      updateOperatorState(oper, OperatorInfo::WriteBlocked); 
+    if (!waitCond.computeReadiness()) {
+      updateOperatorState(oper, OperatorInfo::WriteBlocked);
+    }
     else 
       updateOperatorState(oper, OperatorInfo::Ready); 
   }
@@ -248,11 +240,11 @@ OperatorInfo & Scheduler::getOperatorInfo(OperatorContextImpl *oper) {
 
 OperatorContextImpl * Scheduler::getThreadWork(WorkerThread & thread)
 {
-  unique_lock<mutex> lock(mutex_);  
+  unique_lock<mutex> lock(mutex_);
   OperatorContextImpl * assignment = nullptr;
   if (!stopped_) {
     updateThreadState(thread, ThreadInfo::Waiting);
-    assignment = plugin_->findOperatorToExecute(*this, thread); 
+    assignment = plugin_->findOperatorToExecute(*this, thread);
     while (assignment==nullptr) {
       ThreadInfo & info = *(threads_[&thread]);
       info.getCV().wait(lock);
@@ -272,12 +264,10 @@ OperatorContextImpl * Scheduler::getThreadWork(WorkerThread & thread)
   return assignment;
 }
 
-int counter = 0;
 void Scheduler::updateOperatorState(OperatorContextImpl & oper, OperatorInfo::OperatorState state)
 {
-/*  if(counter == 2)
-    cerr<<"State:\t"<<oper.getOperator().getName()<<"\t"<<state<<endl;;  
- */ OperatorInfo & oinfo = *(operContexts_[&oper]);
+  SC_LOG(Info, "Operator:\t"<<oper.getOperator().getName()<<"\tState:\t"<<state);
+  OperatorInfo & oinfo = *(operContexts_[&oper]);
   OperatorInfo::OperatorState oldState = oinfo.getState();
   if (oldState==state)
     return; // no change
@@ -326,7 +316,7 @@ void Scheduler::updateOperatorState(OperatorContextImpl & oper, OperatorInfo::Op
     if (waitingThreads_.size()>0) {
       // wake one of the threads, as there is more work now
       WorkerThread * thread = *(waitingThreads_.begin());
-        threads_[thread]->getCV().notify_one();
+      threads_[thread]->getCV().notify_one();
     }
   } else if (state==OperatorInfo::OperatorInfo::Running) {
     size_t numberOfInputPorts = oper.getNumberOfInputPorts();
@@ -360,14 +350,13 @@ void Scheduler::updateThreadState(WorkerThread & thread, ThreadInfo::ThreadState
 
 bool Scheduler::requestPartialBlock(OperatorContextImpl & oper) {
   unique_lock<mutex> lock(mutex_);
-
   if(operContexts_[&oper]->getState() != OperatorInfo::Running) {
-    cerr<<"block publisher\t"<<oper.getOperator().getName()<<"\t granted"<<endl;
     updateOperatorState(oper, OperatorInfo::OutOfService);
+    readyOperators_.erase(&oper);
+
     return true;
   }
   else {
-    cerr<<"block publisher\t"<<oper.getOperator().getName()<<"\t waiting"<<endl;
     partialBlockRequestedOperators_.insert(&oper);
     return false;
   }
@@ -375,7 +364,6 @@ bool Scheduler::requestPartialBlock(OperatorContextImpl & oper) {
 
 bool Scheduler::requestCompleteBlock(OperatorContextImpl & oper) {
   unique_lock<mutex> lock(mutex_);
-  
   bool allEmpty = true;
   size_t numberOfInputPorts = oper.getNumberOfInputPorts();
 
@@ -385,12 +373,10 @@ bool Scheduler::requestCompleteBlock(OperatorContextImpl & oper) {
   }
 
   if(operContexts_[&oper]->getState() != OperatorInfo::Running && allEmpty) {
-    cerr<<"block bottleneck\t"<<oper.getOperator().getName()<<"\t granted"<<endl;
     updateOperatorState(oper, OperatorInfo::OutOfService);
     return true; 
   }
   else {
-    cerr<<"block bottleneck\t"<<oper.getOperator().getName()<<"\t waiting"<<endl;
     completeBlockRequestedOperators_.insert(&oper);
     return false;
   }
@@ -429,11 +415,40 @@ void Scheduler::checkOperatorForBlocking(OperatorContextImpl & oper) {
 }
 
 void Scheduler::unblockOperators() {
-  counter++;
   unique_lock<mutex> lock(mutex_);
   for(OperatorContextImpl * oper : outOfServiceOperators_) {
-    cerr<<"unblockOperator: "<<oper->getOperator().getName()<<endl;
-    updateOperatorState(*oper, OperatorInfo::Ready);
+    SC_LOG(Info, "Unblocking Operator\t"<<oper->getOperator().getName());
+    operContexts_[oper]->init();
+    //updateOperatorState(*oper, OperatorInfo::Ready);
+    readyOperators_.insert(oper);
+    if (waitingThreads_.size()>0) {
+      // wake one of the threads, as there is more work now
+      WorkerThread * thread = *(waitingThreads_.begin());
+      threads_[thread]->getCV().notify_one();
+    }
+    SC_LOG(Info, "Unblocked Operator\t"<<oper->getOperator().getName());
   }
   outOfServiceOperators_.clear();
+  /**/
+  /*
+  for(auto it=operContexts_.begin(); it!=operContexts_.end(); it++) {
+    cerr<<it->first->getOperator().getName()<<endl;
+    auto readCond = it->second->getReadWaitCondition();
+    auto writeCond = it->second->getWriteWaitCondition();
+
+    auto readWaitList = readCond.getWaitList();
+    cerr<<"\tread wait list"<<endl;
+    for(auto it=readWaitList.begin(); it!=readWaitList.end(); it++) {
+      cerr<<"\t\t"<<it->first->getOperatorContextImpl().getOperator().getName()<<endl;
+    }
+
+    auto writeWaitList = writeCond.getWaitList();
+    cerr<<"\twrite wait list"<<endl;
+    for(auto it=writeWaitList.begin(); it!=writeWaitList.end(); it++) {
+      cerr<<"\t\t"<<it->first->getOperatorContextImpl().getOperator().getName()<<endl;
+    }
+    cerr<<endl;
+  }
+  */
+  /**/
 }
