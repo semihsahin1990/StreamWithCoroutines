@@ -17,8 +17,7 @@ public:
   void join();
   void setBeginTime();
   void setEndtime();
-  void updateUtility();
-  double getUtility();
+  long getRunningTime() { return threadRunningTime_; }
 
 private:
   void run();
@@ -29,11 +28,7 @@ private:
   std::atomic<bool> stop_;
 
   timespec threadBeginTime_, threadEndTime_;
-  std::chrono::high_resolution_clock::time_point globalBeginTime_, globalEndTime_;
   long threadRunningTime_;
-  double utility_;
-  
-  
 };
 
 } /* namespace streamc */
