@@ -193,6 +193,7 @@ void FissionController::changeFissionLevel(OperatorContextImpl * bottleneck, siz
 
 void FissionController::run() {
 	srand(time(NULL));
+	return;
 	while(!isCompleted_.load()) {
 		std::chrono::milliseconds duration(2000);
 		this_thread::sleep_for(duration);

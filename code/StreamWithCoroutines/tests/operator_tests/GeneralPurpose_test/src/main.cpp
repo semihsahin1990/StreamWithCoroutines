@@ -15,7 +15,6 @@ using namespace streamc::operators;
 using namespace streamc::connectors;
 
 int main(int argc, char *argv[]) {
-
   Flow flow("GeneralPurposeTest");
 
   Operator & src = flow.createOperator<FileSource>("src")

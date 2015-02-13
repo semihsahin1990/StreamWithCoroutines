@@ -3,6 +3,7 @@
 #include "streamc/runtime/FlowContext.h"
 #include "streamc/runtime/WorkerThread.h"
 #include <time.h>
+#include <fstream>
 
 #include <chrono>
 #define ALPHA 0.83
@@ -34,6 +35,11 @@ void UtilityController::run() {
 
 	bool firstTime = true;
 	milliseconds duration(2000);
+	/**/
+	ofstream output;
+  	output.open("expData/utilityResults.dat");
+
+	/**/
 	while(!isCompleted_.load()) {
 
 		high_resolution_clock::time_point periodBeginTime = high_resolution_clock::now();
@@ -55,9 +61,8 @@ void UtilityController::run() {
 				prevUtilites[i] = currUtilities[i];
 			else
 				prevUtilites[i] = ALPHA * prevUtilites[i] + (1-ALPHA) * currUtilities[i];
-			cerr<<"utility:\t"<<prevUtilites[i]<<endl;
+			output<<prevUtilites[i]<<endl;
 		}
-		cerr<<endl;
 		firstTime = false;
 	}
 }
