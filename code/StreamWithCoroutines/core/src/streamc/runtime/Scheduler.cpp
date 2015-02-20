@@ -52,12 +52,6 @@ void Scheduler::addOperatorContext(OperatorContextImpl & context)
 void Scheduler::removeOperatorContext(OperatorContextImpl & context)
 {
   unique_lock<mutex> lock(mutex_);
-  /*
-  for(auto it=operContexts_.begin(); it!=operContexts_.end(); it++) {
-    SC_LOG(Info, it->first->getOperator().getName());
-  }
-  SC_LOG(Info, "Done!");
-  */
   SC_LOG(Info, "Removing Operator Context\t"+context.getOperator().getName());
   operContexts_.erase(&context);
   outOfServiceOperators_.erase(&context);
@@ -351,9 +345,9 @@ void Scheduler::updateThreadState(WorkerThread & thread, ThreadInfo::ThreadState
 bool Scheduler::requestPartialBlock(OperatorContextImpl & oper) {
   unique_lock<mutex> lock(mutex_);
   if(operContexts_[&oper]->getState() != OperatorInfo::Running) {
+    SC_LOG(Info, "REQUEST PARTIAL_STATE\t"<<oper.getOperator().getName()<<"\tVALUE:"<<operContexts_[&oper]->getState());
     updateOperatorState(oper, OperatorInfo::OutOfService);
     readyOperators_.erase(&oper);
-
     return true;
   }
   else {
@@ -373,6 +367,8 @@ bool Scheduler::requestCompleteBlock(OperatorContextImpl & oper) {
   }
 
   if(operContexts_[&oper]->getState() != OperatorInfo::Running && allEmpty) {
+    // TODO: remove log
+    SC_LOG(Info, "REQUEST COMPLETE_STATE\t"<<oper.getOperator().getName()<<"\tVALUE:"<<operContexts_[&oper]->getState());
     updateOperatorState(oper, OperatorInfo::OutOfService);
     return true; 
   }

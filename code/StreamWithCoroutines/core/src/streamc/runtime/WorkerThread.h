@@ -17,7 +17,7 @@ public:
   void join();
   void setBeginTime();
   void setEndtime();
-  long getRunningTime() { return threadRunningTime_; }
+  long getRunningTime();
 
 private:
   void run();
@@ -29,6 +29,7 @@ private:
 
   timespec threadBeginTime_, threadEndTime_;
   long threadRunningTime_;
+  std::mutex mutex_;
 };
 
 } /* namespace streamc */

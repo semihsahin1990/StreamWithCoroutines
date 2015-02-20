@@ -51,7 +51,13 @@ void WorkerThread::setBeginTime() {
 }
 
 void WorkerThread::setEndtime() {
+  unique_lock<mutex> lock(mutex_);
   clock_gettime(CLOCK_THREAD_CPUTIME_ID, &threadEndTime_);
   long threadDifference = (threadEndTime_.tv_sec - threadBeginTime_.tv_sec) * 1000000 + (threadEndTime_.tv_nsec - threadBeginTime_.tv_nsec)/1000;
   threadRunningTime_ = threadRunningTime_ + threadDifference;
+}
+
+long WorkerThread::getRunningTime() {
+  unique_lock<mutex> lock(mutex_);
+  return threadRunningTime_;
 }

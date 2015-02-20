@@ -193,7 +193,7 @@ void FissionController::changeFissionLevel(OperatorContextImpl * bottleneck, siz
 
 void FissionController::run() {
 	srand(time(NULL));
-	return;
+
 	while(!isCompleted_.load()) {
 		std::chrono::milliseconds duration(2000);
 		this_thread::sleep_for(duration);
@@ -206,18 +206,9 @@ void FissionController::run() {
 				break;
 			}
 		}
-		addFission(bottleneck, 6);
-		
+		addFission(bottleneck, 10);
 		this_thread::sleep_for(duration);
-		for(auto it=operators.begin(); it!=operators.end(); it++) {
-			if((*it)->getOperator().getName()=="timestamper") {
-				//bottleneck = *it;
-				break;
-			}
-		}
-
-		//addFission(bottleneck, 4);
-		changeFissionLevel(bottleneck, 2);
+		changeFissionLevel(bottleneck, 5);
 		return;
 	}
 	/*

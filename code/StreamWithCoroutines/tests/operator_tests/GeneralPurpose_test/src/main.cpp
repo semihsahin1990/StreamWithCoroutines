@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) {
   runner.setInfrastructureLogLevel(Info);
   runner.setApplicationLogLevel(Info);
 
-  runner.run(flow, 2, new RandomScheduling());
+  runner.run(flow, 4, new RandomScheduling());
   runner.wait(flow);
 
   return 0;
