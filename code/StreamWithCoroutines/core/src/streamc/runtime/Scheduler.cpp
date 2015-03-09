@@ -11,6 +11,7 @@
 #include "streamc/runtime/OutputPortImpl.h"
 #include "streamc/Operator.h"
 #include "streamc/runtime/FissionController.h"
+#include "streamc/runtime/UtilityController.h"
 #include "streamc/runtime/RuntimeLogger.h"
 #include <iostream>
 
@@ -23,14 +24,24 @@ Scheduler::Scheduler(FlowContext & flowContext, SchedulerPlugin * plugin)
 
 Scheduler::~Scheduler() 
 {}
-
+/*
 void Scheduler::addThread(WorkerThread & thread)
 {
   unique_lock<mutex> lock(mutex_);
   threadInfos_.push_back(unique_ptr<ThreadInfo>(new ThreadInfo(&thread)));
   threads_[&thread] = threadInfos_.back().get();
 }
+*/
+void Scheduler::addThread(WorkerThread & thread)
+{
+  unique_lock<mutex> lock(mutex_);
+  threadInfos_.push_back(unique_ptr<ThreadInfo>(new ThreadInfo(&thread)));
+  threads_[&thread] = threadInfos_.back().get();
 
+  readyThreads_.insert(&thread);
+  thread.start();
+}
+/*
 void Scheduler::removeThreads()
 {
   unique_lock<mutex> lock(mutex_);
@@ -39,6 +50,7 @@ void Scheduler::removeThreads()
   threads_.clear();
   threadInfos_.clear();
 }
+*/
 void Scheduler::addOperatorContext(OperatorContextImpl & context)
 {
   unique_lock<mutex> lock(mutex_);
@@ -57,24 +69,36 @@ void Scheduler::removeOperatorContext(OperatorContextImpl & context)
   outOfServiceOperators_.erase(&context);
   SC_LOG(Info, "Removed Operator Context\t"+context.getOperator().getName());
 }
-
+/*
 void Scheduler::start()
 {
   unique_lock<mutex> lock(mutex_);
   for (auto & threadInfoPair : threads_) 
     readyThreads_.insert(threadInfoPair.first);
 }
-
+*/
+/*
 void Scheduler::stop()
 {
   unique_lock<mutex> lock(mutex_);   
   stopped_ = true;
   // wake up all threads, they will ask scheduler for work,
   // and find out that there is no more work for them
-  for (auto & threadInfoPair : threads_) 
+  
+  for (auto & threadInfoPair : threads_)
     threadInfoPair.second->getCV().notify_one();
 }
+*/
+void Scheduler::stop()
+{
+  unique_lock<mutex> lock(mutex_);   
+  stopped_ = true;
+  // wake up all threads, they will ask scheduler for work,
+  // and find out that there is no more work for them
+  for (auto & threadInfoPair : threads_)
+    threadInfoPair.second->getCV().notify_one();
 
+}
 void Scheduler::markOperatorAsCompleted(OperatorContextImpl & oper)
 {
   unique_lock<mutex> lock(mutex_);
@@ -244,6 +268,13 @@ OperatorContextImpl * Scheduler::getThreadWork(WorkerThread & thread)
       info.getCV().wait(lock);
       if (stopped_) 
         break;
+      /**/
+      if(threadBlockRequested_) {
+        assignment = nullptr;
+        threadBlockRequested_ = false;
+        break;
+      }
+      /**/
       assignment = plugin_->findOperatorToExecute(*this, thread);
     }
   }
@@ -260,7 +291,7 @@ OperatorContextImpl * Scheduler::getThreadWork(WorkerThread & thread)
 
 void Scheduler::updateOperatorState(OperatorContextImpl & oper, OperatorInfo::OperatorState state)
 {
-  SC_LOG(Info, "Operator:\t"<<oper.getOperator().getName()<<"\tState:\t"<<state);
+  //SC_LOG(Info, "Operator:\t"<<oper.getOperator().getName()<<"\tState:\t"<<state);
   OperatorInfo & oinfo = *(operContexts_[&oper]);
   OperatorInfo::OperatorState oldState = oinfo.getState();
   if (oldState==state)
@@ -338,14 +369,15 @@ void Scheduler::updateThreadState(WorkerThread & thread, ThreadInfo::ThreadState
     readyThreads_.erase(&thread);
   if (state==ThreadInfo::Waiting) 
     waitingThreads_.insert(&thread);    
-  else if (state==ThreadInfo::Ready)
+  else if (state==ThreadInfo::Ready) {
     readyThreads_.insert(&thread);
+  }
 }
 
 bool Scheduler::requestPartialBlock(OperatorContextImpl & oper) {
   unique_lock<mutex> lock(mutex_);
   if(operContexts_[&oper]->getState() != OperatorInfo::Running) {
-    SC_LOG(Info, "REQUEST PARTIAL_STATE\t"<<oper.getOperator().getName()<<"\tVALUE:"<<operContexts_[&oper]->getState());
+    //SC_LOG(Info, "REQUEST PARTIAL_STATE\t"<<oper.getOperator().getName()<<"\tVALUE:"<<operContexts_[&oper]->getState());
     updateOperatorState(oper, OperatorInfo::OutOfService);
     readyOperators_.erase(&oper);
     return true;
@@ -368,7 +400,7 @@ bool Scheduler::requestCompleteBlock(OperatorContextImpl & oper) {
 
   if(operContexts_[&oper]->getState() != OperatorInfo::Running && allEmpty) {
     // TODO: remove log
-    SC_LOG(Info, "REQUEST COMPLETE_STATE\t"<<oper.getOperator().getName()<<"\tVALUE:"<<operContexts_[&oper]->getState());
+    //SC_LOG(Info, "REQUEST COMPLETE_STATE\t"<<oper.getOperator().getName()<<"\tVALUE:"<<operContexts_[&oper]->getState());
     updateOperatorState(oper, OperatorInfo::OutOfService);
     return true; 
   }
@@ -413,7 +445,7 @@ void Scheduler::checkOperatorForBlocking(OperatorContextImpl & oper) {
 void Scheduler::unblockOperators() {
   unique_lock<mutex> lock(mutex_);
   for(OperatorContextImpl * oper : outOfServiceOperators_) {
-    SC_LOG(Info, "Unblocking Operator\t"<<oper->getOperator().getName());
+    //SC_LOG(Info, "Unblocking Operator\t"<<oper->getOperator().getName());
     operContexts_[oper]->init();
     //updateOperatorState(*oper, OperatorInfo::Ready);
     readyOperators_.insert(oper);
@@ -422,29 +454,22 @@ void Scheduler::unblockOperators() {
       WorkerThread * thread = *(waitingThreads_.begin());
       threads_[thread]->getCV().notify_one();
     }
-    SC_LOG(Info, "Unblocked Operator\t"<<oper->getOperator().getName());
+    //SC_LOG(Info, "Unblocked Operator\t"<<oper->getOperator().getName());
   }
   outOfServiceOperators_.clear();
-  /**/
-  /*
-  for(auto it=operContexts_.begin(); it!=operContexts_.end(); it++) {
-    cerr<<it->first->getOperator().getName()<<endl;
-    auto readCond = it->second->getReadWaitCondition();
-    auto writeCond = it->second->getWriteWaitCondition();
+}
 
-    auto readWaitList = readCond.getWaitList();
-    cerr<<"\tread wait list"<<endl;
-    for(auto it=readWaitList.begin(); it!=readWaitList.end(); it++) {
-      cerr<<"\t\t"<<it->first->getOperatorContextImpl().getOperator().getName()<<endl;
-    }
+void Scheduler::markThreadCompleted(WorkerThread * thread) {
+  unique_lock<mutex> lock(mutex_);
+  utilityController_->threadBlockGranted(thread);
+}
 
-    auto writeWaitList = writeCond.getWaitList();
-    cerr<<"\twrite wait list"<<endl;
-    for(auto it=writeWaitList.begin(); it!=writeWaitList.end(); it++) {
-      cerr<<"\t\t"<<it->first->getOperatorContextImpl().getOperator().getName()<<endl;
-    }
-    cerr<<endl;
+void Scheduler::requestThreadBlock() {
+  unique_lock<mutex> lock(mutex_);
+  threadBlockRequested_ = true;
+
+  if(waitingThreads_.size() > 0) {
+    WorkerThread * thread = *(waitingThreads_.begin());
+    threads_[thread]->getCV().notify_one();
   }
-  */
-  /**/
 }

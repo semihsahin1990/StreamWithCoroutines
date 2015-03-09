@@ -36,6 +36,7 @@ void WorkerThread::run()
     oper->runOper();
     setEndtime();
   }
+  scheduler_->markThreadCompleted(this);
   SC_LOG(Info, "Worker thread #" << index_ << " completed running"); 
 }
 
@@ -60,4 +61,9 @@ void WorkerThread::setEndtime() {
 long WorkerThread::getRunningTime() {
   unique_lock<mutex> lock(mutex_);
   return threadRunningTime_;
+}
+
+void WorkerThread::resetRunningTime() {
+  unique_lock<mutex> lock(mutex_);
+  threadRunningTime_ = 0;
 }

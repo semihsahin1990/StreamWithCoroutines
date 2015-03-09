@@ -192,6 +192,7 @@ void FissionController::changeFissionLevel(OperatorContextImpl * bottleneck, siz
 }
 
 void FissionController::run() {
+	return;
 	srand(time(NULL));
 
 	while(!isCompleted_.load()) {

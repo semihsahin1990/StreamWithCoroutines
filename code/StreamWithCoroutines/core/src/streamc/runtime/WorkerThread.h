@@ -18,6 +18,7 @@ public:
   void setBeginTime();
   void setEndtime();
   long getRunningTime();
+  void resetRunningTime();
 
 private:
   void run();

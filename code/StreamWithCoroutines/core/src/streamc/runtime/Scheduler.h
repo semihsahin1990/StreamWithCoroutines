@@ -24,10 +24,10 @@ public:
   Scheduler(FlowContext & flowContext, SchedulerPlugin * plugin);
   ~Scheduler();
   void addThread(WorkerThread & thread);
-  void removeThreads();
+  //void removeThreads();
   void addOperatorContext(OperatorContextImpl & oper);
   void removeOperatorContext(OperatorContextImpl & oper);
-  void start();
+  //void start();
   void stop();
   // return the operator to execute, nullptr if the thread should exit
   OperatorContextImpl * getThreadWork(WorkerThread & thread);
@@ -46,6 +46,8 @@ public:
   void checkOperatorForBlocking(OperatorContextImpl & oper);
   void unblockOperators();
   void setUtilityController(UtilityController * utilityController) { utilityController_ = utilityController; };
+  void requestThreadBlock();
+  void markThreadCompleted(WorkerThread * thread);
 private:
   void updateThreadState(WorkerThread & thread, ThreadInfo::ThreadState state);
   void updateOperatorState(OperatorContextImpl & oper, OperatorInfo::OperatorState state);
@@ -73,7 +75,8 @@ private:
   std::unordered_set<OperatorContextImpl *> partialBlockRequestedOperators_;
   std::unordered_set<OperatorContextImpl *> completeBlockRequestedOperators_;
   std::unordered_set<OperatorContextImpl *> outOfServiceOperators_;
-  std::mutex mutex_; 
+  std::mutex mutex_;
+  bool threadBlockRequested_;
 };
 
 } /* streamc */

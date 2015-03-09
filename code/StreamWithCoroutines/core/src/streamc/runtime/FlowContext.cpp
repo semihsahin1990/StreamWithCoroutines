@@ -8,13 +8,13 @@
 #include "streamc/runtime/Scheduler.h"
 #include "streamc/runtime/WorkerThread.h"
 #include "streamc/runtime/SchedulerPlugin.h"
+#include "streamc/runtime/RuntimeLogger.h"
 #include "streamc/runtime/RandomScheduling.h"
 #include "streamc/runtime/FissionController.h"
 #include "streamc/runtime/UtilityController.h"
 
 #include "streamc/operators/RoundRobinSplit.h"
 #include "streamc/operators/RoundRobinMerge.h"
-#include "streamc/operators/Busy.h"
 
 using namespace std;
 using namespace streamc;
@@ -87,7 +87,7 @@ FlowContext::FlowContext(Flow & flow, SchedulerPlugin * plugin)
 
 FlowContext::~FlowContext()
 {}
-
+/*
 void FlowContext::run(int numThreads)
 {
   // reset the shutdown requested (in case we are being rerun)
@@ -101,17 +101,44 @@ void FlowContext::run(int numThreads)
     threads_.push_back(unique_ptr<WorkerThread>(thread));
     scheduler_->addThread(*threads_[i]);
   }
-
-  fissionController_->start();
+  
   utilityController_->start();
+  fissionController_->start();
 
   // start the scheduler and all the threads
   scheduler_->start();
   for (int i=0; i<numThreads; ++i) 
     threads_[i]->start();
 }
+*/
+void FlowContext::run(int maxThreads)
+{
+  // reset the shutdown requested (in case we are being rerun)
+  isShutdownRequested_.store(false);
+  
+  // create threads and add threads to the scheduler 
+  //scheduler_->removeThreads();
+  //threads_.clear();
+  /*
+  for (int i=0; i<numThreads; ++i) { 
+    auto thread = new WorkerThread(i, *scheduler_);
+    threads_.push_back(unique_ptr<WorkerThread>(thread));
+    scheduler_->addThread(*threads_[i]);
+  }
+  */
+  utilityController_->start(maxThreads);
+//  fissionController_->start();
+
+  // start the scheduler and all the threads
+  /*
+  scheduler_->start();
+  for (int i=0; i<numThreads; ++i) 
+    threads_[i]->start();
+  */
+}
 
 // wait for completion
+/*
 void FlowContext::wait()
 {
   unique_lock<mutex> lock(mutex_);
@@ -126,21 +153,38 @@ void FlowContext::wait()
   utilityController_->setCompleted();
   utilityController_->join();
 }
+*/
+void FlowContext::wait()
+{
+  unique_lock<mutex> lock(mutex_);
+  while(numCompleted_ < operatorContexts_.size())
+    cv_.wait(lock);
+  // join all threads 
+  //for (auto & threadPtr : threads_) 
+  //  threadPtr->join();
+  //fissionController_->setCompleted();
+  //fissionController_->join();
+
+  utilityController_->setCompleted();
+  utilityController_->join();
+}
 
 // called by a worker thread
 // increment numCompleted, and mark oper as completed
 void FlowContext::markOperatorCompleted(Operator * oper)
 {
+  SC_LOG(Info, "Operator Completed:\t"<<oper->getName());
   unique_lock<mutex> lock(mutex_);
   numCompleted_++;
   { // notify scheduler about the operator completion
-    OperatorContextImpl * opc = operatorContexts_[oper].get();  
+    OperatorContextImpl * opc = operatorContexts_[oper].get();
     scheduler_->markOperatorAsCompleted(*opc); 
   }
 
   if (numCompleted_==operatorContexts_.size()) {
     // tell the scheduler that there is no more work
     scheduler_->stop();
+    for(int i=0; i<10000000; i++) {}
     // wake up clients waiting for completion
     cv_.notify_all();
   }

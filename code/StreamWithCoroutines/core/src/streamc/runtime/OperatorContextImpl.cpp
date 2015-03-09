@@ -42,7 +42,7 @@ void OperatorContextImpl::coroBody(coro_t::caller_type & caller)
   oper_->process(*this);
   oper_->saveState(*this);
   isComplete_.store(true);
-  flowContext_->markOperatorCompleted(oper_);  
+  flowContext_->markOperatorCompleted(oper_);
 }
 
 Tuple & OperatorContextImpl::getStateStore() 

@@ -31,7 +31,8 @@ public:
   ~FlowContext();
   
   //run thread with numThreads threads
-  void run(int numThreads);
+  //void run(int numThreads);
+  void run(int maxThreads);
 
   //pause the main thread in the flow
   void wait();
@@ -59,7 +60,7 @@ private:
 
   // scheduler and threads
   std::unique_ptr<Scheduler> scheduler_;
-  std::vector<std::unique_ptr<WorkerThread>> threads_;
+  //std::vector<std::unique_ptr<WorkerThread>> threads_;
   FissionController * fissionController_;
   UtilityController * utilityController_;
   static size_t maxQueueSize_;
