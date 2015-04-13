@@ -1,3 +1,15 @@
 \begin{abstract}
-TODO
+Stream processing is a computational paradigm to process high volume of data
+on the fly. This paradigm exposes task and pipeline parallelism by nature, and
+high throughput and low latency are two most common QoS metrics in stream
+processing applications. For those, most prior work has focused on the static
+scheduling methods. In this paper, we present our co-routine based stream
+processing engine, in which auto-parallelization is applied to exploid data
+parallelism as well. We also propose dynamic scheduling algorithm to provide
+high throughput and low latency, by profiling operator behaviors in run time.
+In our experiments, we measured throughput and latency values for chain, data
+parallel, tree and reverse tree topologies of different sizes, operator costs
+and selectivity values. Experimental results show that we get almost linear
+scalability with our dynamic scheduling algorithm compared to static
+scheduling methods.
 \end{abstract}

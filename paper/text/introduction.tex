@@ -1,1 +1,58 @@
 \section{Introduction}\label{sec:introduction}
+
+As the world becomes more interconnected, the amount of data generated from
+software and physical sensors increases exponentially. Stream processing is
+used to analyze this high volume of continuous data on the fly to generate
+live results. Applications can be found many domains, including financial
+markets, telecommunica- tions, cyber security and surveillance.
+
+In stream processing, applications are represented as data flow graphs, in
+which vertices represent operators and edges represent the direction of the
+flow. Various types of parallelisms can be exploited in this program- ming
+model. An example of task parallelism is that two operators process tuples in
+parallel. In pipeline paral- lelism, upstream and downstream operator can
+process tuples at the same time, and in data parallelism, multiple instances
+of an operator process tuples simultaneously. While task and pipeline
+parallelisms can be exploited by stream processing model, data parallelism
+requires to morph the graph by creating operator replicas. Ad- ditionally, It
+is only applicable to stateless and partially stateful operators because of
+order preserving.
+
+High throughput and low latency are two Quality of Service (QoS) metrics in
+stream processing. To satisfy these requirements and obtain scalability,
+scheduling algorithm, auto parallelization module and number of processing
+elements running on the data flow graph are crucial.
+
+Since the number of processing elements -threads- are limited and there is a
+cost of thread switching over oper- ators, it is important to decide which
+operator to sched- ule to minimize that cost. To address this, topology based
+static scheduling algorithms were proposed. However, they are not effective to
+rate or pattern change in the incoming data. Hence, dynamic scheduling
+algorithm is needed with following challenges. First, execution time of an
+operator should be estimated, and it should be guaranteed that scheduling an
+operator compensates switching cost. Second, since the scheduling decision is
+a part of execution, it should be a light-weight algorithm.
+
+Auto parallelization is another component to scale stream processing
+application. It is desirable to achieve this transparently. However, creating
+operator replicas to exploit data parallelism is effective only if that
+operator is the bottleneck operator. Additionally, number of oper- ator
+replicas should be adjusted to the solve bottleneck issue.
+
+Number of threads running on the system is the third factor to meet QoS
+requirements. Increasing number of active threads does not necessarily result
+in an increase in throughput, it may also harm the system performance. Hence,
+number of threads should be adjusted dynami- cally by the stream processing
+engine.
+
+In this paper, we present our co-routine based stream processing engine. We
+also propose dynamic scheduling algorithm, control mechanism to adjust the
+number of threads on the system and auto parallelization module.
+
+
+The organization of the paper is as follows. In Section 2, related work on
+this area will be covered. Co-routine based stream processing engine will be
+presented in Section 3. Dynamic scheduling algorithm will be pro- posed in
+Section 4. Auto parallelization module and thread count adjustment will be
+analyzed in Section 5. In Section 6, experimental results will be given. Paper
+is concluded with future work in Section 7.
