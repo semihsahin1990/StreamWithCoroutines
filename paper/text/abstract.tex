@@ -1,15 +1,26 @@
 \begin{abstract}
-Stream processing is a computational paradigm to process high volume of data
-on the fly. This paradigm exposes task and pipeline parallelism by nature, and
-high throughput and low latency are two most common QoS metrics in stream
-processing applications. For those, most prior work has focused on the static
-scheduling methods. In this paper, we present our co-routine based stream
-processing engine, in which auto-parallelization is applied to exploid data
-parallelism as well. We also propose dynamic scheduling algorithm to provide
-high throughput and low latency, by profiling operator behaviors in run time.
-In our experiments, we measured throughput and latency values for chain, data
-parallel, tree and reverse tree topologies of different sizes, operator costs
-and selectivity values. Experimental results show that we get almost linear
-scalability with our dynamic scheduling algorithm compared to static
-scheduling methods.
+Stream processing is a computational paradigm for on-the-fly processing of
+live data. This paradigm lends itself to implementations that can provide high
+throughput and low latency, by taking advantage of various forms of
+parallelism that is naturally captured by the stream processing model of
+computation, such as pipeline, task, and data parallelism. In this paper, we
+describe the design and implementation of \emph{C-Stream}, which is an elastic
+stream processing engine. C-Stream encompasses three unique properties. First,
+in contrast to the widely adopted event-based interface for developing stream
+processing operators, C-Stream provides an interface wherein each operator has
+its own control loop and rely on data availability APIs to decide when to
+perform its computations. The self-control based model significantly
+simplifies development of operators that require multi-port synchronization.
+Second, C-Stream contains a multi-threaded dynamic scheduler that manages the
+execution of the operators. The scheduler, which is customizable via plug-ins,
+enables the execution of the operators as co-routines, using any number of
+threads. The base scheduler implements back-pressure, provides data
+availability APIs, and manages preemption and termination handling. Last,
+C-Stream provides elastic parallelization. It can dynamically adjust the
+number of threads used to execute an application, and can also adjust the
+number of replicas of data-parallel operators to resolve bottlenecks. We
+provide an experimental evaluation of C-Stream. The results show that C-Stream
+is scalable, highly customizable, and can resolve bottlenecks by dynamically
+adjusting the level of data parallelism used.
 \end{abstract}
+
