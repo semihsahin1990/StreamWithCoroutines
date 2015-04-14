@@ -1,58 +1,83 @@
 \section{Introduction}\label{sec:introduction}
 
-As the world becomes more interconnected, the amount of data generated from
-software and physical sensors increases exponentially. Stream processing is
-used to analyze this high volume of continuous data on the fly to generate
-live results. Applications can be found many domains, including financial
-markets, telecommunica- tions, cyber security and surveillance.
+As the world becomes more instrumented and interconnected, the amount of live
+data generated from software and hardware sensors increases exponentially.
+Data stream processing is a computational paradigm for on-the-fly analysis of
+such streaming data at scale. Applications of streaming can be found in many
+domains, such as financial markets~\cite{ref:app-finance},
+telecommunications~\cite{ref:app-telco},
+cyber-security~\cite{ref:app-cybersecurity}, and
+health-care~\cite{ref:app-healthcare} to name a few.
 
-In stream processing, applications are represented as data flow graphs, in
-which vertices represent operators and edges represent the direction of the
-flow. Various types of parallelisms can be exploited in this program- ming
-model. An example of task parallelism is that two operators process tuples in
-parallel. In pipeline paral- lelism, upstream and downstream operator can
-process tuples at the same time, and in data parallelism, multiple instances
-of an operator process tuples simultaneously. While task and pipeline
-parallelisms can be exploited by stream processing model, data parallelism
-requires to morph the graph by creating operator replicas. Ad- ditionally, It
-is only applicable to stateless and partially stateful operators because of
-order preserving.
+A streaming application is typically represented as a graph of streams and
+operators~\cite{ref:spl}, where operators are generic data manipulators and
+streams connect operators to each other using FIFO semantics. In this model,
+the data is analyzed as it streams through the set of operators forming the
+graph. The key capability of streaming systems is their ability to process
+high volume data sources with low latency. This is achieved by taking
+advantage of various forms of parallelism that is naturally captured by the
+streaming model of computation~\cite{ref:survey}, such as pipeline, task, and
+data parallelism.
 
-High throughput and low latency are two Quality of Service (QoS) metrics in
-stream processing. To satisfy these requirements and obtain scalability,
-scheduling algorithm, auto parallelization module and number of processing
-elements running on the data flow graph are crucial.
+While streaming applications can capture various forms of parallelism, there
+are several challenges in taking advantage of them in practice. First, the
+operators, which are the building blocks of streaming applications, should be
+easy to develop and preferably sequential in nature, saving the developers
+from the complexities of parallelism. Second, we need a flexible scheduler
+that can dynamically schedule operators to take advantage of pipeline, task,
+and data parallelism in a transparent manner. Furthermore, the scheduler
+should be configurable so that we can adjust the trade-off between low latency
+and high throughput. Last, but not the least, the stream processing system
+should be elastic in the sense that the level and kind of parallelism applied
+can be adjusted depending on the resource and workload availability.
 
-Since the number of processing elements -threads- are limited and there is a
-cost of thread switching over oper- ators, it is important to decide which
-operator to sched- ule to minimize that cost. To address this, topology based
-static scheduling algorithms were proposed. However, they are not effective to
-rate or pattern change in the incoming data. Hence, dynamic scheduling
-algorithm is needed with following challenges. First, execution time of an
-operator should be estimated, and it should be guaranteed that scheduling an
-operator compensates switching cost. Second, since the scheduling decision is
-a part of execution, it should be a light-weight algorithm.
+In this paper, we describe the design and implementation of \emph{C-Stream},
+which is an elastic stream processing engine. C-Stream addresses all of the
+aforementioned challenges.  First, in contrast to the widely adopted
+event-based interface for developing stream processing operators, C-Stream
+provides an interface wherein each operator has its own control loop and rely
+on data availability APIs to decide when to perform its computations. This
+model significantly simplifies development of multi-input port operators that
+otherwise require complex synchronization. Furthermore, it enables
+intra-operator optimizations such as batching. Second, C-Stream contains a
+multi-threaded dynamic scheduler that manages the execution of the operators.
+The scheduler, which is customizable via plug-ins, enables the execution of
+the operators as co-routines, using any number of threads. The base scheduler
+implements back-pressure, provides data availability APIs, and manages
+preemption and termination handling. Scheduler plug-ins are used to implement
+different scheduling policies that can prioritize latency or throughput. Last,
+C-Stream provides elastic parallelization. It can dynamically adjust the
+number of threads used to execute an application, and can also adjust the
+number of replicas of data-parallel operators to resolve bottlenecks. For the
+latter we focus on stateless operators, but the techniques also apply on
+partitioned parallel operators\footnote{This requires state migration and
+ordering support, which is not yet implemented in our prototype, but have been
+implemented in other systems~\cite{ref:stream-parallel}}. Finally, we have
+evaluated our system using a variety of topologies under varying operator
+costs. The results show that C-Stream is scalable (with increasing number of
+threads), highly customizable (in terms of scheduling goals), and can resolve
+bottlenecks by dynamically adjusting the level of data parallelism used
+(elasticity).
+ 
+In summary, this paper makes the following contributions:
+\begin{itemize}
+\item We propose an operator development API that facilitates sequential
+implementations, significantly simplifying development of multi-port
+operators that otherwise require explicit synchronization.
+\item We develop a flexible scheduler and accompanying runtime machinery for
+executing operators that are implemented as co-routines, using multiple threads. 
+\item We present techniques for elastic executing, including the adjustment of the
+level of parallelism used and the number of operator replicas employed.
+\item We provide a detailed evaluation of our system to showcase its efficacy.
+\end{itemize}
 
-Auto parallelization is another component to scale stream processing
-application. It is desirable to achieve this transparently. However, creating
-operator replicas to exploit data parallelism is effective only if that
-operator is the bottleneck operator. Additionally, number of oper- ator
-replicas should be adjusted to the solve bottleneck issue.
-
-Number of threads running on the system is the third factor to meet QoS
-requirements. Increasing number of active threads does not necessarily result
-in an increase in throughput, it may also harm the system performance. Hence,
-number of threads should be adjusted dynami- cally by the stream processing
-engine.
-
-In this paper, we present our co-routine based stream processing engine. We
-also propose dynamic scheduling algorithm, control mechanism to adjust the
-number of threads on the system and auto parallelization module.
+The rest of this paper is organized as follows. Section~\ref{sec:related},
+discusses related work. Section~\ref{sec:pmodel} overviews the programming
+model and the operator development APIs used by C-Stream.
+Section~\ref{sec:scheduler} describes the co-routine based runtime and the
+multi-threaded scheduler. Section~\ref{sec:plugin} presents the custom
+scheduler plug-ins we have developed. Section~\ref{sec:elasticity} explains
+how Stream-C achieves elasticity. Section~\ref{sec:evaluation} presents our
+experimental evaluation and Section~\ref{sec:conclusion} concludes the paper.
 
 
-The organization of the paper is as follows. In Section 2, related work on
-this area will be covered. Co-routine based stream processing engine will be
-presented in Section 3. Dynamic scheduling algorithm will be pro- posed in
-Section 4. Auto parallelization module and thread count adjustment will be
-analyzed in Section 5. In Section 6, experimental results will be given. Paper
-is concluded with future work in Section 7.

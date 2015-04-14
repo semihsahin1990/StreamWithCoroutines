@@ -1,85 +1,74 @@
-@String{icml = "International Conference on Machine Learning (ICML)"}
-@String{kdd = "ACM International Conference on Knowledge Discovery and Data Mining (KDD)"}
-@String{vldb = "Very Large Databases Conference (VLDB)"}
-@String{jmr = "Journal of Marketing Research"}
+@String{csur = "ACM Computing Surveys (CSUR)"}
 @String{eswa = "Expert Systems with Applications"}
+@String{ibmjrd = "IBM Journal of Research and Development"}
+@String{icml = "International Conference on Machine Learning (ICML)"}
+@String{iri = "IEEE International Conference on Information Reuse and Integration (IRI)"}
+@String{jmr = "Journal of Marketing Research"}
+@String{kdd = "ACM International Conference on Knowledge Discovery and Data Mining (KDD)"}
+@String{tc = "IEEE Transactions on Computers (TC)"}
+@String{vldb = "Very Large Databases Conference (VLDB)"}
+@String{whpcf = "Workshop on High-Performance Computational Finance at Supercomputing"}
 
-@InProceedings{ref:clus-prof, 
- author = {{\.I}zzeddin G{\"u}r and Mehmet G{\"u}vercin and Hakan Ferhatosmano{\u g}lu},
- title = "Scaling Forecasting Algorithms using Clustered Modeling",
- booktitle = "Technical Report BU-CE-1302, Bilkent University",
- year = "August, 2013" 
-}
-% pages = "0--0",
-
-@InProceedings{ref:dbscan,
- author = "M. Ester and Hans-Peter Kriegel and J. Sander and Xiaowei Xu ",
- title = "A density-based algorithm for discovering clusters in large spatial databases with noise",
- booktitle = kdd,
- pages = "226--31",
- year = "1996"
-}
-
-@InProceedings{ref:clustream,
- author = "Charu C. Aggarwal and Jiawei Han and Jianyong Wang and Philip S. Yu",
- title = "A Framework for Clustering Evolving Data Streams",
- booktitle = vldb,
- pages = "81--92",
- year = "2003"
+@InProceedings{ref:app-finance,
+  author = "Xiaolan J. Zhang and Henrique Andrade and Bugra Gedik and Richard King and John Morar and Senthil Nathan and Yoonho Park and Raju Pavuluri and Edward Pring and Randall Schnier and Philippe Selo and Michael Spicer and Chitra Venkatramani and Andy Frenkiel and Wim De Pauw and Michael Pfiefer and Paul Allen and Norman Cohen and Kun-Lung Wu",
+  title = "Implementing a High-Volume, Low-Latency Market Data Processing System on Commodity Hardware using IBM Middleware", 
+  booktitle = whpcf, 
+  year = "2009"
 }
 
-@InProceedings{ref:x-means,
- author = "Dan Pelleg and Andrew W. Moore",
- title = "X-means: {E}xtending K-means with Efficient Estimation of the Number of Clusters",
- booktitle = icml,
- pages = "727--734",
- year = "2000"
+@Article{ref:app-telco,
+  author = "P. Zerfos and M. Srivatsa and D. Dennerline and H. Franke and D. Agrawal",
+  title = "Platform and applications for massive-scale streaming network analytics", 
+  journal = ibmjrd,
+  volume = "57",
+  number = "3/4",
+  pages = "11:1 - 11:13",
+  year = "2013"
 }
 
-@article{ref:churn-mining,
- author = "Shin-Yuan Hung and David C. Yen and Hsiu-Yu Wang",
- title = "Applying data mining to telecom churn management",
- journal = eswa,
- volume = "31",
- number = "3",
- pages = "515--524",
- year = "2006"
+@InProceedings{ref:parallel,
+  author = "Scott Schneider and Martin Hirzel and Buğra Gedik an Kun-Lung Wu", 
+  title = "Safe data parallelism for general streaming",
+  journal = tc,
+  volume = "64",
+  number = "2",
+  year = "504--517",
+  year = "2015"
 }
 
-@article{ref:segmentation,
- author = "Michael J. Brusco and J. Dennis Cradit and Armen Tashchian",
- title = "Multi-criterion Clusterwise Regression for Joint Segmentation Settings: {A}n Application to Customer Value",
- journal = jmr,
- volume = "40",
- number = "2",
- pages = "225--234",
- year = "2003"
+@InProceedings{ref:app-cybersecurity,
+  author = "Douglas L. Schales and Mihai Christodorescu and Josyula R. Rao and Reiner Sailer and Marc Ph. Stoecklin and Wietse Venema and Ting Wang",
+  title = "Stream Computing for Large-Scale, Multi-Channel Cyber Threat Analytics",
+  booktitle = iri,
+  pages = "8--15",
+  year = "2014"
 }
 
-
-@Misc{ref:storm,
- key = "Twitter Storm",
- title = "Storm",
- howpublished = "\url{http://storm-project.net/}",
- note = "retrieved March, 2013"
+@InProceedings{ref:app-healthcare,
+  author = "Manoj K. Garg and Duk-Jin Kim and Deepak S. Turaga and Balakrishnan Prabhakaran",
+  title = "Multimodal analysis of body sensor network data streams for real-time healthcare",
+  booktitle = "Multimedia Information Retrieval",
+  pages = "469--478",
+  year = "2010"
 }
 
-@Misc{ref:hbase,
- key = "Apache HBase",
- title = "{HBase}",
- howpublished = "\url{http://hbase.apache.org/}",
- note = "retrieved March, 2013"
+@Article{ref:spl,
+  author = "M. Hirzel and H. Andrade and Bugra Gedik and Gabriela Jacques-Silva and Rohit Khandekar and Vibhore Kumar and Mark Mendell and Howard Nasgaard and Scott Schneider and Robert Soule and Kun-Lung Wu",
+  title = "Streams Processing Language: Analyzing Big Data in Motion", 
+  journal = ibmjrd,
+  volume = "57",
+  number = "3/4",
+  pages = "7:1-7:11",
+  year = "2013"
 }
 
-
-%%%%% Unused
-
-@Article{ref:STREAM,
- author = "Arvind Arasu and Brian Babcock and Shivnath Babu and Mayur Datar and Keith Ito and Rajeev Motwani and Itaru Nishizawa and Utkarsh Srivastava and Dilys Thomas and Rohit Varma and Jennifer Widom",
- title = "{STREAM}: {T}he {S}tanford Stream Data Manager",
- journal = "{IEEE} Data Engineering Bulletin",
- volume = "26",
- number = "1",
- year = "2003"
+@Article{ref:survey,
+  name = "Martin Hirzel and Robert Soule and Scott Schneider and Bugra Gedik and Robert Grimm",
+  title = "A Catalog of Streaming Optimizations", 
+  journal = csur, 
+  number = "46",
+  volume = "4", 
+  year = "2014"
 }
+
 
