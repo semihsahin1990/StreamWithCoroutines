@@ -13,8 +13,8 @@ using namespace streamc::operators;
 using namespace streamc::connectors;
 
 // source + timestamper + depth x (selective+busy) + resultcollector + sink
-Chain::Chain(size_t depth, uint64_t cost, double selectivity) 
-	: depth_(depth), cost_(cost), selectivity_(selectivity), flow_("chain")
+Chain::Chain(size_t depth, vector<double> costList, double selectivity) 
+	: depth_(depth), selectivity_(selectivity), flow_("chain")
 {
   // create source
   Operator & src = flow_.createOperator<FileSource>("src")
@@ -25,7 +25,7 @@ Chain::Chain(size_t depth, uint64_t cost, double selectivity)
 
   // create busy and selective operators
   for(size_t i=0; i<depth_; i++) {
-    Operator & busy = flow_.createOperator<Busy>("busy"+to_string(i), cost_);
+    Operator & busy = flow_.createOperator<Busy>("busy"+to_string(i), costList[i]);
     busyOps_.push_back(&busy);
 
     Operator & selective = flow_.createOperator<Selective>("selective"+to_string(i), selectivity_);

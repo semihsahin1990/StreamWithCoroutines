@@ -1,11 +1,11 @@
 #include "streamc/Flow.h"
 #include "streamc/Operator.h"
-#include "vector"
 
 class Tree
 {
 public:
-	Tree(size_t depth, uint64_t cost, double selectivity, size_t n);
+	//Tree(size_t depth, uint64_t cost, double selectivity, size_t n);
+	Tree(size_t depth, std::vector<double> costList, double selectivity, size_t n);
 	size_t getDepth() { return depth_; }
 	streamc::Flow & getFlow() { return flow_; }
 

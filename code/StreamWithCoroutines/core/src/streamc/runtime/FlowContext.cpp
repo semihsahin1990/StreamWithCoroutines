@@ -25,6 +25,7 @@ size_t FlowContext::maxQueueSize_ = 1000; // TODO: make changable, and perhaps p
 FlowContext::FlowContext(Flow & flow, SchedulerPlugin * plugin)
   : flow_(flow), numCompleted_(0), isShutdownRequested_(false)
 {
+  SC_LOG(Info, "\n\n\n");
   // create the scheduler
   if (plugin!=nullptr)
     scheduler_.reset(new Scheduler(*this, plugin));
@@ -127,7 +128,7 @@ void FlowContext::run(int maxThreads)
   }
   */
   utilityController_->start(maxThreads);
-//  fissionController_->start();
+  fissionController_->start();
 
   // start the scheduler and all the threads
   /*
@@ -162,8 +163,8 @@ void FlowContext::wait()
   // join all threads 
   //for (auto & threadPtr : threads_) 
   //  threadPtr->join();
-  //fissionController_->setCompleted();
-  //fissionController_->join();
+  fissionController_->setCompleted();
+  fissionController_->join();
 
   utilityController_->setCompleted();
   utilityController_->join();

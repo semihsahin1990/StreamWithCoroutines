@@ -26,7 +26,6 @@ void WorkerThread::run()
   SC_LOG(Info, "Worker thread #" << index_ << " started running"); 
   
   while(!stop_.load()) {
-    SC_LOG(Info, "Worker thread #" << index_ << " waiting for a ready operator");
     OperatorContextImpl * oper = scheduler_->getThreadWork(*this);
     if (oper==nullptr) 
       break; // no more work to come

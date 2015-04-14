@@ -4,6 +4,7 @@
 #include "streamc/runtime/InputPortImpl.h"
 #include "streamc/runtime/OutputPortImpl.h"
 #include "streamc/Operator.h"
+#include "streamc/runtime/RuntimeLogger.h"
 #include <time.h>
 
 #include <chrono>
@@ -28,11 +29,23 @@ void FissionController::start() {
 vector<OperatorContextImpl *> candidates;
 
 void FissionController::findBottleneckCandidates() {
+	candidates.clear();
 	vector<OperatorContextImpl *> operators = flowContext_.getOperators();
 	for(auto it=operators.begin(); it!=operators.end(); it++) {
 		OperatorContextImpl * oper = *it;
 		if(oper->getNumberOfInputPorts() ==1 && oper->getNumberOfOutputPorts()==1)
 			candidates.push_back(oper);
+	}
+}
+
+void printCandidates() {
+	SC_LOG(Info, "----");
+	SC_LOG(Info, candidates.size());
+	int counter = 0;
+	for(auto it=candidates.begin(); it!=candidates.end(); it++) {
+		
+		SC_LOG(Info, counter++<<":\t"<<(*it)->getOperator().getName());
+		SC_LOG(Info, "----");
 	}
 }
 
@@ -45,6 +58,9 @@ OperatorContextImpl * FissionController::detectBottleneck() {
 		OperatorContextImpl * oper = *it;
 		InputPortImpl & iport = oper->getInputPortImpl(0);
 		OutputPortImpl & oport = oper->getOutputPortImpl(0);
+
+		if(oper->isComplete())
+			continue;
 
 		if(iport.isWriteBlocked(threshold) && !oport.isWriteBlocked(threshold)) {
 		//	cerr<<"bottleneck:\t"<<oper->getOperator().getName()<<endl;
@@ -192,6 +208,7 @@ void FissionController::changeFissionLevel(OperatorContextImpl * bottleneck, siz
 }
 
 void FissionController::run() {
+	/*
 	return;
 	srand(time(NULL));
 
@@ -212,9 +229,11 @@ void FissionController::run() {
 		changeFissionLevel(bottleneck, 5);
 		return;
 	}
-	/*
+	*/
+	
 	srand(time(NULL));
 	findBottleneckCandidates();
+	printCandidates();
 
 	while(!isCompleted_.load()) {
 		std::chrono::milliseconds duration(2000);
@@ -225,16 +244,14 @@ void FissionController::run() {
 			this_thread::sleep_for(duration);
 			continue;
 		}
-		cerr<<bottleneck->getOperator().getName()<<endl;
+		cerr<<"replicate:\t"<<bottleneck->getOperator().getName()<<endl;
 		if(replicatedOperators_.find(bottleneck) == replicatedOperators_.end()) {
-			addFission(bottleneck, 7);
-			//addFission(bottleneck, rand()%10+2);
+			addFission(bottleneck, 2);
 		}
 		else {
-			changeFissionLevel(bottleneck, rand()%3+2);
+			changeFissionLevel(bottleneck, replicatedOperators_[bottleneck]+1);
 		}
 	}
-	*/
 }
 
 void FissionController::blockGranted(OperatorContextImpl * oper) 

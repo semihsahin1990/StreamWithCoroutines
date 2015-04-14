@@ -7,15 +7,15 @@
 #include "streamc/operators/Union.h"
 #include "streamc/operators/ResultCollector.h"
 #include "streamc/operators/FileSink.h"
-
+#include <vector>
 using namespace std;
 using namespace streamc;
 using namespace streamc::operators;
 using namespace streamc::connectors;
 
 // | n^depth-1 x (source+timestamper+selective+busy) + | n^depth-2 x (union+selective+busy) + ... + | 1 x (union+selective+busy) + (resultcollector + sink) 
-ReverseTree::ReverseTree(size_t depth, uint64_t cost, double selectivity, size_t n)
-	: depth_(depth), cost_(cost), selectivity_(selectivity), n_(n), flow_("reverseTree")
+ReverseTree::ReverseTree(size_t depth, vector<double> costList, double selectivity, size_t n)
+	: depth_(depth), selectivity_(selectivity), n_(n), flow_("reverseTree")
 {
 	// create sources
 	int numberOfSources = pow(n_, depth_-1);
@@ -35,7 +35,7 @@ ReverseTree::ReverseTree(size_t depth, uint64_t cost, double selectivity, size_t
 		Operator & selective = flow_.createOperator<Selective>("selective"+to_string(i), selectivity_);
 		selectiveOps_.push_back(&selective);
 
-		Operator & busy = flow_.createOperator<Busy>("busy"+to_string(i), cost_);
+		Operator & busy = flow_.createOperator<Busy>("busy"+to_string(i), costList[i]);
 		busyOps_.push_back(&busy);
 	}
 

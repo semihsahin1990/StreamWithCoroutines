@@ -49,7 +49,7 @@ void UtilityController::removeThread() {
 		unique_lock<mutex> lock(mutex_);
 		scheduler_.requestThreadBlock();
 		blockRequested_ = true;
-		while (blockRequested_)
+		while (blockRequested_ && !isCompleted_.load())
 			cv_.wait(lock);
 	}
 	bool found = false;
@@ -60,10 +60,10 @@ void UtilityController::removeThread() {
 			break;
 		}
 	}
-	//cerr<<"remove thread:\t"<<threads_.size()<<"\t"<<found<<endl;
 }
 
 void UtilityController::run() {
+	threads_.clear();
     addThread();
     
 	//vector<long> prevRunningTimes(threads_.size());
@@ -98,7 +98,6 @@ void UtilityController::run() {
 			currUtilities[i] = (double) (currRunningTimes[i] - prevRunningTimes[i]) / timeDifference;
 		}
 
-		cerr<<threads_.size()<<endl;
 		double avgUtility = 0;
 		for(size_t i=0; i<threads_.size(); i++) {
 			prevRunningTimes[i] = currRunningTimes[i];
@@ -109,7 +108,6 @@ void UtilityController::run() {
 				prevUtilites[i] = ALPHA * prevUtilites[i] + (1-ALPHA) * currUtilities[i];
 
 			avgUtility = avgUtility + prevUtilites[i];
-			cerr<<prevUtilites[i]<<endl;
 		}
 		firstTime = false;
 		avgUtility = avgUtility / threads_.size();

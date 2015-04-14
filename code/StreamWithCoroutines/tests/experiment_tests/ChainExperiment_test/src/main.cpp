@@ -16,16 +16,16 @@
 
 using namespace std;
 using namespace streamc;
+using namespace std::chrono;
 
 class ChainExperiment : public streamc::experiment::Run 
 {
 public:
-
-  void runExperiment(int depth, int numThreads, int cost, double selectivity, SchedulerPlugin * plugin, double & throughput, double & latency) {
+  void runExperiment(int depth, int numThreads, vector<double> costList, double selectivity, SchedulerPlugin * plugin, double & throughput, double & latency) {
     std::chrono::seconds timespan(5);
     std::this_thread::sleep_for(timespan);
 
-    Chain chain(depth, cost, selectivity);
+    Chain chain(depth, costList, selectivity);
     Flow & flow = chain.getFlow();
 
     FlowRunner & runner = FlowRunner::createRunner();
@@ -55,7 +55,7 @@ public:
 
     throughput = (double)count/(double)(lastTupleTime-firstTupleTime);
     
-    cout<<count<<"\t"<<throughput<<"\t"<<latency<<endl;
+    cout<<count<<"\t"<<throughput<<"\t"<<latency<<endl<<endl<<endl;
   }
 
   SchedulerPlugin * getScheduler(int i, size_t quanta) {
@@ -72,7 +72,7 @@ public:
     return nullptr;
   }
 
-  void repeatExperiment(int numberOfRuns, int depth, int numThreads, int cost, double selectivity, int schedulerId, int quanta, double & avgThroughput, double & throughputDev, double & avgLatency, double & latencyDev) {
+  void repeatExperiment(int numberOfRuns, int depth, int numThreads, vector<double> costList, double selectivity, int schedulerId, int quanta, double & avgThroughput, double & throughputDev, double & avgLatency, double & latencyDev) {
     vector<double> tValues;
     vector<double> lValues;
 
@@ -81,7 +81,7 @@ public:
 
     for(int i=0; i<numberOfRuns; i++) {
       double throughput, latency;
-      runExperiment(depth, numThreads, cost, selectivity, getScheduler(schedulerId, quanta), throughput, latency);
+      runExperiment(depth, numThreads, costList, selectivity, getScheduler(schedulerId, quanta), throughput, latency);
       tValues.push_back(throughput);
       lValues.push_back(latency);
       avgThroughput = avgThroughput + throughput;
@@ -102,7 +102,20 @@ public:
     throughputDev = sqrt(throughputDev/numberOfRuns);
     latencyDev = sqrt(latencyDev/numberOfRuns);
 
-    cout<<avgThroughput<<"\t"<<throughputDev<<"\t"<<avgLatency<<"\t"<<latencyDev<<endl;
+    cout<<avgThroughput<<"\t"<<throughputDev<<"\t"<<avgLatency<<"\t"<<latencyDev<<endl<<endl<<endl<<endl;
+  }
+
+  vector<double> generateCosts(size_t baseCost, size_t length) {
+    mt19937_64 randgen;
+    unsigned seed = system_clock::now().time_since_epoch().count();
+    randgen.seed(seed);
+    uniform_real_distribution<> dist(0.5, 1.5);
+
+    vector<double> costList;
+    for(size_t i=0; i<length; i++)
+      costList.push_back(dist(randgen) * baseCost);
+
+    return costList;
   }
 
   void process() 
@@ -113,8 +126,8 @@ public:
 
     size_t defaultThreads = 4;
     size_t defaultDepth = 10;
-    int defaultCost = 30;
-    double defaultSelectivity = 0.98;
+    int defaultCost = 40;
+    double defaultSelectivity = 1;
     int defaultQuanta = 50000;
 
     vector<int> quantaValues =  {500, 1000, 5000, 10000, 50000, 100000, 500000};
@@ -123,12 +136,13 @@ public:
     double throughputDev, latencyDev;
 
     vector<string> schedulers = {"random", "maxThroughput", "maxTupleWait", "leastRecently", "maxQueue"};
-
+    vector<double> costList = generateCosts(defaultCost, defaultDepth);
     
     // thread experiment
     cout<<"thread experiment"<<endl;
-    size_t const numThreadsMin = 5;
-    size_t const numThreadsMax = 4;
+    size_t const numThreadsMin = 1;
+    size_t const numThreadsMax = 12;
+    
     ExpData data("ChainExperiment-thread");
     data.setDescription("This is a chain experiment - throughput as a function of quanta for different approaches");
     data.addFieldName("num_threads");
@@ -144,7 +158,7 @@ public:
       data.addNewFieldValue("num_threads", numThreads);
       for(size_t j=0; j<schedulers.size(); j++) {
         cout<<schedulers[j]<<endl;
-        repeatExperiment(numberOfRuns, defaultDepth, numThreads, defaultCost, defaultSelectivity, j, defaultQuanta, throughput, throughputDev, latency, latencyDev);
+        repeatExperiment(numberOfRuns, defaultDepth, numThreads, costList, defaultSelectivity, j, defaultQuanta, throughput, throughputDev, latency, latencyDev);
         data.addNewFieldValue("t_"+schedulers[j], throughput);
         data.addNewFieldValue("td_"+schedulers[j], throughputDev);
         data.addNewFieldValue("l_"+schedulers[j], latency);
@@ -154,7 +168,7 @@ public:
       cout<<"---------------"<<endl;
     }
     data.close();
-
+/*
     // cost experiment
     cout<<"cost experiment"<<endl;
     int const minCost = 0;
@@ -184,7 +198,7 @@ public:
       cout<<"---------------"<<endl;
     }
     data2.close();
-
+*/
     /*
     // depth experiment
     cout<<"depth experiments"<<endl;

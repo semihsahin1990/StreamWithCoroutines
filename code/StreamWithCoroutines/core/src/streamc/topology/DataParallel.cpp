@@ -8,6 +8,7 @@
 #include "streamc/operators/Merge.h"
 #include "streamc/operators/ResultCollector.h"
 #include "streamc/operators/FileSink.h"
+#include <vector>
 
 using namespace std;
 using namespace streamc;
@@ -15,8 +16,8 @@ using namespace streamc::operators;
 using namespace streamc::connectors;
 
 // source + timestamper + split + | n x (selective+busy) + +merge + result collector + sink
-DataParallel::DataParallel(uint64_t cost, double selectivity, size_t n) 
-	: cost_(cost), selectivity_(selectivity), n_(n), flow_("DataParallel")
+DataParallel::DataParallel(vector<double> costList, double selectivity, size_t n) 
+	: selectivity_(selectivity), n_(n), flow_("DataParallel")
 {
   // create source
   Operator & src = flow_.createOperator<FileSource>("src")
@@ -36,7 +37,7 @@ DataParallel::DataParallel(uint64_t cost, double selectivity, size_t n)
     Operator & selective = flow_.createOperator<Selective>("selective"+to_string(i), selectivity_);
     selectiveOps_.push_back(&selective);
 
-    Operator & busy = flow_.createOperator<Busy>("busy"+to_string(i), cost_);
+    Operator & busy = flow_.createOperator<Busy>("busy"+to_string(i), costList[i]);
     busyOps_.push_back(&busy);
   }
   

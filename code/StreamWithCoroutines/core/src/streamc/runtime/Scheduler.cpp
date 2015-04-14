@@ -54,20 +54,19 @@ void Scheduler::removeThreads()
 void Scheduler::addOperatorContext(OperatorContextImpl & context)
 {
   unique_lock<mutex> lock(mutex_);
-
   operContexts_[&context] = unique_ptr<OperatorInfo>(new OperatorInfo(context));
   context.init();
   operContexts_[&context]->init();
   readyOperators_.insert(&context);
+  SC_LOG(Info, "Added Operator Context\t"+context.getOperator().getName() << "\t"<< &context);
 }
 
 void Scheduler::removeOperatorContext(OperatorContextImpl & context)
 {
   unique_lock<mutex> lock(mutex_);
-  SC_LOG(Info, "Removing Operator Context\t"+context.getOperator().getName());
   operContexts_.erase(&context);
   outOfServiceOperators_.erase(&context);
-  SC_LOG(Info, "Removed Operator Context\t"+context.getOperator().getName());
+  SC_LOG(Info, "Removed Operator Context\t"+context.getOperator().getName() << "\t"<< &context);
 }
 /*
 void Scheduler::start()

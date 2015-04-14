@@ -5,7 +5,8 @@
 class Chain
 {
 public:
-	Chain(size_t depth, uint64_t cost, double selectivity);
+	//Chain(size_t depth, uint64_t cost, double selectivity);
+	Chain(size_t depth, std::vector<double> costList, double selectivity);
 	streamc::Flow & getFlow() { return flow_; }
 
 private:

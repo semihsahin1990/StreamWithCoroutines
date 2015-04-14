@@ -18,7 +18,6 @@ InputPortImpl::InputPortImpl(OperatorContextImpl & oper, Scheduler & scheduler)
   inWriteBlockedState_ = false;
   createdAt_ = chrono::high_resolution_clock::now();
   totalWriteBlockedDuration_ = std::chrono::microseconds(0);
-
 }
 
 //add publisher operator(operator context) to this port
@@ -189,7 +188,6 @@ void InputPortImpl::markAsWriteBlocked() {
   if(inWriteBlockedState_ == true)
     return;
 
-//  cerr<<"mark:\t"<<getOperatorContextImpl().getOperator().getName()<<endl;
   inWriteBlockedState_ = true;
   writeBlockedBeginTime_ = chrono::high_resolution_clock::now();
 }
@@ -200,7 +198,6 @@ void InputPortImpl::unmarkAsWriteBlocked() {
   if(inWriteBlockedState_ == false)
     return;
 
-//  cerr<<"unmark:\t"<<getOperatorContextImpl().getOperator().getName()<<endl; 
   inWriteBlockedState_ = false;
   high_resolution_clock::time_point currentTime = high_resolution_clock::now();
 

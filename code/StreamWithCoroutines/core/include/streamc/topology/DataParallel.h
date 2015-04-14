@@ -1,11 +1,11 @@
 #include "streamc/Flow.h"
 #include "streamc/Operator.h"
-#include "vector"
 
 class DataParallel
 {
 public:
-	DataParallel(uint64_t cost, double selectivity, size_t n);
+	//DataParallel(uint64_t cost, double selectivity, size_t n);
+	DataParallel(std::vector<double> costList, double selectivity, size_t n);
 	streamc::Flow & getFlow() { return flow_; }
 
 private:

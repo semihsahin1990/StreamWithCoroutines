@@ -7,6 +7,7 @@
 #include "streamc/operators/RoundRobinSplit.h"
 #include "streamc/operators/ResultCollector.h"
 #include "streamc/operators/FileSink.h"
+#include <vector>
 
 using namespace std;
 using namespace streamc;
@@ -14,16 +15,16 @@ using namespace streamc::operators;
 using namespace streamc::connectors;
 
 // src + timestamper + | 1 x (selective + busy + RRsplit) + ... + | n^(depth-2) x (selective + busy + RRSplit) + | n^(depth-1) x (selective + busy) + | n^(depth-1) x (resultCollector+sink)
-Tree::Tree(size_t depth, uint64_t cost, double selectivity, size_t n) 
-	: depth_(depth), cost_(cost), selectivity_(selectivity), n_(n), flow_("tree")
+Tree::Tree(size_t depth, vector<double> costList, double selectivity, size_t n) 
+	: depth_(depth), selectivity_(selectivity), n_(n), flow_("tree")
 {
 	// create source
 	Operator & src = flow_.createOperator<FileSource>("src")
 	    .set_fileName("data/in.dat")
 	    .set_fileFormat({{"name",Type::String}, {"grade",Type::String}, {"lineNo", Type::Integer}});
 
-  // create timestamper
-  Operator & timestamper = flow_.createOperator<Timestamper>("timestamper");
+	// create timestamper
+	Operator & timestamper = flow_.createOperator<Timestamper>("timestamper");
 
 	// create Nodes (selective-cost)
 	size_t numberOfNodes = (pow(n_, depth_)-1) / (n_-1);
@@ -31,7 +32,7 @@ Tree::Tree(size_t depth, uint64_t cost, double selectivity, size_t n)
     	Operator & selective = flow_.createOperator<Selective>("selective"+to_string(i), selectivity_);
     	selectiveOps_.push_back(&selective);
 
-    	Operator & busy = flow_.createOperator<Busy>("busy"+to_string(i), cost_);
+    	Operator & busy = flow_.createOperator<Busy>("busy"+to_string(i), costList[i]);
     	busyOps_.push_back(&busy);
 	}
 
