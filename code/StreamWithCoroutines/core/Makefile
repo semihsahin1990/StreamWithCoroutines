@@ -20,8 +20,7 @@ CPPFLAGS  = -DBOOST_LOG_DYN_LINK
 INCLUDES  = -isystem /opt/local/libcpp-software/include
 LDFLAGS   = -L /opt/local/libcpp-software/lib -Wl,-rpath,/opt/local/libcpp-software/lib \
 	-lboost_coroutine-mt -lboost_context-mt -lboost_log-mt -lboost_log_setup-mt \
-	-lboost_filesystem-mt  -lboost_chrono-mt -lboost_system-mt -lboost_thread-mt \
-        -lprofiler
+	-lboost_filesystem-mt  -lboost_chrono-mt -lboost_system-mt -lboost_thread-mt 
 
 ## Implicit Section: change the following only when necessary.
 CXX      = clang++ 

@@ -6,6 +6,7 @@
 @String{jmr = "Journal of Marketing Research"}
 @String{kdd = "ACM International Conference on Knowledge Discovery and Data Mining (KDD)"}
 @String{tc = "IEEE Transactions on Computers (TC)"}
+@String{tpds = "IEEE Transactions on Parallel and Distributed Systems (TPDS)"}
 @String{vldb = "Very Large Databases Conference (VLDB)"}
 @String{whpcf = "Workshop on High-Performance Computational Finance at Supercomputing"}
 
@@ -26,14 +27,24 @@
   year = "2013"
 }
 
-@InProceedings{ref:parallel,
+@Article{ref:stream-parallel,
   author = "Scott Schneider and Martin Hirzel and Buğra Gedik an Kun-Lung Wu", 
   title = "Safe data parallelism for general streaming",
   journal = tc,
   volume = "64",
   number = "2",
-  year = "504--517",
+  pages = "504--517",
   year = "2015"
+}
+
+@Article{ref:elastic-parallel,
+  author = "Bugra Gedik and Scott Schneider and Martin Hirzel and Kun-Lung Wu",
+  title = "Elastic Scaling for Data Stream Processing" ,
+  journal = tpds,
+  volume = "25",
+  number = "6",
+  pages = "1447--1463", 
+  year = "2014"
 }
 
 @InProceedings{ref:app-cybersecurity,
@@ -63,7 +74,7 @@
 }
 
 @Article{ref:survey,
-  name = "Martin Hirzel and Robert Soule and Scott Schneider and Bugra Gedik and Robert Grimm",
+  author = "Martin Hirzel and Robert Soule and Scott Schneider and Bugra Gedik and Robert Grimm",
   title = "A Catalog of Streaming Optimizations", 
   journal = csur, 
   number = "46",

@@ -1,0 +1,187 @@
+\section{Programming Model}\label{sec:pmodel}
+In this section, we first give a brief overview of the basic concepts in
+stream processing. We then describe the programming model used by C-Stream.
+The latter has two aspects: \emph{flow composition} and \emph{operator
+development}.
+
+\subsection{Basic Concepts}
+A streaming application takes the form an operator flow graph. Operators are
+generic data manipulators that are instantiated as part of a flow graph, with
+specializations (e.g., parameter configurations and port arity settings).
+Operators can have zero or more input and output ports. An operator with only
+output ports is called a \emph{source} operator and an operator with only an
+input port is called a \emph{sink} operator. Each output port produces a
+\emph{stream}, that is an ordered series of tuples. An output port is
+connected to an input port via a \emph{stream connection}. These connections
+carry tuples from the stream, providing FIFO semantics. There could be
+multiple stream connections originating from an output port, called a
+\emph{fan-out}. Similarly, there could be multiple stream connections destined
+to an input port, called a \emph{fan-in}.
+
+Three major kinds of parallelism are inherently present within streaming
+applications.
+\medskip\\
+\noindent\emph{Pipeline parallelism}: As one operator is processing a tuple, its
+upstream operator can process the next tuple in line, at the same time.
+\medskip\\
+\noindent\emph{Task parallelism}: A simple fan-out in the flow graph gives way
+to task parallelism, where two different operators can process 
+copies of a tuple, at the same time.
+\medskip\\
+\noindent\emph{Data parallelism}: This type of parallelism can be taken advantage
+of by creating replicas of an operator and distributing the incoming tuples
+among them, so that their processing can be parallelized. This requires a
+split operation, but more importantly, a merge operation after the processing,
+in order to re-establish the original tuple order. Data parallelism can be applied
+to \emph{stateless} as well as
+\emph{partitioned stateful} operators~\cite{ref:elastic-parallel}. Stateless
+operators are those that do not maintain state across tuples. Partitioned
+operators do maintain state, but the state is partitioned based on the value
+of a \emph{key} attribute. In order to take advantage of data parallelism, the
+streaming runtime has to modify the flow graph behind the scenes.
+
+Stream-C takes advantage of all these forms of parallelism, which we cover in
+Section~\ref{sec:elasticity}.
+
+\subsection{Flow Composition}
+There are two aspects of developing a streaming application. The first is to
+compose an application by instantiating operators and connecting them via
+streams. This is called \emph{flow composition}. It is a task typically
+performed by the streaming application developer. The second is operator
+development, which we cover in detail in the next section.
+
+Stream-C supports flow composition using an API-based approach, employing the
+\verb!C++11! language. Listing~\ref{code:composition} shows how a simple
+streaming application is composed using these APIs.
+Figure~\ref{fig:composition} depicts the same application in graphical form.
+
+\begin{lstlisting}[language=C++, 
+  caption={Flow composition in C-Stream.}, label=code:composition, captionpos=b,
+  xleftmargin=0.25cm, columns=flexible, basicstyle={\scriptsize\ttfamily}]
+Flow flow("sample application");
+
+// create the operators
+auto& names = flow.createOperator<FileSource>("name_source")
+  .set_fileName("data/names.dat")
+  .set_fileFormat({{"id",Type::Integer},{"name",Type::String}});
+
+auto& values = flow.createOperator<TCPSource>("value_source")
+  .set_address("my.host.com", 44000)
+  .set_dataFormat({{"id",Type::Integer},{"value",Type::Integer}});
+
+auto& filter = flow.createOperator<Filter>("empty_filter")
+  .set_filter(MEXP1( t_.get<Type::String>("name") != "" ));
+
+auto& combiner = flow.createOperator<Barrier>("combiner", 2);
+
+auto& sink = flow.createOperator<FileSink>("file_sink")
+  .set_fileName("data/out.dat")
+  .set_fileFormat({{"id",Type::Integer}, 
+  	                 {"name",Type::String},{"value",Type::Integer}});
+
+// create the connections
+flow.addConnections( (names,0) >> (0,filter,0) >> (0,combiner) );
+flow.addConnections( (values,0) >> (1,combiner,0) >> (0,snk) );
+
+// configure the runner
+FlowRunner & runner = FlowRunner::createRunner();
+runner.setInfrastructureLogLevel(Info);
+runner.setApplicationLogLevel(Trace);
+
+// run the application and wait for completion
+int numThreads = 2;
+runner.run(flow, numThreads);
+runner.wait(flow);
+\end{lstlisting}
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{figures/composition}
+\caption{Example flow graph from Figure~\ref{code:composition}.}
+\label{fig:composition}
+\end{figure}
+
+A \texttt{Flow} object is used to hold the data flow graph. Operators are
+created using the \texttt{createOperator} function of the \texttt{Flow}
+object. This function takes the operator kind as a template parameter and the
+runtime name of the operator instance being created as a parameter.
+Optionally, it takes the arity of the operator as a parameter as well. For
+instance, the instance of the
+\texttt{Barrier} operator referenced by the \texttt{combiner} variable is
+created by passing the number of input ports, \texttt{2} in this case, as a
+parameter. Operators are configured via their \texttt{set\_} methods, which are
+specific to each operator kind. The parameters to operators can also be lambda
+expressions, such as the \texttt{filter} parameter of the \texttt{Filter}
+operator. Such lambda expressions can reference input tuples (represented by
+the \texttt{t\_} variable in the example code).
+
+The connections between the operator instances are formed using the
+\texttt{createConnections} function of the \texttt{Flow} object. The
+\texttt{>>}
+\verb!C++! operator is overloaded to create chains of connections. For
+instance, \texttt{(names,0) >> (0,filter,0) >> (0,combiner)} represents a
+chain of connections, where the output port \texttt{0} of the operator
+instance referenced by \texttt{names} is connected to the input port
+\texttt{0} of the one referenced by \texttt{filter} and the output port
+\texttt{0} of the latter is connected to the input port \texttt{0} of the
+operator instance referenced by \texttt{combiner}.
+
+The flow is run via the use of a \texttt{FlowRunner} object. The \texttt{run}
+method of the \texttt{FlowRunner} object takes the \texttt{Flow} object as
+well as the number of threads to be used for running the flow as parameters.
+
+\subsection{Operator Development}
+The success of the stream processing paradigm depends, partly, on the
+availability of a wide range of generic operators. Such operators simplify the
+composition of streaming applications by enabling the application developers
+to pick and configure operators from a pre-existing set of cross-domain and
+domain specific operators.
+
+The classical approach to operator development has been to use an event-driven
+model, where a new operator is implemented by extending a framework class and
+overriding a tuple processing function to implement the custom operator logic.
+Examples of this abound~\cite{ref:storm, ref:s4, ref:spl, ref:spb-opdev}.
+
+However, the event-driven approach has several disadvantages. First, it makes
+the implementation of multi-input port operators that require synchronization,
+difficult. Consider the implementation of a simple \texttt{Barrier} operator,
+
+
+- problems: multi-input synchronization
+- problems: buffering, instruction cache
+- problems: termination handling
+
+Self-control based model
+- description
+- code
+- explanation
+
+
+\begin{lstlisting}[language=C++, 
+  caption={Flow composition in C-Stream.}, label=code:oper-def, captionpos=b,
+  xleftmargin=0.25cm, columns=flexible, basicstyle={\scriptsize\ttfamily}]
+class Barrier : public Operator
+{
+public:
+  Barrier::Barrier(std::string const& name, int const numInputs)
+    : Operator(name, numInputs, 1) 
+  {}
+
+  void Barrier::process(OperatorContext& context)
+  {
+    unordered_map<InputPort*, size_t> waitSpec;
+    for (auto iport : context.getInputPorts())
+      waitSpec[iport] = 1;
+    auto& oport = *context.getOutputPorts().front();
+    while(!context.isShutdownRequested()) {
+      bool closed = context.waitOnAllPorts(waitSpec);
+      if (closed)
+        break;
+      Tuple resultTuple;
+      for (auto iport : context.getInputPorts())
+        resultTuple.append(iport->popFrontTuple());
+      oport.pushTuple(resultTuple);
+    }
+  }
+};
+\end{lstlisting}

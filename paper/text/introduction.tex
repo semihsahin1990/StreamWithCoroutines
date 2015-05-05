@@ -1,4 +1,4 @@
-\section{Introduction}\label{sec:introduction}
+ \section{Introduction}\label{sec:introduction}
 
 As the world becomes more instrumented and interconnected, the amount of live
 data generated from software and hardware sensors increases exponentially.
@@ -52,7 +52,7 @@ number of replicas of data-parallel operators to resolve bottlenecks. For the
 latter we focus on stateless operators, but the techniques also apply on
 partitioned parallel operators\footnote{This requires state migration and
 ordering support, which is not yet implemented in our prototype, but have been
-implemented in other systems~\cite{ref:stream-parallel}}. Finally, we have
+implemented in other systems~\cite{ref:stream-parallel}.}. Finally, we have
 evaluated our system using a variety of topologies under varying operator
 costs. The results show that C-Stream is scalable (with increasing number of
 threads), highly customizable (in terms of scheduling goals), and can resolve
@@ -74,7 +74,7 @@ level of parallelism used and the number of operator replicas employed.
 The rest of this paper is organized as follows. Section~\ref{sec:related},
 discusses related work. Section~\ref{sec:pmodel} overviews the programming
 model and the operator development APIs used by C-Stream.
-Section~\ref{sec:scheduler} describes the co-routine based runtime and the
+Section~\ref{sec:runtime} describes the co-routine based runtime and the
 multi-threaded scheduler. Section~\ref{sec:plugin} presents the custom
 scheduler plug-ins we have developed. Section~\ref{sec:elasticity} explains
 how Stream-C achieves elasticity. Section~\ref{sec:evaluation} presents our
