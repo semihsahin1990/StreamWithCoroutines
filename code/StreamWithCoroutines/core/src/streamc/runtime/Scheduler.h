@@ -48,6 +48,11 @@ public:
   void setUtilityController(UtilityController * utilityController) { utilityController_ = utilityController; };
   void requestThreadBlock();
   void markThreadCompleted(WorkerThread * thread);
+  /**/
+  bool checkOperator(OperatorContextImpl * oper) {
+    return operContexts_.find(oper) != operContexts_.end();
+  }
+  /**/
 private:
   void updateThreadState(WorkerThread & thread, ThreadInfo::ThreadState state);
   void updateOperatorState(OperatorContextImpl & oper, OperatorInfo::OperatorState state);

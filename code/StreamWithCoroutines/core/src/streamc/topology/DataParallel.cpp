@@ -37,7 +37,7 @@ DataParallel::DataParallel(vector<double> costList, double selectivity, size_t n
     Operator & selective = flow_.createOperator<Selective>("selective"+to_string(i), selectivity_);
     selectiveOps_.push_back(&selective);
 
-    Operator & busy = flow_.createOperator<Busy>("busy"+to_string(i), costList[i]);
+    Operator & busy = flow_.createOperator<Busy>("busy"+to_string(i), costList[i], selectivity_);
     busyOps_.push_back(&busy);
   }
   

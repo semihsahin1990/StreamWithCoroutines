@@ -24,9 +24,10 @@ public:
   std::chrono::high_resolution_clock::time_point & getFrontTimestamp();
   void drain();
   OperatorContextImpl & getOperatorContextImpl() { return *oper_; }
+  void resetBeginTime();
   void markAsWriteBlocked();
   void unmarkAsWriteBlocked();
-  bool isWriteBlocked(double threshold);
+  double getWriteBlockedRatio();
 
   // implemented interface
   bool isClosed() override;

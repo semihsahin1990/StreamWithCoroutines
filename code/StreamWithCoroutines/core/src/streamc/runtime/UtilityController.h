@@ -24,8 +24,8 @@ public:
 	void threadBlockGranted(WorkerThread * thread);
 
 private:
-	void addThread();
-	void removeThread();
+	bool addThread();
+	bool removeThread();
 
 private:
 	size_t maxThreads_;

@@ -26,7 +26,7 @@ public:
    * @param name name of the operator
    * @param busyTimeMicrosecs
    */
-  Busy(std::string const & name, uint64_t busyTimeMicrosecs);
+  Busy(std::string const & name, uint64_t busyTimeMicrosecs, double selectivity);
 
   /**
    * The process function that contains the busy logic.
@@ -44,6 +44,7 @@ public:
 
 private:
   uint64_t busyTimeMicrosecs_;
+  double selectivity_;
 };
 
 } } // namespace streamc::operators

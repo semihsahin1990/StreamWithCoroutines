@@ -9,10 +9,11 @@
 
 #include <chrono>
 
+#define BOTTLENECK_THRESHOLD 0.01
+#define FISSION_PERIOD 10000 //milliseconds
+
 using namespace std;
 using namespace streamc;
-
-uint64_t fissionPeriod = 1000; //microsecs
 
 FissionController::FissionController(FlowContext & flowContext, Scheduler & scheduler)
 	:	flowContext_(flowContext), scheduler_(scheduler)
@@ -52,22 +53,58 @@ void printCandidates() {
 OperatorContextImpl * FissionController::detectBottleneck() {
 	if(candidates.size()==0)
 		return nullptr;
-	
-	double threshold = 0.3;
+	/**/
+	vector<OperatorContextImpl *> operators = flowContext_.getOperators();
+	for(auto it=operators.begin(); it!=operators.end(); it++) {
+		OperatorContextImpl * oper = *it;
+		if(oper->getNumberOfInputPorts() ==1 && oper->getNumberOfOutputPorts()==1) {
+			InputPortImpl & iport = oper->getInputPortImpl(0);
+			OutputPortImpl & oport = oper->getOutputPortImpl(0);
+			if(oper->isComplete() || oper->getOperator().getName().compare("resultCollector")==0)
+				continue;
+
+			SC_LOG(Info,"Check bottleneck:\t"<<oper->getOperator().getName());
+			SC_LOG(Info, "iport:\t"<<iport.getOperatorContextImpl().getOperator().getName()<<"\t"<<iport.getWriteBlockedRatio());
+			SC_LOG(Info, "oport:\t"<<oport.getOperatorContextImpl().getOperator().getName()<<"\t"<<oport.getWriteBlockedRatio());
+		}
+	}
+	SC_LOG(Info,"----------------------------------------------\n")
+	/**/
 	for(auto it=candidates.begin(); it!=candidates.end(); it++) {
 		OperatorContextImpl * oper = *it;
 		InputPortImpl & iport = oper->getInputPortImpl(0);
 		OutputPortImpl & oport = oper->getOutputPortImpl(0);
 
-		if(oper->isComplete())
+		if(oper->isComplete() || oper->getOperator().getName().compare("resultCollector")==0)
 			continue;
 
-		if(iport.isWriteBlocked(threshold) && !oport.isWriteBlocked(threshold)) {
-		//	cerr<<"bottleneck:\t"<<oper->getOperator().getName()<<endl;
-			return oper;
+		// non-replicated operator
+		if(replicatedOperators_.find(oper) == replicatedOperators_.end()) {
+			SC_LOG(Info, "Checking:\t"<<oper->getOperator().getName()<<"\tratio:\t"<<iport.getWriteBlockedRatio());
+			SC_LOG(Info, "Checking:\t"<<oper->getOperator().getName()<<"\tratio:\t"<<oport.getWriteBlockedRatio());
+			if(iport.getWriteBlockedRatio()>=BOTTLENECK_THRESHOLD && oport.getWriteBlockedRatio()<BOTTLENECK_THRESHOLD) {
+				return oper;
+			}
 		}
-			
+
+		// replicated operator
+		else {
+			OperatorContextImpl * split = iport.getPublisher(0).first;
+			size_t replicaCount = split->getNumberOfOutputPorts();
+			double avgWriteBlockedRatio = 0;
+			for(size_t i=0; i<replicaCount; i++) {
+				avgWriteBlockedRatio = avgWriteBlockedRatio + split->getOutputPortImpl(i).getWriteBlockedRatio();
+			}
+			avgWriteBlockedRatio = avgWriteBlockedRatio / replicaCount;
+
+			SC_LOG(Info, "Checking:\t"<<oper->getOperator().getName()<<"\tratio:\t"<<avgWriteBlockedRatio);
+			SC_LOG(Info, "Checking:\t"<<oper->getOperator().getName()<<"\tratio:\t"<<oport.getWriteBlockedRatio());
+			if(avgWriteBlockedRatio>=BOTTLENECK_THRESHOLD && oport.getWriteBlockedRatio()<BOTTLENECK_THRESHOLD) {
+				return oper;
+			}
+		}
 	}
+	
 	return nullptr;
 }
 
@@ -207,50 +244,49 @@ void FissionController::changeFissionLevel(OperatorContextImpl * bottleneck, siz
 	scheduler_.unblockOperators();
 }
 
-void FissionController::run() {
-	/*
-	return;
-	srand(time(NULL));
+void FissionController::resetPortsWaitingClock() {
+	for(auto it=candidates.begin(); it!=candidates.end(); it++) {
+		// reset candidate's clocl
+		OperatorContextImpl * oper = *it;
+		InputPortImpl & iport = oper->getInputPortImpl(0);
+		iport.resetBeginTime();
 
-	while(!isCompleted_.load()) {
-		std::chrono::milliseconds duration(2000);
-		this_thread::sleep_for(duration);
+		OutputPortImpl & oport = oper->getOutputPortImpl(0);
+		oport.resetBeginTime();
 
-		OperatorContextImpl * bottleneck = nullptr;
-		vector<OperatorContextImpl *> operators = flowContext_.getOperators();
-		for(auto it=operators.begin(); it!=operators.end(); it++) {
-			if((*it)->getOperator().getName()=="busy") {
-				bottleneck = *it;
-				break;
+		// reset replicas' clock if any
+		if(replicatedOperators_.find(oper)!=replicatedOperators_.end()) {
+			OperatorContextImpl * split = iport.getPublisher(0).first;
+			size_t replicaCount = split->getNumberOfOutputPorts();
+			for(size_t i=0; i<replicaCount; i++) {
+				split->getOutputPortImpl(i).resetBeginTime();
 			}
 		}
-		addFission(bottleneck, 10);
-		this_thread::sleep_for(duration);
-		changeFissionLevel(bottleneck, 5);
-		return;
 	}
-	*/
-	
+}
+
+void FissionController::run() {
+	return;
 	srand(time(NULL));
 	findBottleneckCandidates();
-	printCandidates();
+	std::chrono::milliseconds duration(FISSION_PERIOD);
 
 	while(!isCompleted_.load()) {
-		std::chrono::milliseconds duration(2000);
 		this_thread::sleep_for(duration);
 
 		OperatorContextImpl * bottleneck = detectBottleneck();
-		if(bottleneck == nullptr) {
-			this_thread::sleep_for(duration);
+		if(bottleneck == nullptr)
 			continue;
-		}
+		
 		cerr<<"replicate:\t"<<bottleneck->getOperator().getName()<<endl;
+		SC_LOG(Info,"replicate:\t"<<bottleneck->getOperator().getName());
 		if(replicatedOperators_.find(bottleneck) == replicatedOperators_.end()) {
 			addFission(bottleneck, 2);
 		}
 		else {
 			changeFissionLevel(bottleneck, replicatedOperators_[bottleneck]+1);
 		}
+		resetPortsWaitingClock();
 	}
 }
 

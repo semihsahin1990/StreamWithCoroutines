@@ -97,16 +97,30 @@ void OutputPortImpl::pushTuple(Tuple const & tuple)
   }
 }
 
-bool OutputPortImpl::isWriteBlocked(double threshold) {
+double OutputPortImpl::getWriteBlockedRatio() {
+  lock_guard<mutex> lock(mutex_);
+
+  double maxWriteBlockedRatio=0;
+  for(auto const & opPortPair : subscribers_) {
+    OperatorContextImpl * op = opPortPair.first;
+    size_t inPort = opPortPair.second;
+    InputPortImpl & iport = op->getInputPortImpl(inPort);
+    
+    double writeBlockedRatio = iport.getWriteBlockedRatio();
+    if(writeBlockedRatio > maxWriteBlockedRatio)
+      maxWriteBlockedRatio = writeBlockedRatio;
+      
+  }
+  return maxWriteBlockedRatio;
+}
+
+void OutputPortImpl::resetBeginTime() {
   lock_guard<mutex> lock(mutex_);
 
   for(auto const & opPortPair : subscribers_) {
     OperatorContextImpl * op = opPortPair.first;
     size_t inPort = opPortPair.second;
     InputPortImpl & iport = op->getInputPortImpl(inPort);
-    if (iport.isWriteBlocked(threshold))
-      return true;
+    iport.resetBeginTime();
   }
-  
-  return false;
 }

@@ -29,8 +29,11 @@ void WorkerThread::run()
     OperatorContextImpl * oper = scheduler_->getThreadWork(*this);
     if (oper==nullptr) 
       break; // no more work to come
-    SC_LOG(Info, "Worker thread #" << index_ << " running operator:\t"<<oper->getOperator().getName());
-
+    /**/
+    if(scheduler_->checkOperator(oper) == false) {
+      cerr<<"removed operator is scheduled!!!"<<endl;
+    }
+    /**/
     setBeginTime();
     oper->runOper();
     setEndtime();

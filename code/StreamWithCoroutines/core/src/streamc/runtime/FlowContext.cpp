@@ -25,7 +25,7 @@ size_t FlowContext::maxQueueSize_ = 1000; // TODO: make changable, and perhaps p
 FlowContext::FlowContext(Flow & flow, SchedulerPlugin * plugin)
   : flow_(flow), numCompleted_(0), isShutdownRequested_(false)
 {
-  SC_LOG(Info, "\n\n\n");
+  SC_LOG(Info, "\n\n\n\n\n\n\n\nNEW EXPERIMENT\n");
   // create the scheduler
   if (plugin!=nullptr)
     scheduler_.reset(new Scheduler(*this, plugin));
@@ -175,6 +175,7 @@ void FlowContext::wait()
 void FlowContext::markOperatorCompleted(Operator * oper)
 {
   SC_LOG(Info, "Operator Completed:\t"<<oper->getName());
+  
   unique_lock<mutex> lock(mutex_);
   numCompleted_++;
   { // notify scheduler about the operator completion
@@ -185,7 +186,6 @@ void FlowContext::markOperatorCompleted(Operator * oper)
   if (numCompleted_==operatorContexts_.size()) {
     // tell the scheduler that there is no more work
     scheduler_->stop();
-    for(int i=0; i<10000000; i++) {}
     // wake up clients waiting for completion
     cv_.notify_all();
   }

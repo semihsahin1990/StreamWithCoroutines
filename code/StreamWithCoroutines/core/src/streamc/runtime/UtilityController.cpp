@@ -8,8 +8,9 @@
 
 #include <chrono>
 #define ALPHA 0.83
-#define ADD_THREAD_THRESHOLD 0.85
-#define REMOVE_THREAD_THRESHOLD 0.75
+#define ADD_THREAD_THRESHOLD 0.90
+#define REMOVE_THREAD_THRESHOLD 0.80
+#define UTILITY_PERIOD 10000 //milliseconds
 
 using namespace std;
 using namespace streamc;
@@ -28,22 +29,23 @@ void UtilityController::start(size_t maxThreads) {
 	thread_.reset(new thread(bind(&UtilityController::run, this)));
 }
 
-void UtilityController::addThread() {
+bool UtilityController::addThread() {
 	int numOfThreads = threads_.size();
 
 	if(numOfThreads == maxThreads_)
-		return;
+		return false;
 
 	WorkerThread * newThread = new WorkerThread(numOfThreads, scheduler_);
 	threads_.push_back(newThread);
 	scheduler_.addThread(*newThread);
+	return true;
 }
 
-void UtilityController::removeThread() {
+bool UtilityController::removeThread() {
 	int numOfThreads = threads_.size();
 
 	if(numOfThreads == 1)
-		return;
+		return false;
 
 	{
 		unique_lock<mutex> lock(mutex_);
@@ -60,12 +62,13 @@ void UtilityController::removeThread() {
 			break;
 		}
 	}
+	return true;
 }
 
 void UtilityController::run() {
 	threads_.clear();
     addThread();
-    
+    return;
 	//vector<long> prevRunningTimes(threads_.size());
 	vector<long> prevRunningTimes(maxThreads_);
 	vector<long> currRunningTimes(maxThreads_);
@@ -75,7 +78,7 @@ void UtilityController::run() {
 
 	bool firstTime;
 	bool changed = true;
-	milliseconds duration(2000);
+	milliseconds duration(UTILITY_PERIOD);
 
 	while(!isCompleted_.load()) {
 		if(changed) {
@@ -92,10 +95,11 @@ void UtilityController::run() {
 		high_resolution_clock::time_point periodEndTime = high_resolution_clock::now();
 
 		auto timeDifference = duration_cast<microseconds>(periodEndTime - periodBeginTime).count();
-
+		SC_LOG(Info, "numOfThreads:\t"<<threads_.size());
 		for(size_t i=0; i<threads_.size(); i++) {
 			currRunningTimes[i] = threads_[i]->getRunningTime();
 			currUtilities[i] = (double) (currRunningTimes[i] - prevRunningTimes[i]) / timeDifference;
+			SC_LOG(Info, "utility:\t"<<currUtilities[i]);
 		}
 
 		double avgUtility = 0;
@@ -111,15 +115,18 @@ void UtilityController::run() {
 		}
 		firstTime = false;
 		avgUtility = avgUtility / threads_.size();
-
+		SC_LOG(Trace, "check");
 		// check increase/decrease required
 		if(avgUtility>=ADD_THREAD_THRESHOLD) {
-			addThread();
-			changed = true;
+			changed = addThread();
 		}
-		if(avgUtility<REMOVE_THREAD_THRESHOLD) {
-			removeThread();
-			changed = true;
+		else if(avgUtility<REMOVE_THREAD_THRESHOLD) {
+			SC_LOG(Info, "REMOVE THREAD:\t"<<avgUtility<<"\t"<<threads_.size());
+			changed = removeThread();
+		}
+		if(changed){
+			cerr<<"active threads:\t"<<threads_.size()<<endl;
+		SC_LOG(Trace, "active threads:\t"<<threads_.size());
 		}
 	}
 }

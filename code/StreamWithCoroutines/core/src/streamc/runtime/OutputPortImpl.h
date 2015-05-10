@@ -22,7 +22,9 @@ public:
   void removeSubscriber(size_t index);
   void removeSubscriber(OperatorContextImpl & oper);
   std::pair<OperatorContextImpl *, size_t> getSubscriber(size_t index);
-  bool isWriteBlocked(double threshold);
+  void resetBeginTime();
+  double getWriteBlockedRatio();
+  OperatorContextImpl & getOperatorContextImpl() { return *(subscribers_[0].first); }
 
   // implemented interface
   void pushTuple(Tuple const & tuple) override;

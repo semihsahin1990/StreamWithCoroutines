@@ -1,23 +1,28 @@
 #include "streamc/operators/Busy.h"
 #include <chrono>
+#include <random>
 
 using namespace std;
 using namespace std::chrono;
 using namespace streamc;
 using namespace streamc::operators;
 
-Busy::Busy(std::string const & name, uint64_t busyTimeMicrosecs)
-  : Operator(name, 1, 1), busyTimeMicrosecs_(busyTimeMicrosecs)
+Busy::Busy(std::string const & name, uint64_t busyTimeMicrosecs, double selectivity)
+  : Operator(name, 1, 1), busyTimeMicrosecs_(busyTimeMicrosecs), selectivity_(selectivity)
 {}
 
 Busy::Busy(std::string const & name)
-  : Busy(name, 1000)
+  : Busy(name, 100, 1)
 {}
 
 void Busy::process(OperatorContext & context)
 {
   InputPort & iport = context.getInputPort(0);
   OutputPort & oport = context.getOutputPort(0);
+
+  mt19937_64 randgen_;
+  randgen_.seed(mt19937_64::default_seed);
+  std::uniform_real_distribution<double> zero_one(0.0, 1.0);
 
   while (!context.isShutdownRequested()) {
     bool closed = iport.waitTuple();
@@ -32,12 +37,13 @@ void Busy::process(OperatorContext & context)
       if(timeDiffInMicrosecs.count()>=busyTimeMicrosecs_)
         break;
     }
-    oport.pushTuple(tuple);
+    if(zero_one(randgen_) < selectivity_)
+      oport.pushTuple(tuple);
     iport.popTuple();
   }
 }
 
 Busy * Busy::clone(std::string const & name) 
 {
-  return new Busy(name, busyTimeMicrosecs_);
+  return new Busy(name, busyTimeMicrosecs_, selectivity_);
 }

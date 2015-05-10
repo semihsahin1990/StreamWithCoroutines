@@ -3,6 +3,7 @@
 #include "streamc/runtime/OperatorContextImpl.h"
 #include "streamc/runtime/Scheduler.h"
 #include "streamc/Operator.h"
+#include "streamc/runtime/RuntimeLogger.h"
 
 #include <thread>
 #include <mutex>
@@ -182,6 +183,16 @@ void InputPortImpl::drain()
   scheduler_->markInputPortAsRead(*this);
 }
 
+void InputPortImpl::resetBeginTime() {
+  lock_guard<mutex> lock(mutex_);
+  /*
+  if(inWriteBlockedState_)
+    return;
+    */
+  createdAt_ = chrono::high_resolution_clock::now();
+  totalWriteBlockedDuration_ = std::chrono::microseconds(0);
+}
+
 void InputPortImpl::markAsWriteBlocked() {
   lock_guard<mutex> lock(mutex_);
 
@@ -205,13 +216,12 @@ void InputPortImpl::unmarkAsWriteBlocked() {
   totalWriteBlockedDuration_ =  totalWriteBlockedDuration_ + duration_cast<microseconds>(writeBlockedDuration);
 }
 
-bool InputPortImpl::isWriteBlocked(double threshold) {
+double InputPortImpl::getWriteBlockedRatio() {
   lock_guard<mutex> lock(mutex_);
 
   high_resolution_clock::time_point currentTime = high_resolution_clock::now();
   high_resolution_clock::duration timeDiff = currentTime - createdAt_;
   microseconds timeDiffInMicrosecs = duration_cast<std::chrono::microseconds>(timeDiff);
 
-  double writeBlockedRatio = ((double)totalWriteBlockedDuration_.count()) / timeDiffInMicrosecs.count();
-  return writeBlockedRatio >= threshold;
+  return ((double)totalWriteBlockedDuration_.count()) / timeDiffInMicrosecs.count();
 }

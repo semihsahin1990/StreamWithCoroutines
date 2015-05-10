@@ -115,6 +115,9 @@ public:
     for(size_t i=0; i<length; i++)
       costList.push_back(dist(randgen) * baseCost);
 
+    for(size_t i=0; i<length; i++) {
+      cerr<<i<<":\t"<<costList[i]<<endl;
+    }
     return costList;
   }
 
@@ -122,11 +125,11 @@ public:
   {
     using namespace streamc::experiment;
 
-    int numberOfRuns = 3;
+    int numberOfRuns = 1;
 
     size_t defaultThreads = 4;
-    size_t defaultDepth = 10;
-    int defaultCost = 40;
+    size_t defaultDepth = 4;
+    int defaultCost = 400;
     double defaultSelectivity = 1;
     int defaultQuanta = 50000;
 
@@ -140,8 +143,8 @@ public:
     
     // thread experiment
     cout<<"thread experiment"<<endl;
-    size_t const numThreadsMin = 1;
-    size_t const numThreadsMax = 12;
+    size_t const numThreadsMin = 4;
+    size_t const numThreadsMax = 4;
     
     ExpData data("ChainExperiment-thread");
     data.setDescription("This is a chain experiment - throughput as a function of quanta for different approaches");
@@ -164,6 +167,7 @@ public:
         data.addNewFieldValue("l_"+schedulers[j], latency);
         data.addNewFieldValue("ld_"+schedulers[j], latencyDev);
         cout<<endl;
+        return;
       }
       cout<<"---------------"<<endl;
     }
